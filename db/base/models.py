@@ -12,6 +12,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import OuterRef, Subquery
 from django.db.models.signals import post_save, pre_save
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
 from markdown import markdown
 from shortuuidfield import ShortUUIDField
@@ -50,13 +51,15 @@ def _set_is_decoded(sender, instance, **kwargs):
     instance.is_decoded = instance.payload_decoded != ''
 
 
+@python_2_unicode_compatible
 class Mode(models.Model):
     name = models.CharField(max_length=10, unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class Satellite(models.Model):
     """Model for all the satellites."""
     norad_cat_id = models.PositiveIntegerField()
@@ -103,10 +106,11 @@ class Satellite(models.Model):
         has_decoders = Telemetry.objects.filter(satellite=self.id).exclude(decoder='').count()
         return has_decoders
 
-    def __unicode__(self):
+    def __str__(self):
         return '{0} - {1}'.format(self.norad_cat_id, self.name)
 
 
+@python_2_unicode_compatible
 class TransmitterEntry(models.Model):
     """Model for satellite transmitters."""
     uuid = ShortUUIDField(db_index=True)
@@ -143,7 +147,7 @@ class TransmitterEntry(models.Model):
         unique_together = ("uuid", "created")
         verbose_name_plural = 'Transmitter entries'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.description
 
     def save(self, *args, **kwargs):
@@ -181,6 +185,7 @@ class Transmitter(TransmitterEntry):
         proxy = True
 
 
+@python_2_unicode_compatible
 class Telemetry(models.Model):
     """Model for satellite telemtry decoders."""
     satellite = models.ForeignKey(
@@ -194,10 +199,11 @@ class Telemetry(models.Model):
         ordering = ['satellite__norad_cat_id']
         verbose_name_plural = 'Telemetries'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class DemodData(models.Model):
     """Model for satellite for observation data."""
     satellite = models.ForeignKey(
@@ -227,7 +233,7 @@ class DemodData(models.Model):
     class Meta:
         ordering = ['-timestamp']
 
-    def __unicode__(self):
+    def __str__(self):
         return 'data-for-{0}'.format(self.satellite.norad_cat_id)
 
     def display_decoded(self):
