@@ -308,7 +308,7 @@
 
   <!-- Telemetry Frames Section -->
   {% if satellite.telemetry_data.count %}
-    <div class="row hidden-xs hidden-sm">
+    <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 satellite-panels">
         <div class="panel panel-default panel-satellite">
           <div class="panel-heading">
@@ -431,5 +431,6 @@
   <script src="{% static 'lib/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
   <script src="{% static 'lib/mapbox.js/mapbox.js' %}"></script>
   <script src="{% static 'js/app.backbone.js' %}"></script>
+  <script src="{% static 'lib/gpredict.js/dist/gpredict.min.js' %}"></script>
   <script src="{% static 'js/map.js' %}"></script>
 {% endblock %}
