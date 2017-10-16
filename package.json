@@ -4,14 +4,43 @@
     "description": "Satellite Transmitter Suggestions Appp",
     "repository": {
         "type": "git",
-        "url": "https://github.com/satnogs/satnogs-db"
+        "url": "https://gitlab.com/librespacefoundation/satnogs/satnogs-db"
     },
     "author": "SatNOGS",
-    "license": "AGPLv3",
+    "license": "AGPL-3.0",
     "devDependencies": {
         "gulp": "^3.9.1",
         "gulp-eslint": "^3.0.1",
-        "gulp-main-bower-files": "^1.6.1",
         "gulp-stylelint": "^3.9.0"
-    }
+    },
+    "dependencies": {
+        "backbone": "^1.3.3",
+        "bootstrap": "^3.3.7",
+        "bootstrap-daterangepicker": "^2.1.25",
+        "chart.js": "^2.6.0",
+        "d3": "^4.10.2",
+        "dnt-helper": "schalkneethling/dnt-helper",
+        "gpredict.js": "kerel-fs/gpredict.js",
+        "jquery": "^3.2.1",
+        "mapbox.js": "^3.1.1",
+        "moment": "^2.18.1",
+        "underscore": "^1.8.3"
+    },
+    "assets": [
+        "jquery/dist/jquery.min.js",
+        "bootstrap/dist/css/bootstrap.min.css",
+        "bootstrap/dist/js/bootstrap.min.js",
+        "bootstrap/dist/fonts/*",
+        "bootstrap-daterangepicker/daterangepicker.css",
+        "bootstrap-daterangepicker/daterangepicker.js",
+        "mapbos.js/mapbox.css",
+        "mapbos.js/mapbox.js",
+        "underscore/underscore-min.js",
+        "d3/build/d3.min.js",
+        "moment/min/moment.min.js",
+        "backbone/backbone-min.js",
+        "chart.js/dist/Chart.min.js",
+        "dnt-helper/js/dnt-helper.js",
+        "gpredict.js/dist/gpredict.min.js"
+    ]
 }

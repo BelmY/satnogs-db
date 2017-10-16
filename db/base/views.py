@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseNotFound, HttpResponseServerError, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -182,16 +183,22 @@ def faq(request):
 
 def stats(request):
     """View to render stats page."""
-    satellites = Satellite.objects \
-                          .values('name', 'norad_cat_id') \
-                          .annotate(count=Count('telemetry_data'),
-                                    latest_payload=Max('telemetry_data__timestamp')) \
-                          .order_by('-count')
-    observers = DemodData.objects \
-                         .values('observer') \
-                         .annotate(count=Count('observer'),
-                                   latest_payload=Max('timestamp')) \
-                         .order_by('-count')
+    satellites = cache.get('stats_satellites')
+    if not satellites:
+        satellites = Satellite.objects \
+                              .values('name', 'norad_cat_id') \
+                              .annotate(count=Count('telemetry_data'),
+                                        latest_payload=Max('telemetry_data__timestamp')) \
+                              .order_by('-count')
+        cache.set('stats_satellites', satellites, settings.CACHE_TTL)
+    observers = cache.get('stats_observers')
+    if not observers:
+        observers = DemodData.objects \
+                             .values('observer') \
+                             .annotate(count=Count('observer'),
+                                       latest_payload=Max('timestamp')) \
+                             .order_by('-count')
+        cache.set('stats_observers', observers, settings.CACHE_TTL)
     return render(request, 'base/stats.html', {'satellites': satellites,
                                                'observers': observers})
 

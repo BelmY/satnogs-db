@@ -3,7 +3,7 @@ Contribute
 
 Thank you for your interest in contributing to SatNOGS! There are always bugs to file; bugs to fix in code; improvements to be made to the documentation; and more.
 
-The below instructions are for software developers who want to work on `satnogs-db code <http://github.com/satnogs/satnogs-db>`_.
+The below instructions are for software developers who want to work on `satnogs-db code <http://gitlab.com/librespacefoundation/satnogs/satnogs-db>`_.
 
 Git workflow
 ------------
@@ -11,7 +11,7 @@ When you want to start contributing, you should :doc:`follow the installation in
 
 #.  (Optional) Set your cloned fork to track upstream changes (changes to the main repository), then fetch and merge changes from the upstream branch::
 
-    $ git remote add --track master upstream git://github.com/satnogs/satnogs-db
+    $ git remote add --track master upstream git://gitlab.com/librespacefoundation/satnogs/satnogs-db
     $ git fetch upstream
     $ git merge upstream/master
 
@@ -49,7 +49,7 @@ When you want to start contributing, you should :doc:`follow the installation in
 
     $ git push origin my_branch
 
-#. Issue a pull request on GitHub
+#. Issue a pull request on Gitlab
 
 #. Wait to hear from one of the core developers
 
@@ -93,4 +93,4 @@ Most important things:
 
 What to work on
 ---------------
-You can check `opened issues <https://github.com/satnogs/satnogs-db/issues>`_. We regurarly open issues for tracking new features. You pick one and start coding.
+You can check `opened issues <https://gitlab.com/librespacefoundation/satnogs/satnogs-db/issues>`_. We regurarly open issues for tracking new features. You pick one and start coding.

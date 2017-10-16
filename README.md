@@ -2,24 +2,23 @@
 
 SatNOGS DB is a transmitter suggestions and crowd-sourcing app.
 
-## Install and Contribute
+## Contribute
 
-See the [documentation](http://docs.satnogs.org/en/stable/db/).
+Check out the [documentation](https://docs.satnogs.org/en/stable/satnogs-db/docs/) on how to setup a local development instance.
 
 The main repository lives on [Gitlab](https://gitlab.com/librespacefoundation/satnogs/satnogs-db).
 
 ## Join
 
+[![irc](https://img.shields.io/badge/Matrix-%23satnogs:matrix.org-blue.svg)](https://riot.im/app/#/room/#satnogs:matrix.org)
 [![irc](https://img.shields.io/badge/IRC-%23satnogs%20on%20freenode-blue.svg)](https://webchat.freenode.net/?channels=satnogs)
-[![irc](https://img.shields.io/badge/forum-discourse-blue.svg)](https://community.satnogs.org/)
+[![irc](https://img.shields.io/badge/forum-discourse-blue.svg)](https://community.libre.space/c/satnogs)
 
 ## Current Development
 
 [![kanban](https://img.shields.io/badge/kanban-board-lightgray.svg)](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/boards/345706)
-[![travis](https://img.shields.io/travis/satnogs/satnogs-db/dev.svg?label=tests)](http://travis-ci.org/satnogs/satnogs-db/)
-[![coveralls](https://img.shields.io/coveralls/satnogs/satnogs-db/dev.svg)](https://coveralls.io/github/satnogs/satnogs-db)
-[![updates](https://pyup.io/repos/github/satnogs/satnogs-db/shield.svg)](https://pyup.io/repos/github/satnogs/satnogs-db/)
-[![Python 3](https://pyup.io/repos/github/satnogs/satnogs-db/python-3-shield.svg)](https://pyup.io/repos/github/satnogs/satnogs-db/)
+[![build](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/badges/dev/build.svg)](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/commits/dev)
+[![coverage](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/badges/dev/coverage.svg)](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/commits/dev)
 
 ## License
 

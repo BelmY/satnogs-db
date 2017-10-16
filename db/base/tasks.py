@@ -6,6 +6,7 @@ from orbit import satellite
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.utils.timezone import make_aware
 
 from db.base.models import Satellite, DemodData
 from db.celery import app
@@ -40,11 +41,12 @@ def export_frames(norad, email, uid, period=None):
     now = datetime.utcnow()
     if period:
         if period == '1':
-            q = datetime.now() - timedelta(days=7)
+            q = now - timedelta(days=7)
             suffix = 'week'
         else:
-            q = datetime.now() - timedelta(days=30)
+            q = now - timedelta(days=30)
             suffix = 'month'
+        q = make_aware(q)
         frames = DemodData.objects.filter(satellite__norad_cat_id=norad,
                                           timestamp__gte=q)
     else:
