@@ -10,9 +10,9 @@ The main repository lives on [Gitlab](https://gitlab.com/librespacefoundation/sa
 
 ## Join
 
-[![irc](https://img.shields.io/badge/Matrix-%23satnogs:matrix.org-blue.svg)](https://riot.im/app/#/room/#satnogs:matrix.org)
+[![matrix](https://img.shields.io/badge/Matrix-%23satnogs:matrix.org-blue.svg)](https://riot.im/app/#/room/#satnogs:matrix.org)
 [![irc](https://img.shields.io/badge/IRC-%23satnogs%20on%20freenode-blue.svg)](https://webchat.freenode.net/?channels=satnogs)
-[![irc](https://img.shields.io/badge/forum-discourse-blue.svg)](https://community.libre.space/c/satnogs)
+[![forum](https://img.shields.io/badge/forum-discourse-blue.svg)](https://community.libre.space/c/satnogs)
 
 ## Current Development
 
