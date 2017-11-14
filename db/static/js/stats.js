@@ -68,102 +68,109 @@ $(document).ready(function() {
         },
     });
 
-    $.getJSON('/statistics/', function( data ) {
+    $.getJSON('/statistics/', function(data) {
+        if (data.length == 0) {
+            $('#transmitters-charts h2').text('still calculating...');
+            $('#transmitters-charts div').append('<p>please come back later</p>');
+            $('#transmitters-numbers').hide();
+        } else {
+            var i;
+            var r;
+            var g;
+            var b;
+            var a;
+            var color;
+            // Create colors for Mode Chart
+            var mode_colors = [];
+            for (i = 0; i < data.mode_label.length; i++) {
+                r = Math.floor(data.mode_data[i]* 10);
+                b = Math.floor(0.3 * 255);
+                g = Math.floor(data.mode_data[i]* 10);
+                a = 0.5;
+                color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+                mode_colors.push(color);
+            }
 
-        var i;
-        var r;
-        var g;
-        var b;
-        var a;
-        var color;
-        // Create colors for Mode Chart
-        var mode_colors = [];
-        for (i = 0; i < data.mode_label.length; i++) {
-            r = Math.floor(data.mode_data[i]* 10);
-            b = Math.floor(0.3 * 255);
-            g = Math.floor(data.mode_data[i]* 10);
-            a = 0.5;
-            color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
-            mode_colors.push(color);
-        }
+            // Create colors for Band Chart
+            var band_colors = [];
+            for (i = 0; i < data.band_label.length; i++) {
+                b = Math.floor(0.1 * 255);
+                g = Math.floor(data.band_data[i]);
+                r = Math.floor(data.band_data[i]);
+                a = 0.5;
+                color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+                band_colors.push(color);
+            }
 
-        // Create colors for Band Chart
-        var band_colors = [];
-        for (i = 0; i < data.band_label.length; i++) {
-            b = Math.floor(0.1 * 255);
-            g = Math.floor(data.band_data[i]);
-            r = Math.floor(data.band_data[i]);
-            a = 0.5;
-            color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
-            band_colors.push(color);
-        }
+            // Global chart configuration
+            Chart.defaults.global.legend.display = false;
+            Chart.defaults.global.title.display = true;
+            Chart.defaults.global.title.fontSize = 16;
+            Chart.defaults.global.title.fontColor= '#444';
 
-        // Global chart configuration
-        Chart.defaults.global.legend.display = false;
-        Chart.defaults.global.title.display = true;
-        Chart.defaults.global.title.fontSize = 16;
-        Chart.defaults.global.title.fontColor= '#444';
-
-        //Mode Chart
-        var mode_c = document.getElementById('modes');
-        new Chart(mode_c, {
-            type: 'doughnut',
-            data: {
-                labels: data.mode_label,
-                datasets: [{
-                    backgroundColor: mode_colors,
-                    data: data.mode_data,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                elements: {
-                    center: {
-                        // the longest text that could appear in the center
-                        maxText: '100%',
-                        text: data.mode_data.length + ' Modes',
-                        fontColor: '#000',
-                        fontFamily: 'Helvetica Neue',
-                        fontStyle: 'normal',
-                        minFontSize: 1,
-                        maxFontSize: 20,
+            //Mode Chart
+            var mode_c = document.getElementById('modes');
+            new Chart(mode_c, {
+                type: 'doughnut',
+                data: {
+                    labels: data.mode_label,
+                    datasets: [{
+                        backgroundColor: mode_colors,
+                        data: data.mode_data,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    elements: {
+                        center: {
+                            // the longest text that could appear in the center
+                            maxText: '100%',
+                            text: data.mode_data.length + ' Modes',
+                            fontColor: '#000',
+                            fontFamily: 'Helvetica Neue',
+                            fontStyle: 'normal',
+                            minFontSize: 1,
+                            maxFontSize: 20,
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        //Band Chart
-        var band_c = document.getElementById('bands');
-        new Chart(band_c, {
-            type: 'doughnut',
-            data: {
-                labels: data.band_label,
-                datasets: [{
-                    backgroundColor: band_colors,
-                    data: data.band_data,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                elements: {
-                    center: {
-                        // the longest text that could appear in the center
-                        maxText: '100%',
-                        text: data.band_data.length + ' Bands',
-                        fontColor: '#000',
-                        fontFamily: 'Helvetica Neue',
-                        fontStyle: 'normal',
-                        minFontSize: 1,
-                        maxFontSize: 20,
+            //Band Chart
+            var band_c = document.getElementById('bands');
+            new Chart(band_c, {
+                type: 'doughnut',
+                data: {
+                    labels: data.band_label,
+                    datasets: [{
+                        backgroundColor: band_colors,
+                        data: data.band_data,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    elements: {
+                        center: {
+                            // the longest text that could appear in the center
+                            maxText: '100%',
+                            text: data.band_data.length + ' Bands',
+                            fontColor: '#000',
+                            fontFamily: 'Helvetica Neue',
+                            fontStyle: 'normal',
+                            minFontSize: 1,
+                            maxFontSize: 20,
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        //HUD Stats
-        $('#stats-alive').html(data.transmitters_alive);
-        $('#stats-transmitters').html(data.transmitters);
-        $('#stats-satellites').html(data.total_satellites);
-        $('#stats-data').html(data.total_data);
+            //HUD Stats
+            $('#stats-alive').html(data.transmitters_alive);
+            $('#stats-transmitters').html(data.transmitters);
+            $('#stats-satellites').html(data.total_satellites);
+            $('#stats-data').html(data.total_data);
+        }
+    }).fail(function() {
+        $('.transmitters-charts').hide();
     });
 });

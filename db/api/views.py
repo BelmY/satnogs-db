@@ -47,11 +47,11 @@ class TelemetryView(viewsets.ModelViewSet, mixins.CreateModelMixin):
         lat = request.data.get('latitude')
         lng = request.data.get('longitude')
         if any(x.isalpha() for x in lat):
-            data['lat'] = (-float(lat[:-1]) if ('W' in lat) else float(lat[:-1]))
+            data['lat'] = (-float(lat[:-1]) if ('S' in lat) else float(lat[:-1]))
         else:
             data['lat'] = float(lat)
         if any(x.isalpha() for x in lng):
-            data['lng'] = (-float(lng[:-1]) if ('S' in lng) else float(lng[:-1]))
+            data['lng'] = (-float(lng[:-1]) if ('W' in lng) else float(lng[:-1]))
         else:
             data['lng'] = float(lng)
 

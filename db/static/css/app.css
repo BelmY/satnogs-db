@@ -222,11 +222,8 @@ a.satellite-item:hover {
     border-radius: 5px;
 }
 
-.leaflet-left {
-    display: none;
-}
-
-.mapbox-improve-map {
+.mapbox-improve-map,
+.mapboxgl-ctrl-bottom-left {
     display: none;
 }
 

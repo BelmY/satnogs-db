@@ -3,12 +3,15 @@ from datetime import datetime, timedelta
 
 from orbit import satellite
 
+from django.db.models import Count, Max
 from django.conf import settings
+from django.core.cache import cache
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.timezone import make_aware
 
 from db.base.models import Satellite, DemodData
+from db.base.utils import calculate_statistics
 from db.celery import app
 
 
@@ -70,3 +73,23 @@ def export_frames(norad, email, uid, period=None):
     }
     message = render_to_string(template, {'data': data})
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], False)
+
+
+@app.task
+def cache_statistics():
+    statistics = calculate_statistics()
+    cache.set('stats_transmitters', statistics, 60 * 60 * 2)
+
+    satellites = Satellite.objects \
+                          .values('name', 'norad_cat_id') \
+                          .annotate(count=Count('telemetry_data'),
+                                    latest_payload=Max('telemetry_data__timestamp')) \
+                          .order_by('-count')
+    cache.set('stats_satellites', satellites, 60 * 60 * 2)
+
+    observers = DemodData.objects \
+                         .values('observer') \
+                         .annotate(count=Count('observer'),
+                                   latest_payload=Max('timestamp')) \
+                         .order_by('-count')
+    cache.set('stats_observers', observers, 60 * 60 * 2)

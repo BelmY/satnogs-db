@@ -22,25 +22,25 @@
         "dnt-helper": "schalkneethling/dnt-helper",
         "gpredict.js": "kerel-fs/gpredict.js",
         "jquery": "^3.2.1",
-        "mapbox.js": "^3.1.1",
+        "mapbox-gl": "^0.41.0",
         "moment": "^2.18.1",
         "underscore": "^1.8.3"
     },
     "assets": [
-        "jquery/dist/jquery.min.js",
+        "backbone/backbone-min.js",
         "bootstrap/dist/css/bootstrap.min.css",
         "bootstrap/dist/js/bootstrap.min.js",
         "bootstrap/dist/fonts/*",
         "bootstrap-daterangepicker/daterangepicker.css",
         "bootstrap-daterangepicker/daterangepicker.js",
-        "mapbos.js/mapbox.css",
-        "mapbos.js/mapbox.js",
-        "underscore/underscore-min.js",
-        "d3/build/d3.min.js",
-        "moment/min/moment.min.js",
-        "backbone/backbone-min.js",
         "chart.js/dist/Chart.min.js",
+        "d3/build/d3.min.js",
         "dnt-helper/js/dnt-helper.js",
-        "gpredict.js/dist/gpredict.min.js"
+        "gpredict.js/dist/gpredict.min.js",
+        "jquery/dist/jquery.min.js",
+        "mapbox-gl/dist/mapbox-gl.css",
+        "mapbox-gl/dist/mapbox-gl.js",
+        "moment/min/moment.min.js",
+        "underscore/underscore-min.js"
     ]
 }

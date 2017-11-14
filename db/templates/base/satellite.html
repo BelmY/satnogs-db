@@ -7,7 +7,7 @@
 
 {% block css %}
   <link rel="stylesheet" href="{% static 'lib/bootstrap-daterangepicker/daterangepicker.css' %}">
-  <link rel="stylesheet" href="{% static 'lib/mapbox.js/mapbox.css' %}">
+  <link rel="stylesheet" href="{% static 'lib/mapbox-gl/dist/mapbox-gl.css' %}">
 {% endblock css %}
 
 {% block top %}{% endblock %}
@@ -29,6 +29,12 @@
           {% if satellite.names %}
             <div class="satellite-names-full hidden-xs">{{ satellite.names }}</div>
           {% endif %}
+          <div>
+            <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
+            <a href="https://network.satnogs.org/observations/?norad={{ satellite.norad_cat_id }}" target="_blank">
+              SatNOGS Network Observations
+            </a>
+          </div>
         </div>
         <div class="row panel-body">
           <div class="col-sm-3">
@@ -40,7 +46,11 @@
             </div>
           </div>
           <div class="col-sm-9">
-            <div id="map" data-mapboxid="{{ mapbox_id }}" data-mapboxtoken="{{ mapbox_token }}"></div>
+              <div id="map"
+                   data-name="{{ satellite.name }}"
+                   data-tle1="{{ satellite.tle1 }}"
+                   data-tle2="{{ satellite.tle2 }}"
+                   data-mapboxtoken="{{ mapbox_token }}"></div>
           </div>
         </div>
       </div>
@@ -429,7 +439,7 @@
   <script src="{% static 'lib/d3/build/d3.min.js' %}"></script>
   <script src="{% static 'lib/moment/min/moment.min.js' %}"></script>
   <script src="{% static 'lib/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
-  <script src="{% static 'lib/mapbox.js/mapbox.js' %}"></script>
+  <script src="{% static 'lib/mapbox-gl/dist/mapbox-gl.js' %}"></script>
   <script src="{% static 'js/app.backbone.js' %}"></script>
   <script src="{% static 'lib/gpredict.js/dist/gpredict.min.js' %}"></script>
   <script src="{% static 'js/map.js' %}"></script>

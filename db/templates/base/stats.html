@@ -7,12 +7,12 @@
 
 {% block content %}
   <!-- Transmitter stats -->
-  <div class="row text">
+  <div class="row text" id="transmitters-charts">
     <div class="col-md-12">
       <h2>Transmitters</h2>
     </div>
   </div>
-  <div class="row stats">
+  <div class="row stats" id="transmitters-numbers">
     <div class="col-md-4">
       <canvas id="modes" width="300" height="300"></canvas>
     </div>
@@ -48,56 +48,60 @@
   </div>
 
   <hr>
-  <!-- Data paylod stats -->
-  <div class="row">
-    <div class="col-md-6">
-      <h2>Data per satellite</h2>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Norad ID</th>
-            <th>Name</th>
-            <th>Data</th>
-            <th>Latest</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for sat in satellites %}
-            {% if sat.count != 0 %}
-              <tr>
-                <td>{{sat.norad_cat_id}}</td>
-                <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{sat.name}}</a></td>
-                <td>{{sat.count}}</td>
-                <td>{{sat.latest_payload|date:"Y-m-d H:i:s"}}</td>
-              </tr>
-            {% endif %}
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    <div class="col-md-6">
-      <h2>Data per station</h2>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Data</th>
-            <th>Latest</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for obs in observers %}
+
+  {% if satellites and observers %}
+    <!-- Data paylod stats -->
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Data per satellite</h2>
+        <table class="table table-hover">
+          <thead>
             <tr>
-              <td>{{forloop.counter}}</td>
-              <td>{{obs.observer}}</td>
-              <td>{{obs.count}}</td>
-              <td>{{obs.latest_payload|date:"Y-m-d H:i:s"}}</td>
+              <th>Norad ID</th>
+              <th>Name</th>
+              <th>Data</th>
+              <th>Latest</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {% for sat in satellites %}
+              {% if sat.count != 0 %}
+                <tr>
+                  <td>{{sat.norad_cat_id}}</td>
+                  <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{sat.name}}</a></td>
+                  <td>{{sat.count}}</td>
+                  <td>{{sat.latest_payload|date:"Y-m-d H:i:s"}}</td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <h2>Data per station</h2>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Data</th>
+              <th>Latest</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for obs in observers %}
+              <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{obs.observer}}</td>
+                <td>{{obs.count}}</td>
+                <td>{{obs.latest_payload|date:"Y-m-d H:i:s"}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
+  {% endif %}
 {% endblock %}
 
 {% block javascript %}
