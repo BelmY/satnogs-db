@@ -174,13 +174,16 @@ def faq(request):
 
 def stats(request):
     """View to render stats page."""
-    satellites = cache.get('stats_satellites')
-    observers = cache.get('stats_observers')
-    if not satellites or not observers:
-        try:
-            cache_statistics.delay()
-        except OperationalError:
-            pass
+    satellites = Satellite.objects \
+                          .values('name', 'norad_cat_id') \
+                          .annotate(count=Count('telemetry_data'),
+                                    latest_payload=Max('telemetry_data__timestamp')) \
+                          .order_by('-count')
+    observers = DemodData.objects \
+                         .values('observer') \
+                         .annotate(count=Count('observer'),
+                                   latest_payload=Max('timestamp')) \
+                         .order_by('-count')
     return render(request, 'base/stats.html', {'satellites': satellites,
                                                'observers': observers})
 

@@ -21,10 +21,12 @@
           <img src="{% static 'img/transmitters.png' %}">
           {{ transmitters }}
         </p>
-        <p class="statistics" title="suggestions" data-toggle="tooltip">
-          <img src="{% static 'img/suggestions.png' %}">
-          {{ suggestions }}
-        </p>
+        {% if suggestions %}
+          <p class="statistics" title="suggestions" data-toggle="tooltip">
+            <img src="{% static 'img/suggestions.png' %}">
+            {{ suggestions }}
+          </p>
+        {% endif %}
         <p class="statistics" title="telemetry" data-toggle="tooltip">
           <img src="{% static 'img/payloads.png' %}">
           {{ payloads }}
