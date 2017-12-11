@@ -2,8 +2,6 @@ import ephem
 import logging
 from datetime import datetime
 
-from celery.exceptions import OperationalError
-
 from django.db.models import Count, Max
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -127,7 +125,8 @@ def suggestion(request):
         # Notify admins
         admins = User.objects.filter(is_superuser=True)
         site = get_current_site(request)
-        subject = '[{0}] A new suggestion was submitted'.format(site.name)
+        subject = '[{0}] A new suggestion for {1} was submitted'.format(site.name,
+                                                                        suggestion.satellite.name)
         template = 'emails/new_suggestion.txt'
         saturl = '{0}{1}'.format(
             site.domain,
@@ -135,7 +134,9 @@ def suggestion(request):
         )
         data = {
             'satname': suggestion.satellite.name,
-            'saturl': saturl
+            'saturl': saturl,
+            'sitedomain': site.domain,
+            'contributor': suggestion.user
         }
         message = render_to_string(template, {'data': data})
         for user in admins:
@@ -179,12 +180,14 @@ def stats(request):
                           .annotate(count=Count('telemetry_data'),
                                     latest_payload=Max('telemetry_data__timestamp')) \
                           .order_by('-count')
+    satellites_with_data = [obj for obj in Satellite.objects.all() if obj.has_telemetry_data]
     observers = DemodData.objects \
                          .values('observer') \
                          .annotate(count=Count('observer'),
                                    latest_payload=Max('timestamp')) \
                          .order_by('-count')
     return render(request, 'base/stats.html', {'satellites': satellites,
+                                               'satellites_with_data': satellites_with_data,
                                                'observers': observers})
 
 
