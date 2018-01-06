@@ -1,22 +1,10 @@
-ENVIRONMENT=dev
+ENVIRONMENT='dev'
 DEBUG=True
 
-# Email
-DEFAULT_FROM_EMAIL=noreply@example.com
-ADMINS_FROM_NAME=Admins
-ADMINS_FROM_EMAIL=noreply@example.com
-
-# Security
-SECRET_KEY=changeme
-ALLOWED_HOSTS=*
-SITE_URL=http://localhost:8000
-
 # Database
-DATABASE_URL=sqlite:///db.sqlite3
+DATABASE_URL='sqlite:///db.sqlite3'
 
-# Services
-OPBEAT_ORGID=
-OPBEAT_APPID=
-OPBEAT_SECRET=
-GOOGLE_ANALYTICS_KEY=
-MAPBOX_TOKEN=
+# Cache
+CACHE_BACKEND='django.core.cache.backends.locmem.LocMemCache'
+CACHE_LOCATION='unique-snowflake'
+CACHE_CLIENT_CLASS=None

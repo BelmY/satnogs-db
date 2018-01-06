@@ -4,11 +4,12 @@ from os import path
 from shortuuidfield import ShortUUIDField
 from uuid import uuid4
 
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.signals import post_save
-from django.contrib.auth.models import User
-from django.conf import settings
+from django.utils.timezone import now
 
 from db.base.helpers import gridsquare
 
@@ -17,7 +18,8 @@ SATELLITE_STATUS = ['alive', 'dead', 're-entered']
 
 
 def _name_payload_frame(instance, filename):
-    folder = 'payload_frames'
+    today = now()
+    folder = 'payload_frames/{0}/{1}/{2}/'.format(today.year, today.month, today.day)
     ext = 'raw'
     filename = '{0}_{1}.{2}'.format(filename, uuid4().hex, ext)
     return path.join(folder, filename)

@@ -1,19 +1,10 @@
 #!/usr/bin/env python
 from datetime import datetime
-
-
-def decode_bytes(byte_array_temp):
-    numberOfBitsToShiftBy = 0
-    telemetryPointRaw = 0
-    for byte in byte_array_temp:
-        shiftedByte = byte << numberOfBitsToShiftBy
-        telemetryPointRaw += shiftedByte
-        numberOfBitsToShiftBy += 8
-    return telemetryPointRaw
+from struct import unpack
 
 
 def find_sync_index(data):
-    sync_bytes = bytearray([0x55, 0x53, 0x36])  # U S 6 0r 0x55 0x53 0x36
+    sync_bytes = bytearray([0x55, 0x53, 0x36])  # U S 6 or 0x55 0x53 0x36
     packet_start_index = bytearray(data).find(sync_bytes)
     return packet_start_index
 
@@ -29,42 +20,42 @@ def decode_payload(payload, observation_datetime, data_id):
 
     telemetry = []
 
-    packet_index = decode_bytes(payload[3:3 + 2])
-    gnd_index_ack = decode_bytes(payload[5:5 + 2])
-    packet_type = decode_bytes(payload[7:7 + 1])
-    payload_size = decode_bytes(payload[8:8 + 1])
-    reboot_cnt = decode_bytes(payload[9:9 + 2])
+    packet_index = unpack('<H', payload[3:3 + 2])[0]
+    gnd_index_ack = unpack('<H', payload[5:5 + 2])[0]
+    packet_type = unpack('B', payload[7:7 + 1])[0]
+    payload_size = unpack('B', payload[8:8 + 1])[0]
+    reboot_cnt = unpack('<H', payload[9:9 + 2])[0]
     if (packet_type == 1):
-        uptime = decode_bytes(payload[11:11 + 4])  # in ms
-        unix_time = decode_bytes(payload[15:15 + 4])  # in s
-        temp_mcu = decode_bytes(payload[19:19 + 1])  # in C
-        temp_fpga = decode_bytes(payload[20:20 + 1])  # in C
-        magneto_x = decode_bytes(payload[21:21 + 2])  # in ?
-        magneto_y = decode_bytes(payload[23:23 + 2])  # in ?
-        magneto_z = decode_bytes(payload[25:25 + 2])  # in ?
-        gyro_x = decode_bytes(payload[27:27 + 2])  # in ?
-        gyro_y = decode_bytes(payload[29:29 + 2])  # in ?
-        gyro_z = decode_bytes(payload[31:31 + 2])  # in ?
-        i_cpu = decode_bytes(payload[33:33 + 2])  # in ?
-        temp_radio = decode_bytes(payload[35:35 + 1])  # in C
-        payload_reserved_0 = decode_bytes(payload[36:36 + 2])
-        temp_bottom = decode_bytes(payload[38:38 + 1]) * 0.2  # in ?C
-        temp_upper = decode_bytes(payload[39:39 + 1]) * 0.2  # in ?C
-        payload_reserved_1 = decode_bytes(payload[40:40 + 1])
-        eps_vbat = decode_bytes(payload[41:41 + 2])  # in mV
-        i_eps_sun = decode_bytes(payload[43:43 + 2])  # in mA
-        i_eps_out = decode_bytes(payload[45:45 + 2])  # in mA
-        v_eps_panel1 = decode_bytes(payload[47:47 + 2])  # in mV
-        v_eps_panel2 = decode_bytes(payload[49:49 + 2])  # in mV
-        v_eps_panel3 = decode_bytes(payload[51:51 + 2])  # in mV
-        i_eps_panel1 = decode_bytes(payload[53:53 + 2])  # in mA
-        i_eps_panel2 = decode_bytes(payload[55:55 + 2])  # in mA
-        i_eps_panel3 = decode_bytes(payload[57:57 + 2])  # in mA
-        temp_eps_bat = decode_bytes(payload[59:59 + 2])  # in C
-        payload_reserved_2 = decode_bytes(payload[61:61 + 1])
-        sat_error_flag = decode_bytes(payload[62:62 + 2])
-        sat_operation_status = decode_bytes(payload[64:64 + 1])
-        sat_crc = decode_bytes(payload[65:65 + 1])
+        uptime = unpack('<L', payload[11:11 + 4])[0]  # in ms
+        unix_time = unpack('<L', payload[15:15 + 4])[0]  # in s
+        temp_mcu = unpack('b', payload[19:19 + 1])[0]  # in C
+        temp_fpga = unpack('b', payload[20:20 + 1])[0]  # in C
+        magneto_x = unpack('<h', payload[21:21 + 2])[0]  # in ?
+        magneto_y = unpack('<h', payload[23:23 + 2])[0]  # in ?
+        magneto_z = unpack('<h', payload[25:25 + 2])[0]  # in ?
+        gyro_x = unpack('<h', payload[27:27 + 2])[0]  # in ?
+        gyro_y = unpack('<h', payload[29:29 + 2])[0]  # in ?
+        gyro_z = unpack('<h', payload[31:31 + 2])[0]  # in ?
+        i_cpu = unpack('<H', payload[33:33 + 2])[0]  # in ?
+        temp_radio = unpack('b', payload[35:35 + 1])[0]  # in C
+        payload_reserved_0 = unpack('<H', payload[36:36 + 2])[0]
+        temp_bottom = unpack('B', payload[38:38 + 1])[0] * 0.2  # in ?C
+        temp_upper = unpack('B', payload[39:39 + 1])[0] * 0.2  # in ?C
+        payload_reserved_1 = unpack('B', payload[40:40 + 1])[0]
+        eps_vbat = unpack('<H', payload[41:41 + 2])[0]  # in mV
+        i_eps_sun = unpack('<H', payload[43:43 + 2])[0]  # in mA
+        i_eps_out = unpack('<H', payload[45:45 + 2])[0]  # in mA
+        v_eps_panel1 = unpack('<H', payload[47:47 + 2])[0]  # in mV
+        v_eps_panel2 = unpack('<H', payload[49:49 + 2])[0]  # in mV
+        v_eps_panel3 = unpack('<H', payload[51:51 + 2])[0]  # in mV
+        i_eps_panel1 = unpack('<H', payload[53:53 + 2])[0]  # in mA
+        i_eps_panel2 = unpack('<H', payload[55:55 + 2])[0]  # in mA
+        i_eps_panel3 = unpack('<H', payload[57:57 + 2])[0]  # in mA
+        temp_eps_bat = unpack('<H', payload[59:59 + 2])[0]  # in C
+        payload_reserved_2 = unpack('B', payload[61:61 + 1])[0]
+        sat_error_flag = unpack('<H', payload[62:62 + 2])[0]
+        sat_operation_status = unpack('B', payload[64:64 + 1])[0]
+        sat_crc = unpack('B', payload[65:65 + 1])[0]
 
         data = {
             'satellite_datetime': datetime.fromtimestamp(

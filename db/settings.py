@@ -1,12 +1,12 @@
-from os import getenv
+from decouple import config, Csv
 from dj_database_url import parse as db_url
 from unipath import Path
 
 
 ROOT = Path(__file__).parent.parent
 
-ENVIRONMENT = getenv('ENVIRONMENT', 'production')
-DEBUG = getenv('DEBUG', False)
+ENVIRONMENT = config('ENVIRONMENT', default='production')
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 # Apps
 DJANGO_APPS = (
@@ -58,28 +58,26 @@ else:
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
 EMAIL_TIMEOUT = 300
-DEFAULT_FROM_EMAIL = getenv('DEFAULT_FROM_EMAIL', 'noreply@satnogs.org')
-ADMINS = (
-    (
-        getenv('ADMINS_FROM_NAME', 'SatNOGS Admins'),
-        getenv('ADMINS_FROM_EMAIL', DEFAULT_FROM_EMAIL)
-    ),
-)
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@satnogs.org')
+ADMINS = [
+    ('SatNOGS Admins', DEFAULT_FROM_EMAIL)
+]
 MANAGERS = ADMINS
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # Cache
 CACHES = {
     'default': {
-        'BACKEND': getenv('CACHE_BACKEND', 'django.core.cache.backends.locmem.LocMemCache'),
-        'LOCATION': getenv('CACHE_LOCATION', 'unique-snowflake'),
+        'BACKEND': config('CACHE_BACKEND', default='redis_cache.RedisCache'),
+        'LOCATION': config('CACHE_LOCATION', default='unix://var/run/redis/redis.sock'),
         'OPTIONS': {
-            'CLIENT_CLASS': getenv('CACHE_CLIENT_CLASS', None),
+            'CLIENT_CLASS': config('CACHE_CLIENT_CLASS',
+                                   default='django_redis.client.DefaultClient'),
         },
         'KEY_PREFIX': 'db-{0}'.format(ENVIRONMENT),
     }
 }
-CACHE_TTL = int(getenv('CACHE_TTL', 300))
+CACHE_TTL = config('CACHE_TTL', default=300, cast=int)
 
 # Internationalization
 TIME_ZONE = 'UTC'
@@ -134,11 +132,17 @@ MEDIA_ROOT = Path('media').resolve()
 MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 SATELLITE_DEFAULT_IMAGE = '/static/img/sat.png'
+COMPRESS_ENABLED = config('COMPRESS_ENABLED', default=False, cast=bool)
+COMPRESS_OFFLINE = config('COMPRESS_OFFLINE', default=False, cast=bool)
+COMPRESS_CACHE_BACKEND = config('COMPRESS_CACHE_BACKEND', default='default')
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.rCSSMinFilter'
+]
 
 # App conf
 ROOT_URLCONF = 'db.urls'
 WSGI_APPLICATION = 'db.wsgi.application'
-SITE_URL = getenv('SITE_URL', 'https://db.satnogs.org/')
 
 # Auth
 AUTHENTICATION_BACKENDS = (
@@ -210,8 +214,13 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_SEND_TASK_ERROR_EMAILS = True
 CELERY_TASK_ALWAYS_EAGER = False
 CELERY_DEFAULT_QUEUE = 'db-{0}-queue'.format(ENVIRONMENT)
-CELERY_BROKER_URL = getenv('CELERY_BROKER_URL', 'redis://redis:6379/0')
-CELERY_RESULT_BACKEND = getenv('CELERY_RESULT_BACKEND', 'redis://redis:6379/0')
+CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://redis:6379/0')
+CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='redis://redis:6379/0')
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'visibility_timeout': config('REDIS_VISIBILITY_TIMEOUT', default=604800, cast=int),
+    'fanout_prefix': True
+}
+REDIS_CONNECT_RETRY = True
 
 # API
 REST_FRAMEWORK = {
@@ -222,12 +231,13 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': (
-        'rest_framework.filters.DjangoFilterBackend',
+        'django_filters.rest_framework.DjangoFilterBackend',
     )
 }
 
 # Security
-SECRET_KEY = getenv('SECRET_KEY', 'changeme')
+SECRET_KEY = config('SECRET_KEY', default='changeme')
+SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=31536000, cast=int)
 CSP_DEFAULT_SRC = (
     "'self'",
     'https://*.mapbox.com',
@@ -248,34 +258,28 @@ CSP_IMG_SRC = (
 CSP_CHILD_SRC = (
     'blob:',
 )
-
-SECURE_HSTS_SECONDS = getenv('SECURE_HSTS_SECONDS', 31536000)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
-ALLOWED_HOSTS = [
-    getenv('ALLOWED_HOSTS', '*')
-]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost', cast=Csv())
 
 # Database
-DATABASE_URL = getenv('DATABASE_URL', 'sqlite:///db.sqlite3')
+DATABASE_URL = config('DATABASE_URL', default='sqlite:///db.sqlite3')
 DATABASES = {'default': db_url(DATABASE_URL)}
 
 # NETWORK API
-NETWORK_API_ENDPOINT = getenv('NETWORK_API_ENDPOINT', 'https://network.satnogs.org/api/')
-DATA_FETCH_DAYS = getenv('DATA_FETCH_DAYS', 10)
-SATELLITE_POSITION_ENDPOINT = getenv('SATELLITE_POSITION_ENDPOINT',
-                                     'https://network.satnogs.org/satellite_position/')
+NETWORK_API_ENDPOINT = config('NETWORK_API_ENDPOINT', default='https://network.satnogs.org/api/')
+DATA_FETCH_DAYS = config('DATA_FETCH_DAYS', default=10, cast=int)
 
 # Mapbox API
 MAPBOX_GEOCODE_URL = 'https://api.tiles.mapbox.com/v4/geocode/mapbox.places/'
-MAPBOX_TOKEN = getenv('MAPBOX_TOKEN', '')
+MAPBOX_TOKEN = config('MAPBOX_TOKEN', default='')
 
 # Metrics
 OPBEAT = {
-    'ORGANIZATION_ID': getenv('OPBEAT_ORGID', None),
-    'APP_ID': getenv('OPBEAT_APPID', None),
-    'SECRET_TOKEN': getenv('OPBEAT_SECRET', None),
+    'ORGANIZATION_ID': config('OPBEAT_ORGID', default=''),
+    'APP_ID': config('OPBEAT_APPID', default=''),
+    'SECRET_TOKEN': config('OPBEAT_SECRET', default=''),
 }
 
 if ENVIRONMENT == 'dev':

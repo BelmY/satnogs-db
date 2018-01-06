@@ -1,3 +1,5 @@
+from orbit import satellite
+
 from rest_framework import viewsets, mixins, status
 from rest_framework.parsers import FormParser, FileUploadParser
 from rest_framework.permissions import AllowAny
@@ -38,7 +40,24 @@ class TelemetryView(viewsets.ModelViewSet, mixins.CreateModelMixin):
     def create(self, request, *args, **kwargs):
         data = {}
 
-        data['satellite'] = Satellite.objects.get(norad_cat_id=request.data.get('noradID')).id
+        create_satellite = False
+        norad_cat_id = request.data.get('noradID')
+        try:
+            data['satellite'] = Satellite.objects.get(norad_cat_id=norad_cat_id).id
+        except Satellite.DoesNotExist:
+            create_satellite = True
+
+        if create_satellite:
+            try:
+                sat = satellite(norad_cat_id)
+            except IndexError:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            else:
+                tle = sat.tle()
+                obj = Satellite.objects.create(norad_cat_id=norad_cat_id, name=tle[0],
+                                               tle1=tle[1], tle2=tle[2])
+                data['satellite'] = obj
+
         data['station'] = request.data.get('source')
         timestamp = request.data.get('timestamp')
         data['timestamp'] = timestamp

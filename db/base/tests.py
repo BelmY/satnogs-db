@@ -160,13 +160,3 @@ class FaqViewTest(TestCase):
     def test_faq_page(self):
         response = self.client.get('/faq/')
         self.assertContains(response, 'How do I suggest a new transmitter?')
-
-
-@pytest.mark.django_db(transaction=True)
-class StatsViewTest(TestCase):
-    """
-    Test to make sure the stats page is working
-    """
-    def test_stats_page(self):
-        response = self.client.get('/stats/')
-        self.assertContains(response, 'Total satellites')

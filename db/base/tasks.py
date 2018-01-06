@@ -7,6 +7,7 @@ from django.db.models import Count, Max
 from django.conf import settings
 from django.core.cache import cache
 from django.core.mail import send_mail
+from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.utils.timezone import make_aware
 
@@ -64,10 +65,11 @@ def export_frames(norad, email, uid, period=None):
                              obj.display_frame()])
 
     # Notify user
+    site = Site.objects.get_current()
     subject = '[satnogs] Your request for exported frames is ready!'
     template = 'emails/exported_frames.txt'
     data = {
-        'url': '{0}{1}download/{2}'.format(settings.SITE_URL,
+        'url': '{0}{1}download/{2}'.format(site.domain,
                                            settings.MEDIA_URL, filename),
         'norad': norad
     }
