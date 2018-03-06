@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.utils.timezone import now
 
 from db.base.helpers import gridsquare
@@ -35,6 +35,10 @@ def _gen_observer(sender, instance, created, **kwargs):
         instance.observer = '{0}-{1}'.format(instance.station, qth)
     instance.save()
     post_save.connect(_gen_observer, sender=DemodData)
+
+
+def _set_is_decoded(sender, instance, **kwargs):
+    instance.is_decoded = instance.payload_decoded != ''
 
 
 class TransmitterApprovedManager(models.Manager):
@@ -179,6 +183,7 @@ class DemodData(models.Model):
                             default=0)
     lng = models.FloatField(validators=[MaxValueValidator(180), MinValueValidator(-180)],
                             default=0)
+    is_decoded = models.BooleanField(default=False, db_index=True)
     timestamp = models.DateTimeField(null=True)
 
     class Meta:
@@ -199,3 +204,4 @@ class DemodData(models.Model):
 
 
 post_save.connect(_gen_observer, sender=DemodData)
+pre_save.connect(_set_is_decoded, sender=DemodData)

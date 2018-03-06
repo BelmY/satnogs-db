@@ -88,9 +88,8 @@ def satellite(request, norad):
     satellite = get_object_or_404(satellite_query, norad_cat_id=norad)
     suggestions = Suggestion.objects.filter(satellite=satellite)
     modes = Mode.objects.all()
-    telemetry_data_empty = DemodData.objects.filter(satellite__norad_cat_id=norad,
-                                                    payload_decoded__exact='').count()
-    telemetry_data_count = satellite.payload_frames_count - telemetry_data_empty
+    telemetry_data_count = DemodData.objects.filter(satellite__norad_cat_id=norad,
+                                                    is_decoded=True).count()
 
     try:
         latest_frame = DemodData.objects.get(satellite=satellite,
