@@ -26,16 +26,3 @@ def setup_periodic_tasks(sender, **kwargs):
 
     sender.add_periodic_task(RUN_HOURLY, cache_statistics.s(),
                              name='cache-statistics')
-
-
-from opbeat.contrib.django.models import client, logger, register_handlers  # noqa
-from opbeat.contrib.celery import register_signal  # noqa
-
-
-try:
-    register_signal(client)
-except Exception as e:
-    logger.exception('Failed installing celery hook: %s' % e)
-
-if 'opbeat.contrib.django' in settings.INSTALLED_APPS:
-    register_handlers()

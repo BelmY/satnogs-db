@@ -34,10 +34,6 @@ LOCAL_APPS = (
     'db.api',
 )
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-if ENVIRONMENT == 'production':
-    INSTALLED_APPS += (
-        'opbeat.contrib.django',
-    )
 
 # Middlware
 MIDDLEWARE = (
@@ -49,11 +45,6 @@ MIDDLEWARE = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'csp.middleware.CSPMiddleware',
 )
-if ENVIRONMENT == 'production':
-    MIDDLEWARE += (
-        'opbeat.contrib.django.middleware.OpbeatAPMMiddleware',
-        'opbeat.contrib.django.middleware.Opbeat404CatchMiddleware',
-    )
 
 # Email
 if DEBUG:
@@ -179,30 +170,20 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
-        'opbeat': {
-            'level': 'WARNING',
-            'filters': ['require_debug_false'],
-            'class': 'opbeat.contrib.django.handlers.OpbeatHandler',
-        },
     },
     'loggers': {
         'django.request': {
             'level': 'ERROR',
-            'handlers': ['opbeat'],
+            'handlers': ['console'],
             'propagate': False,
         },
         'django.db.backends': {
             'level': 'ERROR',
-            'handlers': ['opbeat'],
+            'handlers': ['console'],
             'propagate': False,
         },
         'db': {
             'level': 'WARNING',
-            'handlers': ['console', 'opbeat'],
-            'propagate': False,
-        },
-        'opbeat.errors': {
-            'level': 'ERROR',
             'handlers': ['console'],
             'propagate': False,
         },
@@ -279,13 +260,6 @@ DATA_FETCH_DAYS = config('DATA_FETCH_DAYS', default=10, cast=int)
 # Mapbox API
 MAPBOX_GEOCODE_URL = 'https://api.tiles.mapbox.com/v4/geocode/mapbox.places/'
 MAPBOX_TOKEN = config('MAPBOX_TOKEN', default='')
-
-# Metrics
-OPBEAT = {
-    'ORGANIZATION_ID': config('OPBEAT_ORGID', default=''),
-    'APP_ID': config('OPBEAT_APPID', default=''),
-    'SECRET_TOKEN': config('OPBEAT_SECRET', default=''),
-}
 
 if ENVIRONMENT == 'dev':
     # Disable template caching
