@@ -90,7 +90,7 @@ class SuggestionAdmin(admin.ModelAdmin):
             message = render_to_string(template, {'data': data})
             try:
                 obj.user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
-            except:
+            except Exception:
                 logger.error(
                     'Could not send email to user',
                     exc_info=True
@@ -110,7 +110,7 @@ class SuggestionAdmin(admin.ModelAdmin):
     def transmitter_uuid(self, obj):
         try:
             return obj.transmitter.uuid
-        except:
+        except Exception:
             return '-'
 
     def transmitter_data(self, obj):

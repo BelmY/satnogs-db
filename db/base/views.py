@@ -65,7 +65,7 @@ def satellite_position(request, sat_id):
             str(sat.tle1),
             str(sat.tle2)
         )
-    except:
+    except Exception:
         data = {}
     else:
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -94,7 +94,7 @@ def satellite(request, norad):
     try:
         latest_frame = DemodData.objects.get(satellite=satellite,
                                              timestamp=satellite.latest_payload_time)
-    except:
+    except Exception:
         latest_frame = ''
 
     return render(request, 'base/satellite.html', {'satellite': satellite,
@@ -141,7 +141,7 @@ def suggestion(request):
         for user in admins:
             try:
                 user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
-            except:
+            except Exception:
                 logger.error(
                     'Could not send email to user',
                     exc_info=True

@@ -22,7 +22,7 @@
         "dnt-helper": "schalkneethling/dnt-helper",
         "gpredict.js": "kerel-fs/gpredict.js",
         "jquery": "^3.2.1",
-        "mapbox-gl": "^0.41.0",
+        "mapbox-gl": "^0.44.0",
         "moment": "^2.18.1",
         "underscore": "^1.8.3"
     },

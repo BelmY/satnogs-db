@@ -15,7 +15,7 @@ class Command(BaseCommand):
         for obj in satellites:
             try:
                 sat = satellite(obj.norad_cat_id)
-            except:
+            except Exception:
                 self.stdout.write(('Satellite {} with Identifier {} does '
                                   'not exist').format(obj.name, obj.norad_cat_id))
                 continue

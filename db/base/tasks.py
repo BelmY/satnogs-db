@@ -30,7 +30,7 @@ def update_all_tle():
     for obj in satellites:
         try:
             sat = satellite(obj.norad_cat_id)
-        except:
+        except Exception:
             continue
 
         tle = sat.tle()

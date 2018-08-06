@@ -39,7 +39,7 @@ def get_valid_satellites():
 
 class ModeFactory(factory.django.DjangoModelFactory):
     """Mode model factory."""
-    name = fuzzy.FuzzyText()
+    name = fuzzy.FuzzyText(length=8)
 
     class Meta:
         model = Mode
@@ -74,7 +74,7 @@ class TransmitterFactory(factory.django.DjangoModelFactory):
     invert = fuzzy.FuzzyChoice(choices=[True, False])
     baud = fuzzy.FuzzyInteger(4000, 22000, step=1000)
     satellite = factory.SubFactory(SatelliteFactory)
-    approved = fuzzy.FuzzyChoice(choices=[True, False])
+    approved = True
 
     class Meta:
         model = Transmitter

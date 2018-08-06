@@ -1,36 +1,41 @@
-version: '3'
+version: '3.1'
 services:
+
   db:
-    image: mariadb:5.5
+    image: mariadb:10.3
+    container_name: satnogs_db_mysql
     environment:
     - MYSQL_DATABASE=satnogsdb
     - MYSQL_USER=satnogsdb
     - MYSQL_PASSWORD=satnogsdb
     - MYSQL_ROOT_PASSWORD=toor
+
   redis:
     image: redis:3.2.8
+    container_name: satnogs_db_redis
+
   celery:
     build:
       context: .
       dockerfile: docker/dev
+    container_name: satnogs_db_celery
     volumes:
       - .:/app
     links:
       - db
       - redis
     environment:
-      - ENVIRONMENT=dev
-      - DEBUG=True
       - DATABASE_URL=mysql://satnogsdb:satnogsdb@db/satnogsdb
-      - CACHE_BACKEND=redis_cache.RedisCache
-      - CACHE_LOCATION=redis://redis:6379/1
-      - CACHE_CLIENT_CLASS=django_redis.client.DefaultClient
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
     command:
       ./bin/run-celery.sh
+
   web:
     build:
       context: .
       dockerfile: docker/dev
+    container_name: satnogs_db_web
     ports:
       - "8000:8000"
     volumes:
@@ -38,13 +43,7 @@ services:
     links:
       - db
       - redis
-      - celery
     environment:
-      - ENVIRONMENT=dev
-      - DEBUG=True
       - DATABASE_URL=mysql://satnogsdb:satnogsdb@db/satnogsdb
-      - CACHE_BACKEND=redis_cache.RedisCache
-      - CACHE_LOCATION=redis://redis:6379/1
-      - CACHE_CLIENT_CLASS=django_redis.client.DefaultClient
     command:
       ./bin/run-web.sh

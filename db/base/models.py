@@ -29,7 +29,7 @@ def _gen_observer(sender, instance, created, **kwargs):
     post_save.disconnect(_gen_observer, sender=DemodData)
     try:
         qth = gridsquare(instance.lat, instance.lng)
-    except:
+    except Exception:
         instance.observer = 'Unknown'
     else:
         instance.observer = '{0}-{1}'.format(instance.station, qth)
@@ -195,7 +195,7 @@ class DemodData(models.Model):
     def display_decoded(self):
         try:
             json.dumps(self.payload_decoded)
-        except:
+        except Exception:
             '{}'
 
     def display_frame(self):

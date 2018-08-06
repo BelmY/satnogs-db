@@ -37,7 +37,7 @@ def gridsquare(lat, lng):
 def get_apikey(user):
     try:
         token = Token.objects.get(user=user)
-    except:
+    except Exception:
         token = Token.objects.create(user=user)
     return token
 

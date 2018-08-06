@@ -28,7 +28,7 @@ class TransmitterSerializer(serializers.ModelSerializer):
     def get_mode_id(self, obj):
         try:
             return obj.mode.id
-        except:
+        except Exception:
             return None
 
     def get_norad_cat_id(self, obj):
@@ -53,13 +53,13 @@ class TelemetrySerializer(serializers.ModelSerializer):
     def get_transmitter(self, obj):
         try:
             return obj.transmitter.uuid
-        except:
+        except Exception:
             return ''
 
     def get_schema(self, obj):
         try:
             return obj.payload_telemetry.schema
-        except:
+        except Exception:
             return ''
 
     def get_decoded(self, obj):
