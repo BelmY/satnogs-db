@@ -52,9 +52,9 @@ class SatelliteAdmin(admin.ModelAdmin):
 @admin.register(Transmitter)
 class TransmitterAdmin(admin.ModelAdmin):
     list_display = ('uuid', 'description', 'satellite', 'uplink_low',
-                    'uplink_high', 'downlink_low', 'downlink_high')
+                    'uplink_high', 'downlink_low', 'downlink_high', 'baud',)
     search_fields = ('satellite__id', 'uuid',)
-    list_filter = ('mode', 'invert')
+    list_filter = ('mode', 'baud')
     readonly_fields = ('uuid', 'satellite', 'approved',)
 
 
