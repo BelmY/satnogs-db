@@ -194,37 +194,40 @@ def decode_data(norad, period=None):
                 decoder_class = getattr(decoder,
                                         tlmdecoder.decoder.capitalize())
 
-                with open(obj.payload_frame.path) as fp:
-                    # we get data frames in hex but kaitai requires binary
-                    hexdata = fp.read()
-                    bindata = binascii.unhexlify(hexdata)
+                try:
+                    with open(obj.payload_frame.path) as fp:
+                        # we get data frames in hex but kaitai requires binary
+                        hexdata = fp.read()
+                        bindata = binascii.unhexlify(hexdata)
 
-                # if we are set to use InfluxDB, send the decoded data there,
-                # otherwise we store it in the local DB.
-                if settings.USE_INFLUX:
-                    try:
-                        frame = decoder_class.from_bytes(bindata)
-                        # find kaitai_to_influx in utils.py
-                        kaitai_to_influx(frame, sat, tlmdecoder, obj)
-                        obj.payload_decoded = 'influxdb'
-                        obj.is_decoded = True
-                        obj.save()
-                        break
-                    except Exception:
-                        obj.is_decoded = False
-                        obj.save()
-                        continue
-                else:  # store in the local db instead of influx
-                    try:
-                        frame = decoder_class.from_bytes(bindata)
-                    except Exception:
-                        obj.payload_decoded = ''
-                        obj.is_decoded = False
-                        obj.save()
-                        continue
-                    else:
-                        # find kaitai_to_json in utils.py
-                        obj.payload_decoded = kaitai_to_json(frame)
-                        obj.is_decoded = True
-                        obj.save()
-                        break
+                    # if we are set to use InfluxDB, send the decoded data
+                    # there, otherwise we store it in the local DB.
+                    if settings.USE_INFLUX:
+                        try:
+                            frame = decoder_class.from_bytes(bindata)
+                            # find kaitai_to_influx in utils.py
+                            kaitai_to_influx(frame, sat, tlmdecoder, obj)
+                            obj.payload_decoded = 'influxdb'
+                            obj.is_decoded = True
+                            obj.save()
+                            break
+                        except Exception:
+                            obj.is_decoded = False
+                            obj.save()
+                            continue
+                    else:  # store in the local db instead of influx
+                        try:
+                            frame = decoder_class.from_bytes(bindata)
+                        except Exception:
+                            obj.payload_decoded = ''
+                            obj.is_decoded = False
+                            obj.save()
+                            continue
+                        else:
+                            # find kaitai_to_json in utils.py
+                            obj.payload_decoded = kaitai_to_json(frame)
+                            obj.is_decoded = True
+                            obj.save()
+                            break
+                except IOError:
+                    continue
