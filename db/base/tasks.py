@@ -10,10 +10,12 @@ from django.core.mail import send_mail
 from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.utils.timezone import make_aware
+from influxdb import InfluxDBClient
 
 from db.base.models import Satellite, DemodData
 from db.base.utils import calculate_statistics
 from db.celery import app
+from db.base.utils import decode_data
 
 
 @app.task(task_ignore_result=False)
@@ -95,3 +97,42 @@ def cache_statistics():
                                    latest_payload=Max('timestamp')) \
                          .order_by('-count')
     cache.set('stats_observers', observers, 60 * 60 * 2)
+
+
+# resets all decoded data and changes the is_decoded flag back to False
+# THIS IS VERY DISTRUCTIVE, but the expectation is that a decode_all_data would
+# follow.
+@app.task
+def reset_decoded_data(norad):
+    """DESTRUCTIVE: deletes decoded data from db and/or influxdb"""
+    frames = DemodData.objects.filter(satellite__norad_cat_id=norad)
+    for frame in frames:
+        frame.payload_decoded = ''
+        frame.is_decoded = False
+        frame.save()
+    if settings.USE_INFLUX:
+        client = InfluxDBClient(settings.INFLUX_HOST, settings.INFLUX_PORT,
+                                settings.INFLUX_USER, settings.INFLUX_PASS,
+                                settings.INFLUX_DB)
+        client.query('DROP SERIES FROM /.*/ WHERE \"norad\" = \'{0}\''
+                     .format(norad))
+
+
+# decode data for a satellite, and a given time frame (if provided). If not
+# provided it is expected that we want to try decoding all frames in the db.
+@app.task
+def decode_all_data(norad):
+    """Task to trigger a full decode of data for a satellite."""
+    decode_data(norad)
+
+
+@app.task
+def decode_recent_data():
+    """Task to trigger a partial/recent decode of data for all satellites."""
+    satellites = Satellite.objects.all()
+
+    for obj in satellites:
+        try:
+            decode_data(obj.norad_cat_id, period=1)
+        except Exception:
+            continue

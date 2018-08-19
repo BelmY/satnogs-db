@@ -8,3 +8,11 @@ DATABASE_URL='sqlite:///db.sqlite3'
 CACHE_BACKEND='django.core.cache.backends.locmem.LocMemCache'
 CACHE_LOCATION='unique-snowflake'
 CACHE_CLIENT_CLASS=None
+
+# InfluxDB
+USE_INFLUX = False
+INFLUX_HOST = 'localhost'
+INFLUX_PORT = '8086'
+INFLUX_USER = 'db'
+INFLUX_PASS = 'db'
+INFLUX_DB = 'db'

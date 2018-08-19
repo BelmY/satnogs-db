@@ -8,9 +8,10 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 
 from db.base.models import Mode, Satellite, Transmitter, Suggestion, DemodData, Telemetry
-from db.base.tasks import check_celery
+from db.base.tasks import check_celery, reset_decoded_data, decode_all_data
 
 
 logger = logging.getLogger('db')
@@ -29,6 +30,10 @@ class SatelliteAdmin(admin.ModelAdmin):
         urls = super(SatelliteAdmin, self).get_urls()
         my_urls = [
             url(r'^check_celery/$', self.check_celery, name='check_celery'),
+            url(r'^reset_data/(?P<norad>[0-9]+)/$', self.reset_data,
+                name='reset_data'),
+            url(r'^decode_all_data/(?P<norad>[0-9]+)/$', self.decode_all_data,
+                name='decode_all_data'),
         ]
         return my_urls + urls
 
@@ -47,6 +52,21 @@ class SatelliteAdmin(admin.ModelAdmin):
             messages.success(request, 'Celery is OK')
         finally:
             return HttpResponseRedirect(reverse('admin:index'))
+
+    # resets all decoded data and changes the is_decoded flag back to False
+    # THIS IS VERY DISTRUCTIVE, but the expectation is that a decode_all_data
+    # would follow.
+    def reset_data(self, request, norad):
+        reset_decoded_data.delay(norad)
+        messages.success(request, 'Data reset task was triggered successfully!')
+        return redirect(reverse('admin:index'))
+
+    # force a decode of all data for a norad ID. This could be very resource
+    # intensive but necessary when catching a satellite up with a new decoder
+    def decode_all_data(self, request, norad):
+        decode_all_data.delay(norad)
+        messages.success(request, 'Decode task was triggered successfully!')
+        return redirect(reverse('admin:index'))
 
 
 @admin.register(Transmitter)

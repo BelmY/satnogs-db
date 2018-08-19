@@ -261,6 +261,14 @@ DATA_FETCH_DAYS = config('DATA_FETCH_DAYS', default=10, cast=int)
 MAPBOX_GEOCODE_URL = 'https://api.tiles.mapbox.com/v4/geocode/mapbox.places/'
 MAPBOX_TOKEN = config('MAPBOX_TOKEN', default='')
 
+# Influx DB for decoded data_id
+USE_INFLUX = config('USE_INFLUX', default=False, cast=bool)
+INFLUX_HOST = config('INFLUX_HOST', default='localhost')
+INFLUX_PORT = config('INFLUX_PORT', default='8086')
+INFLUX_USER = config('INFLUX_USER', default='db')
+INFLUX_PASS = config('INFLUX_PASS', default='db')
+INFLUX_DB = config('INFLUX_DB', default='db')
+
 if ENVIRONMENT == 'dev':
     # Disable template caching
     for backend in TEMPLATES:

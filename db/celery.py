@@ -8,6 +8,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'db.settings')
 
 from django.conf import settings  # noqa
 
+RUN_EVERY_15 = 60 * 15
 RUN_HOURLY = 60 * 60
 RUN_DAILY = 60 * 60 * 24
 
@@ -19,10 +20,13 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
-    from db.base.tasks import update_all_tle, cache_statistics
+    from db.base.tasks import update_all_tle, cache_statistics, decode_recent_data
 
     sender.add_periodic_task(RUN_DAILY, update_all_tle.s(),
                              name='update-all-tle')
 
     sender.add_periodic_task(RUN_HOURLY, cache_statistics.s(),
                              name='cache-statistics')
+
+    sender.add_periodic_task(RUN_EVERY_15, decode_recent_data.s(),
+                             name='decode-recent-data')

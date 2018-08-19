@@ -1,4 +1,10 @@
-from db.base.models import Satellite, Transmitter, Mode, DemodData
+import json
+import binascii
+from datetime import datetime, timedelta
+from db.base.models import Satellite, Transmitter, Mode, DemodData, Telemetry
+from django.conf import settings
+from django.utils.timezone import make_aware
+from influxdb import InfluxDBClient
 
 
 def calculate_statistics():
@@ -97,3 +103,128 @@ def calculate_statistics():
         'band_data': band_data_sorted
     }
     return statistics
+
+
+# kaitai does not give us a good way to export attributes when we don't know
+# what those attributes are, and here we are dealing with a lot of various
+# decoders with different attributes. This is a hacky way of getting them
+# to json. We also need to sanitize this for any binary data left over as
+# it won't export to json.
+def kaitai_to_json(struct):
+    """Take a kaitai decode object and send to db as a json object"""
+    structdict = struct.__dict__
+    tojson = {}
+    for key, value in structdict.iteritems():
+        if key != '_root' and \
+           key != '_parent' and \
+           key != '_io':  # kaitai objects we want to skip
+            if isinstance(value, basestring):  # skip binary values
+                try:
+                    value.decode('utf-8')
+                    tojson[key] = value
+                except UnicodeError:
+                    continue
+            else:
+                tojson[key] = value
+    return json.dumps(tojson)
+
+
+# send the data from kaitai to influxdb, expects a kaitai object, the satellite
+# telemetry and demoddata for that observation to tag metadata.
+def kaitai_to_influx(struct, satellite, telemetry, demoddata):
+    """Take a kaitai decode object and send to influxdb."""
+    client = InfluxDBClient(settings.INFLUX_HOST, settings.INFLUX_PORT,
+                            settings.INFLUX_USER, settings.INFLUX_PASS,
+                            settings.INFLUX_DB)
+    structdict = struct.__dict__
+    for key, value in structdict.iteritems():
+        if key != '_root' and \
+           key != '_parent' and \
+           key != '_io':  # kaitai objects we want to skip
+            influx_tlm = []
+            data = {
+                'time': demoddata.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ'),
+                'measurement': key,
+                'tags': {
+                    'satellite': satellite.name,
+                    'norad': satellite.norad_cat_id,
+                    'decoder': telemetry.decoder,
+                    'station': demoddata.station,
+                    'observer': demoddata.observer,
+                    'source': demoddata.source
+                }
+            }
+            if isinstance(value, basestring):  # skip binary values
+                try:
+                    value.decode('utf-8')
+                    data.update({'fields': {'value': value}})
+                except UnicodeError:
+                    continue
+            else:
+                data.update({'fields': {'value': value}})
+            if 'value' in data['fields']:
+                influx_tlm.append(data)
+                client.write_points(influx_tlm)
+
+
+def decode_data(norad, period=None):
+    """Decode data for a satellite, with an option to limit the scope."""
+
+    sat = Satellite.objects.get(norad_cat_id=norad)
+    if sat.has_telemetry_decoders:
+        now = datetime.utcnow()
+        if period:
+            q = now - timedelta(hours=4)
+            q = make_aware(q)
+            data = DemodData.objects.filter(satellite__norad_cat_id=norad,
+                                            timestamp__gte=q) \
+                                    .filter(is_decoded=False)
+        else:
+            data = DemodData.objects.filter(satellite=sat) \
+                                    .filter(is_decoded=False)
+        telemetry_decoders = Telemetry.objects.filter(satellite=sat)
+
+        # iterate over DemodData objects
+        for obj in data:
+            # iterate over Telemetry decoders
+            for tlmdecoder in telemetry_decoders:
+                decoder_module = 'db.base.decoders.{0}' \
+                                 .format(tlmdecoder.decoder)
+                decoder = __import__(decoder_module, fromlist='.')
+                decoder_class = getattr(decoder,
+                                        tlmdecoder.decoder.capitalize())
+
+                with open(obj.payload_frame.path) as fp:
+                    # we get data frames in hex but kaitai requires binary
+                    hexdata = fp.read()
+                    bindata = binascii.unhexlify(hexdata)
+
+                # if we are set to use InfluxDB, send the decoded data there,
+                # otherwise we store it in the local DB.
+                if settings.USE_INFLUX:
+                    try:
+                        frame = decoder_class.from_bytes(bindata)
+                        # find kaitai_to_influx in utils.py
+                        kaitai_to_influx(frame, sat, tlmdecoder, obj)
+                        obj.payload_decoded = 'influxdb'
+                        obj.is_decoded = True
+                        obj.save()
+                        break
+                    except Exception:
+                        obj.is_decoded = False
+                        obj.save()
+                        continue
+                else:  # store in the local db instead of influx
+                    try:
+                        frame = decoder_class.from_bytes(bindata)
+                    except Exception:
+                        obj.payload_decoded = ''
+                        obj.is_decoded = False
+                        obj.save()
+                        continue
+                    else:
+                        # find kaitai_to_json in utils.py
+                        obj.payload_decoded = kaitai_to_json(frame)
+                        obj.is_decoded = True
+                        obj.save()
+                        break
