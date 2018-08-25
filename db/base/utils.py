@@ -1,4 +1,3 @@
-import json
 import binascii
 from datetime import datetime, timedelta
 from db.base.models import Satellite, Transmitter, Mode, DemodData, Telemetry
@@ -110,38 +109,13 @@ def calculate_statistics():
 # decoders with different attributes. This is a hacky way of getting them
 # to json. We also need to sanitize this for any binary data left over as
 # it won't export to json.
-def kaitai_to_json(struct):
-    """Take a kaitai decode object and send to db as a json object"""
-    structdict = struct.__dict__
-    tojson = {}
-    for key, value in structdict.iteritems():
-        if key != '_root' and \
-           key != '_parent' and \
-           key != '_io':  # kaitai objects we want to skip
-            if isinstance(value, basestring):  # skip binary values
-                try:
-                    value.decode('utf-8')
-                    tojson[key] = value
-                except UnicodeError:
-                    continue
-            else:
-                tojson[key] = value
-    return json.dumps(tojson)
 
-
-# send the data from kaitai to influxdb, expects a kaitai object, the satellite
-# telemetry and demoddata for that observation to tag metadata.
-def kaitai_to_influx(struct, satellite, telemetry, demoddata):
-    """Take a kaitai decode object and send to influxdb."""
-    client = InfluxDBClient(settings.INFLUX_HOST, settings.INFLUX_PORT,
-                            settings.INFLUX_USER, settings.INFLUX_PASS,
-                            settings.INFLUX_DB)
-    structdict = struct.__dict__
+def kaitai_to_json(structdict, satellite, telemetry, demoddata, json_obj):
+    """Recursively sends dict string/int data to the given json_obj"""
     for key, value in structdict.iteritems():
-        if key != '_root' and \
-           key != '_parent' and \
-           key != '_io':  # kaitai objects we want to skip
-            influx_tlm = []
+        if type(value) is dict:  # recursion
+            kaitai_to_json(value, satellite, telemetry, demoddata, json_obj)
+        else:
             data = {
                 'time': demoddata.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ'),
                 'measurement': key,
@@ -163,13 +137,38 @@ def kaitai_to_influx(struct, satellite, telemetry, demoddata):
             else:
                 data.update({'fields': {'value': value}})
             if 'value' in data['fields']:
-                influx_tlm.append(data)
-                client.write_points(influx_tlm)
+                json_obj.append(data)
+
+
+def kaitai_to_dict(struct):
+    """Take a kaitai decode object and return a dict object"""
+    structdict = struct.__dict__
+    todict = {}
+    for key, value in structdict.iteritems():
+        if not key.startswith("_"):  # kaitai objects and priv vars, skip
+            if isinstance(value, basestring):  # skip binary values
+                try:
+                    value.decode('utf-8')
+                    todict[key] = value
+                except UnicodeError:
+                    continue
+            elif hasattr(value, '__dict__'):
+                todict[key] = kaitai_to_dict(value)  # recursion
+            else:
+                todict[key] = value
+    return todict
+
+
+def write_influx(json_obj):
+    """Take a json object and send to influxdb."""
+    client = InfluxDBClient(settings.INFLUX_HOST, settings.INFLUX_PORT,
+                            settings.INFLUX_USER, settings.INFLUX_PASS,
+                            settings.INFLUX_DB)
+    client.write_points(json_obj)
 
 
 def decode_data(norad, period=None):
     """Decode data for a satellite, with an option to limit the scope."""
-
     sat = Satellite.objects.get(norad_cat_id=norad)
     if sat.has_telemetry_decoders:
         now = datetime.utcnow()
@@ -205,8 +204,10 @@ def decode_data(norad, period=None):
                     if settings.USE_INFLUX:
                         try:
                             frame = decoder_class.from_bytes(bindata)
-                            # find kaitai_to_influx in utils.py
-                            kaitai_to_influx(frame, sat, tlmdecoder, obj)
+                            json_obj = []
+                            kaitai_to_json(kaitai_to_dict(frame), sat,
+                                           tlmdecoder, obj, json_obj)
+                            write_influx(json_obj)
                             obj.payload_decoded = 'influxdb'
                             obj.is_decoded = True
                             obj.save()
@@ -224,8 +225,10 @@ def decode_data(norad, period=None):
                             obj.save()
                             continue
                         else:
-                            # find kaitai_to_json in utils.py
-                            obj.payload_decoded = kaitai_to_json(frame)
+                            json_obj = []
+                            kaitai_to_json(kaitai_to_dict(frame), sat,
+                                           tlmdecoder, obj, json_obj)
+                            obj.payload_decoded = json_obj
                             obj.is_decoded = True
                             obj.save()
                             break

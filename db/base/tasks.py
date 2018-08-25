@@ -105,7 +105,8 @@ def cache_statistics():
 @app.task
 def reset_decoded_data(norad):
     """DESTRUCTIVE: deletes decoded data from db and/or influxdb"""
-    frames = DemodData.objects.filter(satellite__norad_cat_id=norad)
+    frames = DemodData.objects.filter(satellite__norad_cat_id=norad) \
+                              .filter(is_decoded=True)
     for frame in frames:
         frame.payload_decoded = ''
         frame.is_decoded = False

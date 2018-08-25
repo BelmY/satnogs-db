@@ -48,7 +48,7 @@ class Cas4(KaitaiStruct):
             self._read()
 
         def _read(self):
-            self.u1_pwr_volt = self._io.read_u1()
+            self.pwr_volt = self._io.read_u1()
             self.pwr_cur = self._io.read_u1()
             self.convert_volt = self._io.read_u1()
             self.convert_cur = self._io.read_u1()
@@ -115,4 +115,3 @@ class Cas4(KaitaiStruct):
         self._m_framecounter = self._io.read_u1()
         self._io.seek(_pos)
         return self._m_framecounter if hasattr(self, '_m_framecounter') else None
-
