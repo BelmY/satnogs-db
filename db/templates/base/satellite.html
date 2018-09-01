@@ -286,6 +286,85 @@
     <li class="list-group-item telemetry-key" data-key="<%- key %>" data-unit="<%- unit %>"><%- description %></li>
   </script>
 
+
+  <!-- Data Structs Section -->
+  {% if satellite.has_telemetry_decoders %}
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 satellite-panels">
+        <div class="panel panel-default panel-satellite">
+          <div class="panel-heading">
+            <div class="satellite-title" id="telemetry-block" data-satid="{{ satellite.norad_cat_id }}">
+              Data Decoding Structs
+            </div>
+          </div>
+          <div class="row panel-body">
+            <div class="col-md-12">
+              <div class="row">
+                {% for telemetry in satellite.telemetries.all %}
+                  <div class="col-md-4">
+                    <div class="panel panel-primary panel-transmitter">
+                      <div class="panel-heading">
+                        <h3 class="panel-title">
+                          <span class="transmitter-title">{{ telemetry.name }}</span>
+                        </h3>
+                      </div>
+                      <div class="row panel-body">
+                        <div class="col-md-12">
+                          {% include "includes/field.html" with name="Decoder Script" value=telemetry.decoder %}
+                          <div class="row transmitter-element">
+                            <div class="col-md-6">
+                              <span class="label label-default">Decoder Struct</span>
+                            </div>
+                            <div class="col-md-6">
+                              <a href="#" data-toggle="modal"
+                                 data-target="#StructModal-{{ telemetry.id }}">
+                                Click here
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Struct Modal -->
+                  <div class="modal fade" id="StructModal-{{ telemetry.id }}" tabindex="-1" role="dialog" aria-labelledby="StructModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title" id="EditSuggestionModalLabel">Kaitai Struct for {{ telemetry.name }}</h4>
+                        </div>
+                        <div class="modal-body">
+                          <div class="kaitai-header">
+                            See <a href="http://kaitai.io" target="_blank">kaitai.io</a> for more information on the format.
+                          </div>
+                          <div class="kaitai-struct">
+                            <pre>{{ telemetry.schema }}</pre>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% empty %}
+                  <div class="row panel-body">
+                    <div class="col-md-12">
+                      <span class="text-danger">No data structs yet for this Satellite.</span>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+
   <!-- Telemetry Frames Section -->
   {% if satellite.telemetry_data.count %}
     <div class="row">
