@@ -72,4 +72,4 @@ class TelemetrySerializer(serializers.ModelSerializer):
 class SidsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DemodData
-        fields = ('satellite', 'payload_frame', 'station', 'lat', 'lng', 'timestamp')
+        fields = ('satellite', 'payload_frame', 'station', 'lat', 'lng', 'timestamp', 'source')

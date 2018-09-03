@@ -74,6 +74,12 @@ class TelemetryView(viewsets.ModelViewSet, mixins.CreateModelMixin):
         else:
             data['lng'] = float(lng)
 
+        # Network or SiDS submission?
+        if request.data.get('satnogs_network'):
+            data['source'] = 'network'
+        else:
+            data['source'] = 'sids'
+
         # Create file out of frame string
         frame = ContentFile(request.data.get('frame'), name='sids')
         data['payload_frame'] = frame
