@@ -336,12 +336,18 @@
                           <h4 class="modal-title" id="EditSuggestionModalLabel">Kaitai Struct for {{ telemetry.name }}</h4>
                         </div>
                         <div class="modal-body">
-                          <div class="kaitai-header">
-                            See <a href="http://kaitai.io" target="_blank">kaitai.io</a> for more information on the format.
-                          </div>
-                          <div class="kaitai-struct">
-                            <pre>{{ telemetry.schema }}</pre>
-                          </div>
+                          {% if not telemetry.schema == '' %}
+                            <div class="kaitai-header">
+                              See <a href="http://kaitai.io" target="_blank">kaitai.io</a> for more information on the format.
+                            </div>
+                            <div class="kaitai-struct">
+                              <pre>{{ telemetry.schema }}</pre>
+                            </div>
+                          {% else %}
+                            <div>
+                              Struct format appears to be missing.
+                            </div>
+                          {% endif %}
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
