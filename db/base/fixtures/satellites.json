@@ -1555,5 +1555,14 @@
         "name": "NAYIF",
         "names": "NAYIF-1\r\nFUNCUBE-5"
     }
+},
+{
+    "model": "base.satellite",
+    "pk": 171,
+    "fields": {
+        "norad_cat_id": 40661,
+        "name": "LIGHTSAIL-1",
+        "status": "re-entered"
+    }
 }
 ]
