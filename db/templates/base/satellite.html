@@ -46,11 +46,13 @@
             </div>
           </div>
           <div class="col-sm-9">
+          {% if satellite.status != 're-entered' %}
               <div id="map"
                    data-name="{{ satellite.name }}"
                    data-tle1="{{ satellite.tle1 }}"
                    data-tle2="{{ satellite.tle2 }}"
                    data-mapboxtoken="{{ mapbox_token }}"></div>
+          {% endif %}
           </div>
         </div>
       </div>
