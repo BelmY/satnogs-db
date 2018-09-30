@@ -1,5 +1,8 @@
 # This is a generated file! Please edit source .ksy file and use kaitai-struct-compiler to rebuild
 
+# manually added support for regex and binascii:
+import re, binascii
+
 from pkg_resources import parse_version
 from kaitaistruct import __version__ as ks_version, KaitaiStruct, KaitaiStream, BytesIO
 
@@ -18,8 +21,19 @@ class Elfin(KaitaiStruct):
         self._raw_ax25_header = self._io.read_bytes(16)
         io = KaitaiStream(BytesIO(self._raw_ax25_header))
         self.ax25_header = self._root.Ax25Hdr(io, self, self._root)
-        self.ax25_info = self._root.ElfinTlmData(self._io, self, self._root)
+        # manually edited to fixup escaped telemetry sequences
+        bindata = self._root.ElfinTlmData(self._io, self, self._root)
+        payload_frame = str(binascii.hexlify(bindata)).upper()
+        payload_frame = payload_frame[2:len(payload_frame)-1] # strip B'..'
 
+        # substitute ELFIN STAR payload escape sequence
+        payload_frame = re.sub('2727', '27', payload_frame)
+        payload_frame = re.sub('275[Ee]', '5e', payload_frame)
+        payload_frame = re.sub('2793', '93', payload_frame)
+
+        self.ax25_info = binascii.unhexlify(str(payload_frame))
+        
+        
     class BvMon(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
