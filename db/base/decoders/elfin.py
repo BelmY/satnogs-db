@@ -221,9 +221,9 @@ class Elfin(KaitaiStruct):
             self._read()
 
         def _read(self):
-            self.dest_callsign = (self._io.read_bytes(6)).decode(u"ASCII")
+            self.dest_callsign = self._io.read_bytes(6)
             self.dest_ssid = self._io.read_u1()
-            self.src_callsign = (self._io.read_bytes(6)).decode(u"ASCII")
+            self.src_callsign = self._io.read_bytes(6)
             self.src_ssid = self._io.read_u1()
             self.ctl = self._io.read_u1()
             self.pid = self._io.read_u1()
