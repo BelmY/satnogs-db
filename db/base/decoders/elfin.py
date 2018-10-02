@@ -1,13 +1,9 @@
 # This is a generated file! Please edit source .ksy file and use kaitai-struct-compiler to rebuild
 
-# manually added support for regex and binascii:
-import re, binascii, sys
-
 from pkg_resources import parse_version
 from kaitaistruct import __version__ as ks_version, KaitaiStruct, KaitaiStream, BytesIO
+from elfin_pp import ElfinPp
 
-# manually added check for python3
-PY3 = sys.version_info[0] == 3
 
 if parse_version(ks_version) < parse_version('0.7'):
     raise Exception("Incompatible Kaitai Struct Python API: 0.7 or later is required, but you have %s" % (ks_version))
@@ -23,20 +19,20 @@ class Elfin(KaitaiStruct):
         self._raw_ax25_header = self._io.read_bytes(16)
         io = KaitaiStream(BytesIO(self._raw_ax25_header))
         self.ax25_header = self._root.Ax25Hdr(io, self, self._root)
-        # manually edited to fixup escaped telemetry sequences
-        bindata = self._root.ElfinTlmData(self._io, self, self._root)
-        payload_frame = str(binascii.hexlify(bindata)).upper()
-        if PY3:
-            payload_frame = payload_frame[2:len(payload_frame)-1] # strip B'..'
+        self.ax25_info = self._root.ElfinTlmData(self._io, self, self._root)
 
-        # substitute ELFIN STAR payload escape sequence
-        payload_frame = re.sub('2727', '27', payload_frame)
-        payload_frame = re.sub('275[Ee]', '5e', payload_frame)
-        payload_frame = re.sub('2793', '93', payload_frame)
+    class DestCallsign(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._read()
 
-        self.ax25_info = binascii.unhexlify(str(payload_frame))
-        
-        
+        def _read(self):
+            self._raw_dest_callsign = self._io.read_bytes(6)
+            self.dest_callsign = KaitaiStream.process_rotate_left(self._raw_dest_callsign, 8 - (1), 1)
+
+
     class BvMon(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
@@ -221,9 +217,9 @@ class Elfin(KaitaiStruct):
             self._read()
 
         def _read(self):
-            self.dest_callsign = self._io.read_bytes(6)
+            self.dest_callsign = self._root.DestCallsign(self._io, self, self._root)
             self.dest_ssid = self._io.read_u1()
-            self.src_callsign = self._io.read_bytes(6)
+            self.src_callsign = self._root.SrcCallsign(self._io, self, self._root)
             self.src_ssid = self._io.read_u1()
             self.ctl = self._io.read_u1()
             self.pid = self._io.read_u1()
@@ -286,9 +282,17 @@ class Elfin(KaitaiStruct):
             self.radio_tlm = self._root.RadioTlm(self._io, self, self._root)
             self.radio_cfg_read = self._root.RadioCfgRead(self._io, self, self._root)
             self.errors = self._root.Errors(self._io, self, self._root)
-            self.fc_salt = (self._io.read_bytes(4)).decode(u"ASCII")
+            self.fc_salt = self._io.read_bytes(4)
             self.fc_crc = self._io.read_u1()
             self.frame_end = self._io.read_u1()
+
+        @property
+        def elfin_tlm_data(self):
+            if hasattr(self, '_m_elfin_tlm_data'):
+                return self._m_elfin_tlm_data if hasattr(self, '_m_elfin_tlm_data') else None
+
+            self._m_elfin_tlm_data = self._root.Preprocessor(self._io, self, self._root)
+            return self._m_elfin_tlm_data if hasattr(self, '_m_elfin_tlm_data') else None
 
 
     class BcdClk(KaitaiStruct):
@@ -384,6 +388,19 @@ class Elfin(KaitaiStruct):
             self.acc_curr_reg = self._io.read_u2be()
 
 
+    class Preprocessor(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._read()
+
+        def _read(self):
+            self._raw_databuf = self._io.read_bytes_full()
+            _process = ElfinPp()
+            self.databuf = _process.decode(self._raw_databuf)
+
+
     class SaCurrent(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
@@ -432,6 +449,18 @@ class Elfin(KaitaiStruct):
 
         def _read(self):
             self.current = self._io.read_u2be()
+
+
+    class SrcCallsign(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._read()
+
+        def _read(self):
+            self._raw_src_callsign = self._io.read_bytes(6)
+            self.src_callsign = KaitaiStream.process_rotate_left(self._raw_src_callsign, 8 - (1), 1)
 
 
 
