@@ -6,12 +6,10 @@
 #
 # Usage in 'kaitai struct':
 #
-# types:
-#   preprocessor:
-#     seq:
-#       - id: databuf
-#         size-eos: true
-#         process: elfin_pp
+#  - id: ax25_info
+#    type: elfin_tlm_data
+#    process: elfin_pp
+#    size-eos: true
 #
 
 import re, binascii
