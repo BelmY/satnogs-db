@@ -89,7 +89,7 @@ class Ax25frames(KaitaiStruct):
 
         def _read(self):
             self.pid = self._io.read_u1()
-            self.ax25_info = (self._io.read_bytes_full()).decode(u"ASCII")
+            self.ax25_info = self._io.read_bytes_full()
 
 
     class IFrame(KaitaiStruct):
@@ -101,7 +101,7 @@ class Ax25frames(KaitaiStruct):
 
         def _read(self):
             self.pid = self._io.read_u1()
-            self.ax25_info = (self._io.read_bytes_full()).decode(u"ASCII")
+            self.ax25_info = self._io.read_bytes_full()
 
 
     class SrcAddress(KaitaiStruct):
