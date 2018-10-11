@@ -19,11 +19,84 @@ class Elfin(KaitaiStruct):
         self._raw_ax25_header = self._io.read_bytes(16)
         io = KaitaiStream(BytesIO(self._raw_ax25_header))
         self.ax25_header = self._root.Ax25Hdr(io, self, self._root)
-        self._raw__raw_ax25_info = self._io.read_bytes_full()
-        _process = ElfinPp()
-        self._raw_ax25_info = _process.decode(self._raw__raw_ax25_info)
-        io = KaitaiStream(BytesIO(self._raw_ax25_info))
-        self.ax25_info = self._root.ElfinTlmData(io, self, self._root)
+        _on = self._io.size() > 78
+        if _on == True:
+            self._raw__raw_ax25_info = self._io.read_bytes_full()
+            _process = ElfinPp()
+            self._raw_ax25_info = _process.decode(self._raw__raw_ax25_info)
+            io = KaitaiStream(BytesIO(self._raw_ax25_info))
+            self.ax25_info = self._root.ElfinTlmData(io, self, self._root)
+        elif _on == False:
+            self._raw__raw_ax25_info = self._io.read_bytes_full()
+            _process = ElfinPp()
+            self._raw_ax25_info = _process.decode(self._raw__raw_ax25_info)
+            io = KaitaiStream(BytesIO(self._raw_ax25_info))
+            self.ax25_info = self._root.ElfinHkpData(io, self, self._root)
+        else:
+            self._raw_ax25_info = self._io.read_bytes_full()
+            _process = ElfinPp()
+            self.ax25_info = _process.decode(self._raw_ax25_info)
+
+    class DestCallsign(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._read()
+
+        def _read(self):
+            self._raw_dest_callsign = self._io.read_bytes(6)
+            self.dest_callsign = KaitaiStream.process_rotate_left(self._raw_dest_callsign, 8 - (1), 1)
+
+
+    class ElfinHkpData(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._read()
+
+        def _read(self):
+            self.elfin_hskp_pwr1_rtcc_year = self._io.read_u1()
+            self.elfin_hskp_pwr1_rtcc_month = self._io.read_u1()
+            self.elfin_hskp_pwr1_rtcc_day = self._io.read_u1()
+            self.elfin_hskp_pwr1_rtcc_hour = self._io.read_u1()
+            self.elfin_hskp_pwr1_rtcc_minute = self._io.read_u1()
+            self.elfin_hskp_pwr1_rtcc_second = self._io.read_u1()
+            self.elfin_hskp_pwr1_pwr_board_id = self._io.read_u1()
+            self.elfin_hskp_pwr1_adc_data_adc_sa_volt_12 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_adc_sa_volt_34 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_adc_sa_volt_56 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_sa_short_circuit_current = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_bat_2_volt = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_bat_1_volt = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_reg_sa_volt_1 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_reg_sa_volt_2 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_reg_sa_volt_3 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_power_bus_current_1 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_power_bus_current_2 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_bat_mon_1_avg_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_1_temperature_register = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_1_volt_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_1_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_1_acc_curr_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_2_avg_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_2_temperature_register = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_2_volt_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_2_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_2_acc_curr_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bv_mon = self._io.read_u2be()
+            self.elfin_hskp_pwr1_tmps_tmp1 = self._io.read_s2be()
+            self.elfin_hskp_pwr1_tmps_tmp2 = self._io.read_s2be()
+            self.elfin_hskp_pwr1_tmps_tmp3 = self._io.read_s2be()
+            self.elfin_hskp_pwr1_tmps_tmp4 = self._io.read_s2be()
+            self.elfin_hskp_pwr1_accumulated_curr_bat1_rsrc = self._io.read_u1()
+            self.elfin_hskp_pwr1_accumulated_curr_bat1_rarc = self._io.read_u1()
+            self.elfin_fc_status_safe_mode = self._io.read_bits_int(1) != 0
+            self.elfin_fc_status_reserved = self._io.read_bits_int(3)
+            self._io.align_to_byte()
+            self.elfin_fc_status_early_orbit = self._io.read_u1()
+
 
     class Ax25Hdr(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
@@ -41,31 +114,11 @@ class Elfin(KaitaiStruct):
             self.pid = self._io.read_u1()
 
 
-    class DestCallsign(KaitaiStruct):
-        def __init__(self, _io, _parent=None, _root=None):
-            self._io = _io
-            self._parent = _parent
-            self._root = _root if _root else self
-            self._read()
-
-        def _read(self):
-            self._raw_dest_callsign = self._io.read_bytes(6)
-            self.dest_callsign = KaitaiStream.process_rotate_left(self._raw_dest_callsign, 8 - (1), 1)
-
-
-    class SrcCallsign(KaitaiStruct):
-        def __init__(self, _io, _parent=None, _root=None):
-            self._io = _io
-            self._parent = _parent
-            self._root = _root if _root else self
-            self._read()
-
-        def _read(self):
-            self._raw_src_callsign = self._io.read_bytes(6)
-            self.src_callsign = KaitaiStream.process_rotate_left(self._raw_src_callsign, 8 - (1), 1)
-
-
     class ElfinTlmData(KaitaiStruct):
+        """
+        .. seealso::
+           Source - https://elfin.igpp.ucla.edu/s/Beacon-Format_v2.xlsx
+        """
         def __init__(self, _io, _parent=None, _root=None):
             self._io = _io
             self._parent = _parent
@@ -92,32 +145,32 @@ class Elfin(KaitaiStruct):
             self.elfin_hskp_pwr1_rtcc_hour = self._io.read_u1()
             self.elfin_hskp_pwr1_rtcc_minute = self._io.read_u1()
             self.elfin_hskp_pwr1_rtcc_second = self._io.read_u1()
-            self.elfin_hskp_pwr1_adc_data_adc_sa_volt_12 = self._io.read_u2le()
-            self.elfin_hskp_pwr1_adc_data_adc_sa_volt_34 = self._io.read_u2le()
-            self.elfin_hskp_pwr1_adc_data_adc_sa_volt_56 = self._io.read_u2le()
-            self.elfin_hskp_pwr1_adc_data_sa_short_circuit_current = self._io.read_u2le()
-            self.elfin_hskp_pwr1_adc_data_bat_2_volt = self._io.read_u2le()
-            self.elfin_hskp_pwr1_adc_data_bat_1_volt = self._io.read_u2le()
-            self.elfin_hskp_pwr1_adc_data_reg_sa_volt_1 = self._io.read_u2le()
-            self.elfin_hskp_pwr1_adc_data_reg_sa_volt_2 = self._io.read_u2le()
-            self.elfin_hskp_pwr1_adc_data_reg_sa_volt_3 = self._io.read_u2le()
-            self.elfin_hskp_pwr1_adc_data_power_bus_current_1 = self._io.read_u2le()
-            self.elfin_hskp_pwr1_adc_data_power_bus_current_2 = self._io.read_u2le()
-            self.elfin_hskp_pwr1_bat_mon_1_avg_cur_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr1_bat_mon_1_temperature_register = self._io.read_s2le()
-            self.elfin_hskp_pwr1_bat_mon_1_volt_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr1_bat_mon_1_cur_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr1_bat_mon_1_acc_curr_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr1_bat_mon_2_avg_cur_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr1_bat_mon_2_temperature_register = self._io.read_s2le()
-            self.elfin_hskp_pwr1_bat_mon_2_volt_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr1_bat_mon_2_cur_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr1_bat_mon_2_acc_curr_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr1_bv_mon = self._io.read_u2le()
-            self.elfin_hskp_pwr1_tmps_tmp1 = self._io.read_s2le()
-            self.elfin_hskp_pwr1_tmps_tmp2 = self._io.read_s2le()
-            self.elfin_hskp_pwr1_tmps_tmp3 = self._io.read_s2le()
-            self.elfin_hskp_pwr1_tmps_tmp4 = self._io.read_s2le()
+            self.elfin_hskp_pwr1_adc_data_adc_sa_volt_12 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_adc_sa_volt_34 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_adc_sa_volt_56 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_sa_short_circuit_current = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_bat_2_volt = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_bat_1_volt = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_reg_sa_volt_1 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_reg_sa_volt_2 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_reg_sa_volt_3 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_power_bus_current_1 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_adc_data_power_bus_current_2 = self._io.read_u2be()
+            self.elfin_hskp_pwr1_bat_mon_1_avg_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_1_temperature_register = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_1_volt_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_1_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_1_acc_curr_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_2_avg_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_2_temperature_register = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_2_volt_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_2_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bat_mon_2_acc_curr_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr1_bv_mon = self._io.read_u2be()
+            self.elfin_hskp_pwr1_tmps_tmp1 = self._io.read_s2be()
+            self.elfin_hskp_pwr1_tmps_tmp2 = self._io.read_s2be()
+            self.elfin_hskp_pwr1_tmps_tmp3 = self._io.read_s2be()
+            self.elfin_hskp_pwr1_tmps_tmp4 = self._io.read_s2be()
             self.elfin_hskp_pwr1_accumulated_curr_bat1_rarc = self._io.read_u1()
             self.elfin_hskp_pwr1_accumulated_curr_bat1_rsrc = self._io.read_u1()
             self.elfin_hskp_pwr1_accumulated_curr_bat2_rarc = self._io.read_u1()
@@ -128,32 +181,32 @@ class Elfin(KaitaiStruct):
             self.elfin_hskp_pwr2_rtcc_hour = self._io.read_u1()
             self.elfin_hskp_pwr2_rtcc_minute = self._io.read_u1()
             self.elfin_hskp_pwr2_rtcc_second = self._io.read_u1()
-            self.elfin_hskp_pwr2_adc_data_adc_sa_volt_12 = self._io.read_u2le()
-            self.elfin_hskp_pwr2_adc_data_adc_sa_volt_34 = self._io.read_u2le()
-            self.elfin_hskp_pwr2_adc_data_adc_sa_volt_56 = self._io.read_u2le()
-            self.elfin_hskp_pwr2_adc_data_sa_short_circuit_current = self._io.read_u2le()
-            self.elfin_hskp_pwr2_adc_data_bat_2_volt = self._io.read_u2le()
-            self.elfin_hskp_pwr2_adc_data_bat_1_volt = self._io.read_u2le()
-            self.elfin_hskp_pwr2_adc_data_reg_sa_volt_1 = self._io.read_u2le()
-            self.elfin_hskp_pwr2_adc_data_reg_sa_volt_2 = self._io.read_u2le()
-            self.elfin_hskp_pwr2_adc_data_reg_sa_volt_3 = self._io.read_u2le()
-            self.elfin_hskp_pwr2_adc_data_power_bus_current_1 = self._io.read_u2le()
-            self.elfin_hskp_pwr2_adc_data_power_bus_current_2 = self._io.read_u2le()
-            self.elfin_hskp_pwr2_bat_mon_1_avg_cur_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr2_bat_mon_1_temperature_register = self._io.read_s2le()
-            self.elfin_hskp_pwr2_bat_mon_1_volt_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr2_bat_mon_1_cur_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr2_bat_mon_1_acc_curr_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr2_bat_mon_2_avg_cur_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr2_bat_mon_2_temperature_register = self._io.read_s2le()
-            self.elfin_hskp_pwr2_bat_mon_2_volt_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr2_bat_mon_2_cur_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr2_bat_mon_2_acc_curr_reg = self._io.read_s2le()
-            self.elfin_hskp_pwr2_bv_mon = self._io.read_s2le()
-            self.elfin_hskp_pwr2_tmps_tmp1 = self._io.read_s2le()
-            self.elfin_hskp_pwr2_tmps_tmp2 = self._io.read_s2le()
-            self.elfin_hskp_pwr2_tmps_tmp3 = self._io.read_s2le()
-            self.elfin_hskp_pwr2_tmps_tmp4 = self._io.read_s2le()
+            self.elfin_hskp_pwr2_adc_data_adc_sa_volt_12 = self._io.read_u2be()
+            self.elfin_hskp_pwr2_adc_data_adc_sa_volt_34 = self._io.read_u2be()
+            self.elfin_hskp_pwr2_adc_data_adc_sa_volt_56 = self._io.read_u2be()
+            self.elfin_hskp_pwr2_adc_data_sa_short_circuit_current = self._io.read_u2be()
+            self.elfin_hskp_pwr2_adc_data_bat_2_volt = self._io.read_u2be()
+            self.elfin_hskp_pwr2_adc_data_bat_1_volt = self._io.read_u2be()
+            self.elfin_hskp_pwr2_adc_data_reg_sa_volt_1 = self._io.read_u2be()
+            self.elfin_hskp_pwr2_adc_data_reg_sa_volt_2 = self._io.read_u2be()
+            self.elfin_hskp_pwr2_adc_data_reg_sa_volt_3 = self._io.read_u2be()
+            self.elfin_hskp_pwr2_adc_data_power_bus_current_1 = self._io.read_u2be()
+            self.elfin_hskp_pwr2_adc_data_power_bus_current_2 = self._io.read_u2be()
+            self.elfin_hskp_pwr2_bat_mon_1_avg_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr2_bat_mon_1_temperature_register = self._io.read_s2be()
+            self.elfin_hskp_pwr2_bat_mon_1_volt_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr2_bat_mon_1_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr2_bat_mon_1_acc_curr_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr2_bat_mon_2_avg_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr2_bat_mon_2_temperature_register = self._io.read_s2be()
+            self.elfin_hskp_pwr2_bat_mon_2_volt_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr2_bat_mon_2_cur_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr2_bat_mon_2_acc_curr_reg = self._io.read_s2be()
+            self.elfin_hskp_pwr2_bv_mon = self._io.read_s2be()
+            self.elfin_hskp_pwr2_tmps_tmp1 = self._io.read_s2be()
+            self.elfin_hskp_pwr2_tmps_tmp2 = self._io.read_s2be()
+            self.elfin_hskp_pwr2_tmps_tmp3 = self._io.read_s2be()
+            self.elfin_hskp_pwr2_tmps_tmp4 = self._io.read_s2be()
             self.elfin_hskp_pwr2_accumulated_curr_bat1_rarc = self._io.read_u1()
             self.elfin_hskp_pwr2_accumulated_curr_bat1_rsrc = self._io.read_u1()
             self.elfin_hskp_pwr2_accumulated_curr_bat2_rarc = self._io.read_u1()
@@ -164,34 +217,34 @@ class Elfin(KaitaiStruct):
             self.elfin_acb_pc_data1_rtcc_hour = self._io.read_u1()
             self.elfin_acb_pc_data1_rtcc_minute = self._io.read_u1()
             self.elfin_acb_pc_data1_rtcc_second = self._io.read_u1()
-            self.elfin_acb_pc_data1_acb_mrm_x = self._io.read_s2le()
-            self.elfin_acb_pc_data1_acb_mrm_y = self._io.read_s2le()
-            self.elfin_acb_pc_data1_acb_mrm_z = self._io.read_s2le()
-            self.elfin_acb_pc_data1_ipdu_mrm_x = self._io.read_s2le()
-            self.elfin_acb_pc_data1_ipdu_mrm_y = self._io.read_s2le()
-            self.elfin_acb_pc_data1_ipdu_mrm_z = self._io.read_s2le()
-            self.elfin_acb_pc_data1_tmps_tmp1 = self._io.read_u2le()
-            self.elfin_acb_pc_data1_tmps_tmp2 = self._io.read_u2le()
-            self.elfin_acb_pc_data1_tmps_tmp3 = self._io.read_u2le()
-            self.elfin_acb_pc_data1_tmps_tmp4 = self._io.read_u2le()
+            self.elfin_acb_pc_data1_acb_mrm_x = self._io.read_s2be()
+            self.elfin_acb_pc_data1_acb_mrm_y = self._io.read_s2be()
+            self.elfin_acb_pc_data1_acb_mrm_z = self._io.read_s2be()
+            self.elfin_acb_pc_data1_ipdu_mrm_x = self._io.read_s2be()
+            self.elfin_acb_pc_data1_ipdu_mrm_y = self._io.read_s2be()
+            self.elfin_acb_pc_data1_ipdu_mrm_z = self._io.read_s2be()
+            self.elfin_acb_pc_data1_tmps_tmp1 = self._io.read_u2be()
+            self.elfin_acb_pc_data1_tmps_tmp2 = self._io.read_u2be()
+            self.elfin_acb_pc_data1_tmps_tmp3 = self._io.read_u2be()
+            self.elfin_acb_pc_data1_tmps_tmp4 = self._io.read_u2be()
             self.elfin_acb_pc_data2_rtcc_year = self._io.read_u1()
             self.elfin_acb_pc_data2_rtcc_month = self._io.read_u1()
             self.elfin_acb_pc_data2_rtcc_day = self._io.read_u1()
             self.elfin_acb_pc_data2_rtcc_hour = self._io.read_u1()
             self.elfin_acb_pc_data2_rtcc_minute = self._io.read_u1()
             self.elfin_acb_pc_data2_rtcc_second = self._io.read_u1()
-            self.elfin_acb_pc_data2_acb_mrm_x = self._io.read_s2le()
-            self.elfin_acb_pc_data2_acb_mrm_y = self._io.read_s2le()
-            self.elfin_acb_pc_data2_acb_mrm_z = self._io.read_s2le()
-            self.elfin_acb_pc_data2_ipdu_mrm_x = self._io.read_s2le()
-            self.elfin_acb_pc_data2_ipdu_mrm_y = self._io.read_s2le()
-            self.elfin_acb_pc_data2_ipdu_mrm_z = self._io.read_s2le()
-            self.elfin_acb_pc_data2_tmps_tmp1 = self._io.read_u2le()
-            self.elfin_acb_pc_data2_tmps_tmp2 = self._io.read_u2le()
-            self.elfin_acb_pc_data2_tmps_tmp3 = self._io.read_u2le()
-            self.elfin_acb_pc_data2_tmps_tmp4 = self._io.read_u2le()
-            self.elfin_acb_sense_adc_data_current = self._io.read_u2be()
-            self.elfin_acb_sense_adc_data_voltage = self._io.read_u2be()
+            self.elfin_acb_pc_data2_acb_mrm_x = self._io.read_s2be()
+            self.elfin_acb_pc_data2_acb_mrm_y = self._io.read_s2be()
+            self.elfin_acb_pc_data2_acb_mrm_z = self._io.read_s2be()
+            self.elfin_acb_pc_data2_ipdu_mrm_x = self._io.read_s2be()
+            self.elfin_acb_pc_data2_ipdu_mrm_y = self._io.read_s2be()
+            self.elfin_acb_pc_data2_ipdu_mrm_z = self._io.read_s2be()
+            self.elfin_acb_pc_data2_tmps_tmp1 = self._io.read_u2be()
+            self.elfin_acb_pc_data2_tmps_tmp2 = self._io.read_u2be()
+            self.elfin_acb_pc_data2_tmps_tmp3 = self._io.read_u2be()
+            self.elfin_acb_pc_data2_tmps_tmp4 = self._io.read_u2be()
+            self.elfin_acb_sense_adc_data_current = self._io.read_u2le()
+            self.elfin_acb_sense_adc_data_voltage = self._io.read_u2le()
             self.elfin_fc_counters_cmds_recv = self._io.read_u1()
             self.elfin_fc_counters_badcmds_recv = self._io.read_u1()
             self.elfin_fc_counters_badpkts_fm_radio = self._io.read_u1()
@@ -210,8 +263,8 @@ class Elfin(KaitaiStruct):
             self.elfin_fc_counters_vu2_on = self._io.read_u1()
             self.elfin_fc_counters_vu2_off = self._io.read_u1()
             self.elfin_radio_tlm_rssi = self._io.read_u1()
-            self.elfin_radio_tlm_bytes_rx = self._io.read_u4le()
-            self.elfin_radio_tlm_bytes_tx = self._io.read_u4le()
+            self.elfin_radio_tlm_bytes_rx = self._io.read_u4be()
+            self.elfin_radio_tlm_bytes_tx = self._io.read_u4be()
             self.elfin_radio_cfg_read_radio_palvl = self._io.read_u1()
             self.elfin_errors_error1_day = self._io.read_u1()
             self.elfin_errors_error1_hour = self._io.read_u1()
@@ -251,6 +304,18 @@ class Elfin(KaitaiStruct):
             self.elfin_fc_salt = self._io.read_bytes(4)
             self.elfin_fc_crc = self._io.read_u1()
             self.elfin_frame_end = self._io.read_u1()
+
+
+    class SrcCallsign(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._read()
+
+        def _read(self):
+            self._raw_src_callsign = self._io.read_bytes(6)
+            self.src_callsign = KaitaiStream.process_rotate_left(self._raw_src_callsign, 8 - (1), 1)
 
 
 
