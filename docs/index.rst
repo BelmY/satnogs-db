@@ -7,4 +7,5 @@ satnogs-db
 
    installation
    contribute
+   maintenance
    api
