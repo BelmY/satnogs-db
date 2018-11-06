@@ -6,8 +6,9 @@ RUN yum -y install python python-pip python-devel git gcc libjpeg-turbo-devel \
 RUN yum -y clean all
 RUN pip install --upgrade pip
 
-COPY ./requirements/ /tmp/requirements/
-RUN pip install --no-cache-dir --require-hashes --no-deps --ignore-installed -r /tmp/requirements/dev.txt
+COPY ./requirements.txt /tmp/requirements.txt
+COPY ./requirements-dev.txt /tmp/requirements-dev.txt
+RUN pip install --no-cache-dir --require-hashes --no-deps --ignore-installed -r /tmp/requirements-dev.txt
 
 WORKDIR /app
 EXPOSE 80

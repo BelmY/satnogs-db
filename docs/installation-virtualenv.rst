@@ -25,7 +25,7 @@ Requirements: You will need python, python-virtualenvwrapper, pip and git
 
    Install local development requirements::
 
-     $ (satnogs-db)$ pip install -r requirements/dev.txt
+     $ (satnogs-db)$ pip install -r requirements-dev.txt
 
 
 #. **Database**
