@@ -18,7 +18,7 @@ stage:
   stage: deploy
   environment: stage
   only:
-   - dev
+   - dev@librespacefoundation/satnogs/satnogs-db
   script:
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
@@ -31,7 +31,7 @@ production:
   stage: deploy
   environment: production
   only:
-   - master
+   - master@librespacefoundation/satnogs/satnogs-db
   script:
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
