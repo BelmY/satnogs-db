@@ -4,6 +4,7 @@ from db.base.models import Satellite, Transmitter, Mode, DemodData, Telemetry
 from django.conf import settings
 from django.utils.timezone import make_aware
 from influxdb import InfluxDBClient
+from satnogsdecoders import decoder
 
 
 def calculate_statistics():
@@ -187,12 +188,11 @@ def decode_data(norad, period=None):
         for obj in data:
             # iterate over Telemetry decoders
             for tlmdecoder in telemetry_decoders:
-                decoder_module = 'db.base.decoders.{0}' \
-                                 .format(tlmdecoder.decoder)
-                decoder = __import__(decoder_module, fromlist='.')
-                decoder_class = getattr(decoder,
-                                        tlmdecoder.decoder.capitalize())
-
+                try:
+                    decoder_class = getattr(decoder,
+                                            tlmdecoder.decoder.capitalize())
+                except AttributeError:
+                    continue
                 try:
                     with open(obj.payload_frame.path) as fp:
                         # we get data frames in hex but kaitai requires binary
