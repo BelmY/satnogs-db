@@ -1,6 +1,5 @@
 version: '3.1'
 services:
-
   db:
     image: mariadb:10.3
     container_name: satnogs_db_mysql
@@ -9,11 +8,9 @@ services:
     - MYSQL_USER=satnogsdb
     - MYSQL_PASSWORD=satnogsdb
     - MYSQL_ROOT_PASSWORD=toor
-
   redis:
     image: redis:3.2.8
     container_name: satnogs_db_redis
-
   celery:
     build:
       context: .
@@ -30,7 +27,6 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     command:
       ./bin/run-celery.sh
-
   web:
     build:
       context: .
