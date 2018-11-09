@@ -6,34 +6,29 @@ Docker Installation
    You will need `docker <https://docs.docker.com/installation/#installation>`_ and `docker-compose <https://docs.docker.com/compose/install/>`_.
 
 
-#. **Build the containers**
+#. **Get the source code**
 
    Clone source code from the `repository <https://gitlab.com/librespacefoundation/satnogs/satnogs-db>`_::
 
      $ git clone https://gitlab.com/librespacefoundation/satnogs/satnogs-db.git
      $ cd satnogs-db
 
+#. **Configure settings**
+
    Set your environmental variables::
 
      $ cp env-dist .env
-
-   Start database containers::
-
-     $ docker-compose up -d db
-
-   Build satnogs-db container::
-
-     $ docker-compose build web
-
-   Run the initialize script to populate the database with scheme and demo data::
-
-    $ docker-compose run web python manage.py initialize
-
 
 #. **Run it!**
 
    Run satnogs-db::
 
-     $ docker-compose up
+     $ docker-compose up -d --build
+
+#. **Populate database**
+
+   Create, setup and populate the database with demo data::
+
+     $ docker-compose exec web djangoctl.sh initialize
 
    Your satnogs-db development instance is available in localhost:8000. Go hack!

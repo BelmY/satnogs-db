@@ -1,44 +1,43 @@
 VirtualEnv Installation
 =======================
 
-Requirements: You will need python, python-virtualenvwrapper, pip and git
+#. **Requirements**
 
+   You will need python, python-virtualenvwrapper, pip and git
 
-#. **Build the environment**
+#. **Get the source code**
 
    Clone source code from the `repository <https://gitlab.com/librespacefoundation/satnogs/satnogs-db>`_::
 
      $ git clone https://gitlab.com/librespacefoundation/satnogs/satnogs-db.git
+     $ cd satnogs-db
+
+#. **Build the environment**
 
    Set up the virtual environment. On first run you should create it and link it to your project path.::
 
-     $ cd satnogs-db
      $ mkvirtualenv satnogs-db -a .
+
+#. **Configure settings**
 
    Set your environmental variables::
 
      $ cp env-dist .env
 
+#. **Run it!**
+
    Activate your python virtual environment::
 
      $ workon satnogs-db
 
-   Install local development requirements::
+   Just run it::
 
-     $ (satnogs-db)$ pip install -r requirements-dev.txt
+    (satnogs-db)$ ./bin/djangoctl.sh develop .
 
-
-#. **Database**
+#. **Populate database**
 
    Create, setup and populate the database with demo data::
 
-     (satnogs-db)$ ./manage.py initialize
+     (satnogs-db)$ ./bin/djangoctl.sh initialize
 
-
-#. **Run it!**
-
-  Just run it::
-
-    (satnogs-db)$ ./manage.py runserver
-
-  Your satnogs-db development instance is available in localhost:8000. Go hack!
+   Your satnogs-db development instance is available in localhost:8000. Go hack!
