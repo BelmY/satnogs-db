@@ -3,7 +3,7 @@ from dj_database_url import parse as db_url
 from unipath import Path
 
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent
 
 ENVIRONMENT = config('ENVIRONMENT', default='production')
 DEBUG = config('DEBUG', default=False, cast=bool)
@@ -88,7 +88,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            Path('db/templates').resolve(),
+            Path(ROOT).child('templates').resolve(),
         ],
         'OPTIONS': {
             'context_processors': [
@@ -117,7 +117,7 @@ TEMPLATES = [
 STATIC_ROOT = Path('staticfiles').resolve()
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    Path('db/static').resolve(),
+    Path(ROOT).child('static').resolve(),
 ]
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
