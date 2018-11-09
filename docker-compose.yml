@@ -2,7 +2,6 @@ version: '3.1'
 services:
   db:
     image: mariadb:10.3
-    container_name: satnogs_db_mysql
     environment:
     - MYSQL_DATABASE=satnogsdb
     - MYSQL_USER=satnogsdb
@@ -10,12 +9,10 @@ services:
     - MYSQL_ROOT_PASSWORD=toor
   redis:
     image: redis:3.2.8
-    container_name: satnogs_db_redis
   celery:
     build:
       context: .
       dockerfile: docker/dev
-    container_name: satnogs_db_celery
     volumes:
       - .:/app
     links:
@@ -31,7 +28,6 @@ services:
     build:
       context: .
       dockerfile: docker/dev
-    container_name: satnogs_db_web
     ports:
       - "8000:8000"
     volumes:
