@@ -14,6 +14,23 @@ test:
     - eslint 'db/static/js/*.js'
     - stylelint 'db/static/css/*.css'
 
+docker:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - apk --update add py-pip
+    - pip install docker-compose
+  script:
+    - docker-compose build --no-cache --pull
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker tag satnogs-db:latest $CI_REGISTRY_IMAGE/satnogs-db:$CI_COMMIT_REF_NAME
+    - docker push $CI_REGISTRY_IMAGE/satnogs-db:$CI_COMMIT_REF_NAME
+  only:
+    - master
+    - dev
+
 stage:
   stage: deploy
   environment: stage

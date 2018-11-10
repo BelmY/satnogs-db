@@ -24,6 +24,7 @@ services:
   web:
     build:
       context: '.'
+    image: 'satnogs-db'
     ports:
       - '8000:8000'
     links:
