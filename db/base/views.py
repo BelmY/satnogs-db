@@ -1,6 +1,4 @@
-import ephem
 import logging
-from datetime import datetime
 
 from django.db.models import Count, Max
 from django.conf import settings
@@ -57,24 +55,11 @@ def robots(request):
 
 def satellite_position(request, sat_id):
     sat = get_object_or_404(Satellite, norad_cat_id=sat_id)
-    try:
-        satellite = ephem.readtle(
-            str(sat.name),
-            str(sat.tle1),
-            str(sat.tle2)
-        )
-    except Exception:
-        data = {}
-    else:
-        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        satellite.compute(now)
-        data = {
-            'name': str(sat.name),
-            'tle1': str(sat.tle1),
-            'tle2': str(sat.tle2),
-            'lon': '{0}'.format(satellite.sublong),
-            'lat': '{0}'.format(satellite.sublat)
-        }
+    data = {
+        'name': str(sat.name),
+        'tle1': str(sat.tle1),
+        'tle2': str(sat.tle2)
+    }
     return JsonResponse(data, safe=False)
 
 
