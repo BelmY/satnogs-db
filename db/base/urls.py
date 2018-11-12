@@ -12,8 +12,6 @@ base_urlpatterns = ([
         name='request_export_all'),
     url(r'^frames/(?P<norad>[0-9]+)/(?P<period>[0-9]+)/$', views.request_export,
         name='request_export'),
-    url(r'^satellite_position/(?P<sat_id>[0-9]+)/$', views.satellite_position,
-        name='satellite_position'),
     url(r'^suggestion/$', views.suggestion, name='suggestion'),
     url(r'^statistics/$', views.statistics, name='statistics'),
     url(r'^stats/$', views.stats, name='stats'),

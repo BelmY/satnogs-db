@@ -53,16 +53,6 @@ def robots(request):
     return response
 
 
-def satellite_position(request, sat_id):
-    sat = get_object_or_404(Satellite, norad_cat_id=sat_id)
-    data = {
-        'name': str(sat.name),
-        'tle1': str(sat.tle1),
-        'tle2': str(sat.tle2)
-    }
-    return JsonResponse(data, safe=False)
-
-
 def satellite(request, norad):
     """View to render satellite page."""
     satellite_query = Satellite.objects \
