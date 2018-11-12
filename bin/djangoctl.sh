@@ -31,6 +31,9 @@ COMMANDS:
   run                   Run WSGI HTTP server
   develop [SOURCE_DIR]  Run application in development mode, optionally
                          installing SOURCE_DIR in editable mode
+  develop_celery [SOURCE_DIR]
+                        Run celery, optionally installing SOURCE_DIR
+                         in editable mode
 
 OPTIONS:
   --help                Print usage
@@ -44,24 +47,39 @@ prepare() {
 	"$MANAGE_CMD" migrate --noinput
 }
 
+install_editable() {
+	pip install \
+	    --no-cache-dir \
+	    --no-deps \
+	    -r "${1}/requirements-dev.txt"
+	pip install \
+	    --no-cache-dir \
+	    --no-deps \
+	    --ignore-installed \
+	    -e "${1}"
+}
+
 start() {
 	exec "$MANAGE_CMD" runserver 0.0.0.0:8000
 }
 
+start_celery() {
+	exec celery -A db worker -B -l INFO
+}
+
 develop() {
 	if [ -d "$1" ]; then
-		pip install \
-		    --no-cache-dir \
-		    --no-deps \
-		    -r "${1}/requirements-dev.txt"
-		pip install \
-		    --no-cache-dir \
-		    --no-deps \
-		    --ignore-installed \
-		    -e "${1}"
+		install_editable "$1"
 	fi
 	prepare
 	start
+}
+
+develop_celery() {
+	if [ -d "$1" ]; then
+		install_editable "$1"
+	fi
+	start_celery
 }
 
 initialize() {
@@ -76,7 +94,7 @@ parse_args() {
 				command="$arg"
 				break
 				;;
-			develop)
+			develop|develop_celery)
 				shift
 				subargs="$1"
 				command="$arg"

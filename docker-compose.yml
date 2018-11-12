@@ -20,7 +20,9 @@ services:
       DATABASE_URL: 'mysql://satnogsdb:satnogsdb@db/satnogsdb'
       CELERY_BROKER_URL: 'redis://redis:6379/0'
       CELERY_RESULT_BACKEND: 'redis://redis:6379/0'
-    command: ["celery", "-A", "db", "worker", "-B", "-l", "INFO"]
+    command: ["djangoctl.sh", "develop_celery", "/usr/local/src/satnogs-db"]
+    volumes:
+      - '.:/usr/local/src/satnogs-db:z'
   web:
     build:
       context: '.'
