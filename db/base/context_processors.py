@@ -16,3 +16,11 @@ def stage_notice(request):
         return {'stage_notice': render_to_string('includes/stage_notice.html')}
     else:
         return {'stage_notice': ''}
+
+
+def auth_block(request):
+    """Displays auth links local vs auth0."""
+    if settings.AUTH0:
+        return {'auth_block': render_to_string('includes/auth_auth0.html')}
+    else:
+        return {'auth_block': render_to_string('includes/auth_local.html')}

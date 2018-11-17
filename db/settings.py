@@ -7,6 +7,7 @@ ROOT = Path(__file__).parent
 
 ENVIRONMENT = config('ENVIRONMENT', default='production')
 DEBUG = config('DEBUG', default=False, cast=bool)
+AUTH0 = config('AUTH0', default=False, cast=bool)
 
 # Apps
 DJANGO_APPS = (
@@ -33,6 +34,11 @@ LOCAL_APPS = (
     'db.base',
     'db.api',
 )
+
+if AUTH0:
+    THIRD_PARTY_APPS += ('social_django',)
+    LOCAL_APPS += ('auth0login',)
+
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # Middlware
@@ -101,6 +107,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'db.base.context_processors.analytics',
                 'db.base.context_processors.stage_notice',
+                'db.base.context_processors.auth_block',
             ],
             'loaders': [
                 ('django.template.loaders.cached.Loader', [
@@ -143,12 +150,16 @@ WSGI_APPLICATION = 'db.wsgi.application'
 # Auth
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
 )
+if AUTH0:
+    AUTHENTICATION_BACKENDS += ('auth0login.auth0backend.Auth0',)
+
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = "/login/auth0"
+LOGOUT_REDIRECT_URL = "/"
 
 # Logging
 LOGGING = {
@@ -268,6 +279,33 @@ INFLUX_PORT = config('INFLUX_PORT', default='8086')
 INFLUX_USER = config('INFLUX_USER', default='db')
 INFLUX_PASS = config('INFLUX_PASS', default='db')
 INFLUX_DB = config('INFLUX_DB', default='db')
+
+if AUTH0:
+    SOCIAL_AUTH_TRAILING_SLASH = False             # Remove end slash from routes
+    SOCIAL_AUTH_AUTH0_DOMAIN = config('SOCIAL_AUTH_AUTH0_DOMAIN', default='YOUR_AUTH0_DOMAIN')
+    SOCIAL_AUTH_AUTH0_KEY = config('SOCIAL_AUTH_AUTH0_KEY', default='YOUR_CLIENT_ID')
+    SOCIAL_AUTH_AUTH0_SECRET = config('SOCIAL_AUTH_AUTH0_SECRET', default='YOUR_CLIENT_SECRET')
+    SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+    SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email', 'first_name', 'last_name']
+
+    SOCIAL_AUTH_PIPELINE = (
+        'social_core.pipeline.social_auth.social_details',
+        'social_core.pipeline.social_auth.social_uid',
+        'social_core.pipeline.social_auth.auth_allowed',
+        'social_core.pipeline.social_auth.social_user',
+        'social_core.pipeline.social_auth.associate_by_email',
+        'social_core.pipeline.user.get_username',
+        'social_core.pipeline.user.create_user',
+        'social_core.pipeline.social_auth.associate_user',
+        'social_core.pipeline.social_auth.load_extra_data',
+        'social_core.pipeline.user.user_details',
+    )
+
+    SOCIAL_AUTH_AUTH0_SCOPE = [
+        'openid',
+        'email',
+        'profile',
+    ]
 
 if ENVIRONMENT == 'dev':
     # Disable template caching
