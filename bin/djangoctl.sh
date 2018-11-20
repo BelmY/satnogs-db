@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 MANAGE_CMD="django-admin"
+WSGI_SERVER="gunicorn"
+DJANGO_APP="db"
 
 usage() {
 	cat <<EOF
@@ -60,11 +62,11 @@ install_editable() {
 }
 
 run() {
-	exec "$MANAGE_CMD" runserver 0.0.0.0:8000
+	exec "$WSGI_SERVER" "$DJANGO_APP".wsgi
 }
 
 run_celery() {
-	exec celery -A db worker -B -l INFO
+	exec celery -A "$DJANGO_APP" worker -B -l INFO
 }
 
 develop() {
@@ -72,7 +74,7 @@ develop() {
 		install_editable "$1"
 	fi
 	prepare
-	run
+	exec "$MANAGE_CMD" runserver 0.0.0.0:8000
 }
 
 develop_celery() {
