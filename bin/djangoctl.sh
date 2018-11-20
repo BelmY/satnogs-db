@@ -59,11 +59,11 @@ install_editable() {
 	    -e "${1}"
 }
 
-start() {
+run() {
 	exec "$MANAGE_CMD" runserver 0.0.0.0:8000
 }
 
-start_celery() {
+run_celery() {
 	exec celery -A db worker -B -l INFO
 }
 
@@ -72,14 +72,14 @@ develop() {
 		install_editable "$1"
 	fi
 	prepare
-	start
+	run
 }
 
 develop_celery() {
 	if [ -d "$1" ]; then
 		install_editable "$1"
 	fi
-	start_celery
+	run_celery
 }
 
 initialize() {
