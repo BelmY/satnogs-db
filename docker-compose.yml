@@ -21,9 +21,11 @@ services:
       CELERY_BROKER_URL: 'redis://redis:6379/0'
       CELERY_RESULT_BACKEND: 'redis://redis:6379/0'
       CACHE_LOCATION: 'redis://redis:6379/1'
+      MEDIA_ROOT: '/var/lib/satnogs-db/media'
     command: ["djangoctl.sh", "develop_celery", "/usr/local/src/satnogs-db"]
     volumes:
       - '.:/usr/local/src/satnogs-db:z'
+      - 'media:/var/lib/satnogs-db/media'
   web:
     build:
       context: '.'
@@ -39,6 +41,13 @@ services:
       CELERY_BROKER_URL: 'redis://redis:6379/0'
       CELERY_RESULT_BACKEND: 'redis://redis:6379/0'
       CACHE_LOCATION: 'redis://redis:6379/1'
+      STATIC_ROOT: '/var/lib/satnogs-db/staticfiles'
+      MEDIA_ROOT: '/var/lib/satnogs-db/media'
     command: ["djangoctl.sh", "develop", "/usr/local/src/satnogs-db"]
     volumes:
       - '.:/usr/local/src/satnogs-db:z'
+      - 'static:/var/lib/satnogs-db/static'
+      - 'media:/var/lib/satnogs-db/media'
+volumes:
+  static:
+  media:

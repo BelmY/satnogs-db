@@ -123,7 +123,7 @@ TEMPLATES = [
 ]
 
 # Static & Media
-STATIC_ROOT = Path('staticfiles').resolve()
+STATIC_ROOT = config('STATIC_ROOT', default=Path('staticfiles').resolve())
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     Path(ROOT).child('static').resolve(),
@@ -133,7 +133,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
-MEDIA_ROOT = Path('media').resolve()
+MEDIA_ROOT = config('MEDIA_ROOT', default=Path('media').resolve())
 MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 SATELLITE_DEFAULT_IMAGE = '/static/img/sat.png'
