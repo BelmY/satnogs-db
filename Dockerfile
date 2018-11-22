@@ -16,10 +16,9 @@ RUN pip install \
 	--no-deps \
 	--ignore-installed \
 	/usr/local/src/satnogs-db
+RUN install -m 755 /usr/local/src/satnogs-db/bin/djangoctl.sh /usr/local/bin/
 
 RUN rm -rf /usr/local/src/satnogs-db
-
-COPY bin/djangoctl.sh /usr/local/bin/
 
 ENV DJANGO_SETTINGS_MODULE db.settings
 
