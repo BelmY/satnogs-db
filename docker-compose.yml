@@ -20,6 +20,7 @@ services:
       DATABASE_URL: 'mysql://satnogsdb:satnogsdb@db/satnogsdb'
       CELERY_BROKER_URL: 'redis://redis:6379/0'
       CELERY_RESULT_BACKEND: 'redis://redis:6379/0'
+      CACHE_LOCATION: 'redis://redis:6379/1'
     command: ["djangoctl.sh", "develop_celery", "/usr/local/src/satnogs-db"]
     volumes:
       - '.:/usr/local/src/satnogs-db:z'
@@ -35,7 +36,9 @@ services:
     environment:
       PYTHONDONTWRITEBYTECODE: '1'
       DATABASE_URL: 'mysql://satnogsdb:satnogsdb@db/satnogsdb'
-      CACHE_LOCATION: 'redis://redis:6379/0'
+      CELERY_BROKER_URL: 'redis://redis:6379/0'
+      CELERY_RESULT_BACKEND: 'redis://redis:6379/0'
+      CACHE_LOCATION: 'redis://redis:6379/1'
     command: ["djangoctl.sh", "develop", "/usr/local/src/satnogs-db"]
     volumes:
       - '.:/usr/local/src/satnogs-db:z'
