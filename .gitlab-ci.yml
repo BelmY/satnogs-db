@@ -28,8 +28,11 @@ docker:
     - docker tag satnogs-db:latest $CI_REGISTRY_IMAGE/satnogs-db:$CI_COMMIT_REF_NAME
     - docker push $CI_REGISTRY_IMAGE/satnogs-db:$CI_COMMIT_REF_NAME
   only:
-    - master
-    - dev
+    refs:
+      - master
+      - dev
+    variables:
+      - $CI_JOB_TOKEN
 
 stage:
   stage: deploy
