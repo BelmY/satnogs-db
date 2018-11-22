@@ -31,10 +31,11 @@ COMMANDS:
                          apply migrations
   initialize            Load initial fixtures
   run                   Run WSGI HTTP server
+  run_celery            Run Celery
   develop [SOURCE_DIR]  Run application in development mode, optionally
                          installing SOURCE_DIR in editable mode
   develop_celery [SOURCE_DIR]
-                        Run celery, optionally installing SOURCE_DIR
+                        Run Celery, optionally installing SOURCE_DIR
                          in editable mode
 
 OPTIONS:
@@ -92,7 +93,7 @@ parse_args() {
 	while [ $# -gt 0 ]; do
 		arg="$1"
 		case $arg in
-			prepare|run|initialize)
+			prepare|run|run_celery|initialize)
 				command="$arg"
 				break
 				;;
