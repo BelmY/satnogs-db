@@ -3,6 +3,9 @@ MAINTAINER SatNOGS project <dev@satnogs.org>
 
 WORKDIR /workdir/
 
+RUN groupadd -r satnogs \
+	&& useradd -r -g satnogs satnogs
+
 COPY requirements.txt /usr/local/src/satnogs-db/
 RUN pip install \
 	--no-cache-dir \
