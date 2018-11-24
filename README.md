@@ -4,7 +4,7 @@ SatNOGS DB is a transmitter suggestions and crowd-sourcing app.
 
 ## Contribute
 
-Check out the [documentation](https://docs.satnogs.org/en/stable/satnogs-db/docs/) on how to setup a local development instance.
+Check out the [documentation](https://docs.satnogs.org/en/latest/satnogs-db/docs/) on how to setup a local development instance.
 
 The main repository lives on [Gitlab](https://gitlab.com/librespacefoundation/satnogs/satnogs-db).
 
