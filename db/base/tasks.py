@@ -1,8 +1,6 @@
 import csv
 from datetime import datetime, timedelta
 
-from orbit import satellite
-
 from django.db.models import Count, Max
 from django.conf import settings
 from django.core.cache import cache
@@ -11,6 +9,11 @@ from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.utils.timezone import make_aware
 from influxdb import InfluxDBClient
+
+from sgp4.earth_gravity import wgs72
+from sgp4.io import twoline2rv
+
+from satellite_tle import fetch_tle_from_celestrak, fetch_tles
 
 from db.base.models import Satellite, DemodData
 from db.base.utils import calculate_statistics
@@ -25,20 +28,75 @@ def check_celery():
 
 
 @app.task
+def update_satellite(norad_id, update_name=True, update_tle=True):
+    """Task to update the name and/or the tle of a satellite, or create a
+       new satellite in the db if no satellite with given norad_id can be found"""
+
+    tle = fetch_tle_from_celestrak(norad_id)
+
+    satellite_created = False
+    try:
+        satellite = Satellite.objects.get(norad_cat_id=norad_id)
+    except Satellite.DoesNotExist:
+        satellite_created = True
+        satellite = Satellite(norad_cat_id=norad_id)
+
+    if update_name:
+        satellite.name = tle[0]
+
+    if update_tle:
+        satellite.tle_source = 'Celestrak (satcat)'
+        satellite.tle1 = tle[1]
+        satellite.tle2 = tle[2]
+
+    satellite.save()
+
+    if satellite_created:
+        print('Created satellite {}: {}'.format(satellite.norad_cat_id, satellite.name))
+    else:
+        print('Updated satellite {}: {}'.format(satellite.norad_cat_id, satellite.name))
+
+
+@app.task
 def update_all_tle():
     """Task to update all satellite TLEs"""
-    satellites = Satellite.objects.all()
 
-    for obj in satellites:
-        try:
-            sat = satellite(obj.norad_cat_id)
-        except Exception:
+    satellites = Satellite.objects.all()
+    norad_ids = list(int(sat.norad_cat_id) for sat in satellites)
+
+    tles = fetch_tles(norad_ids)
+
+    missing_norad_ids = []
+    for satellite in satellites:
+        norad_id = satellite.norad_cat_id
+
+        if norad_id not in tles.keys():
+            # No TLE available for this satellite
+            missing_norad_ids.append(norad_id)
             continue
 
-        tle = sat.tle()
-        obj.tle1 = tle[1]
-        obj.tle2 = tle[2]
-        obj.save()
+        source, tle = tles[norad_id]
+
+        if satellite.tle1 and satellite.tle2:
+            current_sat = twoline2rv(satellite.tle1, satellite.tle2, wgs72)
+            new_sat = twoline2rv(tle[1], tle[2], wgs72)
+
+            if new_sat.epoch < current_sat.epoch:
+                # Epoch of new TLE is larger then the TLE already in the db
+                continue
+
+        satellite.tle_source = source
+        satellite.tle1 = tle[1]
+        satellite.tle2 = tle[2]
+        satellite.save()
+
+        print('Updated TLE for {}: {} from {}'.format(norad_id,
+                                                      satellite.name,
+                                                      source))
+
+    for norad_id in missing_norad_ids:
+        satellite = satellites.get(norad_cat_id=norad_id)
+        print('NO TLE found for {}: {}'.format(norad_id, satellite.name))
 
 
 @app.task

@@ -68,6 +68,7 @@ class Satellite(models.Model):
                               help_text='Ideally: 250x250')
     tle1 = models.CharField(max_length=200, blank=True)
     tle2 = models.CharField(max_length=200, blank=True)
+    tle_source = models.CharField(max_length=300, blank=True)
     status = models.CharField(choices=zip(SATELLITE_STATUS, SATELLITE_STATUS),
                               max_length=10, default='alive')
 

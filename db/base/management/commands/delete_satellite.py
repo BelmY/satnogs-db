@@ -1,10 +1,10 @@
 from django.core.management.base import BaseCommand
 
-from db.base.tasks import update_satellite
+from db.base.models import Satellite
 
 
 class Command(BaseCommand):
-    help = 'Updates/Inserts Name for certain Satellites'
+    help = 'Delete selected Satellites'
 
     def add_arguments(self, parser):
         # Positional arguments
@@ -15,7 +15,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for norad_id in options['norad_ids']:
             try:
-                update_satellite(int(norad_id), update_name=True, update_tle=False)
-            except LookupError:
-                self.stderr.write('Satellite {} not found in Celestrak'.format(norad_id))
+                Satellite.objects.get(norad_cat_id=norad_id).delete()
+                self.stdout.write('Deleted satellite {}.'.format(norad_id))
                 continue
+            except Exception:
+                self.stderr.write('Satellite with Identifier {} does not exist'.format(norad_id))
