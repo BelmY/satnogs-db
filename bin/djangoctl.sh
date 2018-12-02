@@ -63,6 +63,7 @@ install_editable() {
 }
 
 run() {
+	prepare
 	exec "$WSGI_SERVER" "$DJANGO_APP".wsgi
 }
 
