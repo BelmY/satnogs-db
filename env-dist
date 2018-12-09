@@ -10,3 +10,6 @@
 
 # Mapbox
 # MAPBOX_TOKEN=enter_mapbox_token_here
+
+# Sentry
+# SENTRY_DSN='sentry_dsn'

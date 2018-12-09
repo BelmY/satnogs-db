@@ -1,6 +1,8 @@
 from decouple import config, Csv
 from dj_database_url import parse as db_url
 from unipath import Path
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 
 ROOT = Path(__file__).parent
@@ -202,6 +204,14 @@ LOGGING = {
         },
     }
 }
+
+# Sentry
+SENTRY_ENABLED = config('SENTRY_ENABLED', default=False)
+if SENTRY_ENABLED:
+    sentry_sdk.init(
+        dsn=config('SENTRY_DSN', default=''),
+        integrations=[DjangoIntegration()]
+    )
 
 # Celery
 CELERY_ENABLE_UTC = USE_TZ
