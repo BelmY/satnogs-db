@@ -13,7 +13,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
-from db.base.models import Mode, Transmitter, Satellite, Suggestion, DemodData
+from db.base.models import Mode, Transmitter, Satellite, Suggestion, DemodData, TRANSMITTER_TYPE
 from db.base.forms import SuggestionForm
 from db.base.helpers import get_apikey
 from db.base.tasks import export_frames, cache_statistics
@@ -62,6 +62,7 @@ def satellite(request, norad):
     satellite = get_object_or_404(satellite_query, norad_cat_id=norad)
     suggestions = Suggestion.objects.filter(satellite=satellite)
     modes = Mode.objects.all()
+    types = TRANSMITTER_TYPE
     telemetry_data_count = DemodData.objects.filter(satellite__norad_cat_id=norad,
                                                     is_decoded=True).count()
 
@@ -74,6 +75,7 @@ def satellite(request, norad):
     return render(request, 'base/satellite.html', {'satellite': satellite,
                                                    'suggestions': suggestions,
                                                    'modes': modes,
+                                                   'types': types,
                                                    'latest_frame': latest_frame,
                                                    'telemetry_data_count': telemetry_data_count,
                                                    'mapbox_token': settings.MAPBOX_TOKEN})

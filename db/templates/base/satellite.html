@@ -84,7 +84,7 @@
             <div class="row">
               {% for transmitter in satellite.transmitters.all %}
                 <div class="col-md-4">
-                  <div class="panel {% if transmitter.alive %}panel-primary{% else %}panel-danger{% endif %} panel-transmitter">
+                  <div class="panel {% if transmitter.alive %}panel-success{% else %}panel-danger{% endif %} panel-transmitter">
                     <div class="panel-heading">
                       <h3 class="panel-title">
                         <span class="transmitter-title">{{ transmitter.description }}</span>
@@ -98,36 +98,66 @@
                     </div>
                     <div class="row panel-body">
                       <div class="col-md-12">
-                        {% if transmitter.alive %}
-                          {% include "includes/field.html" with name="Alive" value=transmitter.alive %}
+                        {% if transmitter.type %}
+                          {% include "includes/field.html" with name="Type" value=transmitter.type %}
                         {% endif %}
                         {% if transmitter.mode %}
                           {% include "includes/field.html" with name="Mode" value=transmitter.mode %}
                         {% endif %}
-                        {% if transmitter.invert %}
-                          {% include "includes/field.html" with name="Invert" value=transmitter.invert %}
-                        {% endif %}
                         {% if transmitter.baud %}
                           {% include "includes/field.html" with name="Baud" value=transmitter.baud %}
                         {% endif %}
-                        {% if transmitter.uplink_low %}
-                          {% include "includes/field.html" with name="Uplink Low" value=transmitter.uplink_low|frq hz=transmitter.uplink_low %}
+                        {% if transmitter.type == 'Transmitter' %}
+                          {% if transmitter.downlink_low %}
+                            {% include "includes/field.html" with name="Downlink" value=transmitter.downlink_low hz=transmitter.downlink_low %}
+                          {% endif %}
+                          {% if transmitter.downlink_drift %}
+                            {% include "includes/field.html" with name="Downlink Drifted" value=transmitter.downlink_drift hz=transmitter.downlink_drift class="drifted" freq_or=transmitter.downlink_low %}
+                          {% endif %}
                         {% endif %}
-                        {% if transmitter.uplink_high %}
-                          {% include "includes/field.html" with name="Uplink High" value=transmitter.uplink_high|frq hz=transmitter.uplink_high %}
+                        {% if transmitter.type == 'Transceiver' %}
+                          {% if transmitter.downlink_low %}
+                            {% include "includes/field.html" with name="Downlink" value=transmitter.downlink_low hz=transmitter.downlink_low %}
+                          {% endif %}
+                          {% if transmitter.downlink_drift %}
+                            {% include "includes/field.html" with name="Downlink Drifted" value=transmitter.downlink_drift hz=transmitter.downlink_drift class="drifted" freq_or=transmitter.downlink_low %}
+                          {% endif %}
+                          {% if transmitter.uplink_low %}
+                            {% include "includes/field.html" with name="Uplink" value=transmitter.uplink_low hz=transmitter.uplink_low %}
+                          {% endif %}
+                          {% if transmitter.uplink_drift %}
+                            {% include "includes/field.html" with name="Uplink Drifted" value=transmitter.uplink_drift hz=transmitter.uplink_drift class="drifted" freq_or=transmitter.uplink_low %}
+                          {% endif %}
                         {% endif %}
-                        {% if transmitter.downlink_low %}
-                          {% include "includes/field.html" with name="Downlink Low" value=transmitter.downlink_low|frq hz=transmitter.downlink_low %}
-                        {% endif %}
-                        {% if transmitter.downlink_high %}
-                          {% include "includes/field.html" with name="Downlink High" value=transmitter.downlink_high|frq hz=transmitter.downlink_high %}
+                        {% if transmitter.type == 'Transponder' %}
+                          {% if transmitter.downlink_low %}
+                            {% include "includes/field.html" with name="Downlink Low" value=transmitter.downlink_low hz=transmitter.downlink_low %}
+                          {% endif %}
+                          {% if transmitter.downlink_high %}
+                            {% include "includes/field.html" with name="Downlink High" value=transmitter.downlink_high hz=transmitter.downlink_high %}
+                          {% endif %}
+                          {% if transmitter.downlink_drift %}
+                            {% include "includes/field.html" with name="Downlink Drift" value=transmitter.downlink_drift hz=transmitter.downlink_drift %}
+                          {% endif %}
+                          {% if transmitter.uplink_low %}
+                            {% include "includes/field.html" with name="Uplink Low" value=transmitter.uplink_low hz=transmitter.uplink_low %}
+                          {% endif %}
+                          {% if transmitter.uplink_high %}
+                            {% include "includes/field.html" with name="Uplink High" value=transmitter.uplink_high hz=transmitter.uplink_high %}
+                          {% endif %}
+                          {% if transmitter.uplink_drift %}
+                            {% include "includes/field.html" with name="Uplink Drift" value=transmitter.uplink_drift hz=transmitter.uplink_drift %}
+                          {% endif %}
+                          {% if transmitter.invert %}
+                            {% include "includes/field.html" with name="Invert" value=transmitter.invert %}
+                          {% endif %}
                         {% endif %}
                       </div>
                     </div>
                   </div>
 
                   <!-- Edit Suggestion Modal -->
-                  <div class="modal fade" id="EditSuggestionModal-{{ transmitter.id }}" tabindex="-1" role="dialog" aria-labelledby="EditSuggestionModalLabel" aria-hidden="true">
+                  <div class="modal fade suggestion-edit-modal" id="EditSuggestionModal-{{ transmitter.id }}" tabindex="-1" role="dialog" aria-labelledby="EditSuggestionModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -145,6 +175,16 @@
                                 <input type="checkbox" value="1" name="alive" {% if transmitter.alive %}checked{% endif %}> Alive
                               </div>
                               <div class="input-group transmitter-element-suggest">
+                                <div class="input-group-addon">Type</div>
+                                <select class="form-control suggestion-type" name="type">
+                                  {% for type in types %}
+                                    <option value="{{ type }}" {% ifequal transmitter.type type %}selected{% endifequal %}>
+                                      {{ type }}
+                                    </option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                              <div class="input-group transmitter-element-suggest">
                                 <div class="input-group-addon">Uplink Low</div>
                                 <input type="number" class="form-control" name="uplink_low" value="{{ transmitter.uplink_low|default_if_none:'' }}">
                               </div>
@@ -153,12 +193,24 @@
                                 <input type="number" class="form-control" name="uplink_high" value="{{ transmitter.uplink_high|default_if_none:'' }}">
                               </div>
                               <div class="input-group transmitter-element-suggest">
+                                <div class="input-group-addon">Uplink Drifted</div>
+                                <input type="number" class="form-control uplink-drifted-sugedit" name="" value="{{ transmitter.uplink_low|default_if_none:'' }}">
+                                <div class="input-group-addon">PPB Drift</div>
+                                <input type="text" class="form-control uplink-ppb-sugedit" name="uplink_drift" value="{{ transmitter.uplink_drift|default_if_none:'' }}" readonly>
+                              </div>
+                              <div class="input-group transmitter-element-suggest">
                                 <div class="input-group-addon">Downlink Low</div>
                                 <input type="number" class="form-control" name="downlink_low" value="{{ transmitter.downlink_low|default_if_none:'' }}">
                               </div>
                               <div class="input-group transmitter-element-suggest">
                                 <div class="input-group-addon">Downlink High</div>
                                 <input type="number" class="form-control" name="downlink_high" value="{{ transmitter.downlink_high|default_if_none:'' }}">
+                              </div>
+                              <div class="input-group transmitter-element-suggest">
+                                <div class="input-group-addon">Downlink Drifted</div>
+                                <input type="number" class="form-control downlink-drifted-sugedit" name="" value="{{ transmitter.downlink_low|default_if_none:'' }}">
+                                <div class="input-group-addon">PPB Drift</div>
+                                <input type="text" class="form-control downlink-ppb-sugedit" name="downlink_drift" value="{{ transmitter.downlink_drift|default_if_none:'' }}" readonly>
                               </div>
                               <div class="input-group transmitter-element-suggest">
                                 <div class="input-group-addon">Mode</div>
@@ -239,6 +291,9 @@
                           {% if suggestion.alive %}
                             {% include "includes/field.html" with name="Alive" value=suggestion.alive original=suggestion.transmitter.alive %}
                           {% endif %}
+                          {% if suggestion.type %}
+                            {% include "includes/field.html" with name="Type" value=suggestion.type original=suggestion.transmitter.type %}
+                          {% endif %}
                           {% if suggestion.mode %}
                             {% include "includes/field.html" with name="Mode" value=suggestion.mode original=suggestion.transmitter.mode %}
                           {% endif %}
@@ -249,16 +304,22 @@
                             {% include "includes/field.html" with name="Baud" value=suggestion.baud original=suggestion.transmitter.baud %}
                           {% endif %}
                           {% if suggestion.uplink_low %}
-                            {% include "includes/field.html" with name="Uplink Low" value=suggestion.uplink_low|frq original=suggestion.transmitter.uplink_low|frq hz=transmitter.uplink_low %}
+                            {% include "includes/field.html" with name="Uplink Low" value=suggestion.uplink_low original=suggestion.transmitter.uplink_low hz=transmitter.uplink_low %}
                           {% endif %}
                           {% if suggestion.uplink_high %}
-                            {% include "includes/field.html" with name="Uplink High" value=suggestion.uplink_high|frq original=suggestion.transmitter.uplink_high|frq hz=transmitter.uplink_high %}
+                            {% include "includes/field.html" with name="Uplink High" value=suggestion.uplink_high original=suggestion.transmitter.uplink_high hz=transmitter.uplink_high %}
+                          {% endif %}
+                          {% if suggestion.uplink_drift %}
+                            {% include "includes/field.html" with name="Uplink Drift" value=suggestion.uplink_drift original=suggestion.transmitter.uplink_drift hz=transmitter.uplink_drift %}
                           {% endif %}
                           {% if suggestion.downlink_low %}
-                            {% include "includes/field.html" with name="Downlink Low" value=suggestion.downlink_low|frq original=suggestion.transmitter.downlink_low|frq hz=transmitter.downlink_low %}
+                            {% include "includes/field.html" with name="Downlink Low" value=suggestion.downlink_low original=suggestion.transmitter.downlink_low hz=transmitter.downlink_low %}
                           {% endif %}
                           {% if suggestion.downlink_high %}
-                            {% include "includes/field.html" with name="Downlink High" value=suggestion.downlink_high|frq original=suggestion.transmitter.downlink_high|frq hz=transmitter.downlink_high %}
+                            {% include "includes/field.html" with name="Downlink High" value=suggestion.downlink_high original=suggestion.transmitter.downlink_high hz=transmitter.downlink_high %}
+                          {% endif %}
+                          {% if suggestion.downlink_drift %}
+                            {% include "includes/field.html" with name="Downlink Drift" value=suggestion.downlink_drift original=suggestion.transmitter.downlink_drift hz=transmitter.downlink_drift %}
                           {% endif %}
                           {% if suggestion.citation %}
                             {% include "includes/field.html" with name="Citation" value=suggestion.citation|urlizetrunc:35 %}
@@ -429,6 +490,16 @@
                 <input type="checkbox" value="1" name="alive" checked> Alive
               </div>
               <div class="input-group transmitter-element-suggest">
+                <div class="input-group-addon">Type</div>
+                <select class="form-control suggestion-type" name="type">
+                  {% for type in types %}
+                    <option value="{{ type }}">
+                      {{ type }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="input-group transmitter-element-suggest">
                 <div class="input-group-addon">Uplink_Low</div>
                 <input type="number" class="form-control" name="uplink_low">
               </div>
@@ -437,12 +508,24 @@
                 <input type="number" class="form-control" name="uplink_high">
               </div>
               <div class="input-group transmitter-element-suggest">
+                <div class="input-group-addon">Uplink Drifted</div>
+                <input type="number" class="form-control uplink-drifted-sugedit" name="">
+                <div class="input-group-addon">PPB Drift</div>
+                <input type="text" class="form-control uplink-ppb-sugedit" name="uplink_drift" readonly>
+              </div>
+              <div class="input-group transmitter-element-suggest">
                 <div class="input-group-addon">Downlink Low</div>
                 <input type="number" class="form-control" name="downlink_low">
               </div>
               <div class="input-group transmitter-element-suggest">
                 <div class="input-group-addon">Downlink High</div>
                 <input type="number" class="form-control" name="downlink_high">
+              </div>
+              <div class="input-group transmitter-element-suggest">
+                <div class="input-group-addon">Downlink Drifted</div>
+                <input type="number" class="form-control downlink-drifted-sugedit" name="" value="{{ transmitter.downlink_low|default_if_none:'' }}">
+                <div class="input-group-addon">PPB Drift</div>
+                <input type="text" class="form-control downlink-ppb-sugedit" name="downlink_drift" value="{{ transmitter.downlink_drift|default_if_none:'' }}" readonly>
               </div>
               <div class="input-group transmitter-element-suggest">
                 <div class="input-group-addon">Mode</div>
@@ -496,4 +579,5 @@
   <script src="{% static 'lib/mapbox-gl/dist/mapbox-gl.js' %}"></script>
   <script src="{% static 'lib/gpredict.js/dist/gpredict.min.js' %}"></script>
   <script src="{% static 'js/map.js' %}"></script>
+  <script src="{% static 'js/satellite.js' %}"></script>
 {% endblock %}

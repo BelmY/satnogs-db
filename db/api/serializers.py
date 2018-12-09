@@ -21,9 +21,9 @@ class TransmitterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transmitter
-        fields = ('uuid', 'description', 'alive', 'uplink_low', 'uplink_high',
-                  'downlink_low', 'downlink_high', 'mode_id', 'invert',
-                  'baud', 'norad_cat_id')
+        fields = ('uuid', 'description', 'alive', 'type', 'uplink_low', 'uplink_high',
+                  'uplink_drift', 'downlink_low', 'downlink_high', 'downlink_drift',
+                  'mode_id', 'invert', 'baud', 'norad_cat_id')
 
     def get_mode_id(self, obj):
         try:

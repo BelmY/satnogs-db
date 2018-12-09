@@ -71,19 +71,21 @@ class SatelliteAdmin(admin.ModelAdmin):
 
 @admin.register(Transmitter)
 class TransmitterAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'description', 'satellite', 'mode', 'uplink_low',
-                    'uplink_high', 'downlink_low', 'downlink_high', 'baud',)
-    search_fields = ('satellite__id', 'uuid',)
-    list_filter = ('mode', 'baud')
+    list_display = ('uuid', 'description', 'satellite', 'type', 'alive', 'mode', 'uplink_low',
+                    'uplink_high', 'uplink_drift', 'downlink_low', 'downlink_high',
+                    'downlink_drift', 'baud',)
+    search_fields = ('satellite__id', 'uuid', 'satellite__name', 'satellite__norad_cat_id')
+    list_filter = ('type', 'alive', 'mode', 'baud',)
     readonly_fields = ('uuid', 'satellite', 'approved',)
 
 
 @admin.register(Suggestion)
 class SuggestionAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'description', 'transmitter_uuid', 'user', 'satellite', 'uplink_low',
-                    'uplink_high', 'downlink_low', 'downlink_high',)
+    list_display = ('uuid', 'description', 'transmitter_uuid', 'user', 'type', 'satellite',
+                    'uplink_low', 'uplink_high', 'uplink_drift', 'downlink_low', 'downlink_high',
+                    'downlink_drift',)
     search_fields = ('satellite', 'uuid',)
-    list_filter = ('mode', 'invert')
+    list_filter = ('type', 'mode',)
     readonly_fields = ('uuid', 'satellite', 'transmitter', 'approved', 'user',
                        'citation', 'transmitter_data')
     actions = ['approve_suggestion']

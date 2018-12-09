@@ -19,6 +19,7 @@ logger = logging.getLogger('db')
 
 DATA_SOURCES = ['manual', 'network', 'sids']
 SATELLITE_STATUS = ['alive', 'dead', 're-entered']
+TRANSMITTER_TYPE = ['Transmitter', 'Transceiver', 'Transponder']
 
 
 def _name_payload_frame(instance, filename):
@@ -112,10 +113,14 @@ class Transmitter(models.Model):
     uuid = ShortUUIDField(db_index=True, unique=True)
     description = models.TextField()
     alive = models.BooleanField(default=True)
-    uplink_low = models.PositiveIntegerField(blank=True, null=True)
-    uplink_high = models.PositiveIntegerField(blank=True, null=True)
-    downlink_low = models.PositiveIntegerField(blank=True, null=True)
-    downlink_high = models.PositiveIntegerField(blank=True, null=True)
+    type = models.CharField(choices=zip(TRANSMITTER_TYPE, TRANSMITTER_TYPE),
+                            max_length=11, default='Transmitter')
+    uplink_low = models.BigIntegerField(blank=True, null=True)
+    uplink_high = models.BigIntegerField(blank=True, null=True)
+    uplink_drift = models.IntegerField(blank=True, null=True)
+    downlink_low = models.BigIntegerField(blank=True, null=True)
+    downlink_high = models.BigIntegerField(blank=True, null=True)
+    downlink_drift = models.IntegerField(blank=True, null=True)
     mode = models.ForeignKey(Mode, blank=True, null=True,
                              on_delete=models.SET_NULL, related_name='transmitters')
     invert = models.BooleanField(default=False)
@@ -132,10 +137,13 @@ class Transmitter(models.Model):
     def update_from_suggestion(self, suggestion):
         self.description = suggestion.description
         self.alive = suggestion.alive
-        self.downlink_low = suggestion.downlink_low
-        self.downlink_high = suggestion.downlink_high
+        self.type = suggestion.type
         self.uplink_low = suggestion.uplink_low
         self.uplink_high = suggestion.uplink_high
+        self.uplink_drift = suggestion.uplink_drift
+        self.downlink_low = suggestion.downlink_low
+        self.downlink_high = suggestion.downlink_high
+        self.downlink_drift = suggestion.downlink_drift
         self.mode = suggestion.mode
         self.invert = suggestion.invert
         self.baud = suggestion.baud
