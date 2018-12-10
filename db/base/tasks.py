@@ -62,9 +62,13 @@ def update_all_tle():
     """Task to update all satellite TLEs"""
 
     satellites = Satellite.objects.all()
-    norad_ids = list(int(sat.norad_cat_id) for sat in satellites)
+    norad_ids = set(int(sat.norad_cat_id) for sat in satellites)
 
-    tles = fetch_tles(norad_ids)
+    # Filter only officially announced NORAD IDs
+    temporary_norad_ids = set(filter(lambda norad_id: norad_id >= 99900, norad_ids))
+    public_norad_ids = norad_ids - temporary_norad_ids
+
+    tles = fetch_tles(public_norad_ids)
 
     missing_norad_ids = []
     for satellite in satellites:
@@ -94,9 +98,13 @@ def update_all_tle():
                                                       satellite.name,
                                                       source))
 
-    for norad_id in missing_norad_ids:
+    for norad_id in sorted(missing_norad_ids):
         satellite = satellites.get(norad_cat_id=norad_id)
         print('NO TLE found for {}: {}'.format(norad_id, satellite.name))
+
+    for norad_id in sorted(temporary_norad_ids):
+        satellite = satellites.get(norad_cat_id=norad_id)
+        print('Ignored {} with temporary NORAD ID {}'.format(satellite.name, norad_id))
 
 
 @app.task
