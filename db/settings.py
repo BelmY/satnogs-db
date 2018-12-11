@@ -206,7 +206,7 @@ LOGGING = {
 }
 
 # Sentry
-SENTRY_ENABLED = config('SENTRY_ENABLED', default=False)
+SENTRY_ENABLED = config('SENTRY_ENABLED', default=False, cast=bool)
 if SENTRY_ENABLED:
     sentry_sdk.init(
         dsn=config('SENTRY_DSN', default=''),
