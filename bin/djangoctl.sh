@@ -20,6 +20,7 @@
 MANAGE_CMD="django-admin"
 WSGI_SERVER="gunicorn"
 DJANGO_APP="db"
+CELERY_VAR_RUN="/var/run/celery"
 
 usage() {
 	cat <<EOF
@@ -31,7 +32,8 @@ COMMANDS:
                          apply migrations
   initialize            Load initial fixtures
   run                   Run WSGI HTTP server
-  run_celery            Run Celery
+  run_celery [worker|beat]
+                        Run Celery worker or beat
   develop [SOURCE_DIR]  Run application in development mode, optionally
                          installing SOURCE_DIR in editable mode
   develop_celery [SOURCE_DIR]
@@ -68,7 +70,15 @@ run() {
 }
 
 run_celery() {
-	exec celery -A "$DJANGO_APP" worker -B -l INFO
+	case "$1" in
+		worker|beat)
+			exec celery -A "$DJANGO_APP" "$1" -l INFO --workdir "$CELERY_VAR_RUN"
+			;;
+		*)
+			usage
+			exit 1
+			;;
+	esac
 }
 
 develop() {
@@ -83,7 +93,7 @@ develop_celery() {
 	if [ -d "$1" ]; then
 		install_editable "$1"
 	fi
-	run_celery
+	exec celery -A "$DJANGO_APP" worker -B -l INFO
 }
 
 initialize() {
@@ -94,11 +104,11 @@ parse_args() {
 	while [ $# -gt 0 ]; do
 		arg="$1"
 		case $arg in
-			prepare|run|run_celery|initialize)
+			prepare|run|initialize)
 				command="$arg"
 				break
 				;;
-			develop|develop_celery)
+			develop|develop_celery|run_celery)
 				shift
 				subargs="$1"
 				command="$arg"
