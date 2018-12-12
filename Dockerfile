@@ -4,7 +4,8 @@ MAINTAINER SatNOGS project <dev@satnogs.org>
 WORKDIR /workdir/
 
 RUN groupadd -r satnogs \
-	&& useradd -r -g satnogs satnogs
+	&& useradd -r -g satnogs satnogs \
+	&& install -d -m 755 -o satnogs -g satnogs /var/run/celery
 
 COPY requirements.txt /usr/local/src/satnogs-db/
 RUN pip install \
