@@ -61,7 +61,7 @@ def update_satellite(norad_id, update_name=True, update_tle=True):
 def update_all_tle():
     """Task to update all satellite TLEs"""
 
-    satellites = Satellite.objects.all()
+    satellites = Satellite.objects.exclude(status__exact='re-entered')
     norad_ids = set(int(sat.norad_cat_id) for sat in satellites)
 
     # Filter only officially announced NORAD IDs
