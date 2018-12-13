@@ -129,8 +129,9 @@ def export_frames(norad, email, uid, period=None):
     with open(filepath, 'w') as f:
         writer = csv.writer(f, delimiter='|')
         for obj in frames:
-            writer.writerow([obj.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
-                             obj.display_frame()])
+            frame = obj.display_frame()
+            if frame is not None:
+                writer.writerow([obj.timestamp.strftime('%Y-%m-%d %H:%M:%S'), frame])
 
     # Notify user
     site = Site.objects.get_current()

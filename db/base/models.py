@@ -1,4 +1,6 @@
+import logging
 import json
+
 from markdown import markdown
 from os import path
 from shortuuidfield import ShortUUIDField
@@ -12,6 +14,8 @@ from django.db.models.signals import post_save, pre_save
 from django.utils.timezone import now
 
 from db.base.helpers import gridsquare
+
+logger = logging.getLogger('db')
 
 DATA_SOURCES = ['manual', 'network', 'sids']
 SATELLITE_STATUS = ['alive', 'dead', 're-entered']
@@ -200,8 +204,18 @@ class DemodData(models.Model):
             '{}'
 
     def display_frame(self):
-        with open(self.payload_frame.path) as fp:
-            return fp.read()
+        try:
+            with open(self.payload_frame.path) as (fp):
+                return fp.read()
+        except IOError as err:
+            logger.error(
+                err,
+                exc_info=True,
+                extra={
+                    'payload frame path': self.payload_frame.path,
+                }
+            )
+            return None
 
 
 post_save.connect(_gen_observer, sender=DemodData)
