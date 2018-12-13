@@ -41,9 +41,7 @@ class TelemetryView(viewsets.ModelViewSet, mixins.CreateModelMixin):
 
         norad_cat_id = request.data.get('noradID')
 
-        try:
-            sat = Satellite.objects.get(norad_cat_id=norad_cat_id) # noqa
-        except Satellite.DoesNotExist:
+        if not Satellite.objects.filter(norad_cat_id=norad_cat_id).exists():
             try:
                 update_satellite(norad_cat_id, update_name=True, update_tle=True)
             except LookupError:
