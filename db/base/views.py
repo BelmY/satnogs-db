@@ -17,6 +17,7 @@ from db.base.models import Mode, Transmitter, Satellite, Suggestion, DemodData
 from db.base.forms import SuggestionForm
 from db.base.helpers import get_apikey
 from db.base.tasks import export_frames, cache_statistics
+from _mysql_exceptions import OperationalError
 
 
 logger = logging.getLogger('db')
@@ -150,19 +151,14 @@ def faq(request):
 
 def stats(request):
     """View to render stats page."""
-    satellites = Satellite.objects \
-                          .values('name', 'norad_cat_id') \
-                          .annotate(count=Count('telemetry_data'),
-                                    latest_payload=Max('telemetry_data__timestamp')) \
-                          .order_by('-count')
-    satellites_with_data = [obj for obj in Satellite.objects.all() if obj.has_telemetry_data]
-    observers = DemodData.objects \
-                         .values('observer') \
-                         .annotate(count=Count('observer'),
-                                   latest_payload=Max('timestamp')) \
-                         .order_by('-count')
+    satellites = cache.get('stats_satellites')
+    observers = cache.get('stats_observers')
+    if not satellites or not observers:
+        try:
+            cache_statistics.delay()
+        except OperationalError:
+            pass
     return render(request, 'base/stats.html', {'satellites': satellites,
-                                               'satellites_with_data': satellites_with_data,
                                                'observers': observers})
 
 
