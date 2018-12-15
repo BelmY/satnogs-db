@@ -165,7 +165,10 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 LOGIN_REDIRECT_URL = 'home'
-LOGIN_URL = "/login/auth0"
+if AUTH0:
+    LOGIN_URL = "/login/auth0"
+else:
+    LOGIN_URL = 'account_login'
 LOGOUT_REDIRECT_URL = "/"
 
 # Logging
