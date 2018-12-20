@@ -1,10 +1,14 @@
+import logging
 import binascii
+
 from datetime import datetime, timedelta
 from db.base.models import Satellite, Transmitter, Mode, DemodData, Telemetry
 from django.conf import settings
 from django.utils.timezone import make_aware
 from influxdb import InfluxDBClient
 from satnogsdecoders import decoder
+
+logger = logging.getLogger('db')
 
 
 def calculate_statistics():
@@ -17,8 +21,12 @@ def calculate_statistics():
     total_transmitters = transmitters.count()
     total_data = DemodData.objects.all().count()
     alive_transmitters = transmitters.filter(alive=True).count()
-    alive_transmitters_percentage = '{0}%'.format(round((float(alive_transmitters) /
-                                                         float(total_transmitters)) * 100, 2))
+    try:
+        alive_transmitters_percentage = '{0}%'.format(round((float(alive_transmitters) /
+                                                             float(total_transmitters)) * 100, 2))
+    except ZeroDivisionError as error:
+        logger.error(error, exc_info=True)
+        alive_transmitters_percentage = '0%'
 
     mode_label = []
     mode_data = []
