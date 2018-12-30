@@ -181,7 +181,7 @@ def reset_decoded_data(norad):
     if settings.USE_INFLUX:
         client = InfluxDBClient(settings.INFLUX_HOST, settings.INFLUX_PORT,
                                 settings.INFLUX_USER, settings.INFLUX_PASS,
-                                settings.INFLUX_DB)
+                                settings.INFLUX_DB, ssl=settings.INFLUX_SSL)
         client.query('DROP SERIES FROM /.*/ WHERE \"norad\" = \'{0}\''
                      .format(norad))
 

@@ -164,7 +164,7 @@ def write_influx(json_obj):
     """Take a json object and send to influxdb."""
     client = InfluxDBClient(settings.INFLUX_HOST, settings.INFLUX_PORT,
                             settings.INFLUX_USER, settings.INFLUX_PASS,
-                            settings.INFLUX_DB)
+                            settings.INFLUX_DB, ssl=settings.INFLUX_SSL)
     client.write_points(json_obj)
 
 
