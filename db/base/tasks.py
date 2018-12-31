@@ -1,4 +1,5 @@
 import csv
+import logging
 from datetime import datetime, timedelta
 
 from django.db.models import Count, Max
@@ -19,6 +20,8 @@ from db.base.models import Satellite, DemodData
 from db.base.utils import calculate_statistics
 from db.celery import app
 from db.base.utils import decode_data
+
+logger = logging.getLogger('db')
 
 
 @app.task(task_ignore_result=False)
@@ -82,11 +85,14 @@ def update_all_tle():
         source, tle = tles[norad_id]
 
         if satellite.tle1 and satellite.tle2:
-            current_sat = twoline2rv(satellite.tle1, satellite.tle2, wgs72)
-            new_sat = twoline2rv(tle[1], tle[2], wgs72)
-
-            if new_sat.epoch < current_sat.epoch:
-                # Epoch of new TLE is larger then the TLE already in the db
+            try:
+                current_sat = twoline2rv(satellite.tle1, satellite.tle2, wgs72)
+                new_sat = twoline2rv(tle[1], tle[2], wgs72)
+                if new_sat.epoch < current_sat.epoch:
+                    # Epoch of new TLE is larger then the TLE already in the db
+                    continue
+            except ValueError:
+                logger.error('ERROR: TLE malformed for ' + norad_id)
                 continue
 
         satellite.tle_source = source
