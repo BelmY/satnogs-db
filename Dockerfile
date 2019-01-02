@@ -11,14 +11,14 @@ COPY requirements.txt /usr/local/src/satnogs-db/
 RUN pip install \
 	--no-cache-dir \
 	--no-deps \
-	--ignore-installed \
+	--force-reinstall \
 	-r /usr/local/src/satnogs-db/requirements.txt
 
 COPY . /usr/local/src/satnogs-db/
 RUN pip install \
 	--no-cache-dir \
 	--no-deps \
-	--ignore-installed \
+	--force-reinstall \
 	/usr/local/src/satnogs-db
 RUN install -m 755 /usr/local/src/satnogs-db/bin/djangoctl.sh /usr/local/bin/
 

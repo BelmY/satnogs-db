@@ -2,7 +2,7 @@
 #
 # SatNOGS Django control script
 #
-# Copyright (C) 2018 Libre Space Foundation <https://libre.space/>
+# Copyright (C) 2018-2019 Libre Space Foundation <https://libre.space/>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ install_editable() {
 	pip install \
 	    --no-cache-dir \
 	    --no-deps \
-	    --ignore-installed \
+	    --force-reinstall \
 	    -e "${1}"
 }
 
