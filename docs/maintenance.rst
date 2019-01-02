@@ -2,6 +2,17 @@ Maintenance
 ===========
 
 
+Updating Python dependencies
+----------------------------
+To update the Python dependencies:
+
+#. Execute script to refresh `requirements.txt` file:
+
+    $ ./contrib/refresh-requirements.sh
+
+#. Stage and commit `requirements.txt` file
+
+
 Updating frontend dependencies
 ------------------------------
 The frontend dependencies are managed with `npm` as defined in the `package.json`.
