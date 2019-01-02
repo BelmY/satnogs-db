@@ -28,6 +28,7 @@ THIRD_PARTY_APPS = (
     'django_filters',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     'crispy_forms',
     'compressor',
     'csp',
