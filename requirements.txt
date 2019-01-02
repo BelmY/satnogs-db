@@ -39,7 +39,7 @@ python-dotenv==0.6.5
 python-openid==2.2.5
 pytz==2018.7
 rcssmin==1.0.6
-redis==3.0.1
+redis==2.10.6
 requests==2.21.0
 requests-oauthlib==1.0.0
 rjsmin==1.0.12
