@@ -1,14 +1,14 @@
 version: '3.2'
 services:
   db:
-    image: 'mariadb:10.3'
+    image: 'mariadb:10.4.1'
     environment:
       MYSQL_DATABASE: 'satnogsdb'
       MYSQL_USER: 'satnogsdb'
       MYSQL_PASSWORD: 'satnogsdb'
       MYSQL_ROOT_PASSWORD: 'toor'
   redis:
-    image: 'redis:3.2.8'
+    image: 'redis:3.2.12'
   celery:
     build:
       context: '.'
