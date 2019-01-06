@@ -2,9 +2,7 @@ import csv
 import logging
 from datetime import datetime, timedelta
 
-from django.db.models import Count, Max
 from django.conf import settings
-from django.core.cache import cache
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
@@ -17,9 +15,9 @@ from sgp4.io import twoline2rv
 from satellite_tle import fetch_tle_from_celestrak, fetch_tles
 
 from db.base.models import Satellite, DemodData
-from db.base.utils import calculate_statistics
 from db.celery import app
 from db.base.utils import decode_data
+from db.base.utils import cache_statistics
 
 logger = logging.getLogger('db')
 
@@ -153,23 +151,9 @@ def export_frames(norad, email, uid, period=None):
 
 
 @app.task
-def cache_statistics():
-    statistics = calculate_statistics()
-    cache.set('stats_transmitters', statistics, 60 * 60 * 2)
-
-    satellites = Satellite.objects \
-                          .values('name', 'norad_cat_id') \
-                          .annotate(count=Count('telemetry_data'),
-                                    latest_payload=Max('telemetry_data__timestamp')) \
-                          .order_by('-count')
-    cache.set('stats_satellites', satellites, 60 * 60 * 2)
-
-    observers = DemodData.objects \
-                         .values('observer') \
-                         .annotate(count=Count('observer'),
-                                   latest_payload=Max('timestamp')) \
-                         .order_by('-count')
-    cache.set('stats_observers', observers, 60 * 60 * 2)
+def background_cache_statistics():
+    """Task to periodically cache statistics"""
+    cache_statistics()
 
 
 # resets all decoded data and changes the is_decoded flag back to False

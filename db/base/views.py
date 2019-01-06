@@ -1,6 +1,6 @@
 import logging
 
-from django.db.models import Count, Max
+from django.db.models import Max
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -16,7 +16,8 @@ from django.views.decorators.http import require_POST
 from db.base.models import Mode, Transmitter, Satellite, Suggestion, DemodData, TRANSMITTER_TYPE
 from db.base.forms import SuggestionForm
 from db.base.helpers import get_apikey
-from db.base.tasks import export_frames, cache_statistics
+from db.base.tasks import export_frames
+from db.base.utils import cache_statistics
 from _mysql_exceptions import OperationalError
 
 
@@ -57,12 +58,21 @@ def robots(request):
 def satellite(request, norad):
     """View to render satellite page."""
     satellite_query = Satellite.objects \
-                               .annotate(latest_payload_time=Max('telemetry_data__timestamp'),
-                                         payload_frames_count=Count('telemetry_data'))
+                               .annotate(latest_payload_time=Max('telemetry_data__timestamp'))
     satellite = get_object_or_404(satellite_query, norad_cat_id=norad)
     suggestions = Suggestion.objects.filter(satellite=satellite)
     modes = Mode.objects.all()
     types = TRANSMITTER_TYPE
+    sats_cache = cache.get('stats_satellites')
+    if not sats_cache:
+        try:
+            cache_statistics()
+        except OperationalError:
+            pass
+    try:
+        sat_cache = sats_cache.filter(norad_cat_id=norad)
+    except AttributeError:
+        sat_cache = [{'count': 'err'}]
 
     try:
         latest_frame = DemodData.objects.get(satellite=satellite,
@@ -75,6 +85,7 @@ def satellite(request, norad):
                                                    'modes': modes,
                                                    'types': types,
                                                    'latest_frame': latest_frame,
+                                                   'sat_cache': sat_cache[0],
                                                    'mapbox_token': settings.MAPBOX_TOKEN})
 
 
@@ -154,7 +165,7 @@ def stats(request):
     observers = cache.get('stats_observers')
     if not satellites or not observers:
         try:
-            cache_statistics.delay()
+            cache_statistics()
         except OperationalError:
             pass
     return render(request, 'base/stats.html', {'satellites': satellites,
@@ -164,7 +175,7 @@ def stats(request):
 def statistics(request):
     statistics = cache.get('stats_transmitters')
     if not statistics:
-        cache_statistics.delay()
+        cache_statistics()
         statistics = []
     return JsonResponse(statistics, safe=False)
 
