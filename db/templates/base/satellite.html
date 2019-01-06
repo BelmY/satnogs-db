@@ -462,7 +462,7 @@
             </div>
           {% endif %}
           <div class="panel-footer">
-            <span class="badge">Frames: {{ satellite.telemetry_data.count }}</span>
+            <span class="badge">Frames: {{ satellite.payload_frames_count }}</span>
             Latest frame submitted on {{ latest_frame.timestamp|date:'Y-m-d H:i:s' }} by
             {{ latest_frame.observer }}
           </div>

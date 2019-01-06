@@ -63,8 +63,6 @@ def satellite(request, norad):
     suggestions = Suggestion.objects.filter(satellite=satellite)
     modes = Mode.objects.all()
     types = TRANSMITTER_TYPE
-    telemetry_data_count = DemodData.objects.filter(satellite__norad_cat_id=norad,
-                                                    is_decoded=True).count()
 
     try:
         latest_frame = DemodData.objects.get(satellite=satellite,
@@ -77,7 +75,6 @@ def satellite(request, norad):
                                                    'modes': modes,
                                                    'types': types,
                                                    'latest_frame': latest_frame,
-                                                   'telemetry_data_count': telemetry_data_count,
                                                    'mapbox_token': settings.MAPBOX_TOKEN})
 
 
