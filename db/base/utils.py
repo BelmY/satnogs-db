@@ -25,8 +25,9 @@ def calculate_statistics():
     alive_transmitters = transmitters.filter(alive=True).count()
     if alive_transmitters > 0 and total_transmitters > 0:
         try:
-            alive_transmitters_percentage = '{0}%'.format(round((float(alive_transmitters)
-                                                          / float(total_transmitters)) * 100, 2))
+            alive_transmitters_percentage = '{0}%'.format(round((float(alive_transmitters) /
+                                                                 float(total_transmitters)) *
+                                                                100, 2))
         except ZeroDivisionError as error:
             logger.error(error, exc_info=True)
             alive_transmitters_percentage = '0%'

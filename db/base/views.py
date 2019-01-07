@@ -13,7 +13,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
-from db.base.models import Mode, Transmitter, Satellite, Suggestion, DemodData, TRANSMITTER_TYPE
+from db.base.models import Mode, Satellite, Suggestion, DemodData, TRANSMITTER_TYPE
 from db.base.forms import SuggestionForm
 from db.base.helpers import get_apikey
 from db.base.tasks import export_frames
