@@ -37,5 +37,26 @@ cat << EOF > requirements.txt
 EOF
 "$PIP_COMMAND" freeze | grep -v "$EXCLUDE_REGEXP" >> requirements.txt
 
+# Install development package with dependencies
+"$PIP_COMMAND" install --no-cache-dir .[dev]
+
+# Create development requirements file from installed dependencies
+cat << EOF > requirements-dev.txt
+# This is a generated file; DO NOT EDIT!
+#
+# Please edit 'setup.cfg' to add top-level extra dependencies and use
+# './contrib/refresh-requirements.sh to regenerate this file
+-r requirements.txt
+
+EOF
+
+_tmp_requirements_dev=$(mktemp)
+"$PIP_COMMAND" freeze | grep -v "$EXCLUDE_REGEXP" | sort > "$_tmp_requirements_dev"
+sort < requirements.txt | comm -13 - "$_tmp_requirements_dev" >> requirements-dev.txt
+rm -f "$_tmp_requirements_dev"
+
+# Verify dependency compatibility
+"$PIP_COMMAND" check
+
 # Cleanup
 rm -rf "$VIRTUALENV_DIR"
