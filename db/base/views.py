@@ -27,14 +27,17 @@ logger = logging.getLogger('db')
 def home(request):
     """View to render home page."""
     satellites = Satellite.objects.all()
-    transmitters = Transmitter.objects.all().count()
     suggestions = Suggestion.objects.all().count()
     contributors = User.objects.filter(is_active=1).count()
-    payloads = DemodData.objects.all().count()
+    statistics = cache.get('stats_transmitters')
+    if not statistics:
+        try:
+            cache_statistics()
+        except OperationalError:
+            pass
     return render(request, 'base/home.html', {'satellites': satellites,
-                                              'transmitters': transmitters,
+                                              'statistics': statistics,
                                               'contributors': contributors,
-                                              'payloads': payloads,
                                               'suggestions': suggestions})
 
 

@@ -15,11 +15,11 @@
       <div class="row hidden-xs hidden-sm">
         <p class="statistics" title="satellites" data-toggle="tooltip">
           <img src="{% static 'img/satellites.png' %}">
-          {{ satellites.count }}
+          {{ statistics.total_satellites }}
         </p>
         <p class="statistics" title="transmitters" data-toggle="tooltip">
           <img src="{% static 'img/transmitters.png' %}">
-          {{ transmitters }}
+          {{ statistics.transmitters }}
         </p>
         {% if suggestions %}
           <p class="statistics" title="suggestions" data-toggle="tooltip">
@@ -29,7 +29,7 @@
         {% endif %}
         <p class="statistics" title="telemetry" data-toggle="tooltip">
           <img src="{% static 'img/payloads.png' %}">
-          {{ payloads }}
+          {{ statistics.total_data }}
         </p>
         <p class="statistics" title="contributors" data-toggle="tooltip">
           <img src="{% static 'img/contributors.png' %}">
