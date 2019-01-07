@@ -22,16 +22,19 @@
           <div class="satellite-title" data-telemetry="{{ satellite.has_telemetry_data }}">
             {{ satellite }}
           </div>
-          <span class="label satellite-status" data-status="{{ satellite.status }}">
-            {{ satellite.status }}
-          </span>
-          {% if satellite.names %}
-            <div class="satellite-names-full hidden-xs">{{ satellite.names }}</div>
-          {% endif %}
-          <div>
-            <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
-            <a href="https://network.satnogs.org/observations/?norad={{ satellite.norad_cat_id }}" target="_blank">
-              SatNOGS Network Observations
+          <div class="pull-right">
+            {% if satellite.names %}
+              <div class="satellite-names-full hidden-xs">{{ satellite.names }}</div>
+            {% endif %}
+            <span class="label satellite-status" data-status="{{ satellite.status }}">
+              {{ satellite.status }}
+            </span>
+            <a type="button"
+               title="SatNOGS Network observations"
+               class="btn btn-default btn-xs"
+               href="https://network.satnogs.org/observations/?norad={{ satellite.norad_cat_id }}"
+               target="_blank">
+              <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> Observations</span>
             </a>
           </div>
         </div>
@@ -88,6 +91,14 @@
                     <div class="panel-heading">
                       <h3 class="panel-title">
                         <span class="transmitter-title">{{ transmitter.description }}</span>
+                        <button type="button"
+                                title="UUID: {{ transmitter.uuid }}"
+                                class="btn btn-default btn-sm pull-right transmitter-uuid js-copy"
+                                data-toggle="tooltip"
+                                data-placement="bottom"
+                                data-copy="{{ transmitter.uuid }}">
+                          <span class="glyphicon glyphicon-info-sign" title="Suggest edits"></span>
+                        </button>
                         <button type="button"
                                 class="btn btn-default btn-sm pull-right suggest-transmitter"
                                 data-toggle="modal"

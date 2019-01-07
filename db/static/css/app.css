@@ -186,9 +186,9 @@ a.satellite-item:hover {
 .satellite-status {
     margin-bottom: 10px;
     font-weight: normal;
-    float: right;
     margin-top: 5px;
     margin-right: 6px;
+    display: inline-block;
 }
 
 .satellite-status {
@@ -249,9 +249,14 @@ a.satellite-item:hover {
     margin-top: -6px;
 }
 
+.transmitter-uuid {
+    margin-top: -6px;
+    margin-left: 6px;
+}
+
 .suggestions-counter {
     display: inline-block;
-    font-size: 0.9em;
+    font-size: 0.8em;
 }
 
 .label-transmitter-suggestions {
