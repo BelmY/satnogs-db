@@ -46,8 +46,7 @@ test:
   before_script:
     - pip install tox
   script:
-    - tox -e deps
-    - tox -e pytest
+    - tox -e deps,pytest
 docker:
   stage: deploy
   image: docker:latest
