@@ -15,13 +15,6 @@
 },
 {
     "model": "base.mode",
-    "pk": 4,
-    "fields": {
-        "name": "APRS"
-    }
-},
-{
-    "model": "base.mode",
     "pk": 5,
     "fields": {
         "name": "SSTV"
@@ -95,13 +88,6 @@
     "pk": 22,
     "fields": {
         "name": "FSK9k6"
-    }
-},
-{
-    "model": "base.mode",
-    "pk": 25,
-    "fields": {
-        "name": "APRS9k6"
     }
 },
 {
@@ -298,6 +284,132 @@
     "pk": 53,
     "fields": {
         "name": "LRPT"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 54,
+    "fields": {
+        "name": "BPSK9k6"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 55,
+    "fields": {
+        "name": "FFSK1k2"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 56,
+    "fields": {
+        "name": "FSK2k4"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 57,
+    "fields": {
+        "name": "DSTAR"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 58,
+    "fields": {
+        "name": "DUV"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 59,
+    "fields": {
+        "name": "CERTO"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 60,
+    "fields": {
+        "name": "BPSK400"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 61,
+    "fields": {
+        "name": "OFDM"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 62,
+    "fields": {
+        "name": "QPSK38k4"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 63,
+    "fields": {
+        "name": "GMSK"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 64,
+    "fields": {
+        "name": "WSJT"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 65,
+    "fields": {
+        "name": "BPSK2k4"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 66,
+    "fields": {
+        "name": "BPSK4k8"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 67,
+    "fields": {
+        "name": "BPSK12k5"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 68,
+    "fields": {
+        "name": "2-GFSK9k6"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 69,
+    "fields": {
+        "name": "QPSK"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 70,
+    "fields": {
+        "name": "BPSK14k4"
+    }
+},
+{
+    "model": "base.mode",
+    "pk": 71,
+    "fields": {
+        "name": "DQPSK"
     }
 }
 ]
