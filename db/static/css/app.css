@@ -241,6 +241,10 @@ a.satellite-item:hover {
     margin: 20px 0;
 }
 
+.panel-tle {
+    margin: 20px 0;
+}
+
 .panel-first {
     margin-top: 20px;
 }
@@ -279,6 +283,10 @@ a.satellite-item:hover {
 
 .transmitter-citation-footer {
     font-size: .8em;
+}
+
+.tle-element {
+    margin: 10px;
 }
 
 .info {

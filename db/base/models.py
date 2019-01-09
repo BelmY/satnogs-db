@@ -144,6 +144,28 @@ class Satellite(models.Model):
         decoder_count = Telemetry.objects.filter(satellite=self.id).exclude(decoder='').count()
         return decoder_count
 
+    @property
+    def tle_redistributable(self):
+        """Returns True if re-distribution of the TLE is allowed, False otherwise
+
+        :returns: True if re-distribution of the TLE is allowed, False otherwise
+        """
+        return self.tle_source in settings.TLE_SOURCES_REDISTRIBUTABLE
+
+    @property
+    def latest_tle(self):
+        """Returns the latest TLE for this Satellite
+
+        :returns: dict with the latest TLE, it's source and whether redistribution is allowed
+        """
+        return {
+            'source': self.tle_source,
+            'norad_cat_id': self.norad_cat_id,
+            'tle1': self.tle1,
+            'tle2': self.tle2,
+            'redistributable': self.tle_redistributable
+        }
+
     def __str__(self):
         return '{0} - {1}'.format(self.norad_cat_id, self.name)
 

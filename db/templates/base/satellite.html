@@ -50,8 +50,8 @@
           {% if satellite.status != 're-entered' %}
               <div id="map"
                    data-name="{{ satellite.name }}"
-                   data-tle1="{{ satellite.tle1 }}"
-                   data-tle2="{{ satellite.tle2 }}"
+                   data-tle1="{{ satellite.latest_tle.tle1 }}"
+                   data-tle2="{{ satellite.latest_tle.tle2 }}"
                    data-mapboxtoken="{{ mapbox_token }}"></div>
           {% endif %}
           </div>
@@ -513,6 +513,63 @@
     </div>
   {% endif %}
 
+  <!-- Orbital Elements Section -->
+  {% if satellite.latest_tle.redistributable %}
+  <div class="row">
+    <div class="col-md-12 satellite-panels">
+      <div class="panel panel-default panel-satellite">
+        <div class="panel-heading">
+          <div class="satellite-title">
+            Orbital Elements
+          </div>
+        </div>
+        <div class="row panel-body">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel panel-primary panel-tle">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">
+                      <span class="tle-title">Latest TLE</span>
+                    </h3>
+                  </div>
+                  <div class="row panel-body">
+                    <div class="col-md-12">
+                      <div class="row tle-element">
+                        <div class="col-md-2">
+                          <span class="label label-default">NORAD ID</span>
+                        </div>
+                        <div class="col-md-10">
+                          {{ satellite.latest_tle.norad_cat_id }}
+                        </div>
+                      </div>
+                      <div class="row tle-element">
+                        <div class="col-md-2">
+                          <span class="label label-default">TLE source</span>
+                        </div>
+                        <div class="col-md-10">
+                          {{ satellite.latest_tle.source }}
+                        </div>
+                      </div>
+                      <div class="row tle-element">
+                        <div class="col-md-2">
+                          <span class="label label-default">TLE</span>
+                        </div>
+                        <div class="col-md-10">
+                          <pre>{{ satellite.latest_tle.tle1 }}<br>{{ satellite.latest_tle.tle2 }}</pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 
   <!-- Telemetry Frames Section -->
   <!-- This is a hacky way of getting around slow db queries. See #237 -->
