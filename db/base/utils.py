@@ -125,59 +125,24 @@ def calculate_statistics():
     return statistics
 
 
-# kaitai does not give us a good way to export attributes when we don't know
-# what those attributes are, and here we are dealing with a lot of various
-# decoders with different attributes. This is a hacky way of getting them
-# to json. We also need to sanitize this for any binary data left over as
-# it won't export to json.
+def create_point(fields, satellite, telemetry, demoddata):
+    """Create a decoded data point"""
+    point = [
+        {
+            'time': demoddata.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'measurement': satellite.norad_cat_id,
+            'tags': {
+                'satellite': satellite.name,
+                'decoder': telemetry.decoder,
+                'station': demoddata.station,
+                'observer': demoddata.observer,
+                'source': demoddata.source
+            },
+            'fields': fields
+        }
+    ]
 
-def kaitai_to_json(structdict, satellite, telemetry, demoddata, json_obj):
-    """Recursively sends dict string/int data to the given json_obj"""
-    for key, value in structdict.iteritems():
-        if type(value) is dict:  # recursion
-            kaitai_to_json(value, satellite, telemetry, demoddata, json_obj)
-        else:
-            data = {
-                'time': demoddata.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ'),
-                'measurement': key,
-                'tags': {
-                    'satellite': satellite.name,
-                    'norad': satellite.norad_cat_id,
-                    'decoder': telemetry.decoder,
-                    'station': demoddata.station,
-                    'observer': demoddata.observer,
-                    'source': demoddata.source
-                }
-            }
-            if isinstance(value, basestring):  # skip binary values
-                try:
-                    value.decode('utf-8')
-                    data.update({'fields': {'value': value}})
-                except UnicodeError:
-                    continue
-            else:
-                data.update({'fields': {'value': value}})
-            if 'value' in data['fields']:
-                json_obj.append(data)
-
-
-def kaitai_to_dict(struct):
-    """Take a kaitai decode object and return a dict object"""
-    structdict = struct.__dict__
-    todict = {}
-    for key, value in structdict.iteritems():
-        if not key.startswith("_"):  # kaitai objects and priv vars, skip
-            if isinstance(value, basestring):  # skip binary values
-                try:
-                    value.decode('utf-8')
-                    todict[key] = value
-                except UnicodeError:
-                    continue
-            elif hasattr(value, '__dict__'):
-                todict[key] = kaitai_to_dict(value)  # recursion
-            else:
-                todict[key] = value
-    return todict
+    return point
 
 
 def write_influx(json_obj):
@@ -224,9 +189,8 @@ def decode_data(norad, period=None):
                     if settings.USE_INFLUX:
                         try:
                             frame = decoder_class.from_bytes(bindata)
-                            json_obj = []
-                            kaitai_to_json(kaitai_to_dict(frame), sat,
-                                           tlmdecoder, obj, json_obj)
+                            json_obj = create_point(decoder.get_fields(frame), sat,
+                                                    tlmdecoder, obj)
                             write_influx(json_obj)
                             obj.payload_decoded = 'influxdb'
                             obj.is_decoded = True
@@ -245,9 +209,8 @@ def decode_data(norad, period=None):
                             obj.save()
                             continue
                         else:
-                            json_obj = []
-                            kaitai_to_json(kaitai_to_dict(frame), sat,
-                                           tlmdecoder, obj, json_obj)
+                            json_obj = create_point(decoder.get_fields(frame), sat,
+                                                    tlmdecoder, obj)
                             obj.payload_decoded = json_obj
                             obj.is_decoded = True
                             obj.save()
