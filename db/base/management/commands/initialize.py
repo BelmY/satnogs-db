@@ -15,6 +15,7 @@ class Command(BaseCommand):
         call_command('loaddata', 'modes')
         call_command('loaddata', 'satellites')
         call_command('loaddata', 'transmitters')
+        call_command('loaddata', 'telemetries')
         self.stdout.write("Fetching TLEs...")
         call_command('update_all_tle')
 
