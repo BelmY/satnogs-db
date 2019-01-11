@@ -1,6 +1,5 @@
 import logging
 
-from django.db.models import Max
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -60,9 +59,7 @@ def robots(request):
 
 def satellite(request, norad):
     """View to render satellite page."""
-    satellite_query = Satellite.objects \
-                               .annotate(latest_payload_time=Max('telemetry_data__timestamp'))
-    satellite = get_object_or_404(satellite_query, norad_cat_id=norad)
+    satellite = get_object_or_404(Satellite.objects, norad_cat_id=norad)
     suggestions = Suggestion.objects.filter(satellite=satellite)
     modes = Mode.objects.all()
     types = TRANSMITTER_TYPE
@@ -78,8 +75,7 @@ def satellite(request, norad):
         sat_cache = [{'count': 'err'}]
 
     try:
-        latest_frame = DemodData.objects.get(satellite=satellite,
-                                             timestamp=satellite.latest_payload_time)
+        latest_frame = DemodData.objects.filter(satellite=satellite).order_by('-id')[0]
     except Exception:
         latest_frame = ''
 
