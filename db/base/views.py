@@ -63,18 +63,11 @@ def satellite(request, norad):
     suggestions = Suggestion.objects.filter(satellite=satellite)
     modes = Mode.objects.all()
     types = TRANSMITTER_TYPE
+    # TODO: this is a horrible hack, as we have to pass the entire cache to the
+    # template to iterate on, just for one satellite. See #237
     sats_cache = cache.get('stats_satellites')
     if not sats_cache:
-        sat_cache = [{'count': 'err'}]
-    else:
-        #        try:
-        #            cache_statistics()
-        #        except OperationalError:
-        #            pass
-        try:
-            sat_cache = sats_cache.filter(norad_cat_id=norad)
-        except AttributeError:
-            sat_cache = [{'count': 'err'}]
+        sats_cache = []
 
     try:
         latest_frame = DemodData.objects.filter(satellite=satellite).order_by('-id')[0]
@@ -86,7 +79,7 @@ def satellite(request, norad):
                                                    'modes': modes,
                                                    'types': types,
                                                    'latest_frame': latest_frame,
-                                                   'sat_cache': sat_cache[0],
+                                                   'sats_cache': sats_cache,
                                                    'mapbox_token': settings.MAPBOX_TOKEN})
 
 
@@ -164,6 +157,7 @@ def stats(request):
     """View to render stats page."""
     satellites = cache.get('stats_satellites')
     observers = cache.get('stats_observers')
+    # TODO this will never succeed, cache_statistics() runs too long to be live
     if not satellites or not observers:
         try:
             cache_statistics()
