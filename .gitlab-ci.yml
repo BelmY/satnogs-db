@@ -72,16 +72,27 @@ docker:
     refs:
       - master
       - dev
-trigger:
+trigger_master:
   stage: trigger
   image: alpine
   before_script:
     - apk add --no-cache curl
   script:
-    - for trigger in $PIPELINE_TRIGGERS; do curl -X POST "$trigger"; done
+    - for trigger in $PIPELINE_TRIGGERS_MASTER; do curl -X POST "$trigger"; done
   only:
     refs:
       - master
+    variables:
+      - $PIPELINE_TRIGGERS_MASTER
+trigger_dev:
+  stage: trigger
+  image: alpine
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - for trigger in $PIPELINE_TRIGGERS_DEV; do curl -X POST "$trigger"; done
+  only:
+    refs:
       - dev
     variables:
-      - $PIPELINE_TRIGGERS
+      - $PIPELINE_TRIGGERS_DEV
