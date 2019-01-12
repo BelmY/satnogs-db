@@ -65,14 +65,16 @@ def satellite(request, norad):
     types = TRANSMITTER_TYPE
     sats_cache = cache.get('stats_satellites')
     if not sats_cache:
-        try:
-            cache_statistics()
-        except OperationalError:
-            pass
-    try:
-        sat_cache = sats_cache.filter(norad_cat_id=norad)
-    except AttributeError:
         sat_cache = [{'count': 'err'}]
+    else:
+        #        try:
+        #            cache_statistics()
+        #        except OperationalError:
+        #            pass
+        try:
+            sat_cache = sats_cache.filter(norad_cat_id=norad)
+        except AttributeError:
+            sat_cache = [{'count': 'err'}]
 
     try:
         latest_frame = DemodData.objects.filter(satellite=satellite).order_by('-id')[0]
