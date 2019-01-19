@@ -76,6 +76,7 @@ class Satellite(models.Model):
     tle_source = models.CharField(max_length=300, blank=True)
     status = models.CharField(choices=zip(SATELLITE_STATUS, SATELLITE_STATUS),
                               max_length=10, default='alive')
+    decayed = models.DateTimeField(null=True)
 
     class Meta:
         ordering = ['norad_cat_id']

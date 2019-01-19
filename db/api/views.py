@@ -18,6 +18,7 @@ class ModeView(viewsets.ReadOnlyModelViewSet):
 class SatelliteView(viewsets.ReadOnlyModelViewSet):
     queryset = Satellite.objects.all()
     serializer_class = serializers.SatelliteSerializer
+    filter_class = filters.SatelliteViewFilter
     lookup_field = 'norad_cat_id'
 
 

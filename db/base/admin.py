@@ -24,9 +24,9 @@ class ModeAdmin(admin.ModelAdmin):
 
 @admin.register(Satellite)
 class SatelliteAdmin(admin.ModelAdmin):
-    list_display = ('name', 'norad_cat_id', 'status')
+    list_display = ('name', 'norad_cat_id', 'status', 'decayed')
     search_fields = ('name', 'norad_cat_id')
-    list_filter = ('status',)
+    list_filter = ('status', 'decayed')
 
     def get_urls(self):
         urls = super(SatelliteAdmin, self).get_urls()
