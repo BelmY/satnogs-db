@@ -172,7 +172,7 @@ def reset_decoded_data(norad):
         client = InfluxDBClient(settings.INFLUX_HOST, settings.INFLUX_PORT,
                                 settings.INFLUX_USER, settings.INFLUX_PASS,
                                 settings.INFLUX_DB, ssl=settings.INFLUX_SSL)
-        client.query('DROP MEASUREMENT \'{0}\''
+        client.query('DROP MEASUREMENT "{0}"'
                      .format(norad))
 
 
