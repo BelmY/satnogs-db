@@ -47,6 +47,7 @@
               <li><a href="https://wiki.satnogs.org/" target="_blank">Wiki</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+              <li><a href="https://www.timeanddate.com/worldclock" target="_blank" class="hidden-sm"><span id="current_utc">--:-- UTC</span></a></li>
               {% if request.user.is_authenticated %}
               <li class="dropdown">
                 <a href="#"
@@ -114,6 +115,7 @@
       <script src="{% static 'lib/jquery/dist/jquery.min.js' %}"></script>
       <script src="{% static 'lib/bootstrap/dist/js/bootstrap.min.js' %}"></script>
       <script src="{% static 'js/app.js' %}"></script>
+      <script src="{% static 'js/current_utc.js'%}"></script>
       {% block javascript %}{% endblock javascript %}
       {{ analytics_code }}
     {% endcompress %}
