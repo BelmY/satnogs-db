@@ -6,6 +6,6 @@ satnogs-db
    :maxdepth: 1
 
    installation
-   contribute
+   developer-guide
    maintenance
    api
