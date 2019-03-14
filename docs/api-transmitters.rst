@@ -1,7 +1,7 @@
 Transmitters
 ============
 
-The ``transmitters`` method of the :doc:`SatNOGS DB API </db/api>` returns all Transmitters data.
+The ``transmitters`` method of the :doc:`SatNOGS DB API <api>` returns all Transmitters data.
 
 Endpoint
 --------
