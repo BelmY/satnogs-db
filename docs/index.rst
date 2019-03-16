@@ -8,4 +8,5 @@ satnogs-db
    installation
    developer-guide
    maintenance
+   releasing
    api
