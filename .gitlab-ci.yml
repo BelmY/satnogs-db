@@ -18,6 +18,19 @@ static_python:
     - pip install tox~=3.8.0
   script:
     - tox -e flake8
+docs:
+  stage: build
+  image: python:2.7
+  before_script:
+    - pip install sphinx_rtd_theme
+  script:
+    - cd docs
+    - make html SPHINXOPTS="-W"
+  artifacts:
+    expire_in: 1 week
+    when: always
+    paths:
+      - docs/_build/html
 build:
   stage: build
   image: python:2.7
@@ -111,3 +124,13 @@ trigger_latest:
       - tags
     variables:
       - $PIPELINE_TRIGGERS_LATEST
+pages:
+  stage: deploy
+  image: alpine
+  script:
+    - mv docs/_build/html/ public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - tags
