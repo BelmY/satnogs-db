@@ -117,6 +117,8 @@ TEMPLATES = [
                 'db.base.context_processors.stage_notice',
                 'db.base.context_processors.auth_block',
                 'db.base.context_processors.logout_block',
+                'db.base.context_processors.version',
+                'db.base.context_processors.decoders_version'
             ],
             'loaders': [
                 ('django.template.loaders.cached.Loader', [

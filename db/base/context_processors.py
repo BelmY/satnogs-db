@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.template.loader import render_to_string
+from db import __version__
+from satnogsdecoders import __version__ as satnogsdecoders_version
 
 
 def analytics(request):
@@ -32,3 +34,13 @@ def logout_block(request):
         return {'logout_block': render_to_string('includes/logout_auth0.html')}
     else:
         return {'logout_block': render_to_string('includes/logout_local.html')}
+
+
+def version(request):
+    """Displays the current satnogs-db version."""
+    return {'version': 'Version: {}'.format(__version__)}
+
+
+def decoders_version(request):
+    """Displays the satnogsdecoders version."""
+    return {'decoders_version': 'Decoders Version: {}'.format(satnogsdecoders_version)}
