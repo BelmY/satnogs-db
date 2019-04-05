@@ -21,10 +21,10 @@
           <img src="{% static 'img/transmitters.png' %}">
           {{ statistics.transmitters }}
         </p>
-        {% if suggestions %}
-          <p class="statistics" title="suggestions" data-toggle="tooltip">
-            <img src="{% static 'img/suggestions.png' %}">
-            {{ suggestions }}
+        {% if transmitter_suggestions %}
+          <p class="statistics" title="transmitter_suggestions" data-toggle="tooltip">
+            <img src="{% static 'img/transmitter_suggestions.png' %}">
+            {{ transmitter_suggestions }}
           </p>
         {% endif %}
         <p class="statistics" title="telemetry" data-toggle="tooltip">
@@ -56,8 +56,8 @@
             {% with total=sat.transmitters.all.count %}
               {{ total }} transmitter{{ total|pluralize }}
             {% endwith %}
-            {% if request.user.is_superuser and sat.pending_suggestions %}
-              - <span class="glyphicon glyphicon-edit" title="Suggest edits"></span> {{  sat.pending_suggestions }}
+            {% if request.user.is_superuser and sat.pending_transmitter_suggestions %}
+              - <span class="glyphicon glyphicon-edit" title="Suggest edits"></span> {{  sat.pending_transmitter_suggestions }}
             {% endif %}
           </div>
         </a>

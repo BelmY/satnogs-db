@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from db.base.models import Satellite, Transmitter, DemodData
+from db.base.models import Satellite, TransmitterEntry, DemodData
 
 
 class Command(BaseCommand):
@@ -33,8 +33,9 @@ class Command(BaseCommand):
             except Satellite.DoesNotExist:
                 continue
             try:
-                transmitter = Transmitter.objects.get(uuid=obj['transmitter'])
-            except Transmitter.DoesNotExist:
+                transmitter = TransmitterEntry.objects.get(
+                    uuid=obj['transmitter'], created=obj['transmitter_created'])
+            except TransmitterEntry.DoesNotExist:
                 transmitter = None
 
             DemodData.objects.filter(data_id=data_id).delete()

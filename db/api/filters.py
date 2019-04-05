@@ -6,9 +6,19 @@ from db.base.models import Transmitter, DemodData, Satellite
 
 
 class TransmitterViewFilter(FilterSet):
+    alive = filters.BooleanFilter(field_name='status',
+                                  label='Alive',
+                                  method='filter_status')
+
+    def filter_status(self, queryset, name, value):
+        if value:
+            return queryset.filter(status='functional')
+        else:
+            return queryset.exclude(status='functional')
+
     class Meta:
         model = Transmitter
-        fields = ['mode', 'type', 'satellite__norad_cat_id']
+        fields = ['mode', 'type', 'satellite__norad_cat_id', 'alive', 'status']
 
 
 class SatelliteViewFilter(FilterSet):

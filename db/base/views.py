@@ -12,8 +12,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
-from db.base.models import Mode, Satellite, Suggestion, DemodData, TRANSMITTER_TYPE
-from db.base.forms import SuggestionForm
+from db.base.models import Mode, Satellite, DemodData, Transmitter, TransmitterSuggestion
+from db.base.models import TRANSMITTER_TYPE, TRANSMITTER_STATUS
+from db.base.forms import TransmitterEntryForm
 from db.base.helpers import get_apikey
 from db.base.tasks import export_frames
 from db.base.utils import cache_statistics
@@ -26,18 +27,19 @@ logger = logging.getLogger('db')
 def home(request):
     """View to render home page."""
     satellites = Satellite.objects.all()
-    suggestions = Suggestion.objects.all().count()
+    transmitter_suggestions = TransmitterSuggestion.objects.count()
     contributors = User.objects.filter(is_active=1).count()
     statistics = cache.get('stats_transmitters')
     if not statistics:
         try:
             cache_statistics()
+            statistics = cache.get('stats_transmitters')
         except OperationalError:
             pass
     return render(request, 'base/home.html', {'satellites': satellites,
                                               'statistics': statistics,
                                               'contributors': contributors,
-                                              'suggestions': suggestions})
+                                              'transmitter_suggestions': transmitter_suggestions})
 
 
 def custom_404(request):
@@ -60,9 +62,16 @@ def robots(request):
 def satellite(request, norad):
     """View to render satellite page."""
     satellite = get_object_or_404(Satellite.objects, norad_cat_id=norad)
-    suggestions = Suggestion.objects.filter(satellite=satellite)
+    transmitter_suggestions = TransmitterSuggestion.objects.filter(satellite=satellite)
+    for transmitter_suggestion in transmitter_suggestions:
+        try:
+            original_transmitter = satellite.transmitters.get(uuid=transmitter_suggestion.uuid)
+            transmitter_suggestion.transmitter = original_transmitter
+        except Transmitter.DoesNotExist:
+            transmitter_suggestion.transmitter = None
     modes = Mode.objects.all()
     types = TRANSMITTER_TYPE
+    statuses = TRANSMITTER_STATUS
     # TODO: this is a horrible hack, as we have to pass the entire cache to the
     # template to iterate on, just for one satellite. See #237
     sats_cache = cache.get('stats_satellites')
@@ -74,13 +83,15 @@ def satellite(request, norad):
     except Exception:
         latest_frame = ''
 
-    return render(request, 'base/satellite.html', {'satellite': satellite,
-                                                   'suggestions': suggestions,
-                                                   'modes': modes,
-                                                   'types': types,
-                                                   'latest_frame': latest_frame,
-                                                   'sats_cache': sats_cache,
-                                                   'mapbox_token': settings.MAPBOX_TOKEN})
+    return render(request, 'base/satellite.html',
+                  {'satellite': satellite,
+                   'transmitter_suggestions': transmitter_suggestions,
+                   'modes': modes,
+                   'types': types,
+                   'statuses': statuses,
+                   'latest_frame': latest_frame,
+                   'sats_cache': sats_cache,
+                   'mapbox_token': settings.MAPBOX_TOKEN})
 
 
 @login_required
@@ -94,29 +105,34 @@ def request_export(request, norad, period=None):
 
 @login_required
 @require_POST
-def suggestion(request):
-    """View to process suggestion form"""
-    suggestion_form = SuggestionForm(request.POST)
-    if suggestion_form.is_valid():
-        suggestion = suggestion_form.save(commit=False)
-        suggestion.user = request.user
-        suggestion.save()
+def transmitter_suggestion(request):
+    """View to process transmitter suggestion form"""
+    transmitter_form = TransmitterEntryForm(request.POST)
+    if transmitter_form.is_valid():
+        transmitter = transmitter_form.save(commit=False)
+        transmitter.user = request.user
+        transmitter.reviewed = False
+        transmitter.approved = False
+        uuid = transmitter_form.cleaned_data['uuid']
+        if uuid is not None and len(uuid) > 0:
+            transmitter.uuid = uuid
+        transmitter.save()
 
         # Notify admins
         admins = User.objects.filter(is_superuser=True)
         site = get_current_site(request)
         subject = '[{0}] A new suggestion for {1} was submitted'.format(site.name,
-                                                                        suggestion.satellite.name)
-        template = 'emails/new_suggestion.txt'
+                                                                        transmitter.satellite.name)
+        template = 'emails/new_transmitter_suggestion.txt'
         saturl = '{0}{1}'.format(
             site.domain,
-            reverse('satellite', kwargs={'norad': suggestion.satellite.norad_cat_id})
+            reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id})
         )
         data = {
-            'satname': suggestion.satellite.name,
+            'satname': transmitter.satellite.name,
             'saturl': saturl,
             'sitedomain': site.domain,
-            'contributor': suggestion.user
+            'contributor': transmitter.user
         }
         message = render_to_string(template, {'data': data})
         for user in admins:
@@ -128,15 +144,15 @@ def suggestion(request):
                     exc_info=True
                 )
 
-        messages.success(request, ('Your suggestion was stored successfully. '
+        messages.success(request, ('Your transmitter suggestion was stored successfully. '
                                    'Thanks for contibuting!'))
-        return redirect(reverse('satellite', kwargs={'norad': suggestion.satellite.norad_cat_id}))
+        return redirect(reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id}))
     else:
         logger.error(
-            'Suggestion form was not valid {0}'.format(suggestion_form.errors),
+            'Suggestion form was not valid {0}'.format(transmitter_form.errors),
             exc_info=True,
             extra={
-                'form': suggestion_form.errors,
+                'form': transmitter_form.errors,
             }
         )
         messages.error(request, 'We are sorry, but some error occured :(')

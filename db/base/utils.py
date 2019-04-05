@@ -22,7 +22,7 @@ def calculate_statistics():
     total_satellites = satellites.count()
     total_transmitters = transmitters.count()
     total_data = DemodData.objects.all().count()
-    alive_transmitters = transmitters.filter(alive=True).count()
+    alive_transmitters = transmitters.filter(status='active').count()
     if alive_transmitters > 0 and total_transmitters > 0:
         try:
             alive_transmitters_percentage = '{0}%'.format(round((float(alive_transmitters) /

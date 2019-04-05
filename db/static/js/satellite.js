@@ -22,10 +22,16 @@ function copyToClipboard(text, el) {
     }
 }
 
-function suggestion_type(selection) {
+function transmitter_suggestion_type(selection) {
     switch(selection){
     case 'Transmitter':
         $('.input-group').show();
+        $('input').prop( 'disabled', false );
+        $('input[name=\'uplink_low\']').prop( 'disabled', true );
+        $('input[name=\'uplink_high\']').prop( 'disabled', true );
+        $('input[name=\'uplink_drift\']').prop( 'disabled', true );
+        $('input[name=\'downlink_high\']').prop( 'disabled', true );
+        $('input[name=\'invert\']').prop( 'disabled', true );
         $('.input-group').has('input[name=\'uplink_low\']').hide();
         $('.input-group').has('input[name=\'uplink_high\']').hide();
         $('.input-group').has('input[name=\'uplink_drift\']').hide();
@@ -36,6 +42,10 @@ function suggestion_type(selection) {
         break;
     case 'Transceiver':
         $('.input-group').show();
+        $('input').prop( 'disabled', false );
+        $('input[name=\'uplink_high\']').prop( 'disabled', true );
+        $('input[name=\'downlink_high\']').prop( 'disabled', true );
+        $('input[name=\'invert\']').prop( 'disabled', true );
         $('.input-group').has('input[name=\'uplink_high\']').hide();
         $('.input-group').has('input[name=\'downlink_high\']').hide();
         $('.input-group').has('input[name=\'invert\']').hide();
@@ -45,6 +55,7 @@ function suggestion_type(selection) {
         break;
     case 'Transponder':
         $('.input-group').show();
+        $('input').prop( 'disabled', false );
         $('input[name=\'downlink_low\']').prev().html('Downlink Low');
         $('input[name=\'uplink_low\']').prev().html('Uplink Low');
         break;
@@ -76,14 +87,14 @@ function format_freq(frequency) {
 }
 
 $(document).ready(function() {
-    $('.suggestion-type').on('change click', function(){
+    $('.transmitter_suggestion-type').on('change click', function(){
         var selection = $(this).val();
-        suggestion_type(selection);
+        transmitter_suggestion_type(selection);
     });
 
-    $('.suggestion-edit-modal').on('show.bs.modal', function(){
-        var selection =  $(this).find('.suggestion-type').val();
-        suggestion_type(selection);
+    $('.transmitter_suggestion-edit-modal').on('show.bs.modal', function(){
+        var selection =  $(this).find('.transmitter_suggestion-type').val();
+        transmitter_suggestion_type(selection);
 
         var downlink_ppb = parseInt($(this).find('.downlink-ppb-sugedit').val());
         if(downlink_ppb){
@@ -99,7 +110,7 @@ $(document).ready(function() {
     });
 
     $('#NewSuggestionModal').on('show.bs.modal', function(){
-        suggestion_type('Transmitter');
+        transmitter_suggestion_type('Transmitter');
     });
 
     // Calculate the drifted frequencies

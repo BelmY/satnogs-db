@@ -1,16 +1,15 @@
+from datetime import datetime
 import logging
 from socket import error as socket_error
 
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.core.urlresolvers import reverse
-from django.template.loader import render_to_string
-from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 
-from db.base.models import Mode, Satellite, Transmitter, Suggestion, DemodData, Telemetry
+from db.base.models import (Mode, Satellite, TransmitterEntry, TransmitterSuggestion,
+                            Transmitter, DemodData, Telemetry)
 from db.base.tasks import check_celery, reset_decoded_data, decode_all_data
 
 
@@ -71,81 +70,79 @@ class SatelliteAdmin(admin.ModelAdmin):
         return redirect(reverse('admin:index'))
 
 
-@admin.register(Transmitter)
-class TransmitterAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'description', 'satellite', 'type', 'alive', 'mode', 'uplink_low',
-                    'uplink_high', 'uplink_drift', 'downlink_low', 'downlink_high',
-                    'downlink_drift', 'baud',)
+@admin.register(TransmitterEntry)
+class TransmitterEntryAdmin(admin.ModelAdmin):
+    list_display = ('uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
+                    'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift',
+                    'reviewed', 'approved', 'status', 'created', 'citation', 'user')
     search_fields = ('satellite__id', 'uuid', 'satellite__name', 'satellite__norad_cat_id')
-    list_filter = ('type', 'alive', 'mode', 'baud',)
-    readonly_fields = ('uuid', 'satellite', 'approved',)
+    list_filter = ('reviewed', 'approved', 'type', 'status', 'mode', 'baud',)
+    readonly_fields = ('uuid', 'satellite')
 
 
-@admin.register(Suggestion)
-class SuggestionAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'description', 'transmitter_uuid', 'user', 'type', 'satellite',
-                    'uplink_low', 'uplink_high', 'uplink_drift', 'downlink_low', 'downlink_high',
-                    'downlink_drift',)
-    search_fields = ('satellite', 'uuid',)
-    list_filter = ('type', 'mode',)
-    readonly_fields = ('uuid', 'satellite', 'transmitter', 'approved', 'user',
-                       'citation', 'transmitter_data')
-    actions = ['approve_suggestion']
+@admin.register(TransmitterSuggestion)
+class TransmitterSuggestionAdmin(admin.ModelAdmin):
+    list_display = ('uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
+                    'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift',
+                    'status', 'created', 'citation', 'user')
+    search_fields = ('satellite__id', 'uuid', 'satellite__name', 'satellite__norad_cat_id')
+    list_filter = ('type', 'mode', 'baud',)
+    readonly_fields = ('uuid', 'description', 'status', 'type', 'uplink_low', 'uplink_high',
+                       'uplink_drift', 'downlink_low', 'downlink_high', 'downlink_drift', 'mode',
+                       'invert', 'baud', 'satellite', 'reviewed', 'approved', 'created',
+                       'citation', 'user')
+    actions = ['approve_suggestion', 'reject_suggestion']
+
+    def get_actions(self, request):
+        actions = super(TransmitterSuggestionAdmin, self).get_actions(request)
+        if not request.user.has_perm('base.delete_transmittersuggestion'):
+            if 'delete_selected' in actions:
+                del actions['delete_selected']
+        return actions
 
     def approve_suggestion(self, request, queryset):
-        for obj in queryset:
-            try:
-                transmitter = Transmitter.objects.get(id=obj.transmitter.id)
-                transmitter.update_from_suggestion(obj)
-                obj.delete()
-            except (Transmitter.DoesNotExist, AttributeError):
-                obj.approved = True
-                obj.citation = ''
-                obj.user = None
-                obj.save()
-
-            # Notify user
-            current_site = get_current_site(request)
-            subject = '[{0}] Your suggestion was approved'.format(current_site.name)
-            template = 'emails/suggestion_approved.txt'
-            data = {
-                'satname': obj.satellite.name
-            }
-            message = render_to_string(template, {'data': data})
-            try:
-                obj.user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
-            except Exception:
-                logger.error(
-                    'Could not send email to user',
-                    exc_info=True
-                )
-
-        rows_updated = queryset.count()
-
-        # Print a message
-        if rows_updated == 1:
-            message_bit = '1 suggestion was'
+        queryset_size = len(queryset)
+        for entry in queryset:
+            entry.approved = True
+            entry.reviewed = True
+            entry.created = datetime.utcnow()
+            entry.user = request.user
+            entry.save()
+        # After creating the new approved entries, we update the suggestion entries as reviewed
+        # Note that queryset.update doesn't use model's save() that creates new entries
+        queryset.update(reviewed=True, approved=True)
+        if queryset_size == 1:
+            self.message_user(request, "Transmitter suggestion was successfully approved")
         else:
-            message_bit = '{0} suggestions were'.format(rows_updated)
-        self.message_user(request, '{0} successfully approved.'.format(message_bit))
+            self.message_user(request, "Transmitter suggestions were successfully approved")
+    approve_suggestion.short_description = 'Approve selected transmitter suggestions'
 
-    approve_suggestion.short_description = 'Approve selected suggestions'
-
-    def transmitter_uuid(self, obj):
-        try:
-            return obj.transmitter.uuid
-        except Exception:
-            return '-'
-
-    def transmitter_data(self, obj):
-        if obj.transmitter:
-            redirect_url = reverse('admin:base_transmitter_changelist')
-            extra = '{0}'.format(obj.transmitter.pk)
-            return '<a href="{0}">Transmitter Initial Data</a>'.format(
-                redirect_url + extra)
+    def reject_suggestion(self, request, queryset):
+        queryset_size = len(queryset)
+        for entry in queryset:
+            entry.created = datetime.utcnow()
+            entry.user = request.user
+            entry.approved = False
+            entry.reviewed = True
+            entry.save()
+        # After creating the new approved entries, we update the suggestion entries as reviewed
+        # Note that queryset.update doesn't use model's save() that creates new entries
+        queryset.update(reviewed=True, approved=False)
+        if queryset_size == 1:
+            self.message_user(request, "Transmitter suggestion was successfully rejected")
         else:
-            return '-'
-    transmitter_data.allow_tags = True
+            self.message_user(request, "Transmitter suggestions were successfully rejected")
+    reject_suggestion.short_description = 'Reject selected transmitter suggestions'
+
+
+@admin.register(Transmitter)
+class TransmitterAdmin(admin.ModelAdmin):
+    list_display = ('uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
+                    'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift',
+                    'status', 'created', 'citation', 'user')
+    search_fields = ('satellite__id', 'uuid', 'satellite__name', 'satellite__norad_cat_id')
+    list_filter = ('type', 'status', 'mode', 'baud',)
+    readonly_fields = ('uuid', 'satellite')
 
 
 @admin.register(Telemetry)

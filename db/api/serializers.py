@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from db.base.models import Mode, Satellite, Transmitter, DemodData
+from db.base.models import Mode, Satellite, Transmitter, DemodData, TRANSMITTER_STATUS
 
 
 class ModeSerializer(serializers.ModelSerializer):
@@ -18,16 +18,29 @@ class SatelliteSerializer(serializers.ModelSerializer):
 class TransmitterSerializer(serializers.ModelSerializer):
     norad_cat_id = serializers.SerializerMethodField()
     mode_id = serializers.SerializerMethodField()
+    mode = serializers.SerializerMethodField()
+    alive = serializers.SerializerMethodField()
+    updated = serializers.DateTimeField(source='created')
 
     class Meta:
         model = Transmitter
         fields = ('uuid', 'description', 'alive', 'type', 'uplink_low', 'uplink_high',
-                  'uplink_drift', 'downlink_low', 'downlink_high', 'downlink_drift',
-                  'mode_id', 'invert', 'baud', 'norad_cat_id')
+                  'uplink_drift', 'downlink_low', 'downlink_high', 'downlink_drift', 'mode_id',
+                  'mode', 'invert', 'baud', 'norad_cat_id', 'status', 'updated', 'citation')
+
+    # Keeping alive field for compatibility issues
+    def get_alive(self, obj):
+        return obj.status == TRANSMITTER_STATUS[0]
 
     def get_mode_id(self, obj):
         try:
             return obj.mode.id
+        except Exception:
+            return None
+
+    def get_mode(self, obj):
+        try:
+            return obj.mode.name
         except Exception:
             return None
 

@@ -12,7 +12,7 @@ base_urlpatterns = ([
         name='request_export_all'),
     url(r'^frames/(?P<norad>[0-9]+)/(?P<period>[0-9]+)/$', views.request_export,
         name='request_export'),
-    url(r'^suggestion/$', views.suggestion, name='suggestion'),
+    url(r'^transmitter_suggestion/$', views.transmitter_suggestion, name='transmitter_suggestion'),
     url(r'^statistics/$', views.statistics, name='statistics'),
     url(r'^stats/$', views.stats, name='stats'),
     url(r'^users/edit/$', views.users_edit, name='users_edit'),

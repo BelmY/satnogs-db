@@ -1,7 +1,7 @@
 {% extends 'emails/base.txt' %}
 
 {% block main %}
-New suggestion for Satellite {{ data.satname }} was submitted by user {{ data.contributor }}!
+New transmitter suggestion for satellite {{ data.satname }} was submitted by user {{ data.contributor }}!
 
 {{ data.saturl }}
 

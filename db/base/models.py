@@ -10,6 +10,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.models import OuterRef, Subquery
 from django.db.models.signals import post_save, pre_save
 from django.utils.timezone import now
 
@@ -19,6 +20,7 @@ logger = logging.getLogger('db')
 
 DATA_SOURCES = ['manual', 'network', 'sids']
 SATELLITE_STATUS = ['alive', 'dead', 're-entered']
+TRANSMITTER_STATUS = ['active', 'inactive', 'invalid']
 TRANSMITTER_TYPE = ['Transmitter', 'Transceiver', 'Transponder']
 
 
@@ -44,16 +46,6 @@ def _gen_observer(sender, instance, created, **kwargs):
 
 def _set_is_decoded(sender, instance, **kwargs):
     instance.is_decoded = instance.payload_decoded != ''
-
-
-class TransmitterApprovedManager(models.Manager):
-    def get_queryset(self):
-        return super(TransmitterApprovedManager, self).get_queryset().filter(approved=True)
-
-
-class SuggestionApprovedManager(models.Manager):
-    def get_queryset(self):
-        return super(SuggestionApprovedManager, self).get_queryset().filter(approved=False)
 
 
 class Mode(models.Model):
@@ -91,8 +83,12 @@ class Satellite(models.Model):
             return settings.SATELLITE_DEFAULT_IMAGE
 
     @property
-    def pending_suggestions(self):
-        pending = Suggestion.objects.filter(satellite=self.id).count()
+    def transmitters(self):
+        return Transmitter.objects.filter(satellite=self.id).exclude(status='invalid')
+
+    @property
+    def pending_transmitter_suggestions(self):
+        pending = TransmitterSuggestion.objects.filter(satellite=self.id).count()
         return pending
 
     @property
@@ -109,11 +105,12 @@ class Satellite(models.Model):
         return '{0} - {1}'.format(self.norad_cat_id, self.name)
 
 
-class Transmitter(models.Model):
+class TransmitterEntry(models.Model):
     """Model for satellite transmitters."""
-    uuid = ShortUUIDField(db_index=True, unique=True)
+    uuid = ShortUUIDField(db_index=True)
     description = models.TextField()
-    alive = models.BooleanField(default=True)
+    status = models.CharField(choices=zip(TRANSMITTER_STATUS, TRANSMITTER_STATUS),
+                              max_length=8, default='active')
     type = models.CharField(choices=zip(TRANSMITTER_TYPE, TRANSMITTER_TYPE),
                             max_length=11, default='Transmitter')
     uplink_low = models.BigIntegerField(blank=True, null=True)
@@ -122,48 +119,58 @@ class Transmitter(models.Model):
     downlink_low = models.BigIntegerField(blank=True, null=True)
     downlink_high = models.BigIntegerField(blank=True, null=True)
     downlink_drift = models.IntegerField(blank=True, null=True)
-    mode = models.ForeignKey(Mode, blank=True, null=True,
-                             on_delete=models.SET_NULL, related_name='transmitters')
+    mode = models.ForeignKey(Mode, blank=True, null=True, on_delete=models.SET_NULL,
+                             related_name='transmitter_entries')
     invert = models.BooleanField(default=False)
     baud = models.FloatField(validators=[MinValueValidator(0)], blank=True, null=True)
-    satellite = models.ForeignKey(Satellite, related_name='transmitters',
-                                  null=True)
+    satellite = models.ForeignKey(Satellite, null=True, related_name='transmitter_entries')
+    reviewed = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
+    created = models.DateTimeField(default=now)
+    citation = models.CharField(max_length=512, default='CITATION NEEDED - https://xkcd.com/285/')
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
-    objects = TransmitterApprovedManager()
-
-    def __unicode__(self):
-        return self.description
-
-    def update_from_suggestion(self, suggestion):
-        self.description = suggestion.description
-        self.alive = suggestion.alive
-        self.type = suggestion.type
-        self.uplink_low = suggestion.uplink_low
-        self.uplink_high = suggestion.uplink_high
-        self.uplink_drift = suggestion.uplink_drift
-        self.downlink_low = suggestion.downlink_low
-        self.downlink_high = suggestion.downlink_high
-        self.downlink_drift = suggestion.downlink_drift
-        self.mode = suggestion.mode
-        self.invert = suggestion.invert
-        self.baud = suggestion.baud
-        self.approved = True
-        self.save()
-
-
-class Suggestion(Transmitter):
-    """Model for transmitter suggestions."""
-    citation = models.CharField(max_length=255, blank=True)
-    user = models.ForeignKey(User, blank=True, null=True,
-                             on_delete=models.SET_NULL)
-    transmitter = models.ForeignKey(Transmitter, blank=True, null=True,
-                                    on_delete=models.SET_NULL, related_name='suggestions')
-
-    objects = SuggestionApprovedManager()
+    class Meta:
+        unique_together = ("uuid", "created")
+        verbose_name_plural = 'Transmitter entries'
 
     def __unicode__(self):
         return self.description
+
+    def save(self, *args, **kwargs):
+        self.id = None
+        super(TransmitterEntry, self).save()
+
+
+class TransmitterSuggestionManager(models.Manager):
+    def get_queryset(self):
+        return TransmitterEntry.objects.filter(reviewed=False)
+
+
+class TransmitterSuggestion(TransmitterEntry):
+    objects = TransmitterSuggestionManager()
+
+    class Meta:
+        proxy = True
+        permissions = (('approve', 'Can approve/reject transmitter suggestions'),)
+
+
+class TransmitterManager(models.Manager):
+    def get_queryset(self):
+        subquery = TransmitterEntry.objects.filter(
+            reviewed=True, approved=True
+        ).filter(
+            uuid=OuterRef('uuid')
+        ).order_by('-created')
+        return super(TransmitterManager, self).get_queryset().filter(
+            reviewed=True, approved=True).filter(created=Subquery(subquery.values('created')[:1]))
+
+
+class Transmitter(TransmitterEntry):
+    objects = TransmitterManager()
+
+    class Meta:
+        proxy = True
 
 
 class Telemetry(models.Model):
@@ -184,7 +191,7 @@ class Telemetry(models.Model):
 class DemodData(models.Model):
     """Model for satellite for observation data."""
     satellite = models.ForeignKey(Satellite, null=True, related_name='telemetry_data')
-    transmitter = models.ForeignKey(Transmitter, null=True, blank=True)
+    transmitter = models.ForeignKey(TransmitterEntry, null=True, blank=True)
     source = models.CharField(choices=zip(DATA_SOURCES, DATA_SOURCES),
                               max_length=7, default='sids')
     data_id = models.PositiveIntegerField(blank=True, null=True)

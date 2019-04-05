@@ -11,8 +11,10 @@
                         {% endif %}>
     <span {% if hz %}class="frequency {{ class }}"{% endif %}
           {% if freq_or %}data-freq_or="{{ freq_or }}" data-drift="{{ value }}"{% endif %}>{{ value }}</span>
-      {% if original %}
-        <div class="text-muted">{{ original }}</div>
+      {% if original and original != value %}
+        <div>
+          <del class="text-muted">{{ original }}</del>
+        </div>
       {% endif %}
   </div>
 </div>

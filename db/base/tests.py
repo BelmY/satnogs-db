@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils.timezone import now
 
-from db.base.models import (DATA_SOURCES, Mode, Satellite, Transmitter, Suggestion,
+from db.base.models import (DATA_SOURCES, Mode, Satellite, Transmitter, TransmitterSuggestion,
                             Telemetry, DemodData)
 
 
@@ -65,7 +65,8 @@ class SatelliteFactory(factory.django.DjangoModelFactory):
 class TransmitterFactory(factory.django.DjangoModelFactory):
     """Transmitter model factory."""
     description = fuzzy.FuzzyText()
-    alive = fuzzy.FuzzyChoice(choices=[True, False])
+    status = fuzzy.FuzzyChoice(choices=['active', 'inactive', 'invalid'])
+    type = fuzzy.FuzzyChoice(choices=['Transmitter', 'Transceiver', 'Transponder'])
     uplink_low = fuzzy.FuzzyInteger(200000000, 500000000, step=10000)
     uplink_high = fuzzy.FuzzyInteger(200000000, 500000000, step=10000)
     downlink_low = fuzzy.FuzzyInteger(200000000, 500000000, step=10000)
@@ -74,19 +75,36 @@ class TransmitterFactory(factory.django.DjangoModelFactory):
     invert = fuzzy.FuzzyChoice(choices=[True, False])
     baud = fuzzy.FuzzyInteger(4000, 22000, step=1000)
     satellite = factory.SubFactory(SatelliteFactory)
-    approved = True
+    reviewed = True
+    approved = fuzzy.FuzzyChoice(choices=[True, False])
+    created = fuzzy.FuzzyDateTime(now() - timedelta(days=30), now())
+    citation = fuzzy.FuzzyText()
+    user = factory.SubFactory(UserFactory)
 
     class Meta:
         model = Transmitter
 
 
-class SuggestionFactory(factory.django.DjangoModelFactory):
-    transmitter = factory.SubFactory(TransmitterFactory)
+class TransmitterSuggestionFactory(factory.django.DjangoModelFactory):
+    description = fuzzy.FuzzyText()
+    status = fuzzy.FuzzyChoice(choices=['active', 'inactive', 'invalid'])
+    type = fuzzy.FuzzyChoice(choices=['Transmitter', 'Transceiver', 'Transponder'])
+    uplink_low = fuzzy.FuzzyInteger(200000000, 500000000, step=10000)
+    uplink_high = fuzzy.FuzzyInteger(200000000, 500000000, step=10000)
+    downlink_low = fuzzy.FuzzyInteger(200000000, 500000000, step=10000)
+    downlink_high = fuzzy.FuzzyInteger(200000000, 500000000, step=10000)
+    mode = factory.SubFactory(ModeFactory)
+    invert = fuzzy.FuzzyChoice(choices=[True, False])
+    baud = fuzzy.FuzzyInteger(4000, 22000, step=1000)
+    satellite = factory.SubFactory(SatelliteFactory)
+    reviewed = False
+    approved = False
+    created = fuzzy.FuzzyDateTime(now() - timedelta(days=30), now())
     citation = fuzzy.FuzzyText()
     user = factory.SubFactory(UserFactory)
 
     class Meta:
-        model = Suggestion
+        model = TransmitterSuggestion
 
 
 class TelemetryFactory(factory.django.DjangoModelFactory):
