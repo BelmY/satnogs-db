@@ -17,7 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-EXCLUDE_REGEXP="^\\(pkg-resources\\|satnogs-db\\|satnogsdecoders\\)"
+EXCLUDE_REGEXP="^\\(pkg-resources\\|satnogs-db\\)"
+COMPATIBLE_REGEXP="^\\(satnogsdecoders\\)"
 VIRTUALENV_DIR=$(mktemp -d)
 PIP_COMMAND="$VIRTUALENV_DIR/bin/pip"
 
@@ -34,9 +35,13 @@ cat << EOF > requirements.txt
 # Please edit 'setup.cfg' to add top-level dependencies and use
 # './contrib/refresh-requirements.sh to regenerate this file
 
-satnogsdecoders~=0.0
 EOF
 "$PIP_COMMAND" freeze | grep -v "$EXCLUDE_REGEXP" >> requirements.txt
+
+# Set compatible release packages in requirements file
+if [ -n "$COMPATIBLE_REGEXP" ]; then
+	sed -i 's/'"$COMPATIBLE_REGEXP"'==\([0-9]\+\)\(\.[0-9]\+\)\+$/\1~=\2.0/' requirements.txt
+fi
 
 # Install development package with dependencies
 "$PIP_COMMAND" install --no-cache-dir .[dev]
@@ -55,6 +60,11 @@ _tmp_requirements_dev=$(mktemp)
 "$PIP_COMMAND" freeze | grep -v "$EXCLUDE_REGEXP" | sort > "$_tmp_requirements_dev"
 sort < requirements.txt | comm -13 - "$_tmp_requirements_dev" >> requirements-dev.txt
 rm -f "$_tmp_requirements_dev"
+
+# Set compatible release packages in development requirements file
+if [ -n "$COMPATIBLE_REGEXP" ]; then
+	sed -i 's/'"$COMPATIBLE_REGEXP"'==\([0-9]\+\)\(\.[0-9]\+\)\+$/\1~=\2.0/' requirements-dev.txt
+fi
 
 # Verify dependency compatibility
 "$PIP_COMMAND" check
