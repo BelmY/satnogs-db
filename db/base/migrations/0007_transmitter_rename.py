@@ -40,10 +40,6 @@ class Migration(migrations.Migration):
         ),
         migrations.RemoveField(
             model_name='suggestion',
-            name='transmitter_ptr',
-        ),
-        migrations.RemoveField(
-            model_name='suggestion',
             name='citation',
         ),
         migrations.RemoveField(
