@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-EXCLUDE_REGEXP="^\(pkg-resources\|satnogs-db\|satnogsdecoders\)"
+EXCLUDE_REGEXP="^\\(pkg-resources\\|satnogs-db\\|satnogsdecoders\\)"
 VIRTUALENV_DIR=$(mktemp -d)
 PIP_COMMAND="$VIRTUALENV_DIR/bin/pip"
 
