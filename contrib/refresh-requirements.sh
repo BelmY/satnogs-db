@@ -38,11 +38,6 @@ cat << EOF > requirements.txt
 EOF
 "$PIP_COMMAND" freeze | grep -v "$EXCLUDE_REGEXP" >> requirements.txt
 
-# Set compatible release packages in requirements file
-if [ -n "$COMPATIBLE_REGEXP" ]; then
-	sed -i 's/'"$COMPATIBLE_REGEXP"'==\([0-9]\+\)\(\.[0-9]\+\)\+$/\1~=\2.0/' requirements.txt
-fi
-
 # Install development package with dependencies
 "$PIP_COMMAND" install --no-cache-dir .[dev]
 
@@ -61,8 +56,9 @@ _tmp_requirements_dev=$(mktemp)
 sort < requirements.txt | comm -13 - "$_tmp_requirements_dev" >> requirements-dev.txt
 rm -f "$_tmp_requirements_dev"
 
-# Set compatible release packages in development requirements file
+# Set compatible release packages
 if [ -n "$COMPATIBLE_REGEXP" ]; then
+	sed -i 's/'"$COMPATIBLE_REGEXP"'==\([0-9]\+\)\(\.[0-9]\+\)\+$/\1~=\2.0/' requirements.txt
 	sed -i 's/'"$COMPATIBLE_REGEXP"'==\([0-9]\+\)\(\.[0-9]\+\)\+$/\1~=\2.0/' requirements-dev.txt
 fi
 
