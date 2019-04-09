@@ -7,7 +7,8 @@
         "name": "OSCAR 7",
         "names": "AO-7",
         "description": "This satellite was a small communications satellite designed by amateur radio operators. Attitude control was accomplished with a magnetic and damping rods. There were two beacon experiments (near 30 and 430 MHz), and two repeaters with code storage capability. The repeater receiver frequencies were near 146 and 432 MHz, and the transmitter frequencies near 30 and 146 MHz. The command system was manufactured in Australia and the second repeater in Germany.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -18,7 +19,8 @@
         "name": "UOSAT 2",
         "names": "UO-11",
         "description": "Also known as OSCAR 11, this British built satellite from the University of Surrey has reached the end of it's servicable life. It still transmits telemetary based when in direct sunlight and with its watchdog timer operational. This satellite was used for communications as part of a polar expedition in 1988.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -29,7 +31,8 @@
         "name": "LUSAT",
         "names": "LO-19",
         "description": "Lusat was launched by the same Ariane vehicle that launched SPOT-2 from the Kourou Space Center in French Guiana. It was an AMSAT amateur radio satellite. It carried a CCD camera for earth photography.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -40,7 +43,8 @@
         "name": "ITAMSAT",
         "names": "IO-26",
         "description": "Italy's first amateur radio satellite that uses a store and repeat function to relay messages. Similar to LUSAT",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -51,7 +55,8 @@
         "name": "RADIO ROSTO",
         "names": "RS-15",
         "description": "Also known as RS 15. Built by a group of radio amateurs from Russia. This satellite was designed to be used as part of a high pwer constellatoin of radio M spacecraft that were eventually shelved.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -62,7 +67,8 @@
         "name": "JAS-2",
         "names": "FO-29",
         "description": "This Japanese satellite is also known as FujiSAt or FO29. It succeded JAS-1b and is caoable of phone, CW and packet communications.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -73,7 +79,8 @@
         "name": "TECHSAT 1B",
         "names": "GO-32",
         "description": "Techsat 1b is an imaging satellite that transmits a 9600 baud burst every 30 seconds. Built by the Technion Institute of Technology in Israel it replaced Techsat 1a which failed to reach orbit.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -84,7 +91,8 @@
         "name": "ISS",
         "names": "ZARYA",
         "description": "The Zarya (Dawn) module was the first module of the international space station. This large multi-module eart orbiting space station is used as a long term research station and is manned. Built as a collaboration between Russia and the USA it is regularly seen in the night sky.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -95,7 +103,8 @@
         "name": "PCSAT",
         "names": "NO-44",
         "description": "Prototype Communications SATellie (PCSAT) is an dAutomatice Positin Reporting System (APRS) satellite that digipeats AX25 frames. It was built by the US Navy.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -106,7 +115,8 @@
         "name": "SAUDISAT 1C",
         "names": "SO-50",
         "description": "SO-50 is a widely used amateur radio satellite that has FM transponders that use a 67 Hz PL tone for access. It operates as a repeater and was designed and built as part of a Saudi Arabian amateur radio programme.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -117,7 +127,8 @@
         "name": "CUTE-1",
         "names": "CO-55",
         "description": "The Tokyo Institute of Technology developed CUTE 1 as a nanosatellite that operates a a beacon using the callsign JQ1YCY. It is well nown as CO-55.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -128,7 +139,8 @@
         "name": "CUBESAT XI-IV",
         "names": "CO-57",
         "description": "Cubesat X1-IV is Japanese nanosatellite which is also known as CO-57 or Sai Four. At 10cm x10cm and just less than 1Kg it fits within the Cubesat format. It has a CW beacon using the callsign JQ1YCW.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -139,7 +151,8 @@
         "name": "MOZHAYETS 4",
         "names": "RS-22",
         "description": "A Russian training satellite built by the Mozhaisky military academy. Also known as RS22 it was used to test components for the Glosnass system. Its CW beacon remains active.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -150,7 +163,8 @@
         "name": "HAMSAT",
         "names": "VO-52",
         "description": "HAMSAT is an Indian (ISRO) microsatellite that was launched by PSLV-C6 rocket from Sriharikota on the southeastern coast of India at 04:44 UT on 5 May 2005. The 43 kg satellite will relay amateur VHF radio communications.",
-        "status": "dead"
+        "status": "dead",
+        "decayed": null
     }
 },
 {
@@ -161,7 +175,8 @@
         "name": "CUBESAT XI 5",
         "names": "CO-58, OSCAR 58",
         "description": "Similar to cubesat XI IV, this Japanes picosatellite, developed by the university of Tokyo Nakasuka laboratory has been posting to Twitter",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -172,7 +187,8 @@
         "name": "CUTE-1.7+APD II",
         "names": "CO-65",
         "description": "Similar to CUTE 1, but not within the 'normal' cubesat form factor. At 20cm x 15cm x 10cm it is slightly larger than CUTE-1.7+APD but still employing the same control mechanism ( A hitachii PDA). It had a mission duration of 2 months which it achieved but still remains operational where it transits data to the ground station at the Tokyo Institute of Technology",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -183,7 +199,8 @@
         "name": "DELFI-C3",
         "names": "DO-64",
         "description": "Delft university of technology, Netherlands designed this 3U cubesat as a technology demonstration vehicle. Carrying new types of solar cells, a solar sensor and a high efficiency amateur radio transceiver. It operates only in sunlight as it also has no batteries.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -194,7 +211,8 @@
         "name": "SEEDS II",
         "names": "CO-66",
         "description": "SEEDS (Space Engineering EDucation Satellite) is a 3.0 kg Japanese nanosatellite built by the students at Nihon University. It will demonstrate the feasibility of down linking spacecraft parameter data in CW transmission.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -205,7 +223,8 @@
         "name": "YUBILEINY",
         "names": "RS-30",
         "description": "Yubileiny is a Russian microsatellite that was launched by a Rokot rocket from Plesetsk at 15:20 UT on 23 May 2008. The craft commemorates the 1957 launch of Sputnik 1, broadcasting its images and audio tones in the amateur radio band.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -216,7 +235,8 @@
         "name": "PRISM",
         "names": "HITOMI",
         "description": "Prism is a technology demonstration and verification of an ultra small satellite bus and amateur radio services.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -227,7 +247,8 @@
         "name": "KKS-1",
         "names": "KISEKI",
         "description": "A micro propulsion system technology demonstrator with 3 axis attitude control.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -238,7 +259,8 @@
         "name": "SWISSCUBE",
         "names": "",
         "description": "SwissCube, a Swiss cubesat, will take optical airglow measurements validating the use of low-cost off-the-shelf detectors for these observations. Launched with BEESAT, UWE 2 & ITU-pSAT1",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -249,7 +271,8 @@
         "name": "BEESAT",
         "names": "",
         "description": "A German cubesat, will verify the behavior of new micro reaction wheels for picosatellites, Launched with Swisscube, UWE 2 & ITU-pSAT1.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -260,7 +283,8 @@
         "name": "ITUPSAT 1",
         "names": "",
         "description": "A Turkish cubesat, will examine the performance of an on-board passive stability system it will also carry a camera. Launched with Swisscube, BEESAT & UWE 2.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -271,7 +295,8 @@
         "name": "XIWANG-1",
         "names": "HO-68\r\nXW-1\r\nHOPE-1",
         "description": "An amateur radio satellite with a beacon, and three cross-band transponders operating in FM, SSB/CW and digital modes.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -282,7 +307,8 @@
         "name": "TISAT 1",
         "names": "",
         "description": "A low cost Swiss student developed  cubesat with a  mission that includes monitoring of the durability of exposed thin bonding wires, PCB tracks and lines (atomic Oxygen effects), verification of the system fault tolerance scheme, acquisition of spacecraft environment and operating data.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -293,7 +319,8 @@
         "name": "JUGNU",
         "names": "",
         "description": "An Indian technology demonstration and remote sensing satellite used to provide infrared imagery for agriculture and disaster monitoring.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -304,7 +331,8 @@
         "name": "SRMSAT",
         "names": "",
         "description": "An Indian technology demonstration and earth observation satellite who's mission is to monitor greenhouse gases in the Earth's atmosphere using an infrared spectrometer to collect data on the concentration of water vapour.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -315,7 +343,8 @@
         "name": "M-CUBED & EXP-1 PRIME",
         "names": "E1P-U2, Michigan Multipurpose Minisat",
         "description": "A technology demonstrator for a new FPGA based image processing system that became magnetically conjoined with EXP-1. This is the first known non destructive joining of two satellites. It was succeeded by Mcubed-2 in 2013",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -326,7 +355,8 @@
         "name": "AAUSAT3",
         "names": "",
         "description": "Another small satellite from the University of Aalborg in Denmark with its purpose to teach advanced level students design and construction of space technology.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -337,7 +367,8 @@
         "name": "STRAND-1",
         "names": "",
         "description": "Using a Google Nexus One smart phone, the STRaND-1 satellite can be thought of as the worlds first 'Phonesat'. It provided all the systems except solar panels and propulsion.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -348,7 +379,8 @@
         "name": "SOMP",
         "names": "",
         "description": "Students Oxygen Measurement Project (SOMP) is a picosatellite with a mission to measure the concentration of oxygen in the upper atmosphere and testing thin film solar cells.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -359,7 +391,8 @@
         "name": "BEESAT-2",
         "names": "",
         "description": "Launched at the same time as SOMP and BeeSat 3. This 1U cubesat carries gyros and sensors for precise orientation.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -370,7 +403,8 @@
         "name": "CUBEBUG-1",
         "names": "CAPITAN BETO",
         "description": "The first demonstration mission for a new cubesat platform design intended to be released as an open source design for amateur use. It features an ARM based on-board computer, a non reaction wheel with a driver circuit and a low resolution camera all based on COTS components. It will function as a amateur radio digipeater on completion of its mission.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -381,7 +415,8 @@
         "name": "ZACUBE-1",
         "names": "South Africa CubeSat-1, TshepisoSat, ZA003",
         "description": "A student developed cubesat that carries an HF beacon to be used for ionospheric experiments.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -392,7 +427,8 @@
         "name": "TRITON-1",
         "names": "",
         "description": "An experimental Automatic identification System (AIS) receiver that has periodic down link beacons with telemetry and AIS messages.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -403,7 +439,8 @@
         "name": "GOMX 1",
         "names": "GATOSS",
         "description": "A Danish student built satellite capable of tracking aircraft using the Automatic Dependent Surveillance-Broadcast (ADS-B) signals using a software defined radio (SDR). Also known as Global Air traffic Awareness & Optimising through Space-borne Surveillance (GATOSS).",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -414,7 +451,8 @@
         "name": "HUMSAT-D",
         "names": "",
         "description": "Based on the Pumpkin cubesat HumSat D is a Spanish Demonstration (D) educational satellite from Spain that gave hands on experience .",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -425,7 +463,8 @@
         "name": "VELOX-PII",
         "names": "",
         "description": "A Cubesat technology demonstration satellite from Singapore that had a short planned 8-12 week lifetime.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -436,7 +475,8 @@
         "name": "CUBEBUG-2",
         "names": "LO-74",
         "description": "Similar to CubeBug-1 and using the same Open Hardware and Software periodically transmitting AX25 packets for the amateur radio community.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -447,7 +487,8 @@
         "name": "FUNCUBE-1",
         "names": "AO-73",
         "description": "An educational satellite that encourages telemetry download as well as a linear transponder as well as a materials science experiment that resembles Leslie's Cube experiment,",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -458,7 +499,8 @@
         "name": "UWE-3",
         "names": "",
         "description": "University of W\u00fcrzburg's Experimental (UWE) is a technology demonstrator for miniature attitude determination and control systems.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -469,7 +511,8 @@
         "name": "SPROUT",
         "names": "",
         "description": "Space Research On Unique Technology (SPROUT). A Japanese nanosatellite demonstration mission from Nihon University. The primary goal is to test systems that are pertinent Cubesats. This is a successor to SEEDS.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -480,7 +523,8 @@
         "name": "DUCHIFAT-1",
         "names": "",
         "description": "An educational spacecraft from Israel. It relays Automatic Position reporting System (APRS) data packets. It was built with a number of secondary schools at the Space Laboratory of the Herzliya Science Centre.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -491,7 +535,8 @@
         "name": "QB50P1",
         "names": "EO 79, European-OSCAR 79, FUNcube 3, EO-79",
         "description": "One of 2 prototypes to the QB50 Satellite Project. It includes technology including an INMS payload, ADCS system, thermocouple and linear transponder from different suppliers.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -502,7 +547,8 @@
         "name": "LIGHTSAIL-1",
         "names": "",
         "description": "LightSail, developed by The Planetary Society, will demonstrate that sunlight alone can propel a spacecraft in Earth orbit. It is a follow up mission to the failed Cosmos 1 project.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -513,7 +559,8 @@
         "name": "DEORBITSAIL",
         "names": "",
         "description": "DeorbitSail will deploy a 4-by-4-meter, four-quadrant sail to demonstrate deorbiting. The spacecraft will be based on a 3 unit (3U) CubeSat standard structure, with dimensions close to 10 by 10 by 34 cm. DeorbitSail features power, communications, attitude control and data handling components in addition to its densely packed sail and deployment system. The sail will be able to change the satellite\u2019s orbit through drag and solar radiation pressure.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -524,7 +571,8 @@
         "name": "GRIFEX",
         "names": "",
         "description": "GEO-CAPE ROIC In-Flight Performance Experiment (GRIFEX) is a 3U Cubesat technology demonstrator for a Jet Propulsion Lab developed read Out Integrated Circuit.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -535,7 +583,8 @@
         "name": "NO-84",
         "names": "PSAT\r\nParkinsonSAT",
         "description": "This amateur satellite carries a PSK31 transponder as well as a APRS transponder for digipeating. It is one of a pair, see also NO-83.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -546,7 +595,8 @@
         "name": "NO-83",
         "names": "BRICSat-P",
         "description": "This amateur satellite carries a PSK31 transponder as well as a APRS transponder for digipeating. It is one of a pair, see also NO-83.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -557,7 +607,8 @@
         "name": "FIREBIRD 3",
         "names": "",
         "description": "Focused Investigations of Relativistic Electron Burst Intensity, Range, and Dynamics (FIREBIRD). This is a space weather cubesat that studies electron micro bursts.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -568,7 +619,8 @@
         "name": "FIREBIRD 4",
         "names": "",
         "description": "Focused Investigations of Relativistic Electron Burst Intensity, Range, and Dynamics (FIREBIRD). This is a space weather cubesat that studies electron micro bursts.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -579,7 +631,8 @@
         "name": "EXOCUBE",
         "names": "",
         "description": "ExoCube is a space weather satellite sponsored by the National Science Foundation. It\u2019s primary mission is to directly measure the density of Hydrogen, Oxygen, Helium and Nitrogen in the upper atmosphere.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -590,7 +643,8 @@
         "name": "UKUBE-1",
         "names": "",
         "description": "A UK 3U Cubesat from the UK Space Agency made up of 5 experiments and a pathfinder for a 1 Cubesat launch per year. It is supported by EADS Astrium.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -601,7 +655,8 @@
         "name": "DX1",
         "names": "DX-1",
         "description": "The first privately funded Russian small satellite. It carries an Automatic identification System (AIS) receiver for tracking shipping .",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -612,7 +667,8 @@
         "name": "AISAT",
         "names": "",
         "description": "AISat 1 is an German microsatellite, which carries an experimental spacecraft-based Automatic Identification System (AIS) sensor in low-Earth orbit as a means of tracking maritime assets.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -623,7 +679,8 @@
         "name": "VELOX 1",
         "names": "",
         "description": "Along with its sub satellite Velox-P3. This is an educational hand on teaching satellite with technology demonstrations on board that include 20m ground resolution imaging systems as well as inter satellite communications systems.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -634,7 +691,8 @@
         "name": "BUGSAT-1",
         "names": "TITA",
         "description": "A technology demonstration mission for the Aleph-1 constellation of small earth observation satellites from Argentina. It has AX.25 packet, UHF and digipeater capabilities.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -645,7 +703,8 @@
         "name": "NANOSATC-BR1",
         "names": "NCBR-1\r\nNCBR1",
         "description": "A Brazilian mission to engage with a new generation of spacecraft engineers. It provides monitoring of a the magnetosphere over Brazil. It have a UHF VHF transceiver using 1k2 to 9k6 BSPK.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -656,7 +715,8 @@
         "name": "POLYITAN-1",
         "names": "",
         "description": "A Ukranian Ham radio satellite with an educational slant. It has a number of technical demonstrations as well as a mission plan to foster links between educational, government and ham radio communities.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -667,7 +727,8 @@
         "name": "QB50P2",
         "names": "EO 80, European-OSCAR 80, EO-80",
         "description": "A 2U cubesat and the pair of QB50P1. it carries an Ion and neutral mass spectrometer to make earth observations.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -678,7 +739,8 @@
         "name": "UNISAT-6",
         "names": "",
         "description": "Unisat 6 is a Cubesat dispenser that carries an amateur radio linear transponder. It has released ANTELSat, Lemur 1, Tigrisat and Aerocube 6.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -689,7 +751,8 @@
         "name": "TIGRISAT",
         "names": "",
         "description": "This 3U cubesat from Iraq carries a camera with a dust detection capability. It also has a VHF / UHF antenna for telemetry as well as beacon. It also carries an S band antenna. It primarily communicates with ground stations in Rome and Baghdad.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -700,7 +763,8 @@
         "name": "EAGLE 2",
         "names": "",
         "description": "A femtosatellite used to test miniaturised components in a 1.5U PocketQub form factor and made from commercial off the shelf components that transmits telemetry data and beacon.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": "2018-05-19T00:00:00Z"
     }
 },
 {
@@ -711,7 +775,8 @@
         "name": "HORYU 2",
         "names": "",
         "description": "Kyushu Institute of technology students developed this satellite for high voltage solar array testing.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -722,7 +787,8 @@
         "name": "AAUSAT 5",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -733,7 +799,8 @@
         "name": "GOMX-3",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -744,7 +811,8 @@
         "name": "TIANWANG 1A",
         "names": "TW-1A\r\nShangkeda-2\r\nSECM",
         "description": "The 3 satellite constellation comprising of Tianwang 1A, 1B & 1C have been developed by the Nanjing University for inter satellite communication using the GAMALINK technology that are used for Telemetry, Tracking & Command (TT&C).",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -755,7 +823,8 @@
         "name": "TIANWANG 1B",
         "names": "TW-1B\r\nNJUST-2",
         "description": "The 3 satellite constellation comprising of Tianwang 1A, 1B & 1C have been developed by the Nanjing University for inter satellite communication using the GAMALINK technology that are used for Telemetry, Tracking & Command (TT&C).",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -766,7 +835,8 @@
         "name": "TIANWANG 1C",
         "names": "TW-1C\r\nNJFA-1",
         "description": "The 3 satellite constellation comprising of Tianwang 1A, 1B & 1C have been developed by the Nanjing University for inter satellite communication using the GAMALINK technology that are used for Telemetry, Tracking & Command (TT&C).",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -777,7 +847,8 @@
         "name": "XW-2A",
         "names": "CAS-3A",
         "description": "Chinese Amateur Radio Satellite (CAS) is a communications and atmospheric physics experimental micro-satellite.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -788,7 +859,8 @@
         "name": "XW-2B",
         "names": "CAS-3B",
         "description": "Part of a constellation of 3 satellites (CAS-3B, 3C & 3D) used for atmospheric physics experiments and amateur radio.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -799,7 +871,8 @@
         "name": "XW-2C",
         "names": "CAS-3C",
         "description": "Part of a constellation of 3 satellites (CAS-3B, 3C & 3D) used for atmospheric physics experiments and amateur radio.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -810,7 +883,8 @@
         "name": "XW-2D",
         "names": "CAS-3D",
         "description": "Part of a constellation of 3 satellites (CAS-3B, 3C & 3D) used for atmospheric physics experiments and amateur radio.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -821,7 +895,8 @@
         "name": "XW-2E",
         "names": "CAS-3E",
         "description": "One of two identical picosatellite's (the other being XW-2F) are slightly larger that 1U CubeSats have amateur radio VHF / UHF transponders and telemetry down links.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -832,7 +907,8 @@
         "name": "XW-2F",
         "names": "CAS-3F",
         "description": "One of two identical picosatellite's (the other being XW-2E) are slightly larger that 1U CubeSat's have amateur radio VHF / UHF transponders and telemetry down links",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -843,7 +919,8 @@
         "name": "KAITUO 1B",
         "names": "CAS-3G\r\nDCBB\r\nXW-2G",
         "description": "A 2U CubeSat for the University educational purposes designed by Shenzhen Aerospace Dongfanghong HIT Satellite Ltd. together with CAMSAT.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -854,7 +931,8 @@
         "name": "LILACSAT 2",
         "names": "CAS-3H\r\nXW-2H",
         "description": "Built by students at Harbin Institute of Technology (HIT), it carries 4 payloads. A VHF / UHF Software Defined Radio (SDR) FM repeater and APRS digipeater as well as CW telemetry and beacon, A second AIS / ADS-B receiver, An FPGA testing platform and a thermal infrared camera.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -865,7 +943,8 @@
         "name": "NUDT-PHONESAT",
         "names": "CAS-3I\r\nXW-2I",
         "description": "A Chinese experimental pico satellite developed by National University of Defense Technology and CAMSAT. The satellite is based on smart phone technology. NUDT-PhoneSat was launched in a cluster of 20 satellites on the maiden flight of the CZ-6 rocket.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -876,7 +955,8 @@
         "name": "SERPENS",
         "names": "PY0ESA",
         "description": "This Brazilian designs and UK made 3U cubesat has a VHF & S-Band store and forward transponder as well as a UHF HUMSAT compatible messaging system. It uses the callsign PY0ESA.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -887,7 +967,8 @@
         "name": "AAUSAT-II",
         "names": "CUBESAT-2\r\nAAUSAT-2",
         "description": "Denmark's Aalborg universities cubesat is part of an educational mission that suffers from very high tumbling. Whilst initially data was received this is problematic and is not able to decode AX25 packets. This problem is compounded due to lower transmission power",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -898,7 +979,8 @@
         "name": "FIRST-MOVE",
         "names": "",
         "description": "First Munich Orbital Verification Experiment (First-MOVE) carries a camera and a UHF/VHF transceiver.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -909,7 +991,8 @@
         "name": "VERMONT LUNAR",
         "names": "",
         "description": "A prototype self propelled device from Vermont Technical College designed for data collection prior to a planned later lunar mission. It re-entered on 21st November 2015.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -920,7 +1003,8 @@
         "name": "PHONESAT 2.4",
         "names": "",
         "description": "No longer in orbit - Re-entered Earths atmosphere 31st January 2017. The satellite was used to demonstrate the use of smart phone hardware and software for small satellite control.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": "2019-01-19T18:18:47Z"
     }
 },
 {
@@ -931,7 +1015,8 @@
         "name": "FOX-1A",
         "names": "AO-85",
         "description": "AO-85 (formerly Fox-1A) is the first of AMSAT\u2019s Fox-1 series of 1U cubesats. Launched as part of ELaNa XII on the October 8th, 2015 NROL 55 Atlas 5 launch from Vandenburg, California, AO-85 is in a roughly 65 degree inclination, 518x810km orbit with apogee over the northern hemisphere.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -942,7 +1027,8 @@
         "name": "NOAA 15",
         "names": "",
         "description": "Also knowns as NOAA-K and the replacement to NOAA 12, it supports the NOAA/NEIS geostationary meterological satellite program (GOES) giving imaging and climate information.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -953,7 +1039,8 @@
         "name": "NOAA 18",
         "names": "",
         "description": "A 4th generation meterological satellite. Complimentary geostationary (GOES) satellite with its improved sensing capability on a polar orbit.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -964,7 +1051,8 @@
         "name": "NOAA 19",
         "names": "",
         "description": "The NOAA polar operational environmental satellites collect global data on: cloud cover; surface conditions such as ice, snow, and vegetation; atmospheric temperatures; and, moisture, aerosol, and ozone distributions. They also collect and relay information from fixed and moving data platforms.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -975,7 +1063,8 @@
         "name": "FENGYUN 3A",
         "names": "Feng-Yun-3A, FY3A",
         "description": "This Chinese weather satellite uses visible, infrared and microwaves for global mapping as well as being used for the management of the 2008 Beijing Olympics. There are also additional monitors to measure ozone, radiation and the space environment.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -986,7 +1075,8 @@
         "name": "FENGYUN 3B",
         "names": "Feng-Yun-3B",
         "description": "A Chinese weather satellite that carries 11 instruments that, along with its counterparts, are used for 3D atmospheric detection.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -997,7 +1087,8 @@
         "name": "FENGYUN 3C",
         "names": "Feng-Yun-3C",
         "description": "This second generation Chinese meteorological satellite measures air temperature and humidity, clouds and surface radiation for weather forecasting purposes.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1008,7 +1099,8 @@
         "name": "METOP-A",
         "names": "",
         "description": "METOP-A is a European polar orbiting weather satellite. It is Europes first meterological satellite which carries 11 instruments and a further 2 that support search and resuce services. There are similarities between METOP and NOAA including climate monitoring",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1019,7 +1111,8 @@
         "name": "METOP-B",
         "names": "",
         "description": "Europe's first polar-orbiting meteorological satellite (EUMETSAT). With a 14 year life expectancy it delivers atmospheric, land mass and sea surface information as well as being able to collect data from ground and sea based measuring stations and to transmit rescue signals.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1030,7 +1123,8 @@
         "name": "ATHENOXAT 1",
         "names": "ATX1",
         "description": "Designed to be a optical satellite. This 3U  technology demonstrator is for a night vision device developed by Microspace Rapid Pte Ltd of Singapore.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1041,7 +1135,8 @@
         "name": "VELOX 2",
         "names": "VELOX2",
         "description": "A 6U experimental satellite mixes commercial communications equipment and students . The L band communications equipment transmits its data to the geostationary Inmarsat 4 as a technology demonstrator.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1052,7 +1147,8 @@
         "name": "AGGIESAT 4",
         "names": "",
         "description": "",
-        "status": "alive"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1063,7 +1159,8 @@
         "name": "CHUBUSAT-2",
         "names": "JJ2YPN",
         "description": "Small satellite from Nagoya and Daido Universities to measure solar and Earth radiation, undertake imaging of the Earth with an infrared camera and to act as a message relay fo radio amateurs.  It uses the callsign JJ2YPN.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1074,7 +1171,8 @@
         "name": "CHUBUSAT-3",
         "names": "JJ2YPO",
         "description": "Small satellite from Nagoya and Daido Universities to measure solar and Earth radiation and undertake imaging of the Earth with an infrared camera. It also carries a receiver for the Automatic Information System (AIS) to pick up positional and other information from ships at sea, and an amateur radio message relay system.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1085,7 +1183,8 @@
         "name": "HORYU-IV",
         "names": "JG6YBW",
         "description": "Also known as the Arc Event Generator and Investigation Satellite (AEGIS). Kyushu Institute of Technology designed and built this satellite to study electrical arcing on high power solar arrays. It also carries a telemetry system operating in an amateur radio band.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1096,7 +1195,8 @@
         "name": "BISONSAT",
         "names": "N7SKC",
         "description": "Salish Kootenai College (SKC) students designed and built this satellite to calculate and test cover classification, cloud cover and cloud height.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1107,7 +1207,8 @@
         "name": "LQSAT",
         "names": "",
         "description": "LQSat is a Chinese commercial experimental remote sensing satellite. The satellite carries an experimental imager with a ground resolution of 5 m. Additionally, it carries an amateur radio payload. \r\nLQSat will operate as as part of a constellation of four satellites, Jilin 1 for high-definition images, LQSat for testing new space technology and two Lingqiao satellites for video.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1118,7 +1219,8 @@
         "name": "LAPAN-A2",
         "names": "ORARI\r\nIO-86",
         "description": "An Indonesian microsatellite that is used to identify ships with Indonesian waters. It has a wider range that LAPAN-Tubsat and is a sister of LAPAN-A3. It also carried APRS and voice repeaters.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1129,7 +1231,8 @@
         "name": "SAMSAT-218D",
         "names": "",
         "description": "3U CubeSat created by students and scientists from Samara State Aerospace University in Russia as a technology demonstrator and educational satellite. Its main task is to test algorithms for controlling the orientation of nanosatellites.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1140,7 +1243,8 @@
         "name": "SWAYAM",
         "names": "",
         "description": "1U Cubesat from the University of Pune, to demonstrate and test a two-way communications system for use in space.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1151,7 +1255,8 @@
         "name": "BIROS",
         "names": "",
         "description": "BIROS (Bi-spectral InfraRed Optical System) - German-built satellite as a follow-on and companion to TET-1 and intended to detect fires or other high temperature events on the Earth's surface.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1162,7 +1267,8 @@
         "name": "SATHYABAMASAT",
         "names": "",
         "description": "Designed by the Sathyabama University for the study of green house gases in specific areas this spacecraft delivers its data when in range of Chennai, India.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1173,7 +1279,8 @@
         "name": "NUSAT 2",
         "names": "BATATA",
         "description": "",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1184,7 +1291,8 @@
         "name": "NUSAT 1",
         "names": "FRESCO",
         "description": "One of a pair (NUSAT 1 & NUSAT 2) of Argentinian satellites as part of a potential 25 satellite constellation that provide remote sensing and earth imagery via visible and infrared cameras. It also carries a amateur radio transponder.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1195,7 +1303,8 @@
         "name": "NODES 1",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1206,7 +1315,8 @@
         "name": "NODES 2",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1217,7 +1327,8 @@
         "name": "STMSAT-1",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1228,7 +1339,8 @@
         "name": "CADRE",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1239,7 +1351,8 @@
         "name": "MINXSS",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1250,7 +1363,8 @@
         "name": "AAUSAT 4",
         "names": "",
         "description": "1U CubeSat from Aalborg university, Denmark equipped with an AIS receiver to receive messages from ships at sea.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1261,7 +1375,8 @@
         "name": "E-ST@R-II",
         "names": "",
         "description": "A 1U CubeSat developed for demonstrating the autonomous active attitude control capabilities based on magnetic actuation: in fact, the payload is an Active Attitude Determination and Control System. The commissioning phase foresees that the payload is deactivated leaving the satellite in its free tumbling motion, without any attitude stabilization. The A-ADCS starts its work when commanded from GCS, controlling the angular velocities and the attitude of the satellite.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1272,7 +1387,8 @@
         "name": "OUFTI-1",
         "names": "",
         "description": "OUFTI 1 is a 1U CubeSat built by students of the Universite de Liege. It is the first satellite to test the use of the D-STAR communication protocol in space. Also on-board is an innovative electrical power system proposed by Thales Alenia Space ETCA.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1283,7 +1399,8 @@
         "name": "ORSTED",
         "names": "\u00d8rsted",
         "description": "Named after the Danish Physist, Hans Christian \u00d8rsted (1771-1851), who, in 1820 discovered electromagnetism. The satellite has been used to make numerous measurements on geomagnetic effects and the data received is used to support research.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1294,7 +1411,8 @@
         "name": "LAPAN-A3",
         "names": "",
         "description": "An earth observing micro satellite with spectral imaging from Indonesia. It also carries voice repeaters and an APRS digipeater.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1305,7 +1423,8 @@
         "name": "INMARSAT 4-F1",
         "names": "Alphasat1",
         "description": "Inmarsat I well known for its communication satellites. This satellite is a high powered telecoms device that uses the L band and also carries technology demnostration payloads for the European Space Agency (ESA).",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1316,7 +1435,8 @@
         "name": "ALSAT 1N",
         "names": "AlSat-Nano",
         "description": "A 3U cubesat built by Surrey Space Centre and operated by the Algerian Space Agency and the UK Space Agency for the demonstration of new technologies for use on future small satellite missions.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1327,7 +1447,8 @@
         "name": "3CAT-2",
         "names": "",
         "description": "Developed in Catalonia, this observation satellite carries technology demonstrations for reflectometry and an experimental star tracker.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1338,7 +1459,8 @@
         "name": "CANX-4",
         "names": "NLS 7.1",
         "description": "Canadian Advanced Nanospace eXperiments (CanX). One of a pair of identical nanosatellites that is used to demonstrate formation space flight using a cold gas thruster and GPS receiver. See also CanX-5.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1349,7 +1471,8 @@
         "name": "CANX-5",
         "names": "NLS 7.2",
         "description": "Canadian Advanced Nanospace eXperiments (CanX). One of a pair of identical nanosatellites that is used to demonstrate formation space flight using a cold gas thruster and GPS receiver. See also CanX-4.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1360,7 +1483,8 @@
         "name": "AENEAS",
         "names": "",
         "description": "This dual purpose satellite has a primary role to track cargo containers over the open ocean and a secondary role to demonstrate a radiation hardened flight processor.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1371,7 +1495,8 @@
         "name": "ESTCUBE 1",
         "names": "",
         "description": "1U cubesat from Estonia that will deploy a 10m long tether and measure/study effects on it of the solar wind with a view to future use as a solar sail. While emphasis was placed on educating students during creation of ESTCube-1, it does have a scientific purpose. On board the satellite is an electric solar wind sail (e-sail) which was invented by Finnish scientist Pekka Janhunen.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1382,7 +1507,8 @@
         "name": "STARS",
         "names": "KUKAI-GENNAI mother and daughter",
         "description": "Stars is part of a pair of satellites built by Kagawa university. The two satellites are tethered with synthetic fibre, and a camera is built into the smaller unit used to photograph the unit in space. The purpose is to demonstrate the potential for external surveying of a space station.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1393,7 +1519,8 @@
         "name": "ALMASAT-1",
         "names": "",
         "description": "ALMa MAter SATellite is a technology demonstrator satellite developed by the University of Bologna for Earth Orbit or Earth Observation missions.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1404,7 +1531,8 @@
         "name": "MCUBED-2",
         "names": "",
         "description": "The original Mcubed mission became conjoined to E1P U2 (HRBE). This re-run of the same mission will take images of the earth at approximately 200m per pixel.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1415,7 +1543,8 @@
         "name": "DTUSAT-2",
         "names": "",
         "description": "Danmarks Tekniske Universitet Satellite 2 (DTUSAT-2) is a satellite that is used to track birds from space. It uses ground based transponders that are used during migration. It is no longer operational in its primary role but still transmits beacons.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1426,7 +1555,8 @@
         "name": "AIST-2D",
         "names": "",
         "description": "A large technology and scientific research satellite from Russia that holds a number of payloads primarily in these fields including Aurora hyperspectal imaging and a P-Band radar system.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1437,7 +1567,8 @@
         "name": "BEESAT-4",
         "names": "",
         "description": "The Technical University of Berlin is based on BeeSat-2 and uses an advanced GPS receiver. It was deployed by the BIROS satellite.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1448,7 +1579,8 @@
         "name": "PRATHAM",
         "names": "",
         "description": "Pratham is a satellite developed under a plan to build a fully functional microsatellite in less than three years which would then be launched by Indian Space Research Organisation (ISRO). It is entirely a student initiative with mentor-ship provided by ISRO scientists and IIT Bombay Faculty.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1459,7 +1591,8 @@
         "name": "NEE-01 PEGASUS",
         "names": "NEE-01",
         "description": "The first Ecuadorian satellite that has a number of technology demonstrations including, passive antenna deployment, thermal / radiation shield, multiphase solar array and carbon nanotube thermal control system.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1470,7 +1603,8 @@
         "name": "NEE-02 KRYSAOR",
         "names": "NEE-02",
         "description": "Ecuador's second Cubesat similar to NEE 01 Pegaso but with alternative solar power. It has technology demonstrations as well as video transmission.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1481,7 +1615,8 @@
         "name": "ICUBE-1",
         "names": "",
         "description": "Designed and developed by the Institute of Space Technology, Islamabad, Pakistan this educational satellite was successfully launched but no signals were received.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1492,7 +1627,8 @@
         "name": "HINCUBE",
         "names": "",
         "description": "H\u00f8gskolen i Narvik CubeSat (HINCube) designed and built by students in Norway. The device has optical sensors (camera) and thermal sensors.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1503,7 +1639,8 @@
         "name": "DELFI-N3XT",
         "names": "",
         "description": "A 3U cubesat from TU Delft that sought to education, technology demonstration and nanosatellite bus advancement.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1514,7 +1651,8 @@
         "name": "CINEMA-3",
         "names": "KHUSAT-2",
         "description": "Cubeat for Ion, Neutral,Electron, Magnetc fields (CINEMA) is a collaborative University programme that has 3 satellites for earth observation,",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1525,7 +1663,8 @@
         "name": "UNIBRITE",
         "names": "CANX-3A",
         "description": "BRIght-star Target Explorer is an astronomy mission that makes photometric observations of some of the brightest stars.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1536,7 +1675,8 @@
         "name": "BRITE-AUSTRIA",
         "names": "BRITE-Austria\r\nCANX-3B",
         "description": "The scientific goal of this nanosatellite mission is the investigation of the brightness oscillations of massive luminous stars by differential photometry. The scientific instrument is an optical camera with a high-resolution CCD to take images from distant stars with magnitude of 3.5.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1547,7 +1687,8 @@
         "name": "BRITE-PL",
         "names": "LEM",
         "description": "BRIght-star Target Explorer - Poland (BRITE-PL) is designed to make photometric observations of bright stars similar to the previous BRITE missions through a Polish consortium.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1558,7 +1699,8 @@
         "name": "COMPASS-1",
         "names": "",
         "description": "German students from the university of Applied Science, Aachen designed and built this satellite. It is used to flight test a miniature bus, take colour images and a Phoenix GPS receiver as well as an attitude technology demonstration",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1569,7 +1711,8 @@
         "name": "DRAGONSAT-1",
         "names": "",
         "description": "This satellite was designed to observe both the northern and southern aurora. It was successfully launched but is considered to be unservicable as no signals have been received.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1580,7 +1723,8 @@
         "name": "COPPER",
         "names": "",
         "description": "The purpose of the COPPER experiment is to study the use of a microbolometer array in LEO (Low Earth Orbit) for taking infrared images of propulsion system plumes as well as Earth's atmospheric and oceanic conditions. After launch no signals were received.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1591,7 +1735,8 @@
         "name": "CHARGERSAT-1",
         "names": "",
         "description": "Designed and built at the University of Huntsville as a technology demonstrator for communications, axis control and solar power collection. After launch no signals were received.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1602,7 +1747,8 @@
         "name": "CAPE1",
         "names": "",
         "description": "Cajun Advanced Picosatellite Experiment (CAPE-1) is an amateur satellite built by students at the University of Louisiana. Telemetry is relayed via intermittent CW & AX15 beacons sent using a 1 watt transmitter with the callsign K5USL. It has now been superseded by CAPE-2",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1613,7 +1759,8 @@
         "name": "CAPE-2",
         "names": "",
         "description": "This follow up from CAPE-1 from the University of Louisiana had a voice repeater, digipeater and ability to tweet. Believed to be no longer active.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1624,7 +1771,8 @@
         "name": "BLACK KNIGHT-1",
         "names": "",
         "description": "This US military academy was based on Pumpkin Inc's cubesat kit as part of a programme to demonstrate a passive attitude control system. After launch no signals were received. It re-entered on 16th July 2015.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1635,7 +1783,8 @@
         "name": "KYSAT-2",
         "names": "",
         "description": "This is the second satellite designed and built by students of the university of Kentucky and Morehead University. It features a Beaglebone computer and a UHF radio for communications that includes data and images.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1646,7 +1795,8 @@
         "name": "TRAILBLAZER",
         "names": "SPA-1",
         "description": "Failed to reach orbit.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1657,7 +1807,8 @@
         "name": "TJ3SAT",
         "names": "",
         "description": "Designed by high school students this satellite was part of the ELaNA program that was to transmit basic telemetry data as part of an educational outreach programme. After launch no signals were detected. It reentered Earth's atmosphere on 16th September 2015.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1668,7 +1819,8 @@
         "name": "SWAMPSAT",
         "names": "",
         "description": "A student led project from the university of Florida that was to test systems that would improve Cubesats. After launch no signals were received.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1679,7 +1831,8 @@
         "name": "STARS-C",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1690,7 +1843,8 @@
         "name": "METEOR-M 2",
         "names": "",
         "description": "The satellite was designed to watch global weather, the ozone layer, the ocean surface temperature and ice conditions to facilitate shipping in polar regions and to monitor radiation environment in the near-Earth space.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1701,7 +1855,8 @@
         "name": "FREEDOM",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1712,7 +1867,8 @@
         "name": "TANCREDO-1",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1723,7 +1879,8 @@
         "name": "EGG",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1734,7 +1891,8 @@
         "name": "AOBA-VELOX 3",
         "names": "AOBA-VeloxIII",
         "description": "A joint venture between Singaporean and Japanese universities to demonstrate technology. It uses commonly used technology from WiFi routers as a wireless communications method as well as a pulsed plasma micro-propulsion system.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1745,7 +1903,8 @@
         "name": "ITF-2",
         "names": "",
         "description": "Imagine The Future 2 (ITF2) is a student led satellite for amateur radio purposes. It uses a FRAM microprocessor to support radio amateur networking and to test a 1/20th wavelength antenna.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1756,7 +1915,8 @@
         "name": "WASEDA-SAT3",
         "names": "",
         "description": "A cubesat from Waseda University carrying a camera and a ultra light drag chute for accelerating de-orbiting.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1767,7 +1927,8 @@
         "name": "BY70-1",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1778,7 +1939,8 @@
         "name": "CAS-2T & KS-1Q",
         "names": "OBJECT E",
         "description": "https://amsat-uk.org/2016/11/10/student-fm-transponder-cubesat/",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1789,7 +1951,8 @@
         "name": "GALASSIA",
         "names": "",
         "description": "A university satellite with payloads in tow different areas. Total Electron Count (TEC) & Small Photon-Entangling Quantum System (SPEQS). It also serves as a teaching tool for satellite design and manufacture.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1800,7 +1963,8 @@
         "name": "NAYIF-1",
         "names": "EO-88\r\nFUNCUBE-5",
         "description": "Nayif-1 weighing 1.1 kg is UAE\u2019s first CubeSat mission aiming to make space technologies more accessible to UAE universities. It was built by Mohammed bin-Rashid Space Centre, Dubai.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1811,7 +1975,8 @@
         "name": "UPSAT",
         "names": "GR02\r\nON02GR",
         "description": "The first completely open source satellite is part of the QB50 mission. This satellite minimises the use of COTS components and as such has been designed from scratch using open tools and techniques. It carries a multineedle Langmuir probe to sample electron density\r\n\r\n\r\n[upsat.gr](https://upsat.gr/)",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1822,7 +1987,8 @@
         "name": "QBEE",
         "names": "SE01\r\nON01SE",
         "description": "Part of the QB50 mission, this 2U satellite was designed and built by Open Cosmos with the Lule\u00e5 Tekniska Universitet to measure the behaviour of oxygen in the lower thermosphere.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1833,7 +1999,8 @@
         "name": "HAVELSAT",
         "names": "TR02\r\nON02TR",
         "description": "Part of the qb50 flock. Built by both HAVELSAN and the Istanbul Technical University this satellite holds a software defined radio (SDR)",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1844,7 +2011,8 @@
         "name": "DUTHSat",
         "names": "GR01 ON01GR",
         "description": "Democritus University of Thrace Satellite (DUTHSat) carries a multineedle Langmuir probe (mNLP) as part of the QB50 mission as well as a secondary electronics technology demonstration package.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1855,7 +2023,8 @@
         "name": "SOMP2",
         "names": "DE02\r\nON02DE",
         "description": "Part of the QB50 flock",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1866,7 +2035,8 @@
         "name": "COLUMBIA",
         "names": "US04\r\nON04US",
         "description": "Part of the QB50 flock",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1877,7 +2047,8 @@
         "name": "PHOENIX",
         "names": "TW01\r\nON01TW",
         "description": "Another QB50 mission satellite built by the student of National Cheng Kung University (NCKU) that carries an Ion Neutral Mass Spectrometer, Thermistors and Solar EUV sensors.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1888,7 +2059,8 @@
         "name": "X-CUBESAT",
         "names": "FR01\r\nON01FR",
         "description": "Part of the QB50 mission, this \u00c9cole polytechnique built CubeSat has Earth Observation modules for the purposes of education and technology demonstration.",
-        "status": "alive"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1899,7 +2071,8 @@
         "name": "ZA-AEROSAT",
         "names": "AEROSAT\r\nAZ01\r\nON01AZ",
         "description": "Part of the QB50 mission, this 2U satellite was developed and built at the Stellenbosch University , South Africa . It demonstrates a number of methods for passive control, such as feather antennas as well as active momentum wheel systems.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1910,7 +2083,8 @@
         "name": "LINK",
         "names": "KR01\r\nON01KR",
         "description": "Part of the QB50 Mission. Little Intellegent Nanosatellite of KAIST, or LINK is a 2U spacecraft carries an Ion / Netutral Mass Spectrometer (INMS) and two Langmuir probes developed by KAIST.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1921,7 +2095,8 @@
         "name": "SPACECUBE",
         "names": "FR05\r\nON05FR",
         "description": "Part of the QB50 flockDeveloped and built at Mines Paris Tech, this French satellite carried thermosphere experiments using a Flux Probe Experiment (FIPEX) as well as an amateur radio FM transponder.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1931,8 +2106,9 @@
         "norad_cat_id": 42718,
         "name": "HOOPOE",
         "names": "IL01\r\nON01IL",
-        "description": "A part of the QB50 mission and carying upper atmosphere experiments with a Langmuir probe to sample electron density.",
-        "status": "re-entered"
+        "description": "A part of the QB50 mission and carying upper atmosphere experiments with a Langmuir probe to sample electron density\r\n.",
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1943,7 +2119,8 @@
         "name": "CHALLENGER",
         "names": "US01 ON01US QB50 US01, QBUS 1",
         "description": "QBUS is a consortium comprised of Stanford University, Johns Hopkins Applied Physics Laboratory, the University of Colorado at Boulder, the University of Michigan and the Universidad del Turabo Puerto Rico. It carries a Ion / Neutral mass Spectrometer (INMS) which measures the mass of ions and neutral atoms.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1954,7 +2131,8 @@
         "name": "NJUST-1",
         "names": "CN03 ON03CN",
         "description": "Carrying  a Flux Probe Experiment (FIPEX) this Chinese 2U satellite from Nanjin University is part of the QB50 mission.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1965,7 +2143,8 @@
         "name": "UNSW-ECO",
         "names": "AU02 ON02AU",
         "description": "This QB50 mission satellite carries a Ion / Neutral Mass Spectrometer as well as 4 other non QB50 payloads that includes GPS, ADC, Radiation tolerant FPGA and a 3D printed satellite structure.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -1974,9 +2153,10 @@
     "fields": {
         "norad_cat_id": 42725,
         "name": "LILACSAT-1",
-        "names": "CN02 ON02CN\r\nLO-90",
+        "names": "CN02 ON02CN",
         "description": "Carrying both QB50 mission Ion / Neutral Mass Spectrometery (INMS) and amateur radio payloads this satellite from Harbin Institute of Technology provides a tool for both education as well as radio amateurs .",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1987,7 +2167,8 @@
         "name": "NSIGHT-1",
         "names": "AZ02 ON02AZ",
         "description": "A 2U QB50 satellite carrying Flux Probe Experiment (FIPEX) as well as technology demonstration experiments including imaging and VHDL coding techniques for radiation mitigation.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -1998,7 +2179,8 @@
         "name": "QBITO",
         "names": "ES01 ON01ES",
         "description": "With a QB50 Ion/ Neutral mass Spectrometer (INMS) and additional Phase change material, Infra red detection and attitude control payloads, this Spanish satellite is a Polytechnic University of Madrid designed and built device.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2009,7 +2191,8 @@
         "name": "AALTO-2",
         "names": "FI01 ON01FI",
         "description": "Developed for the QB50 mission and taking design learning from Aalto-1, this 2U cubesat has a Multi Needle Langmuire Probe (MnLP) provides a platform for education and co-operation.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2020,18 +2203,20 @@
         "name": "SUSAT",
         "names": "AU01 ON01AU",
         "description": "Designed and developed for upper atmosphere science and technology demonstration this 2U Cubesat from Adelaide University carries an Ion / Neutral mass Spectrometer (INMS).",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
     "model": "base.satellite",
     "pk": 191,
     "fields": {
-        "norad_cat_id": 42727,
+        "norad_cat_id": 42733,
         "name": "SNUSAT-1B",
         "names": "KR03 ON03KR",
         "description": "Seoul National University Satellite 1 (SNUSat-1) carries a Flux Probe Experiment (FIPEX) as part of the QB50 mission as well as a secondary mission to test a fault detection, isolation and recovery algorithm developed in house.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2042,7 +2227,8 @@
         "name": "I-INSPIRE II",
         "names": "AU03 ON03AU",
         "description": "This University of Sydney satellite is part of the QB50 mission. It carries a Multi Needle Langmuir Probe (MnLP) as well as a COTS low resolution imager and in house developed NanoSpec Photonic spectrograph and a geiger radiation counter.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -2053,7 +2239,8 @@
         "name": "EXALTA-1",
         "names": "CA03 ON03CA",
         "description": "A 3U satellite from the University of Alberta, it is part of the QB50 mission carrying a Multi needle Langmuir Probe (MnLP) and digital fluxgate magnetometer.",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -2064,7 +2251,8 @@
         "name": "AOXIANG-1",
         "names": "CN04 ON04CN",
         "description": "A collaboration between  Shaanxi Engineering Laboratory (SELM) & Northwestern Polytechnical University (NPU), this QB50 contains a Ion/Neutral Mass Spectrometer (INMS) as well as secondary technology demonstrations for satellite control.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2075,7 +2263,8 @@
         "name": "BEEAGLESAT",
         "names": "TR01 ON01TR",
         "description": "This Turkish 2U Cubesat is part of the QB50 mission. It carries a Multi Needle Langmuir Probe (MnLP) for sampling the electron density as well as an X-Ray detector.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2086,7 +2275,8 @@
         "name": "ATLANTIS",
         "names": "US02 ON02US",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -2097,7 +2287,8 @@
         "name": "CAS-4B",
         "names": "",
         "description": "One of a pair of satellites (CAS-4A & 4B) that are to be within a 10 satellite constellation of video (OVS-2) and hyperspectral (OHS-2) satellites.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2108,7 +2299,8 @@
         "name": "CAS-4A",
         "names": "",
         "description": "One of a pair of satellites (CAS-4A & 4B) that are to be within a 10 satellite constellation of video (OVS-2) and hyperspectral (OHS-2) satellites.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2119,7 +2311,8 @@
         "name": "LITUANICASAT-2",
         "names": "",
         "description": "A 3U Cubesat from Vilnius University in the QB50 mission. It carries a Flux Probe Experiment (FIPEX). It is also powerful enough to perform impulsive Hofman orbital transfer, orbit shape corrections and change inclination.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2130,7 +2323,8 @@
         "name": "UCLSAT",
         "names": "",
         "description": "UCLSat is a 2U-CubeSat for technology development and upper atmosphere science. It is developed and built at the MSSL, University College London. As part of the QB50 mission is carries an Ion / Neutral Mass Spectrometer (INMS) as well as a secondary payload for measuring energetic particle and magnetic field environments.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2141,7 +2335,8 @@
         "name": "NIUSAT",
         "names": "",
         "description": "This Indian satellite, designed and developed by Noorul Islam Centre for Higher Education has a miniature Wide Field Sensor for agricultural and disaster management support applications.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2152,7 +2347,8 @@
         "name": "INFLATESAIL",
         "names": "",
         "description": "",
-        "status": "re-entered"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -2163,7 +2359,8 @@
         "name": "SKCUBE",
         "names": "",
         "description": "SkCUBE focuses on ham radio experiments that will include connection of two amateur radio operators via the satellite, sending of basic telemetry data via Morse code for easy listening, and high-speed data and image transmission via the 2.4 GHz band.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2174,7 +2371,8 @@
         "name": "AALTO-1",
         "names": "",
         "description": "Aalto-1 is the first Finnish Satellite and the product of a student satellite project initiated in 2010 at Aalto University by a group of grad students enrolled in a Space Technology special assignment course. The satellite is a 3U CubeSat outfitted with an Imaging Fabry-Perot Spectrometer, a Compact Radiation Monitor and an Electrostatic Plasma Brake.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2185,7 +2383,8 @@
         "name": "URSA MAIOR",
         "names": "IT02",
         "description": "MAIOR (University of Rome la Sapienza Micro Attitude In Orbit testing) is an Italian 3U-CubeSat designed by the University of Rome \"LA SAPIENZA\". The satellite carries a multineedle Langmuir probe (mNLP) sampling the electron density of the space around it. It also carries the ARTICA deorbit sail, which will be deployed at the end of the mission and the MEMIT MEMS MicroThruster Experiment.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2196,7 +2395,8 @@
         "name": "COMPASS 2",
         "names": "DRAGSAIL",
         "description": "Compass 2 or Dragsail- CubeSat is and educational technology demonstration satellite. Part of the QB50 mission it is a 3U spacecraft that is used to demonstrate the ability to de-orbit a LEO satellite using a sail, similar to other QB50 missions such as Inflatesail.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2207,7 +2407,8 @@
         "name": "PEGASUS",
         "names": "AT03",
         "description": "Pegasus is an Austrian 2U-CubeSat designed by the Fachhochschule Wiener Neustadt participating in the QB50 project. Pegasus is equipped with the multi-needle Langmuir probes (mNLP).",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2218,7 +2419,8 @@
         "name": "NUDTSAT",
         "names": "CN06",
         "description": "NUDTSat (National University of Defense Technology Satellite) is a 2U-CubeSat for technolgy development and upper atmosphere science. It is developed and built at the National University of Defense Technology (NUDT). It carries an  INMS (Ion/Neutral Mass Spectrometer) for sampling of low mass ionized and neutral particles in lower thermosphere, such as O, O2, and N2 as part of the QB50 mission.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2229,7 +2431,8 @@
         "name": "SUCHAI",
         "names": "SUCHAI (Satellite of the University of Chile for Aerospace Investigation) is the first Chilean 1U CubeSat developed by undergraduate students, engineers and professors of the Electrical Engineering, Physics and Mechanical Engineering Departments of the Faculty of Physical and Mathematical Sciences (FCFM) at Universidad de Chile. The main goal is to learn the whole process of designing, building/integrating, launching and operating a picosatellite.",
         "description": "",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2240,7 +2443,8 @@
         "name": "VZLUSAT-1",
         "names": "CZ02",
         "description": "VZLUSAT-1 is a 2U CubeSat and part of the QB50 mission . The nanosatelite carries on board a miniaturised X-ray telescope, composite material for radiation shielding and FIPEX to measure the concentration of oxygen in the thermosphere.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2251,7 +2455,8 @@
         "name": "ROBUSTA-1B",
         "names": "",
         "description": "ROBUSTA (Radiation on Bipolar Test for University Satellite Application) is a Cubesat project of the University of Montpellier II. The mission of ROBUSTA is to check the deterioration in flight of electronic components based on bipolar transistors when exposed to space radiation environment. The results of this experiment will be used to validate a test method proposed in the laboratory. This is a reflight of the ROBUSTA 1 mission which failed shortly after launch.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2262,7 +2467,8 @@
         "name": "D-SAT",
         "names": "",
         "description": "The D-Sat (Deorbit Satellite) is a 3U CubeSat mission by Italian company D-Orbit to demonstrate active end-of-life reentry.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2273,7 +2479,8 @@
         "name": "BIRD-B",
         "names": "BRAC Onnesha",
         "description": "Bird are a small technological CubeSat (1U) built by Kyushu Institute of Technology (Kyutech) as the Joint Global Multi-Nation Birds Satellite project, which is a cross-border interdisciplinary satellite project for non-space faring countries supported by Japan. Bird-B or BRAC Onnesha is from Bangladesh.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2284,7 +2491,8 @@
         "name": "BIRD-M",
         "names": "Mazaalai NUMSAT-1",
         "description": "Bird are a small technological CubeSat (1U) built by Kyushu Institute of Technology (Kyutech) as the Joint Global Multi-Nation Birds Satellite project, which is a cross-border interdisciplinary satellite project for non-space faring countries supported by Japan. Bird-M or Mazaalai is from Mongolia.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2295,7 +2503,8 @@
         "name": "TECHNOSAT",
         "names": "",
         "description": "TechnoSat is a nanosatellite project of the Technical University of Berlin. The main objective of TechnoSat is the demonstration and on orbit verification of newley developed satellite components. It also has a number of secondary payloads. It also acts as a pathfinder for the TUBIN mission.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2306,7 +2515,8 @@
         "name": "MAYAK",
         "names": "",
         "description": "This Russian 3U cubesat is a technology demonstrator built by a group of young scientists as part of an initiative with the Moscow State University of Mechanical Engineering. Mayak was to become the brightest orbital object in th enight sky by means of a large reflector. It was launched successfully but failed to deploy the reflector.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2317,7 +2527,8 @@
         "name": "CORVUS BC2",
         "names": "Landmapper-BC 2",
         "description": "Also known as The Landmapper-BC spacecraft, weighs around 22 pounds (10 kilograms) and have color and infrared cameras for wide-area imaging.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2328,7 +2539,8 @@
         "name": "CORVUS BC1",
         "names": "Landmapper-BC 1",
         "description": "Also known as The Landmapper-BC spacecraft, weighs around 22 pounds (10 kilograms) and have color and infrared cameras for wide-area imaging.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2339,7 +2551,8 @@
         "name": "TRANSIT 5B-5",
         "names": "OPS 6582",
         "description": "Transit 5B5 was a US Navy navigation satellite launched by a Thor Able Star rocket. It carried a nuclear power source. Transit, one of the first operational satellite systems, was also known as the Navy Navigation Satellite (NNS). It is also nuclear powered.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2350,7 +2563,8 @@
         "name": "MAX VALIER SAT",
         "names": "",
         "description": "Max Valier Sat is an amateur satellite built in cooperation by: \"Max Valier\" High School in Bolzano/Bozen (Italy), OHB System AG from Bremen (Germany), Max Planck Institute for Extraterrestrial Physics from Garching (Germany).",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2361,7 +2575,8 @@
         "name": "FALCONSAT 3",
         "names": "",
         "description": "A US Military (DARPA) picosatllite that tests ambient plasma and micro propulsion attitude control systems. In september 2017 the US Airforce, who were in control of the satellite, transferred control to AMSAT for amateur use. The satllites remaining life was expected to last for a further 5 to 6 years.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2372,7 +2587,8 @@
         "name": "O/OREOS",
         "names": "USA 219",
         "description": "The O/OREOS satellite is NASA's first cubesat to demonstrate the capability to have two distinct, completely independent science experiments on an autonomous satellite. One experiment will test how microorganisms survive and adapt to the stresses of space; the other will monitor the stability of organic molecules in space.\r\n\r\n[details](http://www.dk3wn.info/sat/afu/sat_ooreos.shtml)",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2383,7 +2599,8 @@
         "name": "FOX-1B",
         "names": "AO-91\r\nRADFXSAT",
         "description": "Radiation Effects Satellite or Fox1B is a joint mission between AMSAT and Vanderbilt University. It has a technology experiment for Vanderbilt University and a radio communications payload for AMSAT.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2394,7 +2611,8 @@
         "name": "EAGLESAT-1",
         "names": "",
         "description": "EagleSat is an educational 1U CubeSat built by the Embry-Riddle Aeronautical University to bring together all engineering disciplines, as well as blending together the business majors to mimic a small business environment to the greatest extent possible to design and build an exploratory CubeSat mission that will test various types of memory for bit flipping due to solar radiation while in low Earth orbit.\r\n\r\nThe payload consists of RAM memory to be tested, a solid state radiation detector, a crystal video receiver and a GPS unit.\r\n\r\nEagleSat was selected in 2013 for launch with NASA\u2019s ELaNa program.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2405,7 +2623,8 @@
         "name": "ECAMSAT",
         "names": "",
         "description": "EcAMSat mission will investigate space micro-gravity effects on the antibiotic resistance of E. coli, a bacterial pathogen responsible for urinary tract infection in humans and animals.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2416,7 +2635,8 @@
         "name": "FLYING LAPTOP",
         "names": "",
         "description": "Flying Laptop is a German minisatellite of the IRS (Institut f\u00fcr Raumfahrtsysteme) at the University of Stuttgart, Germany with a primary mission objective to demonstrate and qualify new small-satellite technologies for follow-up missions.\r\n\r\nFlying Laptop will demonstrate a number of innovative technologies including infra-red high speed optical links. It also carries three cameras with 25 meter resolution and an S-Band down link for near real time observations",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2427,7 +2647,8 @@
         "name": "CASSIOPE",
         "names": "",
         "description": "Primarily a communications satellite, CASSIOPE has a cascade system which acts as a postal service for data packets. Large data files are sent to the satellite then delivered to the receiver using the Ka band. It also carries a space environment sensor package developed by the university of Calgary.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2438,7 +2659,8 @@
         "name": "SIMPL",
         "names": "",
         "description": "SIMPL (Satlet Initial-Mission Proofs and Lessons), also known as HISat (Hyper Integrated Satellite), is mission to demonstrate the satlets technology. It is developed by NovaWurks, in collaboration with NanoRacks MicroSat.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2449,7 +2671,8 @@
         "name": "FOX-1D",
         "names": "AO-92",
         "description": "In addition to the Fox-1 U/v FM transponder, Fox-1D carries several university experiments, including a MEMS gyro from Pennsylvania State University \u2013 Erie, a camera from Virginia Tech, and the University of Iowa\u2019s HERCI (High Energy Radiation CubeSat Instrument) radiation mapping experiment. Fox-1D also carries the AMSAT L-Band Downshifter experiment which allows the utilization of a 1.2 GHz uplink for the FM transponder.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2460,7 +2683,8 @@
         "name": "STEP-1",
         "names": "",
         "description": "Korean Satellite",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2471,7 +2695,8 @@
         "name": "CNUSAIL-1",
         "names": "",
         "description": "https://drive.google.com/file/d/1btYW6h6HTvXpYjZVKrUogOxS1tmNwAxC/view",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2482,7 +2707,8 @@
         "name": "SIGMA",
         "names": "KHUSAT-03",
         "description": "SIGMA (Scientific cubesat with Instruments for Global magnetic field and rAdiation) or KHUSAT 3 (Kyung Hee University Satellite) is a 3U cubesat developed at the Kyung Hee University, South Korea. The mission aim is to measure global magnetic field and radiation using a TEPC Radiation Detector and Magnetometer.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2493,7 +2719,8 @@
         "name": "KAUSAT-5",
         "names": "",
         "description": "",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2504,7 +2731,8 @@
         "name": "PICSAT",
         "names": "",
         "description": "Satellite which monitors brightness of the Beta-Pictoris star\r\n\r\nhttps://picsat.obspm.fr\r\nhttps://en.wikipedia.org/wiki/PicSat\r\nhttps://twitter.com/IamPicSat\r\nhttps://directory.eoportal.org/web/eoportal/satellite-missions/p/picsat",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2515,7 +2743,8 @@
         "name": "INS-1C",
         "names": "",
         "description": "Indian Nano Satellite-1C (INS-1C) is another Indian co-passenger payload of PSLV-C40. It is the third satellite in the Indian Nano satellite series. The first two satellites of this series were carried as co-passenger payloads by PSLV-C37 in February 2017. INS-1C carries Miniature Multispectral Technology Demonstration (MMX-TD) Payload from Space Applications Centre (SAC). Data sent by this camera is useful for topographical mapping, vegetation monitoring, aerosol scattering studies and cloud studies.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2526,7 +2755,8 @@
         "name": "BEESAT-3",
         "names": "",
         "description": "Following on from BeeSat, this one year mission, built by students was used to test the S Band transmitter HISPICO.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2537,7 +2767,8 @@
         "name": "POLYITAN-2-SAU",
         "names": "",
         "description": "PolyITAN-2-SAU is a 2U CubeSat designed and built by the National Technical University of Ukraine in cooperation with the Ukrainian amateur radio community. It carries a Flux Probe Experiment (FIPEX) as part of the QB50 mission.",
-        "status": "alive"
+        "status": "re-entered",
+        "decayed": null
     }
 },
 {
@@ -2548,7 +2779,8 @@
         "name": "NORSAT 2",
         "names": "",
         "description": "The NORSAT-2 satellite carries a next generation Automatic Identification System (AIS) receiver from Kongsberg Seatex, along with a VHF data exchange (VDE) payload that will enable two-way communication at higher data rates than possible with AIS. It features a large deployable directional crossed Yagi VHF antenna.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2556,10 +2788,11 @@
     "pk": 240,
     "fields": {
         "norad_cat_id": 43188,
-        "name": "S-NET C",
-        "names": "DP0TBD",
-        "description": "https://www.raumfahrttechnik.tu-berlin.de/menue/forschung/aktuelle_projekte/s_net/parameter/en/\r\nhttp://dk3wn.info/blog/satelliten/s-net/",
-        "status": "alive"
+        "name": "D-Star ONE",
+        "names": "D-Star ONE Phoenix",
+        "description": "A 3U cubesat designed and built in Germany to demonstrate a planned constellation of communications satellites built entirely for the amateur radio community.",
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2570,7 +2803,8 @@
         "name": "FengMaNiu 1",
         "names": "FMN-1",
         "description": "The FengMaNiu 1 CubeSat was developed by Link Space Aerospace Technology to test out a series of new components including a pair of miniaturized panoramic cameras for still image and video collection. It will also serve as a repeater for the worldwide amateur radio community. Shaonian Xing, the \u201cYouth Star\u201d, is an outreach mission of Sat-China to promote STEAM education and provide an opportunity to learn hands-on about satellite development and mission operations.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2581,7 +2815,8 @@
         "name": "Xiaoxiang-2",
         "names": "TY-2\r\nTianYi 2",
         "description": "A commercial research nanosatellite developed in China. This 6U satellite is one of many TY types. This unit carries a camera system.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2592,7 +2827,8 @@
         "name": "NOAA 9",
         "names": "",
         "description": "Building on the TIROS-N earth observation satellites NOAA 9 usies the advanced TIROS-N system as part of a low earth orbit meterological satellite system.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2603,7 +2839,8 @@
         "name": "ZHOU ENLAI",
         "names": "HA-1",
         "description": "HA 1 or Zhou Enlai is an educational 2U CubeSat built by the Huai'an Youth Comprehensive Development Base, Teenagers Amateur Radio Center of Activity in Huaian in east China's Jiangsu Province involving primary and middle school students. It carries a amateur radio transponder and SSTV transmitter.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2614,7 +2851,8 @@
         "name": "SHAONIAN XING",
         "names": "",
         "description": "Shaonian Xing (also known as Youth Star) is a three-unit CubeSat developed by Chinese students as part of the Sat-China outreach project to engage youth in thinking about space, STEAM education, and even satellite development. \r\n\r\nThe Shaonian Xing resulted from an initiative organized by China Soong Ching-ling Foundation, by the China Association for Science and Technology, and by the Chinese Education Society.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2625,7 +2863,8 @@
         "name": "PICSAT",
         "names": "",
         "description": "Satellite which monitors brightness of the Beta-Pictoris star\r\n\r\nhttps://picsat.obspm.fr\r\nhttps://en.wikipedia.org/wiki/PicSat\r\nhttps://twitter.com/IamPicSat\r\nhttps://directory.eoportal.org/web/eoportal/satellite-missions/p/picsat",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2636,7 +2875,8 @@
         "name": "QUANTUTONG 1",
         "names": "QTT 1\r\nTY-6\r\nTianYi 6",
         "description": "QTT-1 is the first technical verification satellite for the \"future constellation programme\" which is customized and developed by Tianyi Research Institute for Full-chart Location Network Co., Ltd. Based on the mature 6U satellite platform of the company, the satellite was developed in a standardized way, which mainly carried out the integration technology of communication navigation remote sensing, emergency information receiving and wide-field broadcasting technology and other flight verification. It has navigation, communication, imaging, AIS, and amateur radio capabilities.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2647,7 +2887,8 @@
         "name": "CARTOSAT-2",
         "names": "IRS-P7",
         "description": "CartoSat 2A is an Indian photo-imaging craft that was launched by a PSLV-C7 rocket from Sriharikota at 03:57 UT on 10 January 2007. The 680 kg craft will provide panchromatic images at one-meter resolution, to aid civil planning, and other cartographic needs.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2658,7 +2899,8 @@
         "name": "CARTOSAT-2A",
         "names": "",
         "description": "CartoSat 2A is the primary Indian remote sensing craft among the fleet of 10 satellites that were launched by a PSLV 9 rocket from Sriharikota in southeastern coast of India at 03:54 UT on 28 April 2008. The 690 kg, 900 W, triaxially stabilized craft carries a panchromatic camera to provide 0.5-0.85 micron images at one meter resolution in a swath of 9.6 km. It can be steered along track as well as across track to enable repeated images of a chosen site, frequently. The images will be used in rural and urban planning.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2669,7 +2911,8 @@
         "name": "CARTOSAT-2B",
         "names": "",
         "description": "Cartosat 2B, an Indian Earth observation satellite, was launched on 12 July 2010 at 03:52 UT from Sriharikota. The 694 kg satellite was launched by a Polar Satellite Launch Vehicle. The satellite carries a panchromatic, high spatial resolution, stereoscopic vision camera. The satellite's black and white camera has a resolution of 0.8 m and will observe Earth land and ocean surfaces from orbit. The imagery will have applications in resource mapping, urban planning, transportation studies, water monitoring, and crop inventories.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2680,7 +2923,8 @@
         "name": "CARTOSAT-2C",
         "names": "",
         "description": "Cartosat-2C is observation satellite designed by ISRO and equipped in panchromatic camera for scene-specific black and white pictures suitable for cartography. It is fourth of Cartosat-2 constellation since first launch in 2007. Cartosat-2C will operate on altitude of 630 km for five years.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2691,7 +2935,8 @@
         "name": "CARTOSAT-2D",
         "names": "",
         "description": "CartoSat 2D is the fifth in India\u2019s second generation of CartoSat Earth Observation craft tasked with the generation of high-resolution imagery, employing a high-degree of agility on the satellites to support event monitoring with high revisit times.\r\n\r\nThe CartoSat-2D launch follows up on the CartoSat-2C mission that launched in June 2016 and is a nearly identical copy of the 2C satellite, carrying the same instruments and operating from a similar orbit. Previous CartoSat missions used a Sun Synchronous Orbit 640 Kilometers in altitude while the newer ones fly at 505 Kilometers in order to increase the resolution of the panchromatic and multispectral cameras aboard the satellites.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2702,18 +2947,20 @@
         "name": "CARTOSAT-2E",
         "names": "",
         "description": "Cartosat-2E is an Earth observation satellite developed by the Indian Space Research Organisation (ISRO), it follows the other Cartosat 2 satellites in the collection of high-resolution, large-scale imagery for use in urban planning, infrastructure development, utilities planning, and traffic management.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
     "model": "base.satellite",
     "pk": 255,
     "fields": {
-        "norad_cat_id": 42733,
+        "norad_cat_id": 42727,
         "name": "SNUSAT-1",
         "names": "KR02 ON02KR",
         "description": "Seoul National University Satellite 1 (SNUSat-1) carries a Flux Probe Experiment (FIPEX) as part of the QB50 mission as well as a secondary mission to test a fault detection, isolation and recovery algorithm developed in house.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2724,7 +2971,8 @@
         "name": "1KUNS-PF",
         "names": "1KUNS",
         "description": "<a href=\"https://1kuns-pf.ns0.it/\">https://1kuns-pf.ns0.it/</a>",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2735,7 +2983,8 @@
         "name": "UBAKUSAT",
         "names": "",
         "description": "",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2746,18 +2995,20 @@
         "name": "IRAZU",
         "names": "Iraz\u00fa",
         "description": "https://www.kickstarter.com/projects/irazu/irazu-project-the-first-satellite-made-in-costa-ri\r\n\r\nhttps://directory.eoportal.org/web/eoportal/satellite-missions/i/irazu\r\n\r\nhttps://www.researchgate.net/publication/308804145_Irazu_CubeSat_Mission_Architecture_and_Development",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
     "model": "base.satellite",
     "pk": 259,
     "fields": {
-        "norad_cat_id": 43693,
+        "norad_cat_id": 99999,
         "name": "IRVINE-01",
         "names": "",
         "description": "https://www.irvinecubesat.org/",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2768,7 +3019,8 @@
         "name": "EQUiSat",
         "names": "",
         "description": "https://equisat.brownspace.org/\r\nhttps://brownspace.org/equisat/",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2779,7 +3031,8 @@
         "name": "ENDUROSAT ONE",
         "names": "ENDUROSAT AD",
         "description": "https://one.endurosat.com/",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2790,7 +3043,8 @@
         "name": "MEMSAT",
         "names": "",
         "description": "https://www.researchgate.net/publication/315063307_Building_MemSat_A_CubeSat_for_Testing_Resistive_Memory",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2801,7 +3055,8 @@
         "name": "RADSAT-G",
         "names": "",
         "description": "http://www.montana.edu/blameres/vitae/publications/d_conference_full/conf_full_028_radsat_smallsat_computer.pdf",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2812,7 +3067,8 @@
         "name": "SiriusSat-1",
         "names": "RS13S",
         "description": "http://sputnix.ru/en/satellites-en/siriussat-1-en",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2823,7 +3079,8 @@
         "name": "SiriusSat-2",
         "names": "RS14S",
         "description": "http://sputnix.ru/en/satellites-en/siriussat-2-en",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2834,7 +3091,8 @@
         "name": "BHUTAN-1",
         "names": "JG6YKL\r\nBIRD-BT",
         "description": "https://en.wikipedia.org/wiki/BHUTAN-1\r\nhttp://birds2.birds-project.com/",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2845,7 +3103,8 @@
         "name": "MAYA-1",
         "names": "JG6YKM\r\nBIRD-PH",
         "description": "https://en.wikipedia.org/wiki/Maya-1_(satellite)\r\nhttp://birds2.birds-project.com/",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2856,18 +3115,32 @@
         "name": "UiTMSat-1",
         "names": "JG6YKN\r\nBIRD-MY",
         "description": "https://fke.uitm.edu.my/see-uitm/\r\nhttp://birds2.birds-project.com/",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
+    }
+},
+{
+    "model": "base.satellite",
+    "pk": 269,
+    "fields": {
+        "norad_cat_id": 99974,
+        "name": "Tanusha-3",
+        "names": "",
+        "description": "",
+        "status": "alive",
+        "decayed": null
     }
 },
 {
     "model": "base.satellite",
     "pk": 270,
     "fields": {
-        "norad_cat_id": 43598,
+        "norad_cat_id": 99973,
         "name": "Tanusha-4",
-        "names": "Tanusha-SWSU-4 (RS-9)\r\nRS9S",
+        "names": "",
         "description": "",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
@@ -2878,711 +3151,56 @@
         "name": "SARAL",
         "names": "",
         "description": "SARAL or Satellite with ARgos and ALtiKa is a cooperative altimetry technology mission of Indian Space Research Organisation and CNES.",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
     "model": "base.satellite",
     "pk": 272,
     "fields": {
-        "norad_cat_id": 43597,
-        "name": "Tanusha-3",
-        "names": "Tanusha-SWSU-3 (RS-8)\r\nRS8S",
+        "norad_cat_id": 43616,
+        "name": "ELFIN-B",
+        "names": "",
         "description": "",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 },
 {
     "model": "base.satellite",
     "pk": 273,
     "fields": {
-        "norad_cat_id": 43189,
-        "name": "S-NET D",
-        "names": "DP0TBE",
-        "description": "https://www.raumfahrttechnik.tu-berlin.de/menue/forschung/aktuelle_projekte/s_net/parameter/en/\r\nhttp://dk3wn.info/blog/satelliten/s-net/",
-        "status": "alive"
+        "norad_cat_id": 43617,
+        "name": "ELFIN-A",
+        "names": "",
+        "description": "",
+        "status": "alive",
+        "decayed": null
     }
 },
 {
     "model": "base.satellite",
     "pk": 274,
     "fields": {
-        "norad_cat_id": 43187,
-        "name": "S-NET B",
-        "names": "DP0TBC",
-        "description": "https://www.raumfahrttechnik.tu-berlin.de/menue/forschung/aktuelle_projekte/s_net/parameter/en/\r\nhttp://dk3wn.info/blog/satelliten/s-net/",
-        "status": "alive"
+        "norad_cat_id": 43787,
+        "name": "OBJECT AF",
+        "names": "",
+        "description": "",
+        "status": "alive",
+        "decayed": null
     }
 },
 {
     "model": "base.satellite",
     "pk": 275,
     "fields": {
-        "norad_cat_id": 43186,
-        "name": "S-NET A",
-        "names": "DP0TBB",
-        "description": "https://www.raumfahrttechnik.tu-berlin.de/menue/forschung/aktuelle_projekte/s_net/parameter/en/\r\nhttp://dk3wn.info/blog/satelliten/s-net/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 276,
-    "fields": {
-        "norad_cat_id": 43615,
-        "name": "CP 7 (DAVE)",
-        "names": "DAVE (Damping And Vibrations Experiment)\r\nPolySat",
-        "description": "https://www.polysat.org/in-development/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 277,
-    "fields": {
-        "norad_cat_id": 43616,
-        "name": "ELFIN-B",
-        "names": "ELFIN-STAR\r\nWJ2XOX",
-        "description": "https://elfin.igpp.ucla.edu",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 278,
-    "fields": {
-        "norad_cat_id": 43617,
-        "name": "ELFIN-A",
-        "names": "WJ2XNX",
-        "description": "https://elfin.igpp.ucla.edu",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 279,
-    "fields": {
-        "norad_cat_id": 43614,
-        "name": "SurfSat",
-        "names": "",
-        "description": "https://today.ucf.edu/ucf-launch-minisatellite-study-ways-keep-electronics-safe-space/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 280,
-    "fields": {
-        "norad_cat_id": 43121,
-        "name": "FLOCK 3P'-1",
-        "names": "",
-        "description": "https://www.planet.com/pulse/planet-openlst-radio-solution-for-cubesats/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 281,
-    "fields": {
-        "norad_cat_id": 43120,
-        "name": "FLOCK 3P'-2",
-        "names": "",
-        "description": "https://www.planet.com/pulse/planet-openlst-radio-solution-for-cubesats/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 282,
-    "fields": {
-        "norad_cat_id": 43119,
-        "name": "FLOCK 3P'-3",
-        "names": "",
-        "description": "https://www.planet.com/pulse/planet-openlst-radio-solution-for-cubesats/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 283,
-    "fields": {
-        "norad_cat_id": 43122,
-        "name": "FLOCK 3P'-4",
-        "names": "",
-        "description": "https://www.planet.com/pulse/planet-openlst-radio-solution-for-cubesats/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 284,
-    "fields": {
-        "norad_cat_id": 43640,
-        "name": "STARS-Me",
-        "names": "JJ2YPL\r\nJJ2YPM",
-        "description": "http://stars.eng.shizuoka.ac.jp/starsme.html",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 285,
-    "fields": {
-        "norad_cat_id": 99981,
-        "name": "RSP-00",
-        "names": "8J1RSP",
-        "description": "http://rymansat.com",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 286,
-    "fields": {
-        "norad_cat_id": 39492,
-        "name": "AIST-1",
-        "names": "",
-        "description": "Aist 1 is a Russian technology demonstration satellite which was launched in December 2013",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 287,
-    "fields": {
-        "norad_cat_id": 43666,
-        "name": "CubeBel-1",
-        "names": "BSUSat-1",
-        "description": "https://bsusat.com",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 288,
-    "fields": {
-        "norad_cat_id": 43677,
-        "name": "Ten-Koh",
-        "names": "JG6YKY\r\nTENKOH STK sim",
-        "description": "http://kit-okuyama-lab.com/%e3%81%a6%e3%82%93%e3%81%93%e3%81%86/ten-koh-orbital-infomation/\r\n\r\nhttp://kit-okuyama-lab.com/en/ten-koh",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 290,
-    "fields": {
-        "norad_cat_id": 43678,
-        "name": "DIWATA-2",
-        "names": "",
-        "description": "http://phl-microsat.upd.edu.ph/diwata2",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 291,
-    "fields": {
-        "norad_cat_id": 43679,
-        "name": "Stars-AO",
-        "names": "JJ2YSY",
-        "description": "http://stars.eng.shizuoka.ac.jp/starsao.html\r\nhttps://stars-ao.info/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 292,
-    "fields": {
-        "norad_cat_id": 99975,
-        "name": "AUTcube2",
-        "names": "JJ2YTA",
-        "description": "http://www1.aut.ac.jp/~nishio-lab/AUTcube2/index_AUTcube2_E.html",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 294,
-    "fields": {
-        "norad_cat_id": 43012,
-        "name": "CZ-4C R/B",
-        "names": "",
-        "description": "rocket body",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 295,
-    "fields": {
-        "norad_cat_id": 43700,
-        "name": "Es'hail 2",
-        "names": "",
-        "description": "https://www.eshailsat.qa/en/satellites/index/#tab-16",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 296,
-    "fields": {
-        "norad_cat_id": 43780,
-        "name": "MOVE-II",
-        "names": "DP0MVE",
-        "description": "https://www.move2space.de/MOVE-II/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 297,
-    "fields": {
-        "norad_cat_id": 43770,
-        "name": "FOX-1C",
-        "names": "Fox-1Cliff\r\nAO-95",
-        "description": "https://www.amsat.org/meet-the-fox-project/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 298,
-    "fields": {
-        "norad_cat_id": 43792,
-        "name": "ESEO (FunCube 4)",
-        "names": "",
-        "description": "https://www.esa.int/Education/ESEO",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 299,
-    "fields": {
-        "norad_cat_id": 99913,
-        "name": "K2SAT",
-        "names": "K\u00b2SAT",
-        "description": "https://twitter.com/K2SAT_KAIST",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 300,
-    "fields": {
-        "norad_cat_id": 99914,
-        "name": "ExseedSat 1",
-        "names": "VO-96",
-        "description": "",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 301,
-    "fields": {
-        "norad_cat_id": 99915,
-        "name": "IRVINE-02",
-        "names": "",
-        "description": "https://www.irvinecubesat.org/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 302,
-    "fields": {
-        "norad_cat_id": 43798,
-        "name": "Astrocast 0.1",
-        "names": "",
-        "description": "https://www.astrocast.com/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 303,
-    "fields": {
-        "norad_cat_id": 99917,
-        "name": "Centauri-1",
-        "names": "",
-        "description": "https://www.fleet.space/\r\nNote that this is deployed from PSLV-C43 and falsely named Centauri-2 according to https://twitter.com/Psykar/status/1069367901205884928",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 304,
-    "fields": {
-        "norad_cat_id": 43793,
-        "name": "CSIM-FD",
-        "names": "",
-        "description": "Compact Spectral Irradiance Monitor Flight Demonstration",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 305,
-    "fields": {
-        "norad_cat_id": 43786,
-        "name": "ITASAT 1",
-        "names": "ITASAT-14",
-        "description": "http://www.itasat.ita.br/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 306,
-    "fields": {
-        "norad_cat_id": 43803,
-        "name": "JY1Sat",
-        "names": "Jordan-OSCAR 97\r\nJO-97",
-        "description": "Jordanian satellite",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 307,
-    "fields": {
-        "norad_cat_id": 99921,
-        "name": "KNACKSAT",
-        "names": "HS0K",
-        "description": "http://www.knacksat.space/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 308,
-    "fields": {
-        "norad_cat_id": 99922,
-        "name": "MinXSS 2",
-        "names": "",
-        "description": "http://lasp.colorado.edu/home/minxss/\r\n\r\nhttps://twitter.com/minxsscubesat",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 309,
-    "fields": {
-        "norad_cat_id": 43814,
-        "name": "PW-Sat2",
-        "names": "",
-        "description": "https://pw-sat.pl/en/home-page/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 310,
-    "fields": {
-        "norad_cat_id": 43772,
-        "name": "RANGE A",
-        "names": "",
-        "description": "http://www.ssdl.gatech.edu/research",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 311,
-    "fields": {
-        "norad_cat_id": 43773,
-        "name": "RANGE B",
-        "names": "",
-        "description": "http://www.ssdl.gatech.edu/research",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 312,
-    "fields": {
-        "norad_cat_id": 99926,
-        "name": "SeeMe",
-        "names": "",
-        "description": "https://www.darpa.mil/program/space-enabled-effects-for-military-engagements",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 313,
-    "fields": {
-        "norad_cat_id": 43784,
-        "name": "SNUGLITE",
-        "names": "DS0DH",
-        "description": "Seoul National University",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 314,
-    "fields": {
-        "norad_cat_id": 43782,
-        "name": "SNUSAT-2",
-        "names": "",
-        "description": "Seoul National University",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 315,
-    "fields": {
-        "norad_cat_id": 43804,
-        "name": "Suomi 100",
-        "names": "",
-        "description": "www.suomi100satelliitti.fi/eng",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 316,
-    "fields": {
-        "norad_cat_id": 99930,
-        "name": "VisionCube",
-        "names": "",
-        "description": "http://control.kau.ac.kr/visioncube/visioncube-2/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 318,
-    "fields": {
-        "norad_cat_id": 43743,
-        "name": "Reaktor Hello World",
-        "names": "OH2RHW1",
-        "description": "https://reaktorspace.com/reaktor-hello-world/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 319,
-    "fields": {
-        "norad_cat_id": 99901,
-        "name": "3CAT-1",
-        "names": "\u00b3Cat-1",
-        "description": "https://nanosatlab.upc.edu/en/missions-and-projects/3cat-1",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 320,
-    "fields": {
-        "norad_cat_id": 43721,
-        "name": "FACSAT 1",
-        "names": "",
-        "description": "Colombian satellite",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 322,
-    "fields": {
-        "norad_cat_id": 43722,
-        "name": "Centauri-2",
-        "names": "",
-        "description": "https://www.fleet.space/\r\nNote that this is deployed from PSLV-C43 and falsely named Centauri-1 according to https://twitter.com/Psykar/status/1069367901205884928",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 323,
-    "fields": {
-        "norad_cat_id": 43738,
-        "name": "InnoSat 2",
+        "norad_cat_id": 99919,
+        "name": "VANGUARD 1",
         "names": "",
         "description": "",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 324,
-    "fields": {
-        "norad_cat_id": 43699,
-        "name": "GSLV R/B",
-        "names": "",
-        "description": "",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 325,
-    "fields": {
-        "norad_cat_id": 43805,
-        "name": "al-Farabi-2",
-        "names": "UN1GWA",
-        "description": "The satellite was developed and assembled by al-Farabi Kazakh National University students with the purpose to conduct scientific experiments in space. http://www.kaznu.kz",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 336,
-    "fields": {
-        "norad_cat_id": 43790,
-        "name": "Eaglet-I",
-        "names": "",
-        "description": "",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 338,
-    "fields": {
-        "norad_cat_id": 43768,
-        "name": "AISTechSat 2",
-        "names": "",
-        "description": "",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 339,
-    "fields": {
-        "norad_cat_id": 99940,
-        "name": "Da Vinci",
-        "names": "",
-        "description": "https://projectdavincicubesat.org/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 340,
-    "fields": {
-        "norad_cat_id": 43855,
-        "name": "CHOMPTT",
-        "names": "",
-        "description": "https://guidebook.com/guide/18114/poi/1931378/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 341,
-    "fields": {
-        "norad_cat_id": 99942,
-        "name": "CP11 (ISX)",
-        "names": "",
-        "description": "http://www.polysat.org\r\nhttps://www.nsf.gov/awardsearch/showAward?AWD_ID=1445468",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 342,
-    "fields": {
-        "norad_cat_id": 99943,
-        "name": "CubeSail-1",
-        "names": "",
-        "description": "https://www.cubesail.us",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 343,
-    "fields": {
-        "norad_cat_id": 99944,
-        "name": "NMTSat",
-        "names": "WM9XLJ",
-        "description": "New Mexico Institute of Mining and Technology",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 346,
-    "fields": {
-        "norad_cat_id": 99950,
-        "name": "D-Star ONE Sparrow",
-        "names": "DP1GOS",
-        "description": "http://www.d-star.one/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 347,
-    "fields": {
-        "norad_cat_id": 43880,
-        "name": "UWE-4",
-        "names": "DP0UWH",
-        "description": "http://www7.informatik.uni-wuerzburg.de/forschung/space-exploration/projects/uwe-4/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 348,
-    "fields": {
-        "norad_cat_id": 99952,
-        "name": "ZACUBE-2",
-        "names": "",
-        "description": "http://www.cput.ac.za/blogs/fsati/zacube-2/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 349,
-    "fields": {
-        "norad_cat_id": 99953,
-        "name": "LUME-1",
-        "names": "LUME-I",
-        "description": "http://www.coiae.es/publico/congresoespacio2017/pdf/01.07.Diego%20Nodar.Univ%20Vigo.pdf",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 351,
-    "fields": {
-        "norad_cat_id": 99954,
-        "name": "D-Star ONE iSat",
-        "names": "DP1GOS",
-        "description": "http://www.d-star.one/",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 352,
-    "fields": {
-        "norad_cat_id": 43787,
-        "name": "2018-099 (SSO-A) Mystery-3",
-        "names": "",
-        "description": "",
-        "status": "alive"
-    }
-},
-{
-    "model": "base.satellite",
-    "pk": 353,
-    "fields": {
-        "norad_cat_id": 43669,
-        "name": "CHANGSHAGAOXIN",
-        "names": "TY 4-01",
-        "description": "http://en.spacety.com/en_missions.html",
-        "status": "alive"
+        "status": "alive",
+        "decayed": null
     }
 }
 ]
