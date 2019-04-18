@@ -36,6 +36,7 @@ class TelemetryView(viewsets.ModelViewSet, mixins.CreateModelMixin):
     permission_classes = (AllowAny, )
     parser_classes = (FormParser, FileUploadParser)
     pagination_class = pagination.LinkedHeaderPageNumberPagination
+    http_method_names = ['get', 'post', 'head']
 
     def create(self, request, *args, **kwargs):
         data = {}
