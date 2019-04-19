@@ -29,14 +29,14 @@ class TransmitterView(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'uuid'
 
 
-class TelemetryView(viewsets.ModelViewSet, mixins.CreateModelMixin):
+class TelemetryView(mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                    mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = DemodData.objects.all()
     serializer_class = serializers.TelemetrySerializer
     filter_class = filters.TelemetryViewFilter
     permission_classes = (AllowAny, )
     parser_classes = (FormParser, FileUploadParser)
     pagination_class = pagination.LinkedHeaderPageNumberPagination
-    http_method_names = ['get', 'post', 'head']
 
     def create(self, request, *args, **kwargs):
         data = {}
