@@ -76,7 +76,7 @@ class TransmitterFactory(factory.django.DjangoModelFactory):
     baud = fuzzy.FuzzyInteger(4000, 22000, step=1000)
     satellite = factory.SubFactory(SatelliteFactory)
     reviewed = True
-    approved = fuzzy.FuzzyChoice(choices=[True, False])
+    approved = True
     created = fuzzy.FuzzyDateTime(now() - timedelta(days=30), now())
     citation = fuzzy.FuzzyText()
     user = factory.SubFactory(UserFactory)
