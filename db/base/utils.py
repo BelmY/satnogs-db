@@ -136,7 +136,7 @@ def create_point(fields, satellite, telemetry, demoddata):
                 'decoder': telemetry.decoder,
                 'station': demoddata.station,
                 'observer': demoddata.observer,
-                'source': demoddata.source
+                'source': demoddata.app_source
             },
             'fields': fields
         }

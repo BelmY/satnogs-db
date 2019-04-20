@@ -68,9 +68,9 @@ class TelemetryView(mixins.ListModelMixin, mixins.RetrieveModelMixin,
 
         # Network or SiDS submission?
         if request.data.get('satnogs_network'):
-            data['source'] = 'network'
+            data['app_source'] = 'network'
         else:
-            data['source'] = 'sids'
+            data['app_source'] = 'sids'
 
         # Create file out of frame string
         frame = ContentFile(request.data.get('frame'), name='sids')

@@ -152,7 +152,7 @@ class TelemetryAdmin(admin.ModelAdmin):
 
 @admin.register(DemodData)
 class DemodDataAdmin(admin.ModelAdmin):
-    list_display = ('id', 'satellite', 'source', 'observer')
+    list_display = ('id', 'satellite', 'app_source', 'observer')
     search_fields = ('transmitter__uuid', 'satellite__norad_cat_id', 'observer')
 
     def satellite(self, obj):

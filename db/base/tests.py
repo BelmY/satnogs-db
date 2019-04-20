@@ -120,7 +120,7 @@ class TelemetryFactory(factory.django.DjangoModelFactory):
 class DemodDataFactory(factory.django.DjangoModelFactory):
     satellite = factory.SubFactory(SatelliteFactory)
     transmitter = factory.SubFactory(TransmitterFactory)
-    source = fuzzy.FuzzyChoice(choices=DATA_SOURCE_IDS)
+    app_source = fuzzy.FuzzyChoice(choices=DATA_SOURCE_IDS)
     data_id = fuzzy.FuzzyInteger(0, 200)
     payload_frame = factory.django.FileField(filename='data.raw')
     payload_decoded = '{}'

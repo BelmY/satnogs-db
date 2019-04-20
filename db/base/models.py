@@ -192,8 +192,8 @@ class DemodData(models.Model):
     """Model for satellite for observation data."""
     satellite = models.ForeignKey(Satellite, null=True, related_name='telemetry_data')
     transmitter = models.ForeignKey(TransmitterEntry, null=True, blank=True)
-    source = models.CharField(choices=zip(DATA_SOURCES, DATA_SOURCES),
-                              max_length=7, default='sids')
+    app_source = models.CharField(choices=zip(DATA_SOURCES, DATA_SOURCES),
+                                  max_length=7, default='sids')
     data_id = models.PositiveIntegerField(blank=True, null=True)
     payload_frame = models.FileField(upload_to=_name_payload_frame, blank=True, null=True)
     payload_decoded = models.TextField(blank=True)
