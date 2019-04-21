@@ -23,7 +23,7 @@ class TransmitterViewFilter(FilterSet):
 
 class SatelliteViewFilter(FilterSet):
     ''' filter on decayed field '''
-    in_orbit = filters.BooleanFilter(name='decayed',
+    in_orbit = filters.BooleanFilter(field_name='decayed',
                                      label='In orbit',
                                      lookup_expr='isnull')
 
@@ -33,7 +33,7 @@ class SatelliteViewFilter(FilterSet):
 
 
 class TelemetryViewFilter(FilterSet):
-    satellite = django_filters.NumberFilter(name='satellite__norad_cat_id',
+    satellite = django_filters.NumberFilter(field_name='satellite__norad_cat_id',
                                             lookup_expr='exact')
 
     class Meta:
