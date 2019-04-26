@@ -8,9 +8,13 @@ static_js_css:
   stage: static
   image: node:11.13
   script:
-    - npm install -g eslint stylelint
-    - eslint 'db/static/js/*.js'
-    - stylelint 'db/static/css/*.css'
+    - npm ci
+    - node_modules/.bin/gulp
+  artifacts:
+    expire_in: 1 week
+    when: always
+    paths:
+      - db/static/lib
 static_python:
   stage: static
   image: python:2.7

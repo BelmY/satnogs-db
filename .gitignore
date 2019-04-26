@@ -24,8 +24,8 @@ nosetests.xml
 # Media & Static
 media
 /staticfiles/*
+/db/static/lib/
 node_modules
-yarn-error.log
 
 # Celery
 celerybeat-schedule
