@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from db.base.models import Satellite, Telemetry, DemodData
+from db.base.models import DemodData, Satellite, Telemetry
 
 
 class Command(BaseCommand):

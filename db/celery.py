@@ -3,10 +3,9 @@ from __future__ import absolute_import
 import os
 
 from celery import Celery
+from django.conf import settings  # noqa
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'db.settings')
-
-from django.conf import settings  # noqa
 
 RUN_EVERY_15 = 60 * 15
 RUN_HOURLY = 60 * 60

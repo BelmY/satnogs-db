@@ -1,17 +1,16 @@
-from datetime import datetime
 import logging
+from datetime import datetime
 from socket import error as socket_error
 
 from django.conf.urls import url
 from django.contrib import admin, messages
-from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from django.urls import reverse
 
-from db.base.models import (
-    Mode, Satellite, TransmitterEntry, TransmitterSuggestion, Transmitter, DemodData, Telemetry
-)
-from db.base.tasks import check_celery, reset_decoded_data, decode_all_data
+from db.base.models import DemodData, Mode, Satellite, Telemetry, \
+    Transmitter, TransmitterEntry, TransmitterSuggestion
+from db.base.tasks import check_celery, decode_all_data, reset_decoded_data
 
 logger = logging.getLogger('db')
 

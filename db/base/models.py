@@ -1,9 +1,6 @@
-import logging
 import json
-
-from markdown import markdown
+import logging
 from os import path
-from shortuuidfield import ShortUUIDField
 from uuid import uuid4
 
 from django.conf import settings
@@ -13,8 +10,10 @@ from django.db import models
 from django.db.models import OuterRef, Subquery
 from django.db.models.signals import post_save, pre_save
 from django.utils.timezone import now
+from markdown import markdown
 
 from db.base.helpers import gridsquare
+from shortuuidfield import ShortUUIDField
 
 logger = logging.getLogger('db')
 

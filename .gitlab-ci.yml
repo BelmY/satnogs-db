@@ -21,14 +21,14 @@ static_python:
   before_script:
     - pip install tox~=3.8.0
   script:
-    - tox -e "py2-{flake8,yapf}"
+    - tox -e "py2-{flake8,isort,yapf}"
 static_python3:
   stage: static
   image: python:3
   before_script:
     - pip install tox~=3.8.0
   script:
-    - tox -e "py3-{flake8,yapf}"
+    - tox -e "py3-{flake8,isort,yapf}"
 docs:
   stage: build
   image: python:2

@@ -1,8 +1,9 @@
-from decouple import config, Csv
-from dj_database_url import parse as db_url
-from unipath import Path
 import sentry_sdk
+from dj_database_url import parse as db_url
 from sentry_sdk.integrations.django import DjangoIntegration
+from unipath import Path
+
+from decouple import Csv, config
 
 ROOT = Path(__file__).parent
 

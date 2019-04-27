@@ -1,9 +1,9 @@
 import pytest
-
-from rest_framework import status
 from django.test import TestCase
 
-from db.base.tests import ModeFactory, SatelliteFactory, TransmitterFactory, DemodDataFactory
+from db.base.tests import DemodDataFactory, ModeFactory, SatelliteFactory, \
+    TransmitterFactory
+from rest_framework import status
 
 
 @pytest.mark.django_db(transaction=True)

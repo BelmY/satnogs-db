@@ -1,16 +1,15 @@
 import random
 from datetime import datetime, timedelta
-import pytest
 
-import factory
-from factory import fuzzy
+import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils.timezone import now
 
-from db.base.models import (
-    DATA_SOURCES, Mode, Satellite, Transmitter, TransmitterSuggestion, Telemetry, DemodData
-)
+import factory
+from db.base.models import DATA_SOURCES, DemodData, Mode, Satellite, \
+    Telemetry, Transmitter, TransmitterSuggestion
+from factory import fuzzy
 
 DATA_SOURCE_IDS = [c[0] for c in DATA_SOURCES]
 

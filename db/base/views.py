@@ -1,24 +1,25 @@
 import logging
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib import messages
 from django.core.cache import cache
-from django.urls import reverse
-from django.http import HttpResponseNotFound, HttpResponseServerError, HttpResponse, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseNotFound, \
+    HttpResponseServerError, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from db.base.models import Mode, Satellite, DemodData, Transmitter, TransmitterSuggestion
-from db.base.models import TRANSMITTER_TYPE, TRANSMITTER_STATUS
+from _mysql_exceptions import OperationalError
 from db.base.forms import TransmitterEntryForm
 from db.base.helpers import get_apikey
+from db.base.models import TRANSMITTER_STATUS, TRANSMITTER_TYPE, DemodData, \
+    Mode, Satellite, Transmitter, TransmitterSuggestion
 from db.base.tasks import export_frames
 from db.base.utils import cache_statistics
-from _mysql_exceptions import OperationalError
 
 logger = logging.getLogger('db')
 

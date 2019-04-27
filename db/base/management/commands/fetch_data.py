@@ -1,12 +1,12 @@
-import requests
 from datetime import datetime, timedelta
-from pytz import timezone
 
+import requests
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
-from django.conf import settings
+from pytz import timezone
 
-from db.base.models import Satellite, TransmitterEntry, DemodData
+from db.base.models import DemodData, Satellite, TransmitterEntry
 
 
 class Command(BaseCommand):

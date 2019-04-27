@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.template.loader import render_to_string
-from db import __version__
 from satnogsdecoders import __version__ as satnogsdecoders_version
+
+from db import __version__
 
 
 def analytics(request):

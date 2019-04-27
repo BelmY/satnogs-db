@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from db.base.models import TransmitterEntry, Transmitter
+from db.base.models import Transmitter, TransmitterEntry
 
 
 class TransmitterEntryForm(forms.ModelForm):
