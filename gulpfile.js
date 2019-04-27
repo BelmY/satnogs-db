@@ -37,12 +37,6 @@ gulp.task('assets', function() {
         .pipe(gulp.dest('db/static/lib'));
 });
 
-gulp.task('test', function() {
-    gulp.start('js:lint');
-    gulp.start('css:lint');
-});
+gulp.task('test', gulp.parallel('js:lint', 'css:lint'));
 
-gulp.task('default', function() {
-    gulp.start('assets');
-    gulp.start('test');
-});
+gulp.task('default', gulp.series('assets', 'test'));
