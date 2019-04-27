@@ -8,17 +8,17 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 
-from db.base.models import (Mode, Satellite, TransmitterEntry, TransmitterSuggestion,
-                            Transmitter, DemodData, Telemetry)
+from db.base.models import (
+    Mode, Satellite, TransmitterEntry, TransmitterSuggestion, Transmitter, DemodData, Telemetry
+)
 from db.base.tasks import check_celery, reset_decoded_data, decode_all_data
-
 
 logger = logging.getLogger('db')
 
 
 @admin.register(Mode)
 class ModeAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', )
 
 
 @admin.register(Satellite)
@@ -31,10 +31,12 @@ class SatelliteAdmin(admin.ModelAdmin):
         urls = super(SatelliteAdmin, self).get_urls()
         my_urls = [
             url(r'^check_celery/$', self.check_celery, name='check_celery'),
-            url(r'^reset_data/(?P<norad>[0-9]+)/$', self.reset_data,
-                name='reset_data'),
-            url(r'^decode_all_data/(?P<norad>[0-9]+)/$', self.decode_all_data,
-                name='decode_all_data'),
+            url(r'^reset_data/(?P<norad>[0-9]+)/$', self.reset_data, name='reset_data'),
+            url(
+                r'^decode_all_data/(?P<norad>[0-9]+)/$',
+                self.decode_all_data,
+                name='decode_all_data'
+            ),
         ]
         return my_urls + urls
 
@@ -72,25 +74,41 @@ class SatelliteAdmin(admin.ModelAdmin):
 
 @admin.register(TransmitterEntry)
 class TransmitterEntryAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
-                    'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift',
-                    'reviewed', 'approved', 'status', 'created', 'citation', 'user')
+    list_display = (
+        'uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
+        'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'reviewed',
+        'approved', 'status', 'created', 'citation', 'user'
+    )
     search_fields = ('satellite__id', 'uuid', 'satellite__name', 'satellite__norad_cat_id')
-    list_filter = ('reviewed', 'approved', 'type', 'status', 'mode', 'baud',)
+    list_filter = (
+        'reviewed',
+        'approved',
+        'type',
+        'status',
+        'mode',
+        'baud',
+    )
     readonly_fields = ('uuid', 'satellite')
 
 
 @admin.register(TransmitterSuggestion)
 class TransmitterSuggestionAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
-                    'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift',
-                    'status', 'created', 'citation', 'user')
+    list_display = (
+        'uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
+        'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'status',
+        'created', 'citation', 'user'
+    )
     search_fields = ('satellite__id', 'uuid', 'satellite__name', 'satellite__norad_cat_id')
-    list_filter = ('type', 'mode', 'baud',)
-    readonly_fields = ('uuid', 'description', 'status', 'type', 'uplink_low', 'uplink_high',
-                       'uplink_drift', 'downlink_low', 'downlink_high', 'downlink_drift', 'mode',
-                       'invert', 'baud', 'satellite', 'reviewed', 'approved', 'created',
-                       'citation', 'user')
+    list_filter = (
+        'type',
+        'mode',
+        'baud',
+    )
+    readonly_fields = (
+        'uuid', 'description', 'status', 'type', 'uplink_low', 'uplink_high', 'uplink_drift',
+        'downlink_low', 'downlink_high', 'downlink_drift', 'mode', 'invert', 'baud', 'satellite',
+        'reviewed', 'approved', 'created', 'citation', 'user'
+    )
     actions = ['approve_suggestion', 'reject_suggestion']
 
     def get_actions(self, request):
@@ -115,6 +133,7 @@ class TransmitterSuggestionAdmin(admin.ModelAdmin):
             self.message_user(request, "Transmitter suggestion was successfully approved")
         else:
             self.message_user(request, "Transmitter suggestions were successfully approved")
+
     approve_suggestion.short_description = 'Approve selected transmitter suggestions'
 
     def reject_suggestion(self, request, queryset):
@@ -132,16 +151,24 @@ class TransmitterSuggestionAdmin(admin.ModelAdmin):
             self.message_user(request, "Transmitter suggestion was successfully rejected")
         else:
             self.message_user(request, "Transmitter suggestions were successfully rejected")
+
     reject_suggestion.short_description = 'Reject selected transmitter suggestions'
 
 
 @admin.register(Transmitter)
 class TransmitterAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
-                    'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift',
-                    'status', 'created', 'citation', 'user')
+    list_display = (
+        'uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
+        'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'status',
+        'created', 'citation', 'user'
+    )
     search_fields = ('satellite__id', 'uuid', 'satellite__name', 'satellite__norad_cat_id')
-    list_filter = ('type', 'status', 'mode', 'baud',)
+    list_filter = (
+        'type',
+        'status',
+        'mode',
+        'baud',
+    )
     readonly_fields = ('uuid', 'satellite')
 
 

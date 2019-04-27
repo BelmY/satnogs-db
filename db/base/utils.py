@@ -25,9 +25,9 @@ def calculate_statistics():
     alive_transmitters = transmitters.filter(status='active').count()
     if alive_transmitters > 0 and total_transmitters > 0:
         try:
-            alive_transmitters_percentage = '{0}%'.format(round((float(alive_transmitters) /
-                                                                 float(total_transmitters)) *
-                                                                100, 2))
+            alive_transmitters_percentage = '{0}%'.format(
+                round((float(alive_transmitters) / float(total_transmitters)) * 100, 2)
+            )
         except ZeroDivisionError as error:
             logger.error(error, exc_info=True)
             alive_transmitters_percentage = '0%'
@@ -56,56 +56,63 @@ def calculate_statistics():
     band_data.append(filtered)
 
     # 30.000.000 ~ 300.000.000 - VHF
-    filtered = transmitters.filter(downlink_low__gte=30000000,
-                                   downlink_low__lt=300000000).count()
+    filtered = transmitters.filter(downlink_low__gte=30000000, downlink_low__lt=300000000).count()
     band_label.append('VHF')
     band_data.append(filtered)
 
     # 300.000.000 ~ 1.000.000.000 - UHF
-    filtered = transmitters.filter(downlink_low__gte=300000000,
-                                   downlink_low__lt=1000000000).count()
+    filtered = transmitters.filter(
+        downlink_low__gte=300000000, downlink_low__lt=1000000000
+    ).count()
     band_label.append('UHF')
     band_data.append(filtered)
 
     # 1G ~ 2G - L
-    filtered = transmitters.filter(downlink_low__gte=1000000000,
-                                   downlink_low__lt=2000000000).count()
+    filtered = transmitters.filter(
+        downlink_low__gte=1000000000, downlink_low__lt=2000000000
+    ).count()
     band_label.append('L')
     band_data.append(filtered)
 
     # 2G ~ 4G - S
-    filtered = transmitters.filter(downlink_low__gte=2000000000,
-                                   downlink_low__lt=4000000000).count()
+    filtered = transmitters.filter(
+        downlink_low__gte=2000000000, downlink_low__lt=4000000000
+    ).count()
     band_label.append('S')
     band_data.append(filtered)
 
     # 4G ~ 8G - C
-    filtered = transmitters.filter(downlink_low__gte=4000000000,
-                                   downlink_low__lt=8000000000).count()
+    filtered = transmitters.filter(
+        downlink_low__gte=4000000000, downlink_low__lt=8000000000
+    ).count()
     band_label.append('C')
     band_data.append(filtered)
 
     # 8G ~ 12G - X
-    filtered = transmitters.filter(downlink_low__gte=8000000000,
-                                   downlink_low__lt=12000000000).count()
+    filtered = transmitters.filter(
+        downlink_low__gte=8000000000, downlink_low__lt=12000000000
+    ).count()
     band_label.append('X')
     band_data.append(filtered)
 
     # 12G ~ 18G - Ku
-    filtered = transmitters.filter(downlink_low__gte=12000000000,
-                                   downlink_low__lt=18000000000).count()
+    filtered = transmitters.filter(
+        downlink_low__gte=12000000000, downlink_low__lt=18000000000
+    ).count()
     band_label.append('Ku')
     band_data.append(filtered)
 
     # 18G ~ 27G - K
-    filtered = transmitters.filter(downlink_low__gte=18000000000,
-                                   downlink_low__lt=27000000000).count()
+    filtered = transmitters.filter(
+        downlink_low__gte=18000000000, downlink_low__lt=27000000000
+    ).count()
     band_label.append('K')
     band_data.append(filtered)
 
     # 27G ~ 40G - Ka
-    filtered = transmitters.filter(downlink_low__gte=27000000000,
-                                   downlink_low__lt=40000000000).count()
+    filtered = transmitters.filter(
+        downlink_low__gte=27000000000, downlink_low__lt=40000000000
+    ).count()
     band_label.append('Ka')
     band_data.append(filtered)
 
@@ -147,9 +154,14 @@ def create_point(fields, satellite, telemetry, demoddata):
 
 def write_influx(json_obj):
     """Take a json object and send to influxdb."""
-    client = InfluxDBClient(settings.INFLUX_HOST, settings.INFLUX_PORT,
-                            settings.INFLUX_USER, settings.INFLUX_PASS,
-                            settings.INFLUX_DB, ssl=settings.INFLUX_SSL)
+    client = InfluxDBClient(
+        settings.INFLUX_HOST,
+        settings.INFLUX_PORT,
+        settings.INFLUX_USER,
+        settings.INFLUX_PASS,
+        settings.INFLUX_DB,
+        ssl=settings.INFLUX_SSL
+    )
     client.write_points(json_obj)
 
 
@@ -174,8 +186,7 @@ def decode_data(norad, period=None):
             # iterate over Telemetry decoders
             for tlmdecoder in telemetry_decoders:
                 try:
-                    decoder_class = getattr(decoder,
-                                            tlmdecoder.decoder.capitalize())
+                    decoder_class = getattr(decoder, tlmdecoder.decoder.capitalize())
                 except AttributeError:
                     continue
                 try:
@@ -189,8 +200,9 @@ def decode_data(norad, period=None):
                     if settings.USE_INFLUX:
                         try:
                             frame = decoder_class.from_bytes(bindata)
-                            json_obj = create_point(decoder.get_fields(frame), sat,
-                                                    tlmdecoder, obj)
+                            json_obj = create_point(
+                                decoder.get_fields(frame), sat, tlmdecoder, obj
+                            )
                             write_influx(json_obj)
                             obj.payload_decoded = 'influxdb'
                             obj.is_decoded = True
@@ -209,8 +221,9 @@ def decode_data(norad, period=None):
                             obj.save()
                             continue
                         else:
-                            json_obj = create_point(decoder.get_fields(frame), sat,
-                                                    tlmdecoder, obj)
+                            json_obj = create_point(
+                                decoder.get_fields(frame), sat, tlmdecoder, obj
+                            )
                             obj.payload_decoded = json_obj
                             obj.is_decoded = True
                             obj.save()

@@ -2,7 +2,6 @@ from rest_framework.authtoken.models import Token
 
 from django.core.cache import cache
 
-
 UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWX'
 LOWER = 'abcdefghijklmnopqrstuvwx'
 
@@ -28,8 +27,10 @@ def gridsquare(lat, lng):
     grid_lat_subsq = LOWER[int(adj_lat_remainder / 2.5)]
     grid_lon_subsq = LOWER[int(adj_lon_remainder / 5)]
 
-    qth = '{}'.format(grid_lon_sq + grid_lat_sq + grid_lon_field +
-                      grid_lat_field + grid_lon_subsq + grid_lat_subsq)
+    qth = '{}'.format(
+        grid_lon_sq + grid_lat_sq + grid_lon_field + grid_lat_field + grid_lon_subsq +
+        grid_lat_subsq
+    )
 
     return qth
 
@@ -63,5 +64,7 @@ def cache_for(time):
                 result = fn(*args, **kwargs)
                 cache.set(key, result, time)
             return result
+
         return wrapper
+
     return decorator

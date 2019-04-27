@@ -8,9 +8,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         # Positional arguments
-        parser.add_argument('satellite_identifiers',
-                            nargs='+',
-                            metavar='<Satellite Identifier>')
+        parser.add_argument('satellite_identifiers', nargs='+', metavar='<Satellite Identifier>')
 
     def handle(self, *args, **options):
         for item in options['satellite_identifiers']:
@@ -29,8 +27,9 @@ class Command(BaseCommand):
                                 frame = fp.read()
 
                             try:
-                                payload_decoded = decoder.decode_payload(frame, obj.timestamp,
-                                                                         obj.data_id)
+                                payload_decoded = decoder.decode_payload(
+                                    frame, obj.timestamp, obj.data_id
+                                )
                             except ValueError:
                                 obj.payload_decoded = ''
                                 obj.payload_telemetry = None

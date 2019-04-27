@@ -6,9 +6,7 @@ from db.base.models import Transmitter, DemodData, Satellite
 
 
 class TransmitterViewFilter(FilterSet):
-    alive = filters.BooleanFilter(field_name='status',
-                                  label='Alive',
-                                  method='filter_status')
+    alive = filters.BooleanFilter(field_name='status', label='Alive', method='filter_status')
 
     def filter_status(self, queryset, name, value):
         if value:
@@ -23,9 +21,7 @@ class TransmitterViewFilter(FilterSet):
 
 class SatelliteViewFilter(FilterSet):
     ''' filter on decayed field '''
-    in_orbit = filters.BooleanFilter(field_name='decayed',
-                                     label='In orbit',
-                                     lookup_expr='isnull')
+    in_orbit = filters.BooleanFilter(field_name='decayed', label='In orbit', lookup_expr='isnull')
 
     class Meta:
         model = Satellite
@@ -33,8 +29,9 @@ class SatelliteViewFilter(FilterSet):
 
 
 class TelemetryViewFilter(FilterSet):
-    satellite = django_filters.NumberFilter(field_name='satellite__norad_cat_id',
-                                            lookup_expr='exact')
+    satellite = django_filters.NumberFilter(
+        field_name='satellite__norad_cat_id', lookup_expr='exact'
+    )
 
     class Meta:
         model = DemodData

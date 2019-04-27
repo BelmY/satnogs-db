@@ -24,9 +24,11 @@ class TransmitterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transmitter
-        fields = ('uuid', 'description', 'alive', 'type', 'uplink_low', 'uplink_high',
-                  'uplink_drift', 'downlink_low', 'downlink_high', 'downlink_drift', 'mode_id',
-                  'mode', 'invert', 'baud', 'norad_cat_id', 'status', 'updated', 'citation')
+        fields = (
+            'uuid', 'description', 'alive', 'type', 'uplink_low', 'uplink_high', 'uplink_drift',
+            'downlink_low', 'downlink_high', 'downlink_drift', 'mode_id', 'mode', 'invert', 'baud',
+            'norad_cat_id', 'status', 'updated', 'citation'
+        )
 
     # Keeping alive field for compatibility issues
     def get_alive(self, obj):
@@ -57,8 +59,10 @@ class TelemetrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DemodData
-        fields = ('norad_cat_id', 'transmitter', 'app_source', 'schema',
-                  'decoded', 'frame', 'observer', 'timestamp')
+        fields = (
+            'norad_cat_id', 'transmitter', 'app_source', 'schema', 'decoded', 'frame', 'observer',
+            'timestamp'
+        )
 
     def get_norad_cat_id(self, obj):
         return obj.satellite.norad_cat_id
@@ -85,5 +89,4 @@ class TelemetrySerializer(serializers.ModelSerializer):
 class SidsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DemodData
-        fields = ('satellite', 'payload_frame', 'station', 'lat', 'lng',
-                  'timestamp', 'app_source')
+        fields = ('satellite', 'payload_frame', 'station', 'lat', 'lng', 'timestamp', 'app_source')

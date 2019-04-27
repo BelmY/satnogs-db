@@ -34,7 +34,8 @@ class Command(BaseCommand):
                 continue
             try:
                 transmitter = TransmitterEntry.objects.get(
-                    uuid=obj['transmitter'], created=obj['transmitter_created'])
+                    uuid=obj['transmitter'], created=obj['transmitter_created']
+                )
             except TransmitterEntry.DoesNotExist:
                 transmitter = None
 
@@ -42,12 +43,20 @@ class Command(BaseCommand):
 
             for demoddata in obj['demoddata']:
                 payload_url = demoddata['payload_demod']
-                timestamp = datetime.strptime(payload_url.split('/')[-1].split('_')[0],
-                                              '%Y%m%dT%H%M%SZ').replace(tzinfo=timezone('UTC'))
+                timestamp = datetime.strptime(
+                    payload_url.split('/')[-1].split('_')[0], '%Y%m%dT%H%M%SZ'
+                ).replace(tzinfo=timezone('UTC'))
                 frame = str(requests.get(payload_url).json())
                 payload_frame = ContentFile(frame, name='network')
 
-                DemodData.objects.create(satellite=satellite, transmitter=transmitter,
-                                         data_id=data_id, payload_frame=payload_frame,
-                                         timestamp=timestamp, source='network',
-                                         station=station, lat=lat, lng=lng)
+                DemodData.objects.create(
+                    satellite=satellite,
+                    transmitter=transmitter,
+                    data_id=data_id,
+                    payload_frame=payload_frame,
+                    timestamp=timestamp,
+                    source='network',
+                    station=station,
+                    lat=lat,
+                    lng=lng
+                )

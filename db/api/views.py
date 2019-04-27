@@ -29,8 +29,8 @@ class TransmitterView(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'uuid'
 
 
-class TelemetryView(mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                    mixins.CreateModelMixin, viewsets.GenericViewSet):
+class TelemetryView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
+                    viewsets.GenericViewSet):
     queryset = DemodData.objects.all()
     serializer_class = serializers.TelemetrySerializer
     filter_class = filters.TelemetryViewFilter

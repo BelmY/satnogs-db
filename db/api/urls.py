@@ -2,7 +2,6 @@ from rest_framework import routers
 
 from db.api import views
 
-
 router = routers.DefaultRouter()
 
 router.register(r'modes', views.ModeView)

@@ -8,9 +8,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         # Positional arguments
-        parser.add_argument('norad_ids',
-                            nargs='+',
-                            metavar='<norad id>')
+        parser.add_argument('norad_ids', nargs='+', metavar='<norad id>')
 
     def handle(self, *args, **options):
         for norad_id in options['norad_ids']:

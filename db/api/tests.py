@@ -22,8 +22,7 @@ class ModeViewApiTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_retrieve(self):
-        response = self.client.get('/api/modes/{0}/'.format(self.mode.id),
-                                   format='json')
+        response = self.client.get('/api/modes/{0}/'.format(self.mode.id), format='json')
         self.assertContains(response, self.mode.name)
 
 
@@ -43,8 +42,9 @@ class SatelliteViewApiTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_retrieve(self):
-        response = self.client.get('/api/satellites/{0}/'.format(self.satellite.norad_cat_id),
-                                   format='json')
+        response = self.client.get(
+            '/api/satellites/{0}/'.format(self.satellite.norad_cat_id), format='json'
+        )
         self.assertContains(response, self.satellite.name)
 
 
@@ -65,8 +65,9 @@ class TransmitterViewApiTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_retrieve(self):
-        response = self.client.get('/api/transmitters/{0}/'.format(self.transmitter.uuid),
-                                   format='json')
+        response = self.client.get(
+            '/api/transmitters/{0}/'.format(self.transmitter.uuid), format='json'
+        )
         self.assertContains(response, self.transmitter.description)
 
 

@@ -98,9 +98,7 @@ def update_all_tle():
         satellite.tle2 = tle[2]
         satellite.save()
 
-        print('Updated TLE for {}: {} from {}'.format(norad_id,
-                                                      satellite.name,
-                                                      source))
+        print('Updated TLE for {}: {} from {}'.format(norad_id, satellite.name, source))
 
     for norad_id in sorted(missing_norad_ids):
         satellite = satellites.get(norad_cat_id=norad_id)
@@ -123,8 +121,7 @@ def export_frames(norad, email, uid, period=None):
             q = now - timedelta(days=30)
             suffix = 'month'
         q = make_aware(q)
-        frames = DemodData.objects.filter(satellite__norad_cat_id=norad,
-                                          timestamp__gte=q)
+        frames = DemodData.objects.filter(satellite__norad_cat_id=norad, timestamp__gte=q)
     else:
         frames = DemodData.objects.filter(satellite__norad_cat_id=norad)
         suffix = 'all'
@@ -142,8 +139,7 @@ def export_frames(norad, email, uid, period=None):
     subject = '[satnogs] Your request for exported frames is ready!'
     template = 'emails/exported_frames.txt'
     data = {
-        'url': '{0}{1}download/{2}'.format(site.domain,
-                                           settings.MEDIA_URL, filename),
+        'url': '{0}{1}download/{2}'.format(site.domain, settings.MEDIA_URL, filename),
         'norad': norad
     }
     message = render_to_string(template, {'data': data})
@@ -169,11 +165,15 @@ def reset_decoded_data(norad):
         frame.is_decoded = False
         frame.save()
     if settings.USE_INFLUX:
-        client = InfluxDBClient(settings.INFLUX_HOST, settings.INFLUX_PORT,
-                                settings.INFLUX_USER, settings.INFLUX_PASS,
-                                settings.INFLUX_DB, ssl=settings.INFLUX_SSL)
-        client.query('DROP MEASUREMENT "{0}"'
-                     .format(norad))
+        client = InfluxDBClient(
+            settings.INFLUX_HOST,
+            settings.INFLUX_PORT,
+            settings.INFLUX_USER,
+            settings.INFLUX_PASS,
+            settings.INFLUX_DB,
+            ssl=settings.INFLUX_SSL
+        )
+        client.query('DROP MEASUREMENT "{0}"'.format(norad))
 
 
 # decode data for a satellite, and a given time frame (if provided). If not

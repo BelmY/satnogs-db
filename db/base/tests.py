@@ -8,9 +8,9 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils.timezone import now
 
-from db.base.models import (DATA_SOURCES, Mode, Satellite, Transmitter, TransmitterSuggestion,
-                            Telemetry, DemodData)
-
+from db.base.models import (
+    DATA_SOURCES, Mode, Satellite, Transmitter, TransmitterSuggestion, Telemetry, DemodData
+)
 
 DATA_SOURCE_IDS = [c[0] for c in DATA_SOURCES]
 
@@ -26,8 +26,9 @@ def generate_payload():
 
 
 def generate_payload_name():
-    filename = datetime.strftime(fuzzy.FuzzyDateTime(now() - timedelta(days=10), now()).fuzz(),
-                                 '%Y%m%dT%H%M%SZ')
+    filename = datetime.strftime(
+        fuzzy.FuzzyDateTime(now() - timedelta(days=10), now()).fuzz(), '%Y%m%dT%H%M%SZ'
+    )
     return filename
 
 
@@ -139,6 +140,7 @@ class HomeViewTest(TestCase):
     """
     Simple test to make sure the home page is working
     """
+
     def test_home_page(self):
         response = self.client.get('/')
         self.assertContains(response, 'SatNOGS DB is, and will always be, an open database.')
@@ -165,6 +167,7 @@ class AboutViewTest(TestCase):
     """
     Test to make sure the about page is working
     """
+
     def test_about_page(self):
         response = self.client.get('/about/')
         self.assertContains(response, 'SatNOGS DB is an effort to create an hollistic')
@@ -175,6 +178,7 @@ class FaqViewTest(TestCase):
     """
     Test to make sure the faq page is working
     """
+
     def test_faq_page(self):
         response = self.client.get('/faq/')
         self.assertContains(response, 'How do I suggest a new transmitter?')

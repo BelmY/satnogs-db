@@ -61,13 +61,13 @@ class Satellite(models.Model):
     name = models.CharField(max_length=45)
     names = models.TextField(blank=True)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='satellites', blank=True,
-                              help_text='Ideally: 250x250')
+    image = models.ImageField(upload_to='satellites', blank=True, help_text='Ideally: 250x250')
     tle1 = models.CharField(max_length=200, blank=True)
     tle2 = models.CharField(max_length=200, blank=True)
     tle_source = models.CharField(max_length=300, blank=True)
-    status = models.CharField(choices=zip(SATELLITE_STATUS, SATELLITE_STATUS),
-                              max_length=10, default='alive')
+    status = models.CharField(
+        choices=zip(SATELLITE_STATUS, SATELLITE_STATUS), max_length=10, default='alive'
+    )
     decayed = models.DateTimeField(null=True, blank=True)
 
     class Meta:
@@ -109,23 +109,26 @@ class TransmitterEntry(models.Model):
     """Model for satellite transmitters."""
     uuid = ShortUUIDField(db_index=True)
     description = models.TextField()
-    status = models.CharField(choices=zip(TRANSMITTER_STATUS, TRANSMITTER_STATUS),
-                              max_length=8, default='active')
-    type = models.CharField(choices=zip(TRANSMITTER_TYPE, TRANSMITTER_TYPE),
-                            max_length=11, default='Transmitter')
+    status = models.CharField(
+        choices=zip(TRANSMITTER_STATUS, TRANSMITTER_STATUS), max_length=8, default='active'
+    )
+    type = models.CharField(
+        choices=zip(TRANSMITTER_TYPE, TRANSMITTER_TYPE), max_length=11, default='Transmitter'
+    )
     uplink_low = models.BigIntegerField(blank=True, null=True)
     uplink_high = models.BigIntegerField(blank=True, null=True)
     uplink_drift = models.IntegerField(blank=True, null=True)
     downlink_low = models.BigIntegerField(blank=True, null=True)
     downlink_high = models.BigIntegerField(blank=True, null=True)
     downlink_drift = models.IntegerField(blank=True, null=True)
-    mode = models.ForeignKey(Mode, blank=True, null=True, on_delete=models.SET_NULL,
-                             related_name='transmitter_entries')
+    mode = models.ForeignKey(
+        Mode, blank=True, null=True, on_delete=models.SET_NULL, related_name='transmitter_entries'
+    )
     invert = models.BooleanField(default=False)
     baud = models.FloatField(validators=[MinValueValidator(0)], blank=True, null=True)
-    satellite = models.ForeignKey(Satellite, null=True,
-                                  related_name='transmitter_entries',
-                                  on_delete=models.SET_NULL)
+    satellite = models.ForeignKey(
+        Satellite, null=True, related_name='transmitter_entries', on_delete=models.SET_NULL
+    )
     reviewed = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
     created = models.DateTimeField(default=now)
@@ -154,18 +157,17 @@ class TransmitterSuggestion(TransmitterEntry):
 
     class Meta:
         proxy = True
-        permissions = (('approve', 'Can approve/reject transmitter suggestions'),)
+        permissions = (('approve', 'Can approve/reject transmitter suggestions'), )
 
 
 class TransmitterManager(models.Manager):
     def get_queryset(self):
         subquery = TransmitterEntry.objects.filter(
             reviewed=True, approved=True
-        ).filter(
-            uuid=OuterRef('uuid')
-        ).order_by('-created')
+        ).filter(uuid=OuterRef('uuid')).order_by('-created')
         return super(TransmitterManager, self).get_queryset().filter(
-            reviewed=True, approved=True).filter(created=Subquery(subquery.values('created')[:1]))
+            reviewed=True, approved=True
+        ).filter(created=Subquery(subquery.values('created')[:1]))
 
 
 class Transmitter(TransmitterEntry):
@@ -177,9 +179,9 @@ class Transmitter(TransmitterEntry):
 
 class Telemetry(models.Model):
     """Model for satellite telemtry decoders."""
-    satellite = models.ForeignKey(Satellite, null=True,
-                                  related_name='telemetries',
-                                  on_delete=models.SET_NULL)
+    satellite = models.ForeignKey(
+        Satellite, null=True, related_name='telemetries', on_delete=models.SET_NULL
+    )
     name = models.CharField(max_length=45)
     schema = models.TextField(blank=True)
     decoder = models.CharField(max_length=20, blank=True)
@@ -194,24 +196,27 @@ class Telemetry(models.Model):
 
 class DemodData(models.Model):
     """Model for satellite for observation data."""
-    satellite = models.ForeignKey(Satellite, null=True,
-                                  related_name='telemetry_data',
-                                  on_delete=models.SET_NULL)
-    transmitter = models.ForeignKey(TransmitterEntry, null=True, blank=True,
-                                    on_delete=models.SET_NULL)
-    app_source = models.CharField(choices=zip(DATA_SOURCES, DATA_SOURCES),
-                                  max_length=7, default='sids')
+    satellite = models.ForeignKey(
+        Satellite, null=True, related_name='telemetry_data', on_delete=models.SET_NULL
+    )
+    transmitter = models.ForeignKey(
+        TransmitterEntry, null=True, blank=True, on_delete=models.SET_NULL
+    )
+    app_source = models.CharField(
+        choices=zip(DATA_SOURCES, DATA_SOURCES), max_length=7, default='sids'
+    )
     data_id = models.PositiveIntegerField(blank=True, null=True)
     payload_frame = models.FileField(upload_to=_name_payload_frame, blank=True, null=True)
     payload_decoded = models.TextField(blank=True)
-    payload_telemetry = models.ForeignKey(Telemetry, null=True, blank=True,
-                                          on_delete=models.SET_NULL)
+    payload_telemetry = models.ForeignKey(
+        Telemetry, null=True, blank=True, on_delete=models.SET_NULL
+    )
     station = models.CharField(max_length=45, default='Unknown')
     observer = models.CharField(max_length=60, blank=True)
-    lat = models.FloatField(validators=[MaxValueValidator(90), MinValueValidator(-90)],
-                            default=0)
-    lng = models.FloatField(validators=[MaxValueValidator(180), MinValueValidator(-180)],
-                            default=0)
+    lat = models.FloatField(validators=[MaxValueValidator(90), MinValueValidator(-90)], default=0)
+    lng = models.FloatField(
+        validators=[MaxValueValidator(180), MinValueValidator(-180)], default=0
+    )
     is_decoded = models.BooleanField(default=False, db_index=True)
     timestamp = models.DateTimeField(null=True)
 
@@ -233,9 +238,7 @@ class DemodData(models.Model):
                 return fp.read()
         except IOError as err:
             logger.error(
-                err,
-                exc_info=True,
-                extra={
+                err, exc_info=True, extra={
                     'payload frame path': self.payload_frame.path,
                 }
             )

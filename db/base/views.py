@@ -20,7 +20,6 @@ from db.base.tasks import export_frames
 from db.base.utils import cache_statistics
 from _mysql_exceptions import OperationalError
 
-
 logger = logging.getLogger('db')
 
 
@@ -36,10 +35,14 @@ def home(request):
             statistics = cache.get('stats_transmitters')
         except OperationalError:
             pass
-    return render(request, 'base/home.html', {'satellites': satellites,
-                                              'statistics': statistics,
-                                              'contributors': contributors,
-                                              'transmitter_suggestions': transmitter_suggestions})
+    return render(
+        request, 'base/home.html', {
+            'satellites': satellites,
+            'statistics': statistics,
+            'contributors': contributors,
+            'transmitter_suggestions': transmitter_suggestions
+        }
+    )
 
 
 def custom_404(request):
@@ -54,8 +57,7 @@ def custom_500(request):
 
 def robots(request):
     data = render(request, 'robots.txt', {'environment': settings.ENVIRONMENT})
-    response = HttpResponse(data,
-                            content_type='text/plain; charset=utf-8')
+    response = HttpResponse(data, content_type='text/plain; charset=utf-8')
     return response
 
 
@@ -83,23 +85,28 @@ def satellite(request, norad):
     except Exception:
         latest_frame = ''
 
-    return render(request, 'base/satellite.html',
-                  {'satellite': satellite,
-                   'transmitter_suggestions': transmitter_suggestions,
-                   'modes': modes,
-                   'types': types,
-                   'statuses': statuses,
-                   'latest_frame': latest_frame,
-                   'sats_cache': sats_cache,
-                   'mapbox_token': settings.MAPBOX_TOKEN})
+    return render(
+        request, 'base/satellite.html', {
+            'satellite': satellite,
+            'transmitter_suggestions': transmitter_suggestions,
+            'modes': modes,
+            'types': types,
+            'statuses': statuses,
+            'latest_frame': latest_frame,
+            'sats_cache': sats_cache,
+            'mapbox_token': settings.MAPBOX_TOKEN
+        }
+    )
 
 
 @login_required
 def request_export(request, norad, period=None):
     """View to request frames export download."""
     export_frames.delay(norad, request.user.email, request.user.pk, period)
-    messages.success(request, ('Your download request was received. '
-                               'You will get an email when it\'s ready'))
+    messages.success(
+        request, ('Your download request was received. '
+                  'You will get an email when it\'s ready')
+    )
     return redirect(reverse('satellite', kwargs={'norad': norad}))
 
 
@@ -121,8 +128,9 @@ def transmitter_suggestion(request):
         # Notify admins
         admins = User.objects.filter(is_superuser=True)
         site = get_current_site(request)
-        subject = '[{0}] A new suggestion for {1} was submitted'.format(site.name,
-                                                                        transmitter.satellite.name)
+        subject = '[{0}] A new suggestion for {1} was submitted'.format(
+            site.name, transmitter.satellite.name
+        )
         template = 'emails/new_transmitter_suggestion.txt'
         saturl = '{0}{1}'.format(
             site.domain,
@@ -139,13 +147,13 @@ def transmitter_suggestion(request):
             try:
                 user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
             except Exception:
-                logger.error(
-                    'Could not send email to user',
-                    exc_info=True
-                )
+                logger.error('Could not send email to user', exc_info=True)
 
-        messages.success(request, ('Your transmitter suggestion was stored successfully. '
-                                   'Thanks for contibuting!'))
+        messages.success(
+            request,
+            ('Your transmitter suggestion was stored successfully. '
+             'Thanks for contibuting!')
+        )
         return redirect(reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id}))
     else:
         logger.error(
@@ -179,8 +187,7 @@ def stats(request):
             cache_statistics()
         except OperationalError:
             pass
-    return render(request, 'base/stats.html', {'satellites': satellites,
-                                               'observers': observers})
+    return render(request, 'base/stats.html', {'satellites': satellites, 'observers': observers})
 
 
 def statistics(request):
