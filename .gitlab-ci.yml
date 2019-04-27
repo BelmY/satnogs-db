@@ -17,21 +17,21 @@ static_js_css:
       - db/static/lib
 static_python:
   stage: static
-  image: python:2.7
+  image: python:2
   before_script:
     - pip install tox~=3.8.0
   script:
     - tox -e "py2-{flake8,yapf}"
 static_python3:
   stage: static
-  image: python:3.6
+  image: python:3
   before_script:
     - pip install tox~=3.8.0
   script:
     - tox -e "py3-{flake8,yapf}"
 docs:
   stage: build
-  image: python:2.7
+  image: python:2
   before_script:
     - pip install sphinx_rtd_theme
   script:
@@ -44,7 +44,7 @@ docs:
       - docs/_build/html
 build:
   stage: build
-  image: python:2.7
+  image: python:2
   script:
     - rm -rf dist
     - python setup.py sdist bdist_wheel
@@ -55,7 +55,7 @@ build:
       - dist
 build3:
   stage: build
-  image: python:3.6
+  image: python:3
   script:
     - rm -rf dist
     - python setup.py sdist bdist_wheel
@@ -66,7 +66,7 @@ build3:
       - dist
 test:
   stage: test
-  image: python:2.7
+  image: python:2
   before_script:
     - pip install tox~=3.8.0
   script:
