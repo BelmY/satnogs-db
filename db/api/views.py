@@ -1,12 +1,12 @@
 from django.core.files.base import ContentFile
-
-from db.api import filters, pagination, serializers
-from db.base.models import DemodData, Mode, Satellite, Transmitter
-from db.base.tasks import update_satellite
 from rest_framework import mixins, status, viewsets
 from rest_framework.parsers import FileUploadParser, FormParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+
+from db.api import filters, pagination, serializers
+from db.base.models import DemodData, Mode, Satellite, Transmitter
+from db.base.tasks import update_satellite
 
 
 class ModeView(viewsets.ReadOnlyModelViewSet):

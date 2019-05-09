@@ -1,5 +1,6 @@
 import logging
 
+from _mysql_exceptions import OperationalError
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,7 +14,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from _mysql_exceptions import OperationalError
 from db.base.forms import TransmitterEntryForm
 from db.base.helpers import get_apikey
 from db.base.models import TRANSMITTER_STATUS, TRANSMITTER_TYPE, DemodData, \

@@ -1,5 +1,4 @@
 from django.core.cache import cache
-
 from rest_framework.authtoken.models import Token
 
 UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWX'

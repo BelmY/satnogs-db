@@ -11,9 +11,9 @@ from django.db.models import OuterRef, Subquery
 from django.db.models.signals import post_save, pre_save
 from django.utils.timezone import now
 from markdown import markdown
+from shortuuidfield import ShortUUIDField
 
 from db.base.helpers import gridsquare
-from shortuuidfield import ShortUUIDField
 
 logger = logging.getLogger('db')
 

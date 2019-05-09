@@ -1,9 +1,9 @@
+from allauth import urls as allauth_urls
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.static import serve
 
-from allauth import urls as allauth_urls
 from db.api.urls import api_urlpatterns
 from db.base.urls import base_urlpatterns
 

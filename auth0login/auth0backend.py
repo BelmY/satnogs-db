@@ -1,5 +1,4 @@
 import requests
-
 from social_core.backends.oauth import BaseOAuth2
 
 

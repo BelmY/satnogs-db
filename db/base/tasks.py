@@ -8,13 +8,13 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.timezone import make_aware
 from influxdb import InfluxDBClient
+from satellite_tle import fetch_tle_from_celestrak, fetch_tles
 from sgp4.earth_gravity import wgs72
 from sgp4.io import twoline2rv
 
 from db.base.models import DemodData, Satellite
 from db.base.utils import cache_statistics, decode_data
 from db.celery import app
-from satellite_tle import fetch_tle_from_celestrak, fetch_tles
 
 logger = logging.getLogger('db')
 

@@ -1,7 +1,8 @@
 import django_filters
-from db.base.models import DemodData, Satellite, Transmitter
 from django_filters import rest_framework as filters
 from django_filters.rest_framework import FilterSet
+
+from db.base.models import DemodData, Satellite, Transmitter
 
 
 class TransmitterViewFilter(FilterSet):

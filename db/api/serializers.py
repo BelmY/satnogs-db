@@ -1,6 +1,7 @@
+from rest_framework import serializers
+
 from db.base.models import TRANSMITTER_STATUS, DemodData, Mode, Satellite, \
     Transmitter
-from rest_framework import serializers
 
 
 class ModeSerializer(serializers.ModelSerializer):
