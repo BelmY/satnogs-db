@@ -75,13 +75,6 @@ test:
     - pip install tox~=3.8.0
   script:
     - tox -e deps,py2-pytest
-test3:
-  stage: test
-  image: python:3
-  before_script:
-    - pip install tox~=3.8.0
-  script:
-    - tox -e deps,py3-pytest
 docker:
   stage: deploy
   image: docker:18.09
