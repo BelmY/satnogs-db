@@ -15,20 +15,20 @@ static_js_css:
     when: always
     paths:
       - db/static/lib
-static_python:
+static:
   stage: static
   image: python:2
   before_script:
     - pip install tox~=3.8.0
   script:
-    - tox -e "py2-{flake8,isort,yapf}"
-static_python3:
+    - tox -e "py2-flake8,isort,yapf"
+static3:
   stage: static
   image: python:3
   before_script:
     - pip install tox~=3.8.0
   script:
-    - tox -e "py3-{flake8,isort,yapf}"
+    - tox -e "py3-flake8"
 docs:
   stage: build
   image: python:2
@@ -74,7 +74,14 @@ test:
   before_script:
     - pip install tox~=3.8.0
   script:
-    - tox -e deps,pytest
+    - tox -e deps,py2-pytest
+test3:
+  stage: test
+  image: python:3
+  before_script:
+    - pip install tox~=3.8.0
+  script:
+    - tox -e deps,py3-pytest
 docker:
   stage: deploy
   image: docker:18.09
