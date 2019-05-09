@@ -1,2 +1,6 @@
 db/_version.py
 db/base/migrations
+.tox
+build
+docs
+versioneer.py
