@@ -85,6 +85,8 @@ docker:
     - pip install docker-compose~=1.23.0
   script:
     - |
+      [ -z "$SATNOGS_DECODERS_VERSION" ] || sed -i 's/^\(satnogsdecoders\).*/\1=='"$SATNOGS_DECODERS_VERSION"'/' requirements.txt
+    - |
       [ -z "$CI_REGISTRY_IMAGE" ] || {
           CACHE_IMAGE="$CI_REGISTRY_IMAGE/satnogs-db:$CI_COMMIT_REF_NAME}"
           [ -z "$CI_COMMIT_TAG" ] || CACHE_IMAGE="$CI_REGISTRY_IMAGE/satnogs-db:latest"
