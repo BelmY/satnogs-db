@@ -7,6 +7,7 @@ from django.core.cache import cache
 from django.db.models import Count, Max
 from django.utils.timezone import make_aware
 from influxdb import InfluxDBClient
+from satnogsdecoders import __version__ as decoders_version
 from satnogsdecoders import decoder
 
 from db.base.models import DemodData, Mode, Satellite, Telemetry, Transmitter
@@ -133,7 +134,7 @@ def calculate_statistics():
     return statistics
 
 
-def create_point(fields, satellite, telemetry, demoddata):
+def create_point(fields, satellite, telemetry, demoddata, version):
     """Create a decoded data point"""
     point = [
         {
@@ -144,7 +145,8 @@ def create_point(fields, satellite, telemetry, demoddata):
                 'decoder': telemetry.decoder,
                 'station': demoddata.station,
                 'observer': demoddata.observer,
-                'source': demoddata.app_source
+                'source': demoddata.app_source,
+                'version': version
             },
             'fields': fields
         }
@@ -174,12 +176,9 @@ def decode_data(norad, period=None):
         if period:
             q = now - timedelta(hours=4)
             q = make_aware(q)
-            data = DemodData.objects.filter(satellite__norad_cat_id=norad,
-                                            timestamp__gte=q) \
-                                    .filter(is_decoded=False)
+            data = DemodData.objects.filter(satellite__norad_cat_id=norad, timestamp__gte=q)
         else:
-            data = DemodData.objects.filter(satellite=sat) \
-                                    .filter(is_decoded=False)
+            data = DemodData.objects.filter(satellite=sat)
         telemetry_decoders = Telemetry.objects.filter(satellite=sat)
 
         # iterate over DemodData objects
@@ -202,7 +201,7 @@ def decode_data(norad, period=None):
                         try:
                             frame = decoder_class.from_bytes(bindata)
                             json_obj = create_point(
-                                decoder.get_fields(frame), sat, tlmdecoder, obj
+                                decoder.get_fields(frame), sat, tlmdecoder, obj, decoders_version
                             )
                             write_influx(json_obj)
                             obj.payload_decoded = 'influxdb'
@@ -223,7 +222,7 @@ def decode_data(norad, period=None):
                             continue
                         else:
                             json_obj = create_point(
-                                decoder.get_fields(frame), sat, tlmdecoder, obj
+                                decoder.get_fields(frame), sat, tlmdecoder, obj, decoders_version
                             )
                             obj.payload_decoded = json_obj
                             obj.is_decoded = True
