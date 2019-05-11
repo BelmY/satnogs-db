@@ -7,7 +7,6 @@ from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.timezone import make_aware
-from influxdb import InfluxDBClient
 from satellite_tle import fetch_tle_from_celestrak, fetch_tles
 from sgp4.earth_gravity import wgs72
 from sgp4.io import twoline2rv
@@ -147,30 +146,6 @@ def export_frames(norad, email, uid, period=None):
 def background_cache_statistics():
     """Task to periodically cache statistics"""
     cache_statistics()
-
-
-# resets all decoded data and changes the is_decoded flag back to False
-# THIS IS VERY DISTRUCTIVE, but the expectation is that a decode_all_data would
-# follow.
-@app.task
-def reset_decoded_data(norad):
-    """DESTRUCTIVE: deletes decoded data from db and/or influxdb"""
-    frames = DemodData.objects.filter(satellite__norad_cat_id=norad) \
-                              .filter(is_decoded=True)
-    for frame in frames:
-        frame.payload_decoded = ''
-        frame.is_decoded = False
-        frame.save()
-    if settings.USE_INFLUX:
-        client = InfluxDBClient(
-            settings.INFLUX_HOST,
-            settings.INFLUX_PORT,
-            settings.INFLUX_USER,
-            settings.INFLUX_PASS,
-            settings.INFLUX_DB,
-            ssl=settings.INFLUX_SSL
-        )
-        client.query('DROP MEASUREMENT "{0}"'.format(norad))
 
 
 # decode data for a satellite, and a given time frame (if provided). If not

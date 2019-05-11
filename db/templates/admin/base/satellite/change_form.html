@@ -2,11 +2,6 @@
 
 {% block object-tools-items %}
   <li>
-    <a href="{% url 'admin:reset_data' norad=original.norad_cat_id %}" class="resetdatalink">
-      RESET Demod Data
-    </a>
-  </li>
-  <li>
     <a href="{% url 'admin:decode_all_data' norad=original.norad_cat_id %}" class="decodedatalink">
       Decode All Data
     </a>
