@@ -5,5 +5,5 @@ New transmitter suggestion for satellite {{ data.satname }} was submitted by use
 
 {{ data.saturl }}
 
-Navigate to {{ data.sitedomain }}/admin/base/suggestion/ to review and approve it.
+Navigate to {{ data.sitedomain }}/admin/base/transmittersuggestion/ to review and approve it.
 {% endblock %}

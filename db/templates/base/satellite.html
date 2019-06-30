@@ -112,6 +112,9 @@
                         {% if transmitter.type %}
                           {% include "includes/field.html" with name="Type" value=transmitter.type %}
                         {% endif %}
+                        {% if transmitter.service %}
+                          {% include "includes/field.html" with name="Service" value=transmitter.service %}
+                        {% endif %}
                         {% if transmitter.mode %}
                           {% include "includes/field.html" with name="Mode" value=transmitter.mode %}
                         {% endif %}
@@ -231,6 +234,27 @@
                                 </select>
                               </div>
                               <div class="input-group transmitter-element-suggest">
+                                <div class="input-group-addon">Service</div>
+                                <select class="form-control transmitter_suggestion-service" name="service">
+                                  {% for service in services %}
+                                    <option value="{{ service }}" {% ifequal transmitter.service service %}selected{% endifequal %}>
+                                      {{ service }}
+                                    </option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                              <div class="input-group transmitter-element-suggest">
+                                <div class="input-group-addon">Mode</div>
+                                <select class="form-control" name="mode">
+                                  <option value="" selected></option>
+                                  {% for mode in modes %}
+                                    <option value="{{ mode.id }}" {% ifequal transmitter.mode mode %}selected{% endifequal %}>
+                                      {{ mode }}
+                                    </option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                              <div class="input-group transmitter-element-suggest">
                                 <div class="input-group-addon">Uplink Low</div>
                                 <input type="number" class="form-control" name="uplink_low" value="{{ transmitter.uplink_low|default_if_none:'' }}">
                               </div>
@@ -257,17 +281,6 @@
                                 <input type="number" class="form-control downlink-drifted-sugedit" name="" value="{{ transmitter.downlink_low|default_if_none:'' }}">
                                 <div class="input-group-addon">PPB Drift</div>
                                 <input type="text" class="form-control downlink-ppb-sugedit" name="downlink_drift" value="{{ transmitter.downlink_drift|default_if_none:'' }}" readonly>
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Mode</div>
-                                <select class="form-control" name="mode">
-                                  <option value="" selected></option>
-                                  {% for mode in modes %}
-                                    <option value="{{ mode.id }}" {% ifequal transmitter.mode mode %}selected{% endifequal %}>
-                                      {{ mode }}
-                                    </option>
-                                  {% endfor %}
-                                </select>
                               </div>
                               <div class="input-group transmitter-element-suggest">
                                 <input type="checkbox" value="1" name="invert" {% if transmitter.invert %}checked{% endif %}> Invert
@@ -342,6 +355,9 @@
                           {% endif %}
                           {% if transmitter_suggestion.type %}
                             {% include "includes/field.html" with name="Type" value=transmitter_suggestion.type original=transmitter_suggestion.transmitter.type %}
+                          {% endif %}
+                          {% if transmitter_suggestion.service %}
+                            {% include "includes/field.html" with name="Service" value=transmitter_suggestion.service original=transmitter_suggestion.transmitter.service %}
                           {% endif %}
                           {% if transmitter_suggestion.mode %}
                             {% include "includes/field.html" with name="Mode" value=transmitter_suggestion.mode original=transmitter_suggestion.transmitter.mode %}
@@ -559,6 +575,27 @@
                 </select>
               </div>
               <div class="input-group transmitter-element-suggest">
+                <div class="input-group-addon">Service</div>
+                <select class="form-control" name="service" required>
+                  {% for service in services %}
+                    <option value="{{ service }}">
+                      {{ service }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="input-group transmitter-element-suggest">
+                <div class="input-group-addon">Mode</div>
+                <select class="form-control" name="mode">
+                  <option value="" selected></option>
+                  {% for mode in modes %}
+                    <option value="{{ mode.id }}">
+                      {{ mode }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="input-group transmitter-element-suggest">
                 <div class="input-group-addon">Uplink_Low</div>
                 <input type="number" class="form-control" name="uplink_low">
               </div>
@@ -585,17 +622,6 @@
                 <input type="number" class="form-control downlink-drifted-sugedit" name="" value="{{ transmitter.downlink_low|default_if_none:'' }}">
                 <div class="input-group-addon">PPB Drift</div>
                 <input type="text" class="form-control downlink-ppb-sugedit" name="downlink_drift" value="{{ transmitter.downlink_drift|default_if_none:'' }}" readonly>
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Mode</div>
-                <select class="form-control" name="mode">
-                  <option value="" selected></option>
-                  {% for mode in modes %}
-                    <option value="{{ mode.id }}">
-                      {{ mode }}
-                    </option>
-                  {% endfor %}
-                </select>
               </div>
               <div class="input-group transmitter-element-suggest">
                 <input type="checkbox" value="1" name="invert"> Invert

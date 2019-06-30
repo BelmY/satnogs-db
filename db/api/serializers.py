@@ -31,7 +31,7 @@ class TransmitterSerializer(serializers.ModelSerializer):
         fields = (
             'uuid', 'description', 'alive', 'type', 'uplink_low', 'uplink_high', 'uplink_drift',
             'downlink_low', 'downlink_high', 'downlink_drift', 'mode_id', 'mode', 'invert', 'baud',
-            'norad_cat_id', 'status', 'updated', 'citation'
+            'norad_cat_id', 'status', 'updated', 'citation', 'service'
         )
 
     # Keeping alive field for compatibility issues

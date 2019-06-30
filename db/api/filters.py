@@ -19,7 +19,7 @@ class TransmitterViewFilter(FilterSet):
 
     class Meta:
         model = Transmitter
-        fields = ['uuid', 'mode', 'type', 'satellite__norad_cat_id', 'alive', 'status']
+        fields = ['uuid', 'mode', 'type', 'satellite__norad_cat_id', 'alive', 'status', 'service']
 
 
 class SatelliteViewFilter(FilterSet):

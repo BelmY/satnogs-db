@@ -25,6 +25,11 @@ DATA_SOURCES = ['manual', 'network', 'sids']
 SATELLITE_STATUS = ['alive', 'dead', 're-entered']
 TRANSMITTER_STATUS = ['active', 'inactive', 'invalid']
 TRANSMITTER_TYPE = ['Transmitter', 'Transceiver', 'Transponder']
+SERVICE_TYPE = [
+    'Aeronautical', 'Amateur', 'Broadcasting', 'Earth Exploration', 'Fixed', 'Inter-satellite',
+    'Maritime', 'Meteorological', 'Mobile', 'Radiolocation', 'Radionavigational',
+    'Space Operation', 'Space Research', 'Standard Frequency and Time Signal', 'Unknown'
+]
 
 
 def _name_payload_frame(instance, filename):
@@ -142,6 +147,9 @@ class TransmitterEntry(models.Model):
     created = models.DateTimeField(default=now)
     citation = models.CharField(max_length=512, default='CITATION NEEDED - https://xkcd.com/285/')
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    service = models.CharField(
+        choices=zip(SERVICE_TYPE, SERVICE_TYPE), max_length=34, default='Unknown'
+    )
 
     class Meta:
         unique_together = ("uuid", "created")

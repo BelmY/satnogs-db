@@ -19,8 +19,9 @@ from django.views.decorators.http import require_POST
 
 from db.base.forms import TransmitterEntryForm
 from db.base.helpers import get_apikey
-from db.base.models import TRANSMITTER_STATUS, TRANSMITTER_TYPE, DemodData, \
-    Mode, Satellite, Transmitter, TransmitterSuggestion
+from db.base.models import SERVICE_TYPE, TRANSMITTER_STATUS, \
+    TRANSMITTER_TYPE, DemodData, Mode, Satellite, Transmitter, \
+    TransmitterSuggestion
 from db.base.tasks import export_frames
 from db.base.utils import cache_statistics
 
@@ -77,6 +78,7 @@ def satellite(request, norad):
             transmitter_suggestion.transmitter = None
     modes = Mode.objects.all()
     types = TRANSMITTER_TYPE
+    services = SERVICE_TYPE
     statuses = TRANSMITTER_STATUS
     # TODO: this is a horrible hack, as we have to pass the entire cache to the
     # template to iterate on, just for one satellite. See #237
@@ -95,6 +97,7 @@ def satellite(request, norad):
             'transmitter_suggestions': transmitter_suggestions,
             'modes': modes,
             'types': types,
+            'services': services,
             'statuses': statuses,
             'latest_frame': latest_frame,
             'sats_cache': sats_cache,

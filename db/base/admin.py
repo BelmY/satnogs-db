@@ -68,7 +68,7 @@ class SatelliteAdmin(admin.ModelAdmin):
 @admin.register(TransmitterEntry)
 class TransmitterEntryAdmin(admin.ModelAdmin):
     list_display = (
-        'uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
+        'uuid', 'description', 'satellite', 'service', 'type', 'mode', 'baud', 'downlink_low',
         'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'reviewed',
         'approved', 'status', 'created', 'citation', 'user'
     )
@@ -78,6 +78,7 @@ class TransmitterEntryAdmin(admin.ModelAdmin):
         'approved',
         'type',
         'status',
+        'service',
         'mode',
         'baud',
     )
@@ -87,7 +88,7 @@ class TransmitterEntryAdmin(admin.ModelAdmin):
 @admin.register(TransmitterSuggestion)
 class TransmitterSuggestionAdmin(admin.ModelAdmin):
     list_display = (
-        'uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
+        'uuid', 'description', 'satellite', 'service', 'type', 'mode', 'baud', 'downlink_low',
         'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'status',
         'created', 'citation', 'user'
     )
@@ -96,6 +97,7 @@ class TransmitterSuggestionAdmin(admin.ModelAdmin):
         'type',
         'mode',
         'baud',
+        'service',
     )
     readonly_fields = (
         'uuid', 'description', 'status', 'type', 'uplink_low', 'uplink_high', 'uplink_drift',
@@ -151,7 +153,7 @@ class TransmitterSuggestionAdmin(admin.ModelAdmin):
 @admin.register(Transmitter)
 class TransmitterAdmin(admin.ModelAdmin):
     list_display = (
-        'uuid', 'description', 'satellite', 'type', 'mode', 'baud', 'downlink_low',
+        'uuid', 'description', 'satellite', 'service', 'type', 'mode', 'baud', 'downlink_low',
         'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'status',
         'created', 'citation', 'user'
     )
@@ -159,6 +161,7 @@ class TransmitterAdmin(admin.ModelAdmin):
     list_filter = (
         'type',
         'status',
+        'service',
         'mode',
         'baud',
     )
