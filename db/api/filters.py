@@ -1,3 +1,6 @@
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+
 import django_filters
 from django_filters import rest_framework as filters
 from django_filters.rest_framework import FilterSet

@@ -1,3 +1,6 @@
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+
 from allauth import urls as allauth_urls
 from django.conf import settings
 from django.conf.urls import include, url

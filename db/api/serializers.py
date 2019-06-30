@@ -1,3 +1,6 @@
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+
 from rest_framework import serializers
 
 from db.base.models import TRANSMITTER_STATUS, DemodData, Mode, Satellite, \

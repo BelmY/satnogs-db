@@ -11,7 +11,7 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
-
+from __future__ import unicode_literals, absolute_import, division, print_function
 import time
 import sys
 import os
@@ -44,8 +44,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'satnogs-db'
-copyright = u'2014-%s, Libre Space Foundation' % time.strftime('%Y')
+project = 'satnogs-db'
+copyright = '2014-%s, Libre Space Foundation' % time.strftime('%Y')
 author = 'SatNOGS'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -198,7 +198,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'satnogs-db.tex', u'satnogs-db Documentation',
+  (master_doc, 'satnogs-db.tex', 'satnogs-db Documentation',
    author, 'manual'),
 ]
 
@@ -228,7 +228,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'satnogs-db', u'satnogs-db Documentation',
+    (master_doc, 'satnogs-db', 'satnogs-db Documentation',
      [author], 1)
 ]
 
@@ -242,7 +242,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'satnogs-db', u'satnogs-db Documentation',
+  (master_doc, 'satnogs-db', 'satnogs-db Documentation',
    author, 'SatNOGS', 'An hollistic, unified, global transmitter database for all satellite transmitters.',
    'Miscellaneous'),
 ]

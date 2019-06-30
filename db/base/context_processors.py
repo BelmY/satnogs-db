@@ -1,3 +1,6 @@
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
+
 from django.conf import settings
 from django.template.loader import render_to_string
 from satnogsdecoders import __version__ as satnogsdecoders_version
