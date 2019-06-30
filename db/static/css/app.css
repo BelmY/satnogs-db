@@ -254,6 +254,11 @@ a.satellite-item:hover {
     margin-left: 6px;
 }
 
+.transmitter-citation {
+    margin-top: -8px;
+    margin-left: 6px;
+}
+
 .transmitter-suggestions-counter {
     display: inline-block;
     font-size: 0.8em;
@@ -270,6 +275,10 @@ a.satellite-item:hover {
 
 .transmitter-element-suggest {
     margin-bottom: 10px;
+}
+
+.transmitter-citation-footer {
+    font-size: .8em;
 }
 
 .info {

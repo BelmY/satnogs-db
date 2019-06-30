@@ -163,9 +163,33 @@
                             {% include "includes/field.html" with name="Invert" value=transmitter.invert %}
                           {% endif %}
                         {% endif %}
-                        {% if transmitter.citation %}
-                          {% include "includes/field.html" with name="Citation" value=transmitter.citation|urlizetrunc:35 %}
-                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="panel-footer transmitter-citation-footer">
+                        Updated on {{ transmitter.created|date:'Y-m-d H:i' }} by {{ transmitter.user }}
+                        <button type="button"
+                                class="btn btn-default btn-sm pull-right transmitter-citation"
+                                data-toggle="modal"
+                                data-target="#TransmitterCitation-{{ transmitter.id }}">
+                          Citation
+                        </button>
+                    </div>
+                  </div>
+
+                  <!-- Citation Modal -->
+                  <div class="modal fade" id="TransmitterCitation-{{ transmitter.id }}" tabindex="-1" role="dialog" aria-labelledby="CitationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title" id="CitationModalLabel">Citation for {{ transmitter.uuid }}</h4>
+                        </div>
+                        <div class="modal-body">
+                          {{ transmitter.citation }}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
                       </div>
                     </div>
                   </div>
