@@ -17,10 +17,10 @@ The main repository lives on [Gitlab](https://gitlab.com/librespacefoundation/sa
 ## Current Development
 
 [![kanban](https://img.shields.io/badge/kanban-board-lightgray.svg)](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/boards/345706)
-[![build](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/badges/dev/build.svg)](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/commits/dev)
-[![coverage](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/badges/dev/coverage.svg)](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/commits/dev)
+[![build](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/badges/master/build.svg)](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/commits/master)
+[![coverage](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/badges/master/coverage.svg)](https://gitlab.com/librespacefoundation/satnogs/satnogs-db/commits/master)
 
 ## License
 
 [![license](https://img.shields.io/badge/license-AGPL%203.0-6672D8.svg)](LICENSE)
-[![Libre Space Foundation](https://img.shields.io/badge/%C2%A9%202014--2017-Libre%20Space%20Foundation-6672D8.svg)](https://librespacefoundation.org/)
+[![Libre Space Foundation](https://img.shields.io/badge/%C2%A9%202014--2019-Libre%20Space%20Foundation-6672D8.svg)](https://librespacefoundation.org/)
