@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='satellite',
             name='image',
-            field=models.ImageField(help_text=b'Ideally: 250x250', upload_to=b'satellites', blank=True),
+            field=models.ImageField(help_text='Ideally: 250x250', upload_to='satellites', blank=True),
         ),
     ]

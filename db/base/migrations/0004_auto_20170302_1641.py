@@ -76,12 +76,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='demoddata',
             name='source',
-            field=models.CharField(choices=[(b'manual', b'manual'), (b'network', b'network'), (b'sids', b'sids')], default=b'sids', max_length=7),
+            field=models.CharField(choices=[('manual', 'manual'), ('network', 'network'), ('sids', 'sids')], default='sids', max_length=7),
         ),
         migrations.AddField(
             model_name='demoddata',
             name='station',
-            field=models.CharField(default=b'Unknown', max_length=45),
+            field=models.CharField(default='Unknown', max_length=45),
         ),
         migrations.AddField(
             model_name='demoddata',

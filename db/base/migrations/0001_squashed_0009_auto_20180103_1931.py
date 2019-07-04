@@ -17,7 +17,7 @@ import shortuuidfield.fields
 
 class Migration(migrations.Migration):
 
-    replaces = [(b'base', '0001_initial'), (b'base', '0002_auto_20150908_2054'), (b'base', '0003_auto_20160504_2104'), (b'base', '0004_auto_20170302_1641'), (b'base', '0005_demoddata_observer'), (b'base', '0006_auto_20170323_1715'), (b'base', '0007_satellite_status'), (b'base', '0008_satellite_description'), (b'base', '0009_auto_20180103_1931')]
+    replaces = [('base', '0001_initial'), ('base', '0002_auto_20150908_2054'), ('base', '0003_auto_20160504_2104'), ('base', '0004_auto_20170302_1641'), ('base', '0005_demoddata_observer'), ('base', '0006_auto_20170323_1715'), ('base', '0007_satellite_status'), ('base', '0008_satellite_description'), ('base', '0009_auto_20180103_1931')]
 
     initial = True
 
@@ -40,10 +40,10 @@ class Migration(migrations.Migration):
                 ('norad_cat_id', models.PositiveIntegerField()),
                 ('name', models.CharField(max_length=45)),
                 ('names', models.TextField(blank=True)),
-                ('image', models.ImageField(blank=True, help_text=b'Ideally: 250x250', upload_to=b'satellites')),
+                ('image', models.ImageField(blank=True, help_text='Ideally: 250x250', upload_to='satellites')),
                 ('tle1', models.CharField(blank=True, max_length=200)),
                 ('tle2', models.CharField(blank=True, max_length=200)),
-                ('status', models.CharField(choices=[(b'alive', b'alive'), (b'dead', b'dead'), (b're-entered', b're-entered')], default=b'alive', max_length=10)),
+                ('status', models.CharField(choices=[('alive', 'alive'), ('dead', 'dead'), ('re-entered', 're-entered')], default='alive', max_length=10)),
                 ('description', models.TextField(blank=True)),
             ],
             options={
@@ -105,8 +105,8 @@ class Migration(migrations.Migration):
                 ('payload_decoded', models.TextField(blank=True)),
                 ('payload_frame', models.FileField(blank=True, null=True, upload_to=db.base.models._name_payload_frame)),
                 ('satellite', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='telemetry_data', to='base.Satellite')),
-                ('source', models.CharField(choices=[(b'manual', b'manual'), (b'network', b'network'), (b'sids', b'sids')], default=b'sids', max_length=7)),
-                ('station', models.CharField(default=b'Unknown', max_length=45)),
+                ('source', models.CharField(choices=[('manual', 'manual'), ('network', 'network'), ('sids', 'sids')], default='sids', max_length=7)),
+                ('station', models.CharField(default='Unknown', max_length=45)),
                 ('timestamp', models.DateTimeField(null=True)),
             ],
             options={

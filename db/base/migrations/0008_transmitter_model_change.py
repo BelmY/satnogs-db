@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='transmitterentry',
             name='citation',
-            field=models.CharField(default=b'CITATION NEEDED - https://xkcd.com/285/', max_length=512),
+            field=models.CharField(default='CITATION NEEDED - https://xkcd.com/285/', max_length=512),
         ),
         migrations.AddField(
             model_name='transmitterentry',
@@ -93,7 +93,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='transmitterentry',
             name='status',
-            field=models.CharField(choices=[(b'active', b'active'), (b'inactive', b'inactive'), (b'invalid', b'invalid')], default=b'active', max_length=8),
+            field=models.CharField(choices=[('active', 'active'), ('inactive', 'inactive'), ('invalid', 'invalid')], default='active', max_length=8),
         ),
         migrations.RunPython(from_alive_to_status, reverse_from_alive_to_status),
         migrations.RemoveField(

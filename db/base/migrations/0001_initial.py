@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('norad_cat_id', models.PositiveIntegerField()),
                 ('name', models.CharField(max_length=45)),
                 ('names', models.TextField(blank=True)),
-                ('image', models.ImageField(upload_to=b'satellites', blank=True)),
+                ('image', models.ImageField(upload_to='satellites', blank=True)),
             ],
             options={
                 'ordering': ['name'],
