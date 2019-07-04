@@ -3,13 +3,13 @@ from __future__ import absolute_import, division, print_function, \
 
 import logging
 
-from _mysql_exceptions import OperationalError
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.cache import cache
+from django.db import OperationalError
 from django.http import HttpResponse, HttpResponseNotFound, \
     HttpResponseServerError, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
