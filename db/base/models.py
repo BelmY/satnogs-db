@@ -115,7 +115,9 @@ class TransmitterEntry(models.Model):
         choices=list(zip(TRANSMITTER_STATUS, TRANSMITTER_STATUS)), max_length=8, default='active'
     )
     type = models.CharField(
-        choices=list(zip(TRANSMITTER_TYPE, TRANSMITTER_TYPE)), max_length=11, default='Transmitter'
+        choices=list(zip(TRANSMITTER_TYPE, TRANSMITTER_TYPE)),
+        max_length=11,
+        default='Transmitter'
     )
     uplink_low = models.BigIntegerField(blank=True, null=True)
     uplink_high = models.BigIntegerField(blank=True, null=True)
