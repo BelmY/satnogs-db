@@ -65,7 +65,7 @@ def update_all_tle():
     norad_ids = set(int(sat.norad_cat_id) for sat in satellites)
 
     # Filter only officially announced NORAD IDs
-    temporary_norad_ids = set(filter(lambda norad_id: norad_id >= 99900, norad_ids))
+    temporary_norad_ids = set([norad_id for norad_id in norad_ids if norad_id >= 99900])
     public_norad_ids = norad_ids - temporary_norad_ids
 
     tles = fetch_tles(public_norad_ids)
@@ -74,7 +74,7 @@ def update_all_tle():
     for satellite in satellites:
         norad_id = satellite.norad_cat_id
 
-        if norad_id not in tles.keys():
+        if norad_id not in list(tles.keys()):
             # No TLE available for this satellite
             missing_norad_ids.append(norad_id)
             continue

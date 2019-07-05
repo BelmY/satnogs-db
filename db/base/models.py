@@ -68,7 +68,7 @@ class Satellite(models.Model):
     tle2 = models.CharField(max_length=200, blank=True)
     tle_source = models.CharField(max_length=300, blank=True)
     status = models.CharField(
-        choices=zip(SATELLITE_STATUS, SATELLITE_STATUS), max_length=10, default='alive'
+        choices=list(zip(SATELLITE_STATUS, SATELLITE_STATUS)), max_length=10, default='alive'
     )
     decayed = models.DateTimeField(null=True, blank=True)
 
@@ -112,10 +112,10 @@ class TransmitterEntry(models.Model):
     uuid = ShortUUIDField(db_index=True)
     description = models.TextField()
     status = models.CharField(
-        choices=zip(TRANSMITTER_STATUS, TRANSMITTER_STATUS), max_length=8, default='active'
+        choices=list(zip(TRANSMITTER_STATUS, TRANSMITTER_STATUS)), max_length=8, default='active'
     )
     type = models.CharField(
-        choices=zip(TRANSMITTER_TYPE, TRANSMITTER_TYPE), max_length=11, default='Transmitter'
+        choices=list(zip(TRANSMITTER_TYPE, TRANSMITTER_TYPE)), max_length=11, default='Transmitter'
     )
     uplink_low = models.BigIntegerField(blank=True, null=True)
     uplink_high = models.BigIntegerField(blank=True, null=True)
@@ -205,7 +205,7 @@ class DemodData(models.Model):
         TransmitterEntry, null=True, blank=True, on_delete=models.SET_NULL
     )
     app_source = models.CharField(
-        choices=zip(DATA_SOURCES, DATA_SOURCES), max_length=7, default='sids'
+        choices=list(zip(DATA_SOURCES, DATA_SOURCES)), max_length=7, default='sids'
     )
     data_id = models.PositiveIntegerField(blank=True, null=True)
     payload_frame = models.FileField(upload_to=_name_payload_frame, blank=True, null=True)

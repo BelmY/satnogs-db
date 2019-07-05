@@ -121,8 +121,8 @@ def calculate_statistics():
     band_label.append('Ka')
     band_data.append(filtered)
 
-    mode_data_sorted, mode_label_sorted = zip(*sorted(zip(mode_data, mode_label), reverse=True))
-    band_data_sorted, band_label_sorted = zip(*sorted(zip(band_data, band_label), reverse=True))
+    mode_data_sorted, mode_label_sorted = list(zip(*sorted(zip(mode_data, mode_label), reverse=True)))
+    band_data_sorted, band_label_sorted = list(zip(*sorted(zip(band_data, band_label), reverse=True)))
 
     statistics = {
         'total_satellites': total_satellites,
