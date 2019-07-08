@@ -71,6 +71,18 @@ To add new or remove existing third-party static assets:
      $ ./node_modules/.bin/gulp assets
 
 
+Documentation
+-------------
+
+The documentation can be generated locally with sphinx::
+
+     $ cd docs
+     $ virtualenv -p python3 env
+     $ source env/bin/activate
+     $ pip install sphinx_rtd_theme
+     $ make html SPHINXOPTS="-W"
+
+
 Coding Style
 ------------
 
