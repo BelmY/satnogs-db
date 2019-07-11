@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
-import logging
 from datetime import datetime
 from socket import error as socket_error
 
@@ -14,8 +13,6 @@ from django.urls import reverse
 from db.base.models import DemodData, Mode, Satellite, Telemetry, \
     Transmitter, TransmitterEntry, TransmitterSuggestion
 from db.base.tasks import check_celery, decode_all_data
-
-logger = logging.getLogger('db')
 
 
 @admin.register(Mode)
@@ -44,14 +41,14 @@ class SatelliteAdmin(admin.ModelAdmin):
     def check_celery(self, request):
         try:
             investigator = check_celery.delay()
-        except socket_error as e:
-            messages.error(request, 'Cannot connect to broker: %s' % e)
+        except socket_error as error:
+            messages.error(request, 'Cannot connect to broker: %s' % error)
             return HttpResponseRedirect(reverse('admin:index'))
 
         try:
             investigator.get(timeout=5)
-        except investigator.TimeoutError as e:
-            messages.error(request, 'Worker timeout: %s' % e)
+        except investigator.TimeoutError as error:
+            messages.error(request, 'Worker timeout: %s' % error)
         else:
             messages.success(request, 'Celery is OK')
         finally:

@@ -16,18 +16,18 @@ from sgp4.io import twoline2rv
 
 from db.base.models import DemodData, Satellite
 from db.base.utils import cache_statistics, decode_data
-from db.celery import app
+from db.celery import APP
 
-logger = logging.getLogger('db')
+LOGGER = logging.getLogger('db')
 
 
-@app.task(task_ignore_result=False)
+@APP.task(task_ignore_result=False)
 def check_celery():
     """Dummy celery task to check that everything runs smoothly."""
     pass
 
 
-@app.task
+@APP.task
 def update_satellite(norad_id, update_name=True, update_tle=True):
     """Task to update the name and/or the tle of a satellite, or create a
        new satellite in the db if no satellite with given norad_id can be found"""
@@ -57,7 +57,7 @@ def update_satellite(norad_id, update_name=True, update_tle=True):
         print('Updated satellite {}: {}'.format(satellite.norad_cat_id, satellite.name))
 
 
-@app.task
+@APP.task
 def update_all_tle():
     """Task to update all satellite TLEs"""
 
@@ -89,7 +89,7 @@ def update_all_tle():
                     # Epoch of new TLE is larger then the TLE already in the db
                     continue
             except ValueError:
-                logger.error('ERROR: TLE malformed for ' + norad_id)
+                LOGGER.error('ERROR: TLE malformed for ' + norad_id)
                 continue
 
         satellite.tle_source = source
@@ -108,26 +108,28 @@ def update_all_tle():
         print('Ignored {} with temporary NORAD ID {}'.format(satellite.name, norad_id))
 
 
-@app.task
+@APP.task
 def export_frames(norad, email, uid, period=None):
     """Task to export satellite frames in csv."""
     now = datetime.utcnow()
     if period:
         if period == '1':
-            q = now - timedelta(days=7)
+            time_period = now - timedelta(days=7)
             suffix = 'week'
         else:
-            q = now - timedelta(days=30)
+            time_period = now - timedelta(days=30)
             suffix = 'month'
-        q = make_aware(q)
-        frames = DemodData.objects.filter(satellite__norad_cat_id=norad, timestamp__gte=q)
+        time_period = make_aware(time_period)
+        frames = DemodData.objects.filter(
+            satellite__norad_cat_id=norad, timestamp__gte=time_period
+        )
     else:
         frames = DemodData.objects.filter(satellite__norad_cat_id=norad)
         suffix = 'all'
     filename = '{0}-{1}-{2}-{3}.csv'.format(norad, uid, now.strftime('%Y%m%dT%H%M%SZ'), suffix)
     filepath = '{0}/download/{1}'.format(settings.MEDIA_ROOT, filename)
-    with open(filepath, 'w') as f:
-        writer = csv.writer(f, delimiter='|')
+    with open(filepath, 'w') as output_file:
+        writer = csv.writer(output_file, delimiter='|')
         for obj in frames:
             frame = obj.display_frame()
             if frame is not None:
@@ -145,7 +147,7 @@ def export_frames(norad, email, uid, period=None):
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], False)
 
 
-@app.task
+@APP.task
 def background_cache_statistics():
     """Task to periodically cache statistics"""
     cache_statistics()
@@ -153,13 +155,13 @@ def background_cache_statistics():
 
 # decode data for a satellite, and a given time frame (if provided). If not
 # provided it is expected that we want to try decoding all frames in the db.
-@app.task
+@APP.task
 def decode_all_data(norad):
     """Task to trigger a full decode of data for a satellite."""
     decode_data(norad)
 
 
-@app.task
+@APP.task
 def decode_recent_data():
     """Task to trigger a partial/recent decode of data for all satellites."""
     satellites = Satellite.objects.all()

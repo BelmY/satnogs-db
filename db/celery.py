@@ -12,13 +12,13 @@ RUN_EVERY_15 = 60 * 15
 RUN_HOURLY = 60 * 60
 RUN_DAILY = 60 * 60 * 24
 
-app = Celery('db')
+APP = Celery('db')
 
-app.config_from_object('django.conf:settings', namespace='CELERY')
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+APP.config_from_object('django.conf:settings', namespace='CELERY')
+APP.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 
-@app.on_after_finalize.connect
+@APP.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
     from db.base.tasks import update_all_tle, background_cache_statistics, decode_recent_data
 

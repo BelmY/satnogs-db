@@ -19,7 +19,7 @@ from shortuuidfield import ShortUUIDField
 
 from db.base.helpers import gridsquare
 
-logger = logging.getLogger('db')
+LOGGER = logging.getLogger('db')
 
 DATA_SOURCES = ['manual', 'network', 'sids']
 SATELLITE_STATUS = ['alive', 'dead', 're-entered']
@@ -159,7 +159,7 @@ class TransmitterEntry(models.Model):
         return self.description
 
     def save(self, *args, **kwargs):
-        self.id = None
+        self.id = None  # pylint: disable=C0103
         super(TransmitterEntry, self).save()
 
 
@@ -252,10 +252,10 @@ class DemodData(models.Model):
 
     def display_frame(self):
         try:
-            with open(self.payload_frame.path) as (fp):
-                return fp.read()
+            with open(self.payload_frame.path) as frame_file:
+                return frame_file.read()
         except IOError as err:
-            logger.error(
+            LOGGER.error(
                 err, exc_info=True, extra={
                     'payload frame path': self.payload_frame.path,
                 }

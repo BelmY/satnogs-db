@@ -15,7 +15,7 @@ from satnogsdecoders import decoder
 
 from db.base.models import DemodData, Mode, Satellite, Telemetry, Transmitter
 
-logger = logging.getLogger('db')
+LOGGER = logging.getLogger('db')
 
 
 def calculate_statistics():
@@ -34,7 +34,7 @@ def calculate_statistics():
                 round((float(alive_transmitters) / float(total_transmitters)) * 100, 2)
             )
         except ZeroDivisionError as error:
-            logger.error(error, exc_info=True)
+            LOGGER.error(error, exc_info=True)
             alive_transmitters_percentage = '0%'
     else:
         alive_transmitters_percentage = '0%'
@@ -42,9 +42,9 @@ def calculate_statistics():
     mode_label = []
     mode_data = []
     for mode in modes:
-        tr = transmitters.filter(mode=mode).count()
+        filtered_transmitters = transmitters.filter(mode=mode).count()
         mode_label.append(mode.name)
-        mode_data.append(tr)
+        mode_data.append(filtered_transmitters)
 
     # needed to pass testing in a fresh environment with no modes in db
     if not mode_label:
@@ -179,9 +179,11 @@ def decode_data(norad, period=None):
     if sat.has_telemetry_decoders:
         now = datetime.utcnow()
         if period:
-            q = now - timedelta(hours=4)
-            q = make_aware(q)
-            data = DemodData.objects.filter(satellite__norad_cat_id=norad, timestamp__gte=q)
+            time_period = now - timedelta(hours=4)
+            time_period = make_aware(time_period)
+            data = DemodData.objects.filter(
+                satellite__norad_cat_id=norad, timestamp__gte=time_period
+            )
         else:
             data = DemodData.objects.filter(satellite=sat)
         telemetry_decoders = Telemetry.objects.filter(satellite=sat)
@@ -195,9 +197,9 @@ def decode_data(norad, period=None):
                 except AttributeError:
                     continue
                 try:
-                    with open(obj.payload_frame.path) as fp:
+                    with open(obj.payload_frame.path) as frame_file:
                         # we get data frames in hex but kaitai requires binary
-                        hexdata = fp.read()
+                        hexdata = frame_file.read()
                         bindata = binascii.unhexlify(hexdata)
 
                     # if we are set to use InfluxDB, send the decoded data

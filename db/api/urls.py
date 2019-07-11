@@ -5,11 +5,11 @@ from rest_framework import routers
 
 from db.api import views
 
-router = routers.DefaultRouter()
+ROUTER = routers.DefaultRouter()
 
-router.register(r'modes', views.ModeView)
-router.register(r'satellites', views.SatelliteView)
-router.register(r'transmitters', views.TransmitterView)
-router.register(r'telemetry', views.TelemetryView)
+ROUTER.register(r'modes', views.ModeView)
+ROUTER.register(r'satellites', views.SatelliteView)
+ROUTER.register(r'transmitters', views.TransmitterView)
+ROUTER.register(r'telemetry', views.TelemetryView)
 
-api_urlpatterns = router.urls
+API_URLPATTERNS = ROUTER.urls

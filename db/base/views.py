@@ -25,7 +25,7 @@ from db.base.models import SERVICE_TYPE, TRANSMITTER_STATUS, \
 from db.base.tasks import export_frames
 from db.base.utils import cache_statistics
 
-logger = logging.getLogger('db')
+LOGGER = logging.getLogger('db')
 
 
 def home(request):
@@ -154,7 +154,7 @@ def transmitter_suggestion(request):
             try:
                 user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
             except Exception:
-                logger.error('Could not send email to user', exc_info=True)
+                LOGGER.error('Could not send email to user', exc_info=True)
 
         messages.success(
             request,
@@ -163,7 +163,7 @@ def transmitter_suggestion(request):
         )
         return redirect(reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id}))
     else:
-        logger.error(
+        LOGGER.error(
             'Suggestion form was not valid {0}'.format(transmitter_form.errors),
             exc_info=True,
             extra={

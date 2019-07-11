@@ -26,8 +26,8 @@ class Command(BaseCommand):
                             decoder_module = 'db.base.decoders.{0}'.format(option.decoder)
                             decoder = __import__(decoder_module, fromlist='.')
 
-                            with open(obj.payload_frame.path) as fp:
-                                frame = fp.read()
+                            with open(obj.payload_frame.path) as data_file:
+                                frame = data_file.read()
 
                             try:
                                 payload_decoded = decoder.decode_payload(
