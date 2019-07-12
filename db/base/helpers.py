@@ -9,9 +9,9 @@ LOWER = 'abcdefghijklmnopqrstuvwx'
 
 
 def gridsquare(lat, lng):
-    if not (-180 <= lng < 180):
+    if not -180 <= lng < 180:
         return False
-    if not (-90 <= lat < 90):
+    if not -90 <= lat < 90:
         return False
 
     adj_lat = lat + 90.0
