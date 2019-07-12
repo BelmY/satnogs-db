@@ -29,7 +29,7 @@ def frq(value):
         # Frequency is in kHz range
         formatted = format(to_format / 1000, '.3f')
         response = format_html('{0} kHz', formatted)
-    if 1000000 <= to_format:
+    if to_format >= 1000000:
         # Frequency is in MHz range
         prec = int(to_format % 1000)
         formatted = format((to_format // 1000) / 1000, '.3f')
