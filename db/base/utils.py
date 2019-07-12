@@ -47,9 +47,9 @@ def calculate_statistics():
         mode_data.append(tr)
 
     # needed to pass testing in a fresh environment with no modes in db
-    if len(mode_label) == 0:
+    if not mode_label:
         mode_label = ['FM']
-    if len(mode_data) == 0:
+    if not mode_data:
         mode_data = ['FM']
 
     band_label = []

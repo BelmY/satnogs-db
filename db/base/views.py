@@ -128,7 +128,7 @@ def transmitter_suggestion(request):
         transmitter.reviewed = False
         transmitter.approved = False
         uuid = transmitter_form.cleaned_data['uuid']
-        if uuid is not None and len(uuid) > 0:
+        if uuid:
             transmitter.uuid = uuid
         transmitter.save()
 
