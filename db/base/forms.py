@@ -27,4 +27,7 @@ class TransmitterEntryForm(forms.ModelForm):
 
     class Meta:
         model = TransmitterEntry
-        exclude = ['uuid', 'reviewed', 'approved', 'created', 'user']
+        fields = ['description', 'status', 'type', 'uplink_low', 'uplink_high',
+                  'downlink_low', 'downlink_high', 'uplink_drift',
+                  'downlink_drift', 'mode', 'invert', 'baud', 'satellite',
+                  'service']

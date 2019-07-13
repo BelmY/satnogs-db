@@ -184,6 +184,8 @@ class TransmitterEntry(models.Model):
     service = models.CharField(
         choices=zip(SERVICE_TYPE, SERVICE_TYPE), max_length=34, default='Unknown'
     )
+    #  NOTE: future fields will need to be added to forms.py and to
+    #  api/serializers.py
 
     class Meta:
         unique_together = ("uuid", "created")
