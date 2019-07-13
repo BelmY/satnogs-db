@@ -1,6 +1,7 @@
 [MASTER]
 ignore=_version.py,migrations
 load-plugins=pylint_django
+ignored-argument-names=args|kwargs
 
 [MESSAGES CONTROL]
 disable=
@@ -18,8 +19,6 @@ disable=
     R0915,
     R1705,
     W0511,
-    W0612,
-    W0613,
     W0621,
     W0703,
     W1201,

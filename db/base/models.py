@@ -32,7 +32,7 @@ SERVICE_TYPE = [
 ]
 
 
-def _name_payload_frame(instance, filename):
+def _name_payload_frame(instance, filename):  # pylint: disable=W0613
     """Returns a unique, timestamped path and filename for a payload
 
     :param filename: the original filename submitted
@@ -45,7 +45,7 @@ def _name_payload_frame(instance, filename):
     return path.join(folder, filename)
 
 
-def _gen_observer(sender, instance, created, **kwargs):
+def _gen_observer(sender, instance, created, **kwargs):  # pylint: disable=W0613
     post_save.disconnect(_gen_observer, sender=DemodData)
     try:
         qth = gridsquare(instance.lat, instance.lng)
@@ -57,7 +57,7 @@ def _gen_observer(sender, instance, created, **kwargs):
     post_save.connect(_gen_observer, sender=DemodData)
 
 
-def _set_is_decoded(sender, instance, **kwargs):
+def _set_is_decoded(sender, instance, **kwargs):  # pylint: disable=W0613
     """Returns true if payload_decoded has data"""
     instance.is_decoded = instance.payload_decoded != ''
 
@@ -193,7 +193,8 @@ class TransmitterEntry(models.Model):
         return self.description
 
     #  see https://github.com/PyCQA/pylint-django/issues/94 for why W0221
-    def save(self, *args, **kwargs):  # pylint: disable=W0221
+    #  after python3, remove W0613 disable
+    def save(self, *args, **kwargs):  # pylint: disable=W0221,W0613
         #  this assignment is needed to preserve changes made to a Transmitter
         #  through the admin UI
         self.id = None  # pylint: disable=C0103, W0201
