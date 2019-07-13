@@ -191,7 +191,7 @@ def transmitter_suggestion(request):
         return redirect(reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id}))
     else:
         LOGGER.error(
-            'Suggestion form was not valid {0}'.format(transmitter_form.errors),
+            'Suggestion form was not valid %s', format(transmitter_form.errors),
             exc_info=True,
             extra={
                 'form': transmitter_form.errors,

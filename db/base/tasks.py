@@ -90,7 +90,7 @@ def update_all_tle():
                     # Epoch of new TLE is larger then the TLE already in the db
                     continue
             except ValueError:
-                LOGGER.error('ERROR: TLE malformed for ' + norad_id)
+                LOGGER.error('ERROR: TLE malformed for %s', norad_id)
                 continue
 
         satellite.tle_source = source
