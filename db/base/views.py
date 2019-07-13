@@ -37,17 +37,17 @@ def home(request):
     satellites = Satellite.objects.all()
     transmitter_suggestions = TransmitterSuggestion.objects.count()
     contributors = User.objects.filter(is_active=1).count()
-    statistics = cache.get('stats_transmitters')
-    if not statistics:
+    cached_stats = cache.get('stats_transmitters')
+    if not cached_stats:
         try:
             cache_statistics()
-            statistics = cache.get('stats_transmitters')
+            cached_stats = cache.get('stats_transmitters')
         except OperationalError:
             pass
     return render(
         request, 'base/home.html', {
             'satellites': satellites,
-            'statistics': statistics,
+            'statistics': cached_stats,
             'contributors': contributors,
             'transmitter_suggestions': transmitter_suggestions
         }
@@ -85,14 +85,14 @@ def satellite(request, norad):
 
     :returns: base/satellite.html
     """
-    satellite = get_object_or_404(Satellite.objects, norad_cat_id=norad)
-    transmitter_suggestions = TransmitterSuggestion.objects.filter(satellite=satellite)
-    for transmitter_suggestion in transmitter_suggestions:
+    satellite_obj = get_object_or_404(Satellite.objects, norad_cat_id=norad)
+    transmitter_suggestions = TransmitterSuggestion.objects.filter(satellite=satellite_obj)
+    for suggestion in transmitter_suggestions:
         try:
-            original_transmitter = satellite.transmitters.get(uuid=transmitter_suggestion.uuid)
-            transmitter_suggestion.transmitter = original_transmitter
+            original_transmitter = satellite_obj.transmitters.get(uuid=suggestion.uuid)
+            suggestion.transmitter = original_transmitter
         except Transmitter.DoesNotExist:
-            transmitter_suggestion.transmitter = None
+            suggestion.transmitter = None
     modes = Mode.objects.all()
     types = TRANSMITTER_TYPE
     services = SERVICE_TYPE
@@ -104,13 +104,13 @@ def satellite(request, norad):
         sats_cache = []
 
     try:
-        latest_frame = DemodData.objects.filter(satellite=satellite).order_by('-id')[0]
+        latest_frame = DemodData.objects.filter(satellite=satellite_obj).order_by('-id')[0]
     except Exception:
         latest_frame = ''
 
     return render(
         request, 'base/satellite.html', {
-            'satellite': satellite,
+            'satellite': satellite_obj,
             'transmitter_suggestions': transmitter_suggestions,
             'modes': modes,
             'types': types,
@@ -239,11 +239,11 @@ def statistics(request):
 
     :returns: JsonResponse of statistics
     """
-    statistics = cache.get('stats_transmitters')
-    if not statistics:
+    cached_stats = cache.get('stats_transmitters')
+    if not cached_stats:
         cache_statistics()
-        statistics = []
-    return JsonResponse(statistics, safe=False)
+        cached_stats = []
+    return JsonResponse(cached_stats, safe=False)
 
 
 # TODO: this is confusing as we call it "edit" but it is the users "settings"
