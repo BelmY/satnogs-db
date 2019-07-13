@@ -13,12 +13,14 @@ class TransmitterViewFilter(FilterSet):
     """SatNOGS DB Transmitter API View Filter"""
     alive = filters.BooleanFilter(field_name='status', label='Alive', method='filter_status')
 
-    def filter_status(self, queryset, name, value):
+    #  see https://django-filter.readthedocs.io/en/master/ref/filters.html for
+    #  unused-argument
+    def filter_status(self, queryset, name, value):  # pylint: disable=unused-argument
         """Returns Transmitters that are either functional or non-functional"""
         if value:
-            return queryset.filter(status='functional')
+            return queryset.filter(status='active')
         else:
-            return queryset.exclude(status='functional')
+            return queryset.exclude(status='active')
 
     class Meta:
         model = Transmitter
