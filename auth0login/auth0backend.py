@@ -18,6 +18,10 @@ class Auth0(BaseOAuth2):
         """Return the token endpoint."""
         return "https://" + self.setting('DOMAIN') + "/oauth/token"
 
+    def auth_html(self):
+        """Return the login endpoint."""
+        return "https://" + self.setting('DOMAIN') + "/login/auth0"
+
     def get_user_id(self, details, response):
         """Return current user id."""
         return details['user_id']
