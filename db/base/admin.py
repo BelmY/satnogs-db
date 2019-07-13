@@ -69,8 +69,8 @@ class SatelliteAdmin(admin.ModelAdmin):
             messages.error(request, 'Worker timeout: %s' % error)
         else:
             messages.success(request, 'Celery is OK')
-        finally:
-            return HttpResponseRedirect(reverse('admin:index'))
+
+        return HttpResponseRedirect(reverse('admin:index'))
 
     def decode_all_data(self, request, norad):
         """Returns the admin home page, while triggering a Celery decode task
