@@ -25,7 +25,7 @@ LOGGER = logging.getLogger('db')
 @APP.task(task_ignore_result=False)
 def check_celery():
     """Dummy celery task to check that everything runs smoothly."""
-    pass
+    LOGGER.info('check_celery has been triggered')
 
 
 @APP.task
