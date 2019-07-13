@@ -192,10 +192,10 @@ class TransmitterEntry(models.Model):
     def __str__(self):
         return self.description
 
-    # see https://github.com/PyCQA/pylint-django/issues/94 for why W0221
-    def save(self, *args, **kwargs): # pylint: disable=W0221
-        # this assignment is needed to preserve changes made to a Transmitter
-        # through the admin UI
+    #  see https://github.com/PyCQA/pylint-django/issues/94 for why W0221
+    def save(self, *args, **kwargs):  # pylint: disable=W0221
+        #  this assignment is needed to preserve changes made to a Transmitter
+        #  through the admin UI
         self.id = None  # pylint: disable=C0103, W0201
         super(TransmitterEntry, self).save()
 
