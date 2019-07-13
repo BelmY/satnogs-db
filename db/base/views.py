@@ -106,7 +106,7 @@ def satellite(request, norad):
 
     try:
         latest_frame = DemodData.objects.filter(satellite=satellite_obj).order_by('-id')[0]
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, IndexError):
         latest_frame = ''
 
     return render(

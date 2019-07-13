@@ -213,9 +213,13 @@ class TransmitterSuggestionManager(models.Manager):
         return TransmitterEntry.objects.filter(reviewed=False)
 
 
+@python_2_unicode_compatible
 class TransmitterSuggestion(TransmitterEntry):
     """TransmitterSuggestion is an unreviewed TransmitterEntry object"""
     objects = TransmitterSuggestionManager()
+
+    def __str__(self):
+        return self.description
 
     class Meta:
         proxy = True
@@ -240,11 +244,15 @@ class TransmitterManager(models.Manager):
         ).filter(created=Subquery(subquery.values('created')[:1]))
 
 
+@python_2_unicode_compatible
 class Transmitter(TransmitterEntry):
     """Associates a generic Transmitter object with their TransmitterEntries
     that are managed by TransmitterManager
     """
     objects = TransmitterManager()
+
+    def __str__(self):
+        return self.description
 
     class Meta:
         proxy = True
