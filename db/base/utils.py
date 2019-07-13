@@ -188,67 +188,69 @@ def decode_data(norad, period=None):
     otherwise attempt to decode everything
     """
     sat = Satellite.objects.get(norad_cat_id=norad)
-    if sat.has_telemetry_decoders:
-        now = datetime.utcnow()
-        if period:
-            time_period = now - timedelta(hours=4)
-            time_period = make_aware(time_period)
-            data = DemodData.objects.filter(
-                satellite__norad_cat_id=norad, timestamp__gte=time_period
-            )
-        else:
-            data = DemodData.objects.filter(satellite=sat)
-        telemetry_decoders = Telemetry.objects.filter(satellite=sat)
+    if not sat.has_telemetry_decoders:
+        return
 
-        # iterate over DemodData objects
-        for obj in data:
-            # iterate over Telemetry decoders
-            for tlmdecoder in telemetry_decoders:
-                try:
-                    decoder_class = getattr(decoder, tlmdecoder.decoder.capitalize())
-                except AttributeError:
-                    continue
-                try:
-                    with open(obj.payload_frame.path) as frame_file:
-                        # we get data frames in hex but kaitai requires binary
-                        hexdata = frame_file.read()
-                        bindata = binascii.unhexlify(hexdata)
+    now = datetime.utcnow()
+    if period:
+        time_period = now - timedelta(hours=4)
+        time_period = make_aware(time_period)
+        data = DemodData.objects.filter(
+            satellite__norad_cat_id=norad, timestamp__gte=time_period
+        )
+    else:
+        data = DemodData.objects.filter(satellite=sat)
+    telemetry_decoders = Telemetry.objects.filter(satellite=sat)
 
-                    # if we are set to use InfluxDB, send the decoded data
-                    # there, otherwise we store it in the local DB.
-                    if settings.USE_INFLUX:
-                        try:
-                            frame = decoder_class.from_bytes(bindata)
-                            json_obj = create_point(
-                                decoder.get_fields(frame), sat, tlmdecoder, obj, decoders_version
-                            )
-                            write_influx(json_obj)
-                            obj.payload_decoded = 'influxdb'
-                            obj.is_decoded = True
-                            obj.save()
-                            break
-                        except Exception:  # pylint: disable=broad-except
-                            obj.is_decoded = False
-                            obj.save()
-                            continue
-                    else:  # store in the local db instead of influx
-                        try:
-                            frame = decoder_class.from_bytes(bindata)
-                        except Exception:  # pylint: disable=broad-except
-                            obj.payload_decoded = ''
-                            obj.is_decoded = False
-                            obj.save()
-                            continue
-                        else:
-                            json_obj = create_point(
-                                decoder.get_fields(frame), sat, tlmdecoder, obj, decoders_version
-                            )
-                            obj.payload_decoded = json_obj
-                            obj.is_decoded = True
-                            obj.save()
-                            break
-                except IOError:
-                    continue
+    # iterate over DemodData objects
+    for obj in data:
+        # iterate over Telemetry decoders
+        for tlmdecoder in telemetry_decoders:
+            try:
+                decoder_class = getattr(decoder, tlmdecoder.decoder.capitalize())
+            except AttributeError:
+                continue
+            try:
+                with open(obj.payload_frame.path) as frame_file:
+                    # we get data frames in hex but kaitai requires binary
+                    hexdata = frame_file.read()
+                    bindata = binascii.unhexlify(hexdata)
+
+                # if we are set to use InfluxDB, send the decoded data
+                # there, otherwise we store it in the local DB.
+                if settings.USE_INFLUX:
+                    try:
+                        frame = decoder_class.from_bytes(bindata)
+                        json_obj = create_point(
+                            decoder.get_fields(frame), sat, tlmdecoder, obj, decoders_version
+                        )
+                        write_influx(json_obj)
+                        obj.payload_decoded = 'influxdb'
+                        obj.is_decoded = True
+                        obj.save()
+                        break
+                    except Exception:  # pylint: disable=broad-except
+                        obj.is_decoded = False
+                        obj.save()
+                        continue
+                else:  # store in the local db instead of influx
+                    try:
+                        frame = decoder_class.from_bytes(bindata)
+                    except Exception:  # pylint: disable=broad-except
+                        obj.payload_decoded = ''
+                        obj.is_decoded = False
+                        obj.save()
+                        continue
+                    else:
+                        json_obj = create_point(
+                            decoder.get_fields(frame), sat, tlmdecoder, obj, decoders_version
+                        )
+                        obj.payload_decoded = json_obj
+                        obj.is_decoded = True
+                        obj.save()
+                        break
+            except IOError:
+                continue
 
 
 # Caches stats about satellites and data
