@@ -2,7 +2,6 @@
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
-from django.core.cache import cache
 from rest_framework.authtoken.models import Token
 
 UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWX'
@@ -56,36 +55,3 @@ def get_apikey(user):
     except Exception:
         token = Token.objects.create(user=user)
     return token
-
-
-# TODO: remove
-def cache_get_key(*args, **kwargs):
-    """Unused, needs removing"""
-    import hashlib
-    serialise = []
-    for arg in args:
-        serialise.append(str(arg))
-    for key, arg in list(kwargs.items()):
-        serialise.append(str(key))
-    serialise.append(str(arg))
-    key = hashlib.md5("".join(serialise)).hexdigest()
-    return key
-
-
-# TODO: remove
-def cache_for(time):
-    """Unused, needs removing"""
-    def decorator(func):
-        """Unused, needs removing"""
-        def wrapper(*args, **kwargs):
-            """Unused, needs removing"""
-            key = cache_get_key(func.__name__, *args, **kwargs)
-            result = cache.get(key)
-            if not result:
-                result = func(*args, **kwargs)
-                cache.set(key, result, time)
-            return result
-
-        return wrapper
-
-    return decorator

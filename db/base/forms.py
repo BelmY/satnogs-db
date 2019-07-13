@@ -11,6 +11,7 @@ from db.base.models import Transmitter, TransmitterEntry
 
 class TransmitterEntryForm(forms.ModelForm):
     """Model Form class for TransmitterEntry objects"""
+
     def existing_uuid(value):
         """ensures the UUID is existing and valid"""
         try:

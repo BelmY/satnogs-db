@@ -204,6 +204,7 @@ class TransmitterSuggestionManager(models.Manager):
     TransmitterSuggestions are TransmitterEntry objects that have been
     submitted (suggested) but not yet reviewed
     """
+
     def get_queryset(self):
         """Returns TransmitterEntries that have not been reviewed"""
         return TransmitterEntry.objects.filter(reviewed=False)
@@ -220,6 +221,7 @@ class TransmitterSuggestion(TransmitterEntry):
 
 class TransmitterManager(models.Manager):
     """Django Manager for Transmitter objects"""
+
     def get_queryset(self):
         """Returns query of TransmitterEntries
 
