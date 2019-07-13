@@ -1,4 +1,5 @@
 """SatNOGS DB API serializers, django rest framework"""
+#  pylint: disable=no-self-use
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 

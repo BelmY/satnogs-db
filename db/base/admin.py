@@ -48,7 +48,7 @@ class SatelliteAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-    def check_celery(self, request):
+    def check_celery(self, request):  # pylint: disable=no-self-use
         """Returns status of Celery workers
 
         Check the delay for celery workers, return an error if a connection
@@ -72,7 +72,7 @@ class SatelliteAdmin(admin.ModelAdmin):
 
         return HttpResponseRedirect(reverse('admin:index'))
 
-    def decode_all_data(self, request, norad):
+    def decode_all_data(self, request, norad):  # pylint: disable=no-self-use
         """Returns the admin home page, while triggering a Celery decode task
 
         Forces a decode of all data for a norad ID. This could be very resource
@@ -220,7 +220,7 @@ class DemodDataAdmin(admin.ModelAdmin):
     list_display = ('id', 'satellite', 'app_source', 'observer')
     search_fields = ('transmitter__uuid', 'satellite__norad_cat_id', 'observer')
 
-    def satellite(self, obj):
+    def satellite(self, obj):  # pylint: disable=no-self-use
         """Returns the Satellite object associated with this DemodData
 
         :param obj: DemodData object

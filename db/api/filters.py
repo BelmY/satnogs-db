@@ -15,7 +15,7 @@ class TransmitterViewFilter(FilterSet):
 
     #  see https://django-filter.readthedocs.io/en/master/ref/filters.html for
     #  unused-argument
-    def filter_status(self, queryset, name, value):  # pylint: disable=unused-argument
+    def filter_status(self, queryset, name, value):  # pylint: disable=unused-argument,no-self-use
         """Returns Transmitters that are either functional or non-functional"""
         if value:
             return queryset.filter(status='active')

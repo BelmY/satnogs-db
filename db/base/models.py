@@ -210,7 +210,7 @@ class TransmitterSuggestionManager(models.Manager):
     submitted (suggested) but not yet reviewed
     """
 
-    def get_queryset(self):
+    def get_queryset(self):  # pylint: disable=no-self-use
         """Returns TransmitterEntries that have not been reviewed"""
         return TransmitterEntry.objects.filter(reviewed=False)
 
