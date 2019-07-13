@@ -49,7 +49,7 @@ def _gen_observer(sender, instance, created, **kwargs):  # pylint: disable=W0613
     post_save.disconnect(_gen_observer, sender=DemodData)
     try:
         qth = gridsquare(instance.lat, instance.lng)
-    except Exception:
+    except Exception:  # pylint: disable=broad-except
         instance.observer = 'Unknown'
     else:
         instance.observer = '{0}-{1}'.format(instance.station, qth)

@@ -2,6 +2,7 @@
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.authtoken.models import Token
 
 UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWX'
@@ -52,6 +53,6 @@ def get_apikey(user):
     """
     try:
         token = Token.objects.get(user=user)
-    except Exception:
+    except ObjectDoesNotExist:
         token = Token.objects.create(user=user)
     return token

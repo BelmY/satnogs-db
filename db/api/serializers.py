@@ -49,14 +49,14 @@ class TransmitterSerializer(serializers.ModelSerializer):
         """Returns mode ID"""
         try:
             return obj.mode.id
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             return None
 
     def get_mode(self, obj):
         """Returns mode name"""
         try:
             return obj.mode.name
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             return None
 
     def get_norad_cat_id(self, obj):
@@ -87,7 +87,7 @@ class TelemetrySerializer(serializers.ModelSerializer):
         """Returns Transmitter UUID"""
         try:
             return obj.transmitter.uuid
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             return ''
 
     # TODO: this is a relic of the old data decoding method, needs revisiting
@@ -95,7 +95,7 @@ class TelemetrySerializer(serializers.ModelSerializer):
         """Returns Transmitter telemetry schema"""
         try:
             return obj.payload_telemetry.schema
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             return ''
 
     # TODO: this is a relic of the old data decoding method, needs revisiting

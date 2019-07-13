@@ -2,6 +2,7 @@
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 
 from db.base.models import Satellite
@@ -21,5 +22,5 @@ class Command(BaseCommand):
                 Satellite.objects.get(norad_cat_id=norad_id).delete()
                 self.stdout.write('Deleted satellite {}.'.format(norad_id))
                 continue
-            except Exception:
+            except ObjectDoesNotExist:
                 self.stderr.write('Satellite with Identifier {} does not exist'.format(norad_id))

@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import OperationalError
 from django.http import HttpResponse, HttpResponseNotFound, \
     HttpResponseServerError, JsonResponse
@@ -105,7 +106,7 @@ def satellite(request, norad):
 
     try:
         latest_frame = DemodData.objects.filter(satellite=satellite_obj).order_by('-id')[0]
-    except Exception:
+    except ObjectDoesNotExist:
         latest_frame = ''
 
     return render(
@@ -179,7 +180,7 @@ def transmitter_suggestion(request):
         for user in admins:
             try:
                 user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
-            except Exception:
+            except Exception:  # pylint: disable=broad-except
                 LOGGER.error('Could not send email to user', exc_info=True)
 
         messages.success(
