@@ -2,7 +2,6 @@
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
-import json
 import logging
 from os import path
 from uuid import uuid4
@@ -297,19 +296,6 @@ class DemodData(models.Model):
 
     def __str__(self):
         return 'data-for-{0}'.format(self.satellite.norad_cat_id)
-
-    # TODO: this is a relic of the first attempt at payload decoding and
-    # should be refactored out or changed to actually fetch the decoded
-    # frame (from influx?)
-    def display_decoded(self):
-        """Returns the contents of payload_decoded
-
-        :returns: json-formatted contents of payload_decoded
-        """
-        try:
-            json.dumps(self.payload_decoded)
-        except Exception:
-            '{}'
 
     def display_frame(self):
         """Returns the contents of the saved frame file for this DemodData
