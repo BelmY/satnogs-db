@@ -1,3 +1,4 @@
+"""SatNOGS DB API django rest framework Views"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -13,11 +14,13 @@ from db.base.tasks import update_satellite
 
 
 class ModeView(viewsets.ReadOnlyModelViewSet):
+    """SatNOGS DB Mode API view class"""
     queryset = Mode.objects.all()
     serializer_class = serializers.ModeSerializer
 
 
 class SatelliteView(viewsets.ReadOnlyModelViewSet):
+    """SatNOGS DB Satellite API view class"""
     queryset = Satellite.objects.all()
     serializer_class = serializers.SatelliteSerializer
     filter_class = filters.SatelliteViewFilter
@@ -25,6 +28,7 @@ class SatelliteView(viewsets.ReadOnlyModelViewSet):
 
 
 class TransmitterView(viewsets.ReadOnlyModelViewSet):
+    """SatNOGS DB Transmitter API view class"""
     queryset = Transmitter.objects.all()
     serializer_class = serializers.TransmitterSerializer
     filter_class = filters.TransmitterViewFilter
@@ -33,6 +37,7 @@ class TransmitterView(viewsets.ReadOnlyModelViewSet):
 
 class TelemetryView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
                     viewsets.GenericViewSet):
+    """SatNOGS DB Telemetry API view class"""
     queryset = DemodData.objects.all()
     serializer_class = serializers.TelemetrySerializer
     filter_class = filters.TelemetryViewFilter

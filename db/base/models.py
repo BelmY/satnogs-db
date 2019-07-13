@@ -1,3 +1,4 @@
+"""Django database model for SatNOGS DB"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -33,6 +34,11 @@ SERVICE_TYPE = [
 
 
 def _name_payload_frame(instance, filename):
+    """Returns a unique, timestamped path and filename for a payload
+
+    :param filename: the original filename submitted
+    :returns: path string with timestamped subfolders and filename
+    """
     today = now()
     folder = 'payload_frames/{0}/{1}/{2}/'.format(today.year, today.month, today.day)
     ext = 'raw'
@@ -53,11 +59,13 @@ def _gen_observer(sender, instance, created, **kwargs):
 
 
 def _set_is_decoded(sender, instance, **kwargs):
+    """Returns true if payload_decoded has data"""
     instance.is_decoded = instance.payload_decoded != ''
 
 
 @python_2_unicode_compatible
 class Mode(models.Model):
+    """A satellite transmitter RF mode. For example: FM"""
     name = models.CharField(max_length=10, unique=True)
 
     def __str__(self):
@@ -84,9 +92,17 @@ class Satellite(models.Model):
         ordering = ['norad_cat_id']
 
     def get_description(self):
+        """Returns the markdown-processed satellite description
+
+        :returns: the markdown-processed satellite description
+        """
         return markdown(self.description)
 
     def get_image(self):
+        """Returns an image for the satellite
+
+        :returns: the saved image for the satellite, or a default
+        """
         if self.image and hasattr(self.image, 'url'):
             return self.image.url
         else:
@@ -94,20 +110,39 @@ class Satellite(models.Model):
 
     @property
     def transmitters(self):
+        """Returns valid transmitters for this Satellite
+
+        :returns: the valid transmitters for this Satellite
+        """
         return Transmitter.objects.filter(satellite=self.id).exclude(status='invalid')
 
+    # TODO: rename this to sound more like a count
     @property
     def pending_transmitter_suggestions(self):
+        """Returns number of pending transmitter suggestions for this Satellite
+
+        :returns: number of pending transmitter suggestions for this Satellite
+        """
         pending = TransmitterSuggestion.objects.filter(satellite=self.id).count()
         return pending
 
+    # TODO: rename this to sound more like a count
     @property
     def has_telemetry_data(self):
+        """Returns number of DemodData for this Satellite
+
+        :returns: number of DemodData for this Satellite
+        """
         has_data = DemodData.objects.filter(satellite=self.id).count()
         return has_data
 
+    # TODO: rename this to sound more like a count
     @property
     def has_telemetry_decoders(self):
+        """Returns number of Telemetry objects for this Satellite
+
+        :returns: number of Telemetry objects for this Satellite
+        """
         has_decoders = Telemetry.objects.filter(satellite=self.id).exclude(decoder='').count()
         return has_decoders
 
@@ -164,11 +199,18 @@ class TransmitterEntry(models.Model):
 
 
 class TransmitterSuggestionManager(models.Manager):
+    """Django Manager for TransmitterSuggestions
+
+    TransmitterSuggestions are TransmitterEntry objects that have been
+    submitted (suggested) but not yet reviewed
+    """
     def get_queryset(self):
+        """Returns TransmitterEntries that have not been reviewed"""
         return TransmitterEntry.objects.filter(reviewed=False)
 
 
 class TransmitterSuggestion(TransmitterEntry):
+    """TransmitterSuggestion is an unreviewed TransmitterEntry object"""
     objects = TransmitterSuggestionManager()
 
     class Meta:
@@ -177,7 +219,14 @@ class TransmitterSuggestion(TransmitterEntry):
 
 
 class TransmitterManager(models.Manager):
+    """Django Manager for Transmitter objects"""
     def get_queryset(self):
+        """Returns query of TransmitterEntries
+
+        :returns: the latest revision of a TransmitterEntry for each
+        TransmitterEntry uuid associated with this Satellite that is
+        both reviewed and approved
+        """
         subquery = TransmitterEntry.objects.filter(
             reviewed=True, approved=True
         ).filter(uuid=OuterRef('uuid')).order_by('-created')
@@ -187,6 +236,9 @@ class TransmitterManager(models.Manager):
 
 
 class Transmitter(TransmitterEntry):
+    """Associates a generic Transmitter object with their TransmitterEntries
+    that are managed by TransmitterManager
+    """
     objects = TransmitterManager()
 
     class Meta:
@@ -195,7 +247,7 @@ class Transmitter(TransmitterEntry):
 
 @python_2_unicode_compatible
 class Telemetry(models.Model):
-    """Model for satellite telemtry decoders."""
+    """Model for satellite telemetry decoders."""
     satellite = models.ForeignKey(
         Satellite, null=True, related_name='telemetries', on_delete=models.SET_NULL
     )
@@ -244,13 +296,24 @@ class DemodData(models.Model):
     def __str__(self):
         return 'data-for-{0}'.format(self.satellite.norad_cat_id)
 
+    # TODO: this is a relic of the first attempt at payload decoding and
+    # should be refactored out or changed to actually fetch the decoded
+    # frame (from influx?)
     def display_decoded(self):
+        """Returns the contents of payload_decoded
+
+        :returns: json-formatted contents of payload_decoded
+        """
         try:
             json.dumps(self.payload_decoded)
         except Exception:
             '{}'
 
     def display_frame(self):
+        """Returns the contents of the saved frame file for this DemodData
+
+        :returns: the contents of the saved frame file for this DemodData
+        """
         try:
             with open(self.payload_frame.path) as frame_file:
                 return frame_file.read()

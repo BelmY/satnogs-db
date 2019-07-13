@@ -1,3 +1,4 @@
+"""SatNOGS DB celery task workers"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -20,6 +21,7 @@ APP.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 @APP.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
+    """Initializes celery tasks that need to run on a scheduled basis"""
     from db.base.tasks import update_all_tle, background_cache_statistics, decode_recent_data
 
     sender.add_periodic_task(RUN_DAILY, update_all_tle.s(), name='update-all-tle')

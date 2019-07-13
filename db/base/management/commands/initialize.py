@@ -1,3 +1,4 @@
+"""SatNOGS DB django management command to initialize a new database"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -6,6 +7,7 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
+    """django management command to initialize a new database"""
     help = 'Create initial fixtures'
 
     def handle(self, *args, **options):

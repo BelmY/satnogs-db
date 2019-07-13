@@ -1,3 +1,4 @@
+"""SatNOGS DB django base Forms class"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -9,7 +10,9 @@ from db.base.models import Transmitter, TransmitterEntry
 
 
 class TransmitterEntryForm(forms.ModelForm):
+    """Model Form class for TransmitterEntry objects"""
     def existing_uuid(value):
+        """ensures the UUID is existing and valid"""
         try:
             Transmitter.objects.get(uuid=value)
         except Transmitter.DoesNotExist:

@@ -1,3 +1,4 @@
+"""SatNOGS DB django management command to fetch data (TLEs, etc)"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -13,6 +14,7 @@ from db.base.models import DemodData, Satellite, TransmitterEntry
 
 
 class Command(BaseCommand):
+    """django management command to fetch data (TLEs, etc)"""
     help = 'Fetch Satellite data from Network'
 
     def handle(self, *args, **options):

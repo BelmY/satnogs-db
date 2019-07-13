@@ -1,3 +1,4 @@
+"""SatNOGS DB API test suites"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -21,10 +22,12 @@ class ModeViewApiTest(TestCase):
         self.mode.save()
 
     def test_list(self):
+        """Test the API modes list"""
         response = self.client.get('/api/modes/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_retrieve(self):
+        """Test the API mode retrieval"""
         response = self.client.get('/api/modes/{0}/'.format(self.mode.id), format='json')
         self.assertContains(response, self.mode.name)
 
@@ -41,10 +44,12 @@ class SatelliteViewApiTest(TestCase):
         self.satellite.save()
 
     def test_list(self):
+        """Test the Satellite API listing"""
         response = self.client.get('/api/satellites/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_retrieve(self):
+        """Test the Satellite API retrieval"""
         response = self.client.get(
             '/api/satellites/{0}/'.format(self.satellite.norad_cat_id), format='json'
         )
@@ -64,10 +69,12 @@ class TransmitterViewApiTest(TestCase):
         self.transmitter.save()
 
     def test_list(self):
+        """Test the Transmitter API listing"""
         response = self.client.get('/api/transmitters/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_retrieve(self):
+        """Test the Transmitter API retrieval"""
         response = self.client.get(
             '/api/transmitters/{0}/'.format(self.transmitter.uuid), format='json'
         )
@@ -86,9 +93,11 @@ class TelemetryViewApiTest(TestCase):
         self.datum.save()
 
     def test_list(self):
+        """Test the Telemetry API listing"""
         response = self.client.get('/api/telemetry/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_retrieve(self):
+        """Test the Telemetry API retrieval"""
         response = self.client.get('/api/telemetry/{0}/'.format(self.datum.id), format='json')
         self.assertContains(response, self.datum.observer)

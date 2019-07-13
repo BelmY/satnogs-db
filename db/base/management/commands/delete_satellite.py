@@ -1,3 +1,4 @@
+"""SatNOGS DB django management command to delete satellites"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -7,6 +8,7 @@ from db.base.models import Satellite
 
 
 class Command(BaseCommand):
+    """django management command to delete satellites"""
     help = 'Delete selected Satellites'
 
     def add_arguments(self, parser):

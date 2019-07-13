@@ -1,3 +1,4 @@
+"""SatNOGS DB django management command to fetch satellites"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -7,6 +8,7 @@ from db.base.tasks import update_satellite
 
 
 class Command(BaseCommand):
+    """django management command to fetch satellites"""
     help = 'Updates/Inserts Name for certain Satellites'
 
     def add_arguments(self, parser):

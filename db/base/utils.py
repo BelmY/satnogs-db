@@ -1,3 +1,4 @@
+"""Miscellaneous functions for SatNOGS DB"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -19,7 +20,10 @@ LOGGER = logging.getLogger('db')
 
 
 def calculate_statistics():
-    """View to create statistics endpoint."""
+    """Calculates statistics about the data we have in DB
+
+    :returns: a dictionary of statistics
+    """
     satellites = Satellite.objects.all()
     transmitters = Transmitter.objects.all()
     modes = Mode.objects.all()
@@ -140,7 +144,10 @@ def calculate_statistics():
 
 
 def create_point(fields, satellite, telemetry, demoddata, version):
-    """Create a decoded data point"""
+    """Create a decoded data point in JSON format that is influxdb compatible
+
+    :returns: a JSON formatted time series data point
+    """
     point = [
         {
             'time': demoddata.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ'),
@@ -174,7 +181,12 @@ def write_influx(json_obj):
 
 
 def decode_data(norad, period=None):
-    """Decode data for a satellite, with an option to limit the scope."""
+    """Decode data for a satellite, with an option to limit the scope.
+
+    :param norad: the NORAD ID of the satellite to decode data for
+    :param period: if period exists, only attempt to decode the last 4 hours,
+    otherwise attempt to decode everything
+    """
     sat = Satellite.objects.get(norad_cat_id=norad)
     if sat.has_telemetry_decoders:
         now = datetime.utcnow()
@@ -241,6 +253,10 @@ def decode_data(norad, period=None):
 
 # Caches stats about satellites and data
 def cache_statistics():
+    """Populate a django cache with statistics from data in DB
+
+    .. seealso:: calculate_statistics
+    """
     statistics = calculate_statistics()
     cache.set('stats_transmitters', statistics, 60 * 60 * 2)
 

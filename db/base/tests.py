@@ -1,3 +1,4 @@
+"""SatNOGS DB test suites"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -18,6 +19,7 @@ DATA_SOURCE_IDS = [c[0] for c in DATA_SOURCES]
 
 
 def generate_payload():
+    """Create data payloads"""
     payload = '{0:b}'.format(random.randint(500000000, 510000000))
     digits = 1824
     while digits:
@@ -28,6 +30,7 @@ def generate_payload():
 
 
 def generate_payload_name():
+    """Create payload names"""
     filename = datetime.strftime(
         fuzzy.FuzzyDateTime(now() - timedelta(days=10), now()).fuzz(), '%Y%m%dT%H%M%SZ'
     )
@@ -35,6 +38,7 @@ def generate_payload_name():
 
 
 def get_valid_satellites():
+    """Returns valid satellites"""
     qs = Transmitter.objects.all()
     satellites = Satellite.objects.filter(transmitters__in=qs).distinct()
     return satellites
@@ -89,6 +93,7 @@ class TransmitterFactory(factory.django.DjangoModelFactory):
 
 
 class TransmitterSuggestionFactory(factory.django.DjangoModelFactory):
+    """TransmitterSuggestion model factory."""
     description = fuzzy.FuzzyText()
     status = fuzzy.FuzzyChoice(choices=['active', 'inactive', 'invalid'])
     type = fuzzy.FuzzyChoice(choices=['Transmitter', 'Transceiver', 'Transponder'])
@@ -111,6 +116,7 @@ class TransmitterSuggestionFactory(factory.django.DjangoModelFactory):
 
 
 class TelemetryFactory(factory.django.DjangoModelFactory):
+    """Telemetry model factory."""
     satellite = factory.SubFactory(SatelliteFactory)
     name = fuzzy.FuzzyText()
     schema = '{}'
@@ -121,6 +127,7 @@ class TelemetryFactory(factory.django.DjangoModelFactory):
 
 
 class DemodDataFactory(factory.django.DjangoModelFactory):
+    """DemodData model factory."""
     satellite = factory.SubFactory(SatelliteFactory)
     transmitter = factory.SubFactory(TransmitterFactory)
     app_source = fuzzy.FuzzyChoice(choices=DATA_SOURCE_IDS)
@@ -144,6 +151,7 @@ class HomeViewTest(TestCase):
     """
 
     def test_home_page(self):
+        """Tests for a known string in the SatNOGS DB home page template"""
         response = self.client.get('/')
         self.assertContains(response, 'SatNOGS DB is, and will always be, an open database.')
 
@@ -160,6 +168,7 @@ class SatelliteViewTest(TestCase):
         self.satellite.save()
 
     def test_satellite_page(self):
+        """Tests for satellite name in a SatNOGS DB satellite page"""
         response = self.client.get('/satellite/%s/' % self.satellite.norad_cat_id)
         self.assertContains(response, self.satellite.name)
 
@@ -171,6 +180,7 @@ class AboutViewTest(TestCase):
     """
 
     def test_about_page(self):
+        """Tests for a known string in the SatNOGS DB about page template"""
         response = self.client.get('/about/')
         self.assertContains(response, 'SatNOGS DB is an effort to create an hollistic')
 
@@ -182,5 +192,6 @@ class FaqViewTest(TestCase):
     """
 
     def test_faq_page(self):
+        """Tests for a known string in the SatNOGS DB FAQ page template"""
         response = self.client.get('/faq/')
         self.assertContains(response, 'How do I suggest a new transmitter?')

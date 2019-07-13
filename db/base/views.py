@@ -1,3 +1,4 @@
+"""Base django views for SatNOGS DB"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -29,7 +30,10 @@ LOGGER = logging.getLogger('db')
 
 
 def home(request):
-    """View to render home page."""
+    """View to render home page.
+
+    :returns: base/home.html
+    """
     satellites = Satellite.objects.all()
     transmitter_suggestions = TransmitterSuggestion.objects.count()
     contributors = User.objects.filter(is_active=1).count()
@@ -51,23 +55,36 @@ def home(request):
 
 
 def custom_404(request):
-    """Custom 404 error handler."""
+    """Custom 404 error handler.
+
+    :returns: 404.html
+    """
     return HttpResponseNotFound(render(request, '404.html'))
 
 
 def custom_500(request):
-    """Custom 500 error handler."""
+    """Custom 500 error handler.
+
+    :returns: 500.html
+    """
     return HttpResponseServerError(render(request, '500.html'))
 
 
 def robots(request):
+    """robots.txt handler
+
+    :returns: robots.txt
+    """
     data = render(request, 'robots.txt', {'environment': settings.ENVIRONMENT})
     response = HttpResponse(data, content_type='text/plain; charset=utf-8')
     return response
 
 
 def satellite(request, norad):
-    """View to render satellite page."""
+    """View to render satellite page.
+
+    :returns: base/satellite.html
+    """
     satellite = get_object_or_404(Satellite.objects, norad_cat_id=norad)
     transmitter_suggestions = TransmitterSuggestion.objects.filter(satellite=satellite)
     for transmitter_suggestion in transmitter_suggestions:
@@ -108,7 +125,13 @@ def satellite(request, norad):
 
 @login_required
 def request_export(request, norad, period=None):
-    """View to request frames export download."""
+    """View to request frames export download.
+
+    This triggers a request to collect and zip up the requested data for
+    download, which the user is notified of via email when the celery task is
+    completed.
+    :returns: the originating satellite page
+    """
     export_frames.delay(norad, request.user.email, request.user.pk, period)
     messages.success(
         request, ('Your download request was received. '
@@ -120,7 +143,10 @@ def request_export(request, norad, period=None):
 @login_required
 @require_POST
 def transmitter_suggestion(request):
-    """View to process transmitter suggestion form"""
+    """View to process transmitter suggestion form
+
+    :returns: the originating satellite page unless an error occurs
+    """
     transmitter_form = TransmitterEntryForm(request.POST)
     if transmitter_form.is_valid():
         transmitter = transmitter_form.save(commit=False)
@@ -175,17 +201,28 @@ def transmitter_suggestion(request):
 
 
 def about(request):
-    """View to render about page."""
+    """View to render about page.
+
+    :returns: base/about.html
+    """
     return render(request, 'base/about.html')
 
 
+# TODO: replace this with a link to docs in the wiki which won't require code
+# updates to maintain
 def faq(request):
-    """View to render faq page."""
+    """View to render faq page.
+
+    :returns: base/faq.html
+    """
     return render(request, 'base/faq.html')
 
 
 def stats(request):
-    """View to render stats page."""
+    """View to render stats page.
+
+    :returns: base/stats.html
+    """
     satellites = cache.get('stats_satellites')
     observers = cache.get('stats_observers')
     # TODO this will never succeed, cache_statistics() runs too long to be live
@@ -198,6 +235,10 @@ def stats(request):
 
 
 def statistics(request):
+    """Triggers a refresh of cached statistics if the cache does not exist
+
+    :returns: JsonResponse of statistics
+    """
     statistics = cache.get('stats_transmitters')
     if not statistics:
         cache_statistics()
@@ -205,8 +246,12 @@ def statistics(request):
     return JsonResponse(statistics, safe=False)
 
 
+# TODO: this is confusing as we call it "edit" but it is the users "settings"
 @login_required
 def users_edit(request):
-    """View to render user settings page."""
+    """View to render user settings page.
+
+    :returns: base/users_edit.html
+    """
     token = get_apikey(request.user)
     return render(request, 'base/users_edit.html', {'token': token})

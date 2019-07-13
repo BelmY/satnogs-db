@@ -1,3 +1,4 @@
+"""SatNOGS DB django rest framework Filters class"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -9,9 +10,11 @@ from db.base.models import DemodData, Satellite, Transmitter
 
 
 class TransmitterViewFilter(FilterSet):
+    """SatNOGS DB Transmitter API View Filter"""
     alive = filters.BooleanFilter(field_name='status', label='Alive', method='filter_status')
 
     def filter_status(self, queryset, name, value):
+        """Returns Transmitters that are either functional or non-functional"""
         if value:
             return queryset.filter(status='functional')
         else:
@@ -23,7 +26,10 @@ class TransmitterViewFilter(FilterSet):
 
 
 class SatelliteViewFilter(FilterSet):
-    ''' filter on decayed field '''
+    """SatNOGS DB Satellite API View Filter
+
+    filter on decayed field
+    """
     in_orbit = filters.BooleanFilter(field_name='decayed', label='In orbit', lookup_expr='isnull')
 
     class Meta:
@@ -32,6 +38,7 @@ class SatelliteViewFilter(FilterSet):
 
 
 class TelemetryViewFilter(FilterSet):
+    """SatNOGS DB Telemetry API View Filter"""
     satellite = django_filters.NumberFilter(
         field_name='satellite__norad_cat_id', lookup_expr='exact'
     )

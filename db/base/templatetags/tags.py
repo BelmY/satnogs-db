@@ -1,3 +1,4 @@
+"""Django template tags for SatNOGS DB"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -10,6 +11,7 @@ register = template.Library()
 
 @register.simple_tag
 def active(request, urls):
+    """Returns if this is an active URL"""
     if request.path in (reverse(url) for url in urls.split()):
         return 'active'
     return None
@@ -17,6 +19,7 @@ def active(request, urls):
 
 @register.filter
 def frq(value):
+    """Returns Hz formatted frequency html string"""
     try:
         to_format = float(value)
     except (TypeError, ValueError):

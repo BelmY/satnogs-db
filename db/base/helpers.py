@@ -1,3 +1,4 @@
+"""Helper functions for SatNOGS DB"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -9,6 +10,13 @@ LOWER = 'abcdefghijklmnopqrstuvwx'
 
 
 def gridsquare(lat, lng):
+    """Calculates a maidenhead grid square from a lat/long
+
+    Used when we get a SiDS submission, we want to store and display the
+    location of the submitter as a grid square.
+
+    :returns: a string of the grid square, ie: EM69uf
+    """
     if not -180 <= lng < 180:
         return False
     if not -90 <= lat < 90:
@@ -38,6 +46,11 @@ def gridsquare(lat, lng):
 
 
 def get_apikey(user):
+    """If necessary, create, then return an API key for a user
+
+    :param user: a SatNOGS DB User object
+    :returns: user API token
+    """
     try:
         token = Token.objects.get(user=user)
     except Exception:
@@ -45,7 +58,9 @@ def get_apikey(user):
     return token
 
 
+# TODO: remove
 def cache_get_key(*args, **kwargs):
+    """Unused, needs removing"""
     import hashlib
     serialise = []
     for arg in args:
@@ -57,9 +72,13 @@ def cache_get_key(*args, **kwargs):
     return key
 
 
+# TODO: remove
 def cache_for(time):
+    """Unused, needs removing"""
     def decorator(func):
+        """Unused, needs removing"""
         def wrapper(*args, **kwargs):
+            """Unused, needs removing"""
             key = cache_get_key(func.__name__, *args, **kwargs)
             result = cache.get(key)
             if not result:

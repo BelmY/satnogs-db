@@ -1,3 +1,4 @@
+"""Defines functions and settings for the django admin interface"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -17,16 +18,25 @@ from db.base.tasks import check_celery, decode_all_data
 
 @admin.register(Mode)
 class ModeAdmin(admin.ModelAdmin):
+    """Defines Mode view in django admin UI"""
     list_display = ('name', )
 
 
 @admin.register(Satellite)
 class SatelliteAdmin(admin.ModelAdmin):
+    """Defines Satellite view in django admin UI"""
     list_display = ('name', 'norad_cat_id', 'status', 'decayed')
     search_fields = ('name', 'norad_cat_id')
     list_filter = ('status', 'decayed')
 
     def get_urls(self):
+        """Returns django urls for the Satellite view
+
+        check_celery -- url for the check_celery function
+        decode_all_data -- url for the decode_all_data function
+
+        :returns: Django urls for the Satellite admin view
+        """
         urls = super(SatelliteAdmin, self).get_urls()
         my_urls = [
             url(r'^check_celery/$', self.check_celery, name='check_celery'),
@@ -39,6 +49,14 @@ class SatelliteAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def check_celery(self, request):
+        """Returns status of Celery workers
+
+        Check the delay for celery workers, return an error if a connection
+        can not be made or if the delay is too long. Otherwise return that
+        Celery is OK.
+
+        :returns: admin home page redirect with popup message
+        """
         try:
             investigator = check_celery.delay()
         except socket_error as error:
@@ -54,9 +72,15 @@ class SatelliteAdmin(admin.ModelAdmin):
         finally:
             return HttpResponseRedirect(reverse('admin:index'))
 
-    # force a decode of all data for a norad ID. This could be very resource
-    # intensive but necessary when catching a satellite up with a new decoder
     def decode_all_data(self, request, norad):
+        """Returns the admin home page, while triggering a Celery decode task
+
+        Forces a decode of all data for a norad ID. This could be very resource
+        intensive but necessary when catching a satellite up with a new decoder
+
+        :param norad: the NORAD ID for the satellite to decode
+        :returns: Admin home page
+        """
         decode_all_data.delay(norad)
         messages.success(request, 'Decode task was triggered successfully!')
         return redirect(reverse('admin:index'))
@@ -64,6 +88,7 @@ class SatelliteAdmin(admin.ModelAdmin):
 
 @admin.register(TransmitterEntry)
 class TransmitterEntryAdmin(admin.ModelAdmin):
+    """Defines TransmitterEntry view in django admin UI"""
     list_display = (
         'uuid', 'description', 'satellite', 'service', 'type', 'mode', 'baud', 'downlink_low',
         'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'reviewed',
@@ -84,6 +109,7 @@ class TransmitterEntryAdmin(admin.ModelAdmin):
 
 @admin.register(TransmitterSuggestion)
 class TransmitterSuggestionAdmin(admin.ModelAdmin):
+    """Defines TransmitterSuggestion view in django admin UI"""
     list_display = (
         'uuid', 'description', 'satellite', 'service', 'type', 'mode', 'baud', 'downlink_low',
         'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'status',
@@ -104,6 +130,12 @@ class TransmitterSuggestionAdmin(admin.ModelAdmin):
     actions = ['approve_suggestion', 'reject_suggestion']
 
     def get_actions(self, request):
+        """Returns the actions a user can take on a TransmitterSuggestion
+
+        For example, delete, approve, or reject
+
+        :returns: list of actions the user can take on TransmitterSuggestion
+        """
         actions = super(TransmitterSuggestionAdmin, self).get_actions(request)
         if not request.user.has_perm('base.delete_transmittersuggestion'):
             if 'delete_selected' in actions:
@@ -111,6 +143,11 @@ class TransmitterSuggestionAdmin(admin.ModelAdmin):
         return actions
 
     def approve_suggestion(self, request, queryset):
+        """Returns the TransmitterSuggestion page after approving suggestions
+
+        :param queryset: the TransmitterSuggestion entries to be approved
+        :returns: TransmitterSuggestion admin page
+        """
         queryset_size = len(queryset)
         for entry in queryset:
             entry.approved = True
@@ -129,6 +166,11 @@ class TransmitterSuggestionAdmin(admin.ModelAdmin):
     approve_suggestion.short_description = 'Approve selected transmitter suggestions'
 
     def reject_suggestion(self, request, queryset):
+        """Returns the TransmitterSuggestion page after rejecting suggestions
+
+        :param queryset: the TransmitterSuggestion entries to be rejected
+        :returns: TransmitterSuggestion admin page
+        """
         queryset_size = len(queryset)
         for entry in queryset:
             entry.created = datetime.utcnow()
@@ -149,6 +191,7 @@ class TransmitterSuggestionAdmin(admin.ModelAdmin):
 
 @admin.register(Transmitter)
 class TransmitterAdmin(admin.ModelAdmin):
+    """Defines Transmitter view in django admin UI"""
     list_display = (
         'uuid', 'description', 'satellite', 'service', 'type', 'mode', 'baud', 'downlink_low',
         'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'status',
@@ -167,13 +210,20 @@ class TransmitterAdmin(admin.ModelAdmin):
 
 @admin.register(Telemetry)
 class TelemetryAdmin(admin.ModelAdmin):
+    """Defines Telemetry view in django admin UI"""
     list_display = ('name', 'decoder')
 
 
 @admin.register(DemodData)
 class DemodDataAdmin(admin.ModelAdmin):
+    """Defines DemodData view in django admin UI"""
     list_display = ('id', 'satellite', 'app_source', 'observer')
     search_fields = ('transmitter__uuid', 'satellite__norad_cat_id', 'observer')
 
     def satellite(self, obj):
+        """Returns the Satellite object associated with this DemodData
+
+        :param obj: DemodData object
+        :returns: Satellite object
+        """
         return obj.satellite
