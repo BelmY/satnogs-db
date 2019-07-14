@@ -195,9 +195,7 @@ def decode_data(norad, period=None):
     if period:
         time_period = now - timedelta(hours=4)
         time_period = make_aware(time_period)
-        data = DemodData.objects.filter(
-            satellite__norad_cat_id=norad, timestamp__gte=time_period
-        )
+        data = DemodData.objects.filter(satellite__norad_cat_id=norad, timestamp__gte=time_period)
     else:
         data = DemodData.objects.filter(satellite=sat)
     telemetry_decoders = Telemetry.objects.filter(satellite=sat)
