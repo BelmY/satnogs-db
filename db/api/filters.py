@@ -18,9 +18,10 @@ class TransmitterViewFilter(FilterSet):
     def filter_status(self, queryset, name, value):  # pylint: disable=W0613,R0201
         """Returns Transmitters that are either functional or non-functional"""
         if value:
-            return queryset.filter(status='active')
+            transmitters = queryset.filter(status='active')
         else:
-            return queryset.exclude(status='active')
+            transmitters = queryset.exclude(status='active')
+        return transmitters
 
     class Meta:
         model = Transmitter

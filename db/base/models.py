@@ -103,9 +103,10 @@ class Satellite(models.Model):
         :returns: the saved image for the satellite, or a default
         """
         if self.image and hasattr(self.image, 'url'):
-            return self.image.url
+            image = self.image.url
         else:
-            return settings.SATELLITE_DEFAULT_IMAGE
+            image = settings.SATELLITE_DEFAULT_IMAGE
+        return image
 
     @property
     def transmitters(self):

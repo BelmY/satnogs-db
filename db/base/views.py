@@ -188,7 +188,9 @@ def transmitter_suggestion(request):
             ('Your transmitter suggestion was stored successfully. '
              'Thanks for contibuting!')
         )
-        return redirect(reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id}))
+        redirect_page = redirect(
+            reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id})
+        )
     else:
         LOGGER.error(
             'Suggestion form was not valid %s',
@@ -199,7 +201,9 @@ def transmitter_suggestion(request):
             }
         )
         messages.error(request, 'We are sorry, but some error occured :(')
-        return redirect(reverse('home'))
+        redirect_page = redirect(reverse('home'))
+
+    return redirect_page
 
 
 def about(request):

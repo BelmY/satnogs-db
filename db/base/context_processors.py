@@ -12,33 +12,37 @@ from db import __version__
 def analytics(request):
     """Returns analytics code."""
     if settings.ENVIRONMENT == 'production':
-        return {'analytics_code': render_to_string('includes/analytics.html')}
+        rendered_string = {'analytics_code': render_to_string('includes/analytics.html')}
     else:
-        return {'analytics_code': ''}
+        rendered_string = {'analytics_code': ''}
+    return rendered_string
 
 
 def stage_notice(request):
     """Displays stage notice."""
     if settings.ENVIRONMENT == 'stage':
-        return {'stage_notice': render_to_string('includes/stage_notice.html')}
+        rendered_string = {'stage_notice': render_to_string('includes/stage_notice.html')}
     else:
-        return {'stage_notice': ''}
+        rendered_string = {'stage_notice': ''}
+    return rendered_string
 
 
 def auth_block(request):
     """Displays auth links local vs auth0."""
     if settings.AUTH0:
-        return {'auth_block': render_to_string('includes/auth_auth0.html')}
+        rendered_string = {'auth_block': render_to_string('includes/auth_auth0.html')}
     else:
-        return {'auth_block': render_to_string('includes/auth_local.html')}
+        rendered_string = {'auth_block': render_to_string('includes/auth_local.html')}
+    return rendered_string
 
 
 def logout_block(request):
     """Displays logout links local vs auth0."""
     if settings.AUTH0:
-        return {'logout_block': render_to_string('includes/logout_auth0.html')}
+        rendered_string = {'logout_block': render_to_string('includes/logout_auth0.html')}
     else:
-        return {'logout_block': render_to_string('includes/logout_local.html')}
+        rendered_string = {'logout_block': render_to_string('includes/logout_local.html')}
+    return rendered_string
 
 
 def version(request):
