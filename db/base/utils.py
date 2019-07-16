@@ -59,71 +59,75 @@ def calculate_statistics():
     band_label = []
     band_data = []
 
-    # <30.000.000 - HF
-    filtered = transmitters.filter(downlink_low__lt=30000000).count()
-    band_label.append('HF')
-    band_data.append(filtered)
+    bands = [
+        # <30.000.000 - HF
+        {
+            'lower_limit': 0,
+            'upper_limit': 30000000,
+            'label': 'HF'
+        },
+        # 30.000.000 ~ 300.000.000 - VHF
+        {
+            'lower_limit': 30000000,
+            'upper_limit': 300000000,
+            'label': 'VHF'
+        },
+        # 300.000.000 ~ 1.000.000.000 - UHF
+        {
+            'lower_limit': 300000000,
+            'upper_limit': 1000000000,
+            'label': 'UHF',
+        },
+        # 1G ~ 2G - L
+        {
+            'lower_limit': 1000000000,
+            'upper_limit': 2000000000,
+            'label': 'L',
+        },
+        # 2G ~ 4G - S
+        {
+            'lower_limit': 2000000000,
+            'upper_limit': 4000000000,
+            'label': 'S',
+        },
+        # 4G ~ 8G - C
+        {
+            'lower_limit': 4000000000,
+            'upper_limit': 8000000000,
+            'label': 'C',
+        },
+        # 8G ~ 12G - X
+        {
+            'lower_limit': 8000000000,
+            'upper_limit': 12000000000,
+            'label': 'X',
+        },
+        # 12G ~ 18G - Ku
+        {
+            'lower_limit': 12000000000,
+            'upper_limit': 18000000000,
+            'label': 'Ku',
+        },
+        # 18G ~ 27G - K
+        {
+            'lower_limit': 18000000000,
+            'upper_limit': 27000000000,
+            'label': 'K',
+        },
+        # 27G ~ 40G - Ka
+        {
+            'lower_limit': 27000000000,
+            'upper_limit': 40000000000,
+            'label': 'Ka',
+        },
+    ]
 
-    # 30.000.000 ~ 300.000.000 - VHF
-    filtered = transmitters.filter(downlink_low__gte=30000000, downlink_low__lt=300000000).count()
-    band_label.append('VHF')
-    band_data.append(filtered)
-
-    # 300.000.000 ~ 1.000.000.000 - UHF
-    filtered = transmitters.filter(
-        downlink_low__gte=300000000, downlink_low__lt=1000000000
-    ).count()
-    band_label.append('UHF')
-    band_data.append(filtered)
-
-    # 1G ~ 2G - L
-    filtered = transmitters.filter(
-        downlink_low__gte=1000000000, downlink_low__lt=2000000000
-    ).count()
-    band_label.append('L')
-    band_data.append(filtered)
-
-    # 2G ~ 4G - S
-    filtered = transmitters.filter(
-        downlink_low__gte=2000000000, downlink_low__lt=4000000000
-    ).count()
-    band_label.append('S')
-    band_data.append(filtered)
-
-    # 4G ~ 8G - C
-    filtered = transmitters.filter(
-        downlink_low__gte=4000000000, downlink_low__lt=8000000000
-    ).count()
-    band_label.append('C')
-    band_data.append(filtered)
-
-    # 8G ~ 12G - X
-    filtered = transmitters.filter(
-        downlink_low__gte=8000000000, downlink_low__lt=12000000000
-    ).count()
-    band_label.append('X')
-    band_data.append(filtered)
-
-    # 12G ~ 18G - Ku
-    filtered = transmitters.filter(
-        downlink_low__gte=12000000000, downlink_low__lt=18000000000
-    ).count()
-    band_label.append('Ku')
-    band_data.append(filtered)
-
-    # 18G ~ 27G - K
-    filtered = transmitters.filter(
-        downlink_low__gte=18000000000, downlink_low__lt=27000000000
-    ).count()
-    band_label.append('K')
-    band_data.append(filtered)
-
-    # 27G ~ 40G - Ka
-    filtered = transmitters.filter(
-        downlink_low__gte=27000000000, downlink_low__lt=40000000000
-    ).count()
-    band_label.append('Ka')
-    band_data.append(filtered)
+    for band in bands:
+        filtered = transmitters.filter(
+            downlink_low__gte=band['lower_limit'], downlink_low__lt=band['upper_limit']
+        ).count()
+        band_label.append(band['label'])
+        band_data.append(filtered)
 
     mode_data_sorted, mode_label_sorted = \
         list(zip(*sorted(zip(mode_data, mode_label), reverse=True)))
