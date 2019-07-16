@@ -5,15 +5,15 @@ from __future__ import absolute_import, division, print_function, \
 import random
 from datetime import datetime, timedelta
 
+import factory
 import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils.timezone import now
+from factory import fuzzy
 
-import factory
 from db.base.models import DATA_SOURCES, DemodData, Mode, Satellite, \
     Telemetry, Transmitter, TransmitterSuggestion
-from factory import fuzzy
 
 DATA_SOURCE_IDS = [c[0] for c in DATA_SOURCES]
 
