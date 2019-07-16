@@ -9,19 +9,20 @@ from django.utils.translation import ugettext_lazy as _
 from db.base.models import Transmitter, TransmitterEntry
 
 
+def existing_uuid(value):
+    """ensures the UUID is existing and valid"""
+    try:
+        Transmitter.objects.get(uuid=value)
+    except Transmitter.DoesNotExist:
+        raise ValidationError(
+            _('%(value)s is not a valid uuid'),
+            code='invalid',
+            params={'value': value},
+        )
+
+
 class TransmitterEntryForm(forms.ModelForm):
     """Model Form class for TransmitterEntry objects"""
-
-    def existing_uuid(value):
-        """ensures the UUID is existing and valid"""
-        try:
-            Transmitter.objects.get(uuid=value)
-        except Transmitter.DoesNotExist:
-            raise ValidationError(
-                _('%(value)s is not a valid uuid'),
-                code='invalid',
-                params={'value': value},
-            )
 
     uuid = forms.CharField(required=False, validators=[existing_uuid])
 
