@@ -19,7 +19,7 @@ APP.config_from_object('django.conf:settings', namespace='CELERY')
 APP.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 
-#  after python3, remove W0613 disable
+# after python3, remove W0613 disable
 @APP.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=W0613
     """Initializes celery tasks that need to run on a scheduled basis"""

@@ -170,7 +170,7 @@ def decode_recent_data():
     for obj in satellites:
         try:
             decode_data(obj.norad_cat_id, period=1)
-        except Exception:  # pylint: disable=broad-except
-            #  an object could have failed decoding for a number of reasons,
-            #  keep going
+        except Exception:  # pylint: disable=W0703
+            # an object could have failed decoding for a number of reasons,
+            # keep going
             continue

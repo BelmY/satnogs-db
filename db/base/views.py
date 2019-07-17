@@ -180,7 +180,7 @@ def transmitter_suggestion(request):
         for user in admins:
             try:
                 user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
-            except Exception:  # pylint: disable=broad-except
+            except Exception:  # pylint: disable=W0703
                 LOGGER.error('Could not send email to user', exc_info=True)
 
         messages.success(

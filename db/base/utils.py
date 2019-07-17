@@ -227,14 +227,14 @@ def decode_data(norad, period=None):
                         obj.is_decoded = True
                         obj.save()
                         break
-                    except Exception:  # pylint: disable=broad-except
+                    except Exception:  # pylint: disable=W0703
                         obj.is_decoded = False
                         obj.save()
                         continue
                 else:  # store in the local db instead of influx
                     try:
                         frame = decoder_class.from_bytes(bindata)
-                    except Exception:  # pylint: disable=broad-except
+                    except Exception:  # pylint: disable=W0703
                         obj.payload_decoded = ''
                         obj.is_decoded = False
                         obj.save()

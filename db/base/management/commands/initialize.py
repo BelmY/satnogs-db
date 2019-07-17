@@ -15,7 +15,7 @@ class Command(BaseCommand):
         self.stdout.write("Creating database...")
         call_command('migrate')
 
-        #  Initial data
+        # Initial data
         self.stdout.write("Creating fixtures...")
         call_command('loaddata', 'modes')
         call_command('loaddata', 'satellites')

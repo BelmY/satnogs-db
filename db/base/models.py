@@ -49,7 +49,7 @@ def _gen_observer(sender, instance, created, **kwargs):  # pylint: disable=W0613
     post_save.disconnect(_gen_observer, sender=DemodData)
     try:
         qth = gridsquare(instance.lat, instance.lng)
-    except Exception:  # pylint: disable=broad-except
+    except Exception:  # pylint: disable=W0703
         instance.observer = 'Unknown'
     else:
         instance.observer = '{0}-{1}'.format(instance.station, qth)
@@ -185,8 +185,8 @@ class TransmitterEntry(models.Model):
         choices=zip(SERVICE_TYPE, SERVICE_TYPE), max_length=34, default='Unknown'
     )
 
-    #  NOTE: future fields will need to be added to forms.py and to
-    #  api/serializers.py
+    # NOTE: future fields will need to be added to forms.py and to
+    # api/serializers.py
 
     class Meta:
         unique_together = ("uuid", "created")
@@ -195,11 +195,11 @@ class TransmitterEntry(models.Model):
     def __str__(self):
         return self.description
 
-    #  see https://github.com/PyCQA/pylint-django/issues/94 for why W0221
-    #  after python3, remove W0613 disable
+    # see https://github.com/PyCQA/pylint-django/issues/94 for why W0221
+    # after python3, remove W0613 disable
     def save(self, *args, **kwargs):  # pylint: disable=W0221,W0613
-        #  this assignment is needed to preserve changes made to a Transmitter
-        #  through the admin UI
+        # this assignment is needed to preserve changes made to a Transmitter
+        # through the admin UI
         self.id = None  # pylint: disable=C0103, W0201
         super(TransmitterEntry, self).save()
 
@@ -211,7 +211,7 @@ class TransmitterSuggestionManager(models.Manager):
     submitted (suggested) but not yet reviewed
     """
 
-    def get_queryset(self):  # pylint: disable=no-self-use
+    def get_queryset(self):  # pylint: disable=R0201
         """Returns TransmitterEntries that have not been reviewed"""
         return TransmitterEntry.objects.filter(reviewed=False)
 
