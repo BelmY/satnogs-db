@@ -91,7 +91,6 @@ class TelemetrySerializer(serializers.ModelSerializer):
         except Exception:  # pylint: disable=W0703
             return ''
 
-    # TODO: this is a relic of the old data decoding method, needs revisiting
     def get_schema(self, obj):
         """Returns Transmitter telemetry schema"""
         try:
@@ -99,7 +98,6 @@ class TelemetrySerializer(serializers.ModelSerializer):
         except Exception:  # pylint: disable=W0703
             return ''
 
-    # TODO: this is a relic of the old data decoding method, needs revisiting
     def get_decoded(self, obj):
         """Returns the payload_decoded field"""
         return obj.payload_decoded
