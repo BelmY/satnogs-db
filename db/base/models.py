@@ -205,7 +205,7 @@ class TransmitterEntry(models.Model):
         super(TransmitterEntry, self).save()
 
 
-class TransmitterSuggestionManager(models.Manager):
+class TransmitterSuggestionManager(models.Manager):  # pylint: disable=R0903
     """Django Manager for TransmitterSuggestions
 
     TransmitterSuggestions are TransmitterEntry objects that have been
@@ -230,7 +230,7 @@ class TransmitterSuggestion(TransmitterEntry):
         permissions = (('approve', 'Can approve/reject transmitter suggestions'), )
 
 
-class TransmitterManager(models.Manager):
+class TransmitterManager(models.Manager):  # pylint: disable=R0903
     """Django Manager for Transmitter objects"""
 
     def get_queryset(self):
