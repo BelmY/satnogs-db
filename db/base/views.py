@@ -98,8 +98,6 @@ def satellite(request, norad):
     types = TRANSMITTER_TYPE
     services = SERVICE_TYPE
     statuses = TRANSMITTER_STATUS
-    # TODO: this is a horrible hack, as we have to pass the entire cache to the
-    # template to iterate on, just for one satellite. See #237
     sats_cache = cache.get('stats_satellites')
     if not sats_cache:
         sats_cache = []
@@ -214,8 +212,6 @@ def about(request):
     return render(request, 'base/about.html')
 
 
-# TODO: replace this with a link to docs in the wiki which won't require code
-# updates to maintain
 def faq(request):
     """View to render faq page.
 
@@ -231,7 +227,6 @@ def stats(request):
     """
     satellites = cache.get('stats_satellites')
     observers = cache.get('stats_observers')
-    # TODO this will never succeed, cache_statistics() runs too long to be live
     if not satellites or not observers:
         try:
             cache_statistics()
@@ -252,7 +247,6 @@ def statistics(request):
     return JsonResponse(cached_stats, safe=False)
 
 
-# TODO: this is confusing as we call it "edit" but it is the users "settings"
 @login_required
 def users_edit(request):
     """View to render user settings page.
