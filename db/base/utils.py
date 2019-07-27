@@ -24,13 +24,43 @@ def calculate_statistics():
 
     :returns: a dictionary of statistics
     """
+    # satellite statistics
     satellites = Satellite.objects.all()
-    transmitters = Transmitter.objects.all()
-    modes = Mode.objects.all()
-
     total_satellites = satellites.count()
-    total_transmitters = transmitters.count()
+
+    # data statistics
     total_data = DemodData.objects.all().count()
+
+    # transmitter statistics
+    transmitters, total_transmitters, alive_transmitters_percentage = \
+        calculate_transmitters_stats()
+
+    # mode statistics
+    mode_data_sorted, mode_label_sorted = \
+        calculate_mode_stats(transmitters)
+
+    # band statistics
+    band_label_sorted, band_data_sorted = \
+        calculate_band_stats(transmitters)
+
+    statistics = {
+        'total_satellites': total_satellites,
+        'total_data': total_data,
+        'transmitters': total_transmitters,
+        'transmitters_alive': alive_transmitters_percentage,
+        'mode_label': mode_label_sorted,
+        'mode_data': mode_data_sorted,
+        'band_label': band_label_sorted,
+        'band_data': band_data_sorted
+    }
+    return statistics
+
+
+def calculate_transmitters_stats():
+    """Helper function to provite transmitters and statistics about
+    transmitters in db (such as total and percentage of alive)"""
+    transmitters = Transmitter.objects.all()
+    total_transmitters = transmitters.count()
     alive_transmitters = transmitters.filter(status='active').count()
     if alive_transmitters > 0 and total_transmitters > 0:
         try:
@@ -43,8 +73,15 @@ def calculate_statistics():
     else:
         alive_transmitters_percentage = '0%'
 
+    return transmitters, total_transmitters, alive_transmitters_percentage
+
+def calculate_mode_stats(transmitters):
+    """Helper function to provide data and labels for modes associated with
+    transmitters provided"""
+    modes = Mode.objects.all()
     mode_label = []
     mode_data = []
+
     for mode in modes:
         filtered_transmitters = transmitters.filter(mode=mode).count()
         mode_label.append(mode.name)
@@ -56,6 +93,15 @@ def calculate_statistics():
     if not mode_data:
         mode_data = ['FM']
 
+    mode_data_sorted, mode_label_sorted = \
+        list(zip(*sorted(zip(mode_data, mode_label), reverse=True)))
+
+    return mode_label_sorted, mode_data_sorted
+
+
+def calculate_band_stats(transmitters):
+    """Helper function to provide data and labels for bands associated with
+    transmitters provided"""
     band_label = []
     band_data = []
 
@@ -129,22 +175,10 @@ def calculate_statistics():
         band_label.append(band['label'])
         band_data.append(filtered)
 
-    mode_data_sorted, mode_label_sorted = \
-        list(zip(*sorted(zip(mode_data, mode_label), reverse=True)))
     band_data_sorted, band_label_sorted = \
         list(zip(*sorted(zip(band_data, band_label), reverse=True)))
 
-    statistics = {
-        'total_satellites': total_satellites,
-        'total_data': total_data,
-        'transmitters': total_transmitters,
-        'transmitters_alive': alive_transmitters_percentage,
-        'mode_label': mode_label_sorted,
-        'mode_data': mode_data_sorted,
-        'band_label': band_label_sorted,
-        'band_data': band_data_sorted
-    }
-    return statistics
+    return band_label_sorted, band_data_sorted
 
 
 def create_point(fields, satellite, telemetry, demoddata, version):

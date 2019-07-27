@@ -129,6 +129,12 @@ def export_frames(norad, email, uid, period=None):
         suffix = 'all'
     filename = '{0}-{1}-{2}-{3}.csv'.format(norad, uid, now.strftime('%Y%m%dT%H%M%SZ'), suffix)
     filepath = '{0}/download/{1}'.format(settings.MEDIA_ROOT, filename)
+    write_export_frames(filepath, frames)
+    notify_user_export(filename, norad, email)
+
+
+def write_export_frames(filepath, frames):
+    """Helper function to write exported frames to a specified file"""
     with open(filepath, 'w') as output_file:
         writer = csv.writer(output_file, delimiter='|')
         for obj in frames:
@@ -136,7 +142,9 @@ def export_frames(norad, email, uid, period=None):
             if frame is not None:
                 writer.writerow([obj.timestamp.strftime('%Y-%m-%d %H:%M:%S'), frame])
 
-    # Notify user
+
+def notify_user_export(filename, norad, email):
+    """Helper function to email a user when their export is complete"""
     site = Site.objects.get_current()
     subject = '[satnogs] Your request for exported frames is ready!'
     template = 'emails/exported_frames.txt'
