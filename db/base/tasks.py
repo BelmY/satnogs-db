@@ -6,6 +6,7 @@ import csv
 import logging
 from datetime import datetime, timedelta
 
+from celery import Celery
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
@@ -17,10 +18,10 @@ from sgp4.io import twoline2rv
 
 from db.base.models import DemodData, Satellite
 from db.base.utils import cache_statistics, decode_data
-from db.celery import APP
 
 LOGGER = logging.getLogger('db')
 
+APP = Celery('db')
 
 @APP.task(task_ignore_result=False)
 def check_celery():
