@@ -117,35 +117,32 @@ class Satellite(models.Model):
         # Remove the following pylint disable after Python 3 migration
         return Transmitter.objects.filter(satellite=self.id).exclude(status='invalid')  # pylint: disable=E1101
 
-    # TODO: rename this to sound more like a count
     @property
-    def pending_transmitter_suggestions(self):
+    def transmitter_suggestion_count(self):
         """Returns number of pending transmitter suggestions for this Satellite
 
         :returns: number of pending transmitter suggestions for this Satellite
         """
-        pending = TransmitterSuggestion.objects.filter(satellite=self.id).count()
-        return pending
+        pending_count = TransmitterSuggestion.objects.filter(satellite=self.id).count()
+        return pending_count
 
-    # TODO: rename this to sound more like a count
     @property
-    def has_telemetry_data(self):
+    def telemetry_data_count(self):
         """Returns number of DemodData for this Satellite
 
         :returns: number of DemodData for this Satellite
         """
-        has_data = DemodData.objects.filter(satellite=self.id).count()
-        return has_data
+        data_count = DemodData.objects.filter(satellite=self.id).count()
+        return data_count
 
-    # TODO: rename this to sound more like a count
     @property
-    def has_telemetry_decoders(self):
+    def telemetry_decoder_count(self):
         """Returns number of Telemetry objects for this Satellite
 
         :returns: number of Telemetry objects for this Satellite
         """
-        has_decoders = Telemetry.objects.filter(satellite=self.id).exclude(decoder='').count()
-        return has_decoders
+        decoder_count = Telemetry.objects.filter(satellite=self.id).exclude(decoder='').count()
+        return decoder_count
 
     def __str__(self):
         return '{0} - {1}'.format(self.norad_cat_id, self.name)

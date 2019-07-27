@@ -56,8 +56,8 @@
             {% with total=sat.transmitters.all.count %}
               {{ total }} transmitter{{ total|pluralize }}
             {% endwith %}
-            {% if request.user.is_superuser and sat.pending_transmitter_suggestions %}
-              - <span class="glyphicon glyphicon-edit" title="Suggest edits"></span> {{  sat.pending_transmitter_suggestions }}
+            {% if request.user.is_superuser and sat.transmitter_suggestion_count %}
+              - <span class="glyphicon glyphicon-edit" title="Suggest edits"></span> {{  sat.transmitter_suggestion_count }}
             {% endif %}
           </div>
         </a>

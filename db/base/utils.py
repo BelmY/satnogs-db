@@ -227,7 +227,7 @@ def decode_data(norad, period=None):
     otherwise attempt to decode everything
     """
     sat = Satellite.objects.get(norad_cat_id=norad)
-    if not sat.has_telemetry_decoders:
+    if not sat.telemetry_decoder_count:
         return
 
     now = datetime.utcnow()
