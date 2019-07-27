@@ -10,7 +10,8 @@ from __future__ import absolute_import, division, print_function, \
 import sentry_sdk
 from decouple import Csv, config
 from dj_database_url import parse as db_url
-from sentry_sdk.integrations.django import DjangoIntegration
+# C0412 below clashes with isort
+from sentry_sdk.integrations.django import DjangoIntegration  # pylint: disable=C0412
 from unipath import Path
 
 ROOT = Path(__file__).parent
