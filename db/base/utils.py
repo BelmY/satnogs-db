@@ -61,7 +61,8 @@ def calculate_transmitters_stats():
     transmitters in db (such as total and percentage of alive)"""
     transmitters = Transmitter.objects.all()
     total_transmitters = transmitters.count()
-    alive_transmitters = transmitters.filter(status='active').count()
+    # Remove the following pylint disable after Python 3 migration
+    alive_transmitters = transmitters.filter(status='active').count()  # pylint: disable=E1101
     if alive_transmitters > 0 and total_transmitters > 0:
         try:
             alive_transmitters_percentage = '{0}%'.format(

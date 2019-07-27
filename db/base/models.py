@@ -114,7 +114,8 @@ class Satellite(models.Model):
 
         :returns: the valid transmitters for this Satellite
         """
-        return Transmitter.objects.filter(satellite=self.id).exclude(status='invalid')
+        # Remove the following pylint disable after Python 3 migration
+        return Transmitter.objects.filter(satellite=self.id).exclude(status='invalid')  # pylint: disable=E1101
 
     # TODO: rename this to sound more like a count
     @property
