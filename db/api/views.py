@@ -13,13 +13,13 @@ from db.base.models import DemodData, Mode, Satellite, Transmitter
 from db.base.tasks import update_satellite
 
 
-class ModeView(viewsets.ReadOnlyModelViewSet):
+class ModeView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """SatNOGS DB Mode API view class"""
     queryset = Mode.objects.all()
     serializer_class = serializers.ModeSerializer
 
 
-class SatelliteView(viewsets.ReadOnlyModelViewSet):
+class SatelliteView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """SatNOGS DB Satellite API view class"""
     queryset = Satellite.objects.all()
     serializer_class = serializers.SatelliteSerializer
@@ -27,7 +27,7 @@ class SatelliteView(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'norad_cat_id'
 
 
-class TransmitterView(viewsets.ReadOnlyModelViewSet):
+class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """SatNOGS DB Transmitter API view class"""
     queryset = Transmitter.objects.all()
     serializer_class = serializers.TransmitterSerializer
@@ -35,8 +35,8 @@ class TransmitterView(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'uuid'
 
 
-class TelemetryView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
-                    viewsets.GenericViewSet):
+class TelemetryView(mixins.ListModelMixin, mixins.RetrieveModelMixin, # pylint: disable=R0901
+                    mixins.CreateModelMixin, viewsets.GenericViewSet):
     """SatNOGS DB Telemetry API view class"""
     queryset = DemodData.objects.all()
     serializer_class = serializers.TelemetrySerializer
