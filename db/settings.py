@@ -4,14 +4,16 @@ For local installation settings please copy .env-dist to .env and edit
 the appropriate settings in that file. You should not need to edit this
 file for local settings!
 """
+# C0412 below clashes with isort in a way that prevents inline disabling
+# for the DjangoIntegration import
+# pylint: disable=C0412
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
 import sentry_sdk
 from decouple import Csv, config
 from dj_database_url import parse as db_url
-# C0412 below clashes with isort
-from sentry_sdk.integrations.django import DjangoIntegration  # pylint: disable=C0412
+from sentry_sdk.integrations.django import DjangoIntegration
 from unipath import Path
 
 ROOT = Path(__file__).parent

@@ -76,6 +76,7 @@ def calculate_transmitters_stats():
 
     return transmitters, total_transmitters, alive_transmitters_percentage
 
+
 def calculate_mode_stats(transmitters):
     """Helper function to provide data and labels for modes associated with
     transmitters provided"""

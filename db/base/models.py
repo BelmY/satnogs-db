@@ -115,7 +115,8 @@ class Satellite(models.Model):
         :returns: the valid transmitters for this Satellite
         """
         # Remove the following pylint disable after Python 3 migration
-        return Transmitter.objects.filter(satellite=self.id).exclude(status='invalid')  # pylint: disable=E1101
+        transmitters = Transmitter.objects.filter(satellite=self.id)
+        return transmitters.exclude(status='invalid')  # pylint: disable=E1101
 
     @property
     def transmitter_suggestion_count(self):

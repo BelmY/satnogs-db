@@ -23,6 +23,7 @@ LOGGER = logging.getLogger('db')
 
 APP = Celery('db')
 
+
 @APP.task(task_ignore_result=False)
 def check_celery():
     """Dummy celery task to check that everything runs smoothly."""

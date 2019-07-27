@@ -35,8 +35,9 @@ class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     lookup_field = 'uuid'
 
 
-class TelemetryView(mixins.ListModelMixin, mixins.RetrieveModelMixin, # pylint: disable=R0901
-                    mixins.CreateModelMixin, viewsets.GenericViewSet):
+class TelemetryView(  # pylint: disable=R0901
+        mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
+        viewsets.GenericViewSet):
     """SatNOGS DB Telemetry API view class"""
     queryset = DemodData.objects.all()
     serializer_class = serializers.TelemetrySerializer
