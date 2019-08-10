@@ -6,7 +6,7 @@ import csv
 import logging
 from datetime import datetime, timedelta
 
-from celery import Celery
+from celery import shared_task
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
@@ -21,16 +21,14 @@ from db.base.utils import cache_statistics, decode_data
 
 LOGGER = logging.getLogger('db')
 
-APP = Celery('db')
 
-
-@APP.task(task_ignore_result=False)
+@shared_task
 def check_celery():
     """Dummy celery task to check that everything runs smoothly."""
     LOGGER.info('check_celery has been triggered')
 
 
-@APP.task
+@shared_task
 def update_satellite(norad_id, update_name=True, update_tle=True):
     """Task to update the name and/or the tle of a satellite, or create a
        new satellite in the db if no satellite with given norad_id can be found"""
@@ -60,7 +58,7 @@ def update_satellite(norad_id, update_name=True, update_tle=True):
         print('Updated satellite {}: {}'.format(satellite.norad_cat_id, satellite.name))
 
 
-@APP.task
+@shared_task
 def update_all_tle():
     """Task to update all satellite TLEs"""
 
@@ -111,7 +109,7 @@ def update_all_tle():
         print('Ignored {} with temporary NORAD ID {}'.format(satellite.name, norad_id))
 
 
-@APP.task
+@shared_task
 def export_frames(norad, email, uid, period=None):
     """Task to export satellite frames in csv."""
     now = datetime.utcnow()
@@ -158,7 +156,7 @@ def notify_user_export(filename, norad, email):
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], False)
 
 
-@APP.task
+@shared_task
 def background_cache_statistics():
     """Task to periodically cache statistics"""
     cache_statistics()
@@ -166,13 +164,13 @@ def background_cache_statistics():
 
 # decode data for a satellite, and a given time frame (if provided). If not
 # provided it is expected that we want to try decoding all frames in the db.
-@APP.task
+@shared_task
 def decode_all_data(norad):
     """Task to trigger a full decode of data for a satellite."""
     decode_data(norad)
 
 
-@APP.task
+@shared_task
 def decode_recent_data():
     """Task to trigger a partial/recent decode of data for all satellites."""
     satellites = Satellite.objects.all()

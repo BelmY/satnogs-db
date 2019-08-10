@@ -5,7 +5,6 @@ from __future__ import absolute_import, division, print_function, \
 import os
 
 from celery import Celery
-from django.conf import settings  # noqa
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'db.settings')
 
@@ -16,15 +15,36 @@ RUN_DAILY = 60 * 60 * 24
 APP = Celery('db')
 
 APP.config_from_object('django.conf:settings', namespace='CELERY')
-APP.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+APP.autodiscover_tasks()
+
+
+# Wrapper tasks as workaround for registering shared tasks to beat scheduler
+# See https://github.com/celery/celery/issues/5059
+@APP.task
+def update_all_tle():
+    """Wrapper task for 'update_all_tle' shared task"""
+    from db.base.tasks import update_all_tle as periodic_task
+    periodic_task()
+
+
+@APP.task
+def background_cache_statistics():
+    """Wrapper task for 'background_cache_statistics' shared task"""
+    from db.base.tasks import background_cache_statistics as periodic_task
+    periodic_task()
+
+
+@APP.task
+def decode_recent_data():
+    """Wrapper task for 'decocde_recent_data' shared task"""
+    from db.base.tasks import decode_recent_data as periodic_task
+    periodic_task()
 
 
 # after python3, remove W0613 disable
 @APP.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=W0613
     """Initializes celery tasks that need to run on a scheduled basis"""
-    from db.base.tasks import update_all_tle, background_cache_statistics, decode_recent_data
-
     sender.add_periodic_task(RUN_DAILY, update_all_tle.s(), name='update-all-tle')
 
     sender.add_periodic_task(
