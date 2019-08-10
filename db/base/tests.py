@@ -11,8 +11,7 @@ import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils.timezone import now
-# C0412 below clashes with isort
-from factory import fuzzy  # pylint: disable=C0412
+from factory import fuzzy
 
 from db.base.models import DATA_SOURCES, DemodData, Mode, Satellite, \
     Telemetry, Transmitter, TransmitterSuggestion

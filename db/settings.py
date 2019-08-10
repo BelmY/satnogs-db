@@ -4,9 +4,6 @@ For local installation settings please copy .env-dist to .env and edit
 the appropriate settings in that file. You should not need to edit this
 file for local settings!
 """
-# C0412 below clashes with isort in a way that prevents inline disabling
-# for the DjangoIntegration import
-# pylint: disable=C0412
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
