@@ -98,7 +98,7 @@ def calculate_mode_stats(transmitters):
     mode_data_sorted, mode_label_sorted = \
         list(zip(*sorted(zip(mode_data, mode_label), reverse=True)))
 
-    return mode_label_sorted, mode_data_sorted
+    return mode_data_sorted, mode_label_sorted
 
 
 def calculate_band_stats(transmitters):
