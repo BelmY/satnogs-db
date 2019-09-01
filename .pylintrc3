@@ -1,8 +1,0 @@
-[MASTER]
-ignore=_version.py,migrations
-load-plugins=pylint_django
-
-[MESSAGES CONTROL]
-disable=
-    C0412,
-    R0801,

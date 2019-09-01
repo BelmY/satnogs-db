@@ -41,9 +41,8 @@ def decode_recent_data():
     periodic_task()
 
 
-# after python3, remove W0613 disable
 @APP.on_after_finalize.connect
-def setup_periodic_tasks(sender, **kwargs):  # pylint: disable=W0613
+def setup_periodic_tasks(sender, **kwargs):
     """Initializes celery tasks that need to run on a scheduled basis"""
     sender.add_periodic_task(RUN_DAILY, update_all_tle.s(), name='update-all-tle')
 

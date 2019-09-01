@@ -195,8 +195,7 @@ class TransmitterEntry(models.Model):
         return self.description
 
     # see https://github.com/PyCQA/pylint-django/issues/94 for why W0221
-    # after python3, remove W0613 disable
-    def save(self, *args, **kwargs):  # pylint: disable=W0221,W0613
+    def save(self, *args, **kwargs):  # pylint: disable=W0221
         # this assignment is needed to preserve changes made to a Transmitter
         # through the admin UI
         self.id = None  # pylint: disable=C0103, W0201
