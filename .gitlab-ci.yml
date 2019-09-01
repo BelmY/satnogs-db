@@ -17,18 +17,11 @@ static_js_css:
       - db/static/lib
 static:
   stage: static
-  image: python:2
-  before_script:
-    - pip install tox~=3.8.0
-  script:
-    - tox -e "py2-flake8,isort,yapf,py2-pylint"
-static3:
-  stage: static
   image: python:3
   before_script:
     - pip install tox~=3.8.0
   script:
-    - tox -e "py3-flake8,py3-pylint"
+    - tox -e "py3-flake8,isort,yapf,py3-pylint"
 docs:
   stage: build
   image: python:3
@@ -44,19 +37,6 @@ docs:
       - docs/_build/html
 build:
   stage: build
-  image: python:2
-  before_script:
-    - pip install tox~=3.8.0
-  script:
-    - rm -rf dist
-    - tox -e py2-build
-  artifacts:
-    expire_in: 1 week
-    when: always
-    paths:
-      - dist
-build3:
-  stage: build
   image: python:3
   before_script:
     - pip install tox~=3.8.0
@@ -70,11 +50,11 @@ build3:
       - dist
 test:
   stage: test
-  image: python:2
+  image: python:3
   before_script:
     - pip install tox~=3.8.0
   script:
-    - tox -e deps,py2-pytest
+    - tox -e deps,py3-pytest
 docker:
   stage: deploy
   image: docker:18.09
