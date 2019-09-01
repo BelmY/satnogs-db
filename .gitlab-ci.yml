@@ -1,3 +1,10 @@
+variables:
+  GITLAB_CI_IMAGE_ALPINE: 'alpine:3.9'
+  GITLAB_CI_IMAGE_DOCKER: 'docker:18.09'
+  GITLAB_CI_IMAGE_NODE: 'node:11.13'
+  GITLAB_CI_IMAGE_PYTHON: 'python:3'
+  GITLAB_CI_PYPI_DOCKER_COMPOSE: 'docker-compose~=1.23.0'
+  GITLAB_CI_PYPI_TOX: 'tox~=3.8.0'
 stages:
   - static
   - build
@@ -6,7 +13,7 @@ stages:
   - trigger
 static_js_css:
   stage: static
-  image: node:11.13
+  image: ${GITLAB_CI_IMAGE_NODE}
   script:
     - npm ci
     - node_modules/.bin/gulp
@@ -17,14 +24,14 @@ static_js_css:
       - db/static/lib
 static:
   stage: static
-  image: python:3
+  image: ${GITLAB_CI_IMAGE_PYTHON}
   before_script:
-    - pip install tox~=3.8.0
+    - pip install "$GITLAB_CI_PYPI_TOX"
   script:
     - tox -e "flake8,isort,yapf,pylint"
 docs:
   stage: build
-  image: python:3
+  image: ${GITLAB_CI_IMAGE_PYTHON}
   before_script:
     - pip install sphinx_rtd_theme
   script:
@@ -37,9 +44,9 @@ docs:
       - docs/_build/html
 build:
   stage: build
-  image: python:3
+  image: ${GITLAB_CI_IMAGE_PYTHON}
   before_script:
-    - pip install tox~=3.8.0
+    - pip install "$GITLAB_CI_PYPI_TOX"
   script:
     - rm -rf dist
     - tox -e build
@@ -50,19 +57,19 @@ build:
       - dist
 test:
   stage: test
-  image: python:3
+  image: ${GITLAB_CI_IMAGE_PYTHON}
   before_script:
-    - pip install tox~=3.8.0
+    - pip install "$GITLAB_CI_PYPI_TOX"
   script:
     - tox -e deps,pytest
 docker:
   stage: deploy
-  image: docker:18.09
+  image: ${GITLAB_CI_IMAGE_DOCKER}
   services:
-    - docker:18.09-dind
+    - ${GITLAB_CI_IMAGE_DOCKER}-dind
   before_script:
     - apk --update add py-pip
-    - pip install docker-compose~=1.23.0
+    - pip install "$GITLAB_CI_PYPI_DOCKER_COMPOSE"
   script:
     - |
       [ -z "$SATNOGS_DECODERS_VERSION" ] || sed -i 's/^\(satnogsdecoders\).*/\1=='"$SATNOGS_DECODERS_VERSION"'/' requirements.txt
@@ -99,7 +106,7 @@ docker:
       - tags
 trigger_master:
   stage: trigger
-  image: alpine:3.9
+  image: ${GITLAB_CI_IMAGE_ALPINE}
   before_script:
     - apk add --no-cache curl
   script:
@@ -111,7 +118,7 @@ trigger_master:
       - $PIPELINE_TRIGGERS_MASTER
 trigger_latest:
   stage: trigger
-  image: alpine:3.9
+  image: ${GITLAB_CI_IMAGE_ALPINE}
   before_script:
     - apk add --no-cache curl
   script:
