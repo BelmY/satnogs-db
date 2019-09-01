@@ -21,7 +21,7 @@ static:
   before_script:
     - pip install tox~=3.8.0
   script:
-    - tox -e "py3-flake8,isort,yapf,py3-pylint"
+    - tox -e "flake8,isort,yapf,pylint"
 docs:
   stage: build
   image: python:3
@@ -42,7 +42,7 @@ build:
     - pip install tox~=3.8.0
   script:
     - rm -rf dist
-    - tox -e py3-build
+    - tox -e build
   artifacts:
     expire_in: 1 week
     when: always
@@ -54,7 +54,7 @@ test:
   before_script:
     - pip install tox~=3.8.0
   script:
-    - tox -e deps,py3-pytest
+    - tox -e deps,pytest
 docker:
   stage: deploy
   image: docker:18.09
