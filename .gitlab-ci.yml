@@ -130,7 +130,7 @@ trigger_latest:
       - $PIPELINE_TRIGGERS_LATEST
 pages:
   stage: deploy
-  image: alpine
+  image: ${GITLAB_CI_IMAGE_ALPINE}
   script:
     - mv docs/_build/html/ public/
   artifacts:
