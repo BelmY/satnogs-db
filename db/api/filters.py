@@ -45,8 +45,8 @@ class TelemetryViewFilter(FilterSet):
     satellite = django_filters.NumberFilter(
         field_name='satellite__norad_cat_id', lookup_expr='exact'
     )
-    start = django_filters.IsoDateTimeFilter(name='timestamp', lookup_expr='gte')
-    end = django_filters.IsoDateTimeFilter(name='timestamp', lookup_expr='lte')
+    start = django_filters.IsoDateTimeFilter(field_name='timestamp', lookup_expr='gte')
+    end = django_filters.IsoDateTimeFilter(field_name='timestamp', lookup_expr='lte')
 
     class Meta:
         model = DemodData
