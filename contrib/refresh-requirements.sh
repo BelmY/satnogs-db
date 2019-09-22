@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 EXCLUDE_REGEXP="^\\(pkg-resources\\|satnogs-db\\)"
-COMPATIBLE_REGEXP="^\\(satnogsdecoders\\)"
+COMPATIBLE_REGEXP="^\\(satnogs-decoders\\)"
 VIRTUALENV_DIR=$(mktemp -d)
 PIP_COMMAND="$VIRTUALENV_DIR/bin/pip"
 
