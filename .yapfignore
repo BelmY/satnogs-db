@@ -1,5 +1,5 @@
 db/_version.py
-db/base/migrations
+db/*/migrations
 .tox
 build
 docs
