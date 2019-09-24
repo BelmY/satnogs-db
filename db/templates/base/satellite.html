@@ -6,7 +6,6 @@
 {% block title %} - {{ satellite }}{% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" href="{% static 'lib/bootstrap-daterangepicker/daterangepicker.css' %}">
   <link rel="stylesheet" href="{% static 'lib/mapbox-gl/dist/mapbox-gl.css' %}">
 {% endblock css %}
 
@@ -658,9 +657,7 @@
 {% endblock %}
 
 {% block javascript %}
-  <script src="{% static 'lib/underscore/underscore-min.js' %}"></script>
   <script src="{% static 'lib/moment/min/moment.min.js' %}"></script>
-  <script src="{% static 'lib/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
   <script src="{% static 'lib/mapbox-gl/dist/mapbox-gl.js' %}"></script>
   <script src="{% static 'lib/gpredict.js/dist/gpredict.min.js' %}"></script>
   <script src="{% static 'js/map.js' %}"></script>
