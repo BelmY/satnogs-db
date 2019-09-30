@@ -1,6 +1,7 @@
 node_modules
 db/_version.py
 db/*/migrations
+satnogs-db-api-client
 .tox
 build
 docs
