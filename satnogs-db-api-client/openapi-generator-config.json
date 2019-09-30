@@ -1,0 +1,5 @@
+{
+    "packageName": "satnogsdbapiclient",
+    "projectName": "satnogs-db-api-client",
+    "generateSourceCodeOnly": true
+}
