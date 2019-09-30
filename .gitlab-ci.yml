@@ -3,11 +3,13 @@ variables:
   GITLAB_CI_IMAGE_DOCKER: 'docker:18.09'
   GITLAB_CI_IMAGE_NODE: 'node:11.13'
   GITLAB_CI_IMAGE_PYTHON: 'python:3'
+  GITLAB_CI_IMAGE_OPENAPI_GENERATOR_CLI: 'openapitools/openapi-generator-cli'
   GITLAB_CI_PYPI_DOCKER_COMPOSE: 'docker-compose~=1.23.0'
   GITLAB_CI_PYPI_TOX: 'tox~=3.8.0'
   GITLAB_CI_PYPI_TWINE: 'twine~=1.13.0'
 stages:
   - schema
+  - api
   - static
   - build
   - test
@@ -18,8 +20,23 @@ schema:
   image: ${GITLAB_CI_IMAGE_PYTHON}
   script:
     - pip install --no-cache-dir --no-deps -r "requirements.txt" --force-reinstall .
-    - mkdir satnogs-db-api-client
     - ./manage.py generateschema > satnogs-db-api-client/api-schema.yml
+  artifacts:
+    expire_in: 1 week
+    when: always
+    paths:
+      - satnogs-db-api-client
+api:
+  stage: api
+  image: ${GITLAB_CI_IMAGE_OPENAPI_GENERATOR_CLI}
+  script:
+    - >-
+      docker-entrypoint.sh
+      generate
+      -i satnogs-db-api-client/api-schema.yml
+      -g python
+      -o satnogs-db-api-client
+      -c satnogs-db-api-client/openapi-generator-config.json
   artifacts:
     expire_in: 1 week
     when: always
