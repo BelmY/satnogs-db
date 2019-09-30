@@ -89,6 +89,7 @@ build:
     when: always
     paths:
       - dist
+      - satnogs-db-api-client/dist
 test:
   stage: test
   image: ${GITLAB_CI_IMAGE_PYTHON}
