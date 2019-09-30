@@ -81,6 +81,9 @@ build:
   script:
     - rm -rf dist
     - tox -e build
+    - cd satnogs-db-api-client
+    - rm -rf dist
+    - python setup.py sdist bdist_wheel
   artifacts:
     expire_in: 1 week
     when: always
