@@ -11,10 +11,6 @@ from django.views.static import serve
 from db.api.urls import API_URLPATTERNS
 from db.base.urls import BASE_URLPATTERNS
 
-# pylint: disable=C0103
-handler404 = 'db.base.views.custom_404'
-handler500 = 'db.base.views.custom_500'
-
 urlpatterns = [
     # Base
     url(r'^', include(BASE_URLPATTERNS)),

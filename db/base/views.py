@@ -12,8 +12,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import OperationalError
-from django.http import HttpResponse, HttpResponseNotFound, \
-    HttpResponseServerError, JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -53,22 +52,6 @@ def home(request):
             'transmitter_suggestions': transmitter_suggestions
         }
     )
-
-
-def custom_404(request):
-    """Custom 404 error handler.
-
-    :returns: 404.html
-    """
-    return HttpResponseNotFound(render(request, '404.html'))
-
-
-def custom_500(request):
-    """Custom 500 error handler.
-
-    :returns: 500.html
-    """
-    return HttpResponseServerError(render(request, '500.html'))
 
 
 def robots(request):
