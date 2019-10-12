@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Suggestion',
             fields=[
-                ('transmitter_ptr', models.OneToOneField(parent_link=True, on_delete=django.db.models.deletion.CASCADE, auto_created=True, primary_key=True, serialize=False, to='base.Transmitter')),
+                ('transmitter_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='base.Transmitter')),
                 ('citation', models.CharField(max_length=255, blank=True)),
             ],
             bases=('base.transmitter',),
@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='transmitter',
             name='satellite',
-            field=models.ForeignKey(related_name='transmitters', on_delete=django.db.models.deletion.SET_NULL, to='base.Satellite', null=True),
+            field=models.ForeignKey(related_name='transmitters', to='base.Satellite', null=True),
         ),
         migrations.AddField(
             model_name='suggestion',
