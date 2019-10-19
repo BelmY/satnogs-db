@@ -6,7 +6,7 @@ from __future__ import absolute_import, division, print_function, \
 from rest_framework import serializers
 
 from db.base.models import TRANSMITTER_STATUS, DemodData, Mode, Satellite, \
-    Transmitter
+    Telemetry, Transmitter
 
 
 class ModeSerializer(serializers.ModelSerializer):
@@ -17,12 +17,22 @@ class ModeSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 
+class SatTelemetrySerializer(serializers.ModelSerializer):
+    """SatNOGS DB satellite telemetry API Serializer"""
+
+    class Meta:
+        model = Telemetry
+        fields = ['decoder']
+
+
 class SatelliteSerializer(serializers.ModelSerializer):
     """SatNOGS DB Satellite API Serializer"""
 
+    telemetries = SatTelemetrySerializer(many=True, read_only=True)
+
     class Meta:
         model = Satellite
-        fields = ('norad_cat_id', 'name', 'names', 'image', 'status', 'decayed')
+        fields = ('norad_cat_id', 'name', 'names', 'image', 'status', 'decayed', 'telemetries')
 
 
 class TransmitterSerializer(serializers.ModelSerializer):
