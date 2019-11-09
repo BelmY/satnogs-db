@@ -27,22 +27,26 @@ function transmitter_suggestion_type(selection) {
     case 'Transmitter':
         $('.input-group').show();
         $('input').prop( 'disabled', false );
+        $('select').prop( 'disabled', false );
         $('input[name=\'uplink_low\']').prop( 'disabled', true );
         $('input[name=\'uplink_high\']').prop( 'disabled', true );
         $('input[name=\'uplink_drift\']').prop( 'disabled', true );
         $('input[name=\'downlink_high\']').prop( 'disabled', true );
         $('input[name=\'invert\']').prop( 'disabled', true );
+        $('select[name=\'uplink_mode\']').prop( 'disabled', true );
         $('.input-group').has('input[name=\'uplink_low\']').hide();
         $('.input-group').has('input[name=\'uplink_high\']').hide();
         $('.input-group').has('input[name=\'uplink_drift\']').hide();
         $('.input-group').has('input[name=\'downlink_high\']').hide();
         $('.input-group').has('input[name=\'invert\']').hide();
+        $('.input-group').has('select[name=\'uplink_mode\']').hide();
 
         $('.input-group-addon:contains(\'Downlink Low\')').html('Downlink');
         break;
     case 'Transceiver':
         $('.input-group').show();
         $('input').prop( 'disabled', false );
+        $('select').prop( 'disabled', false );
         $('input[name=\'uplink_high\']').prop( 'disabled', true );
         $('input[name=\'downlink_high\']').prop( 'disabled', true );
         $('input[name=\'invert\']').prop( 'disabled', true );
@@ -56,6 +60,7 @@ function transmitter_suggestion_type(selection) {
     case 'Transponder':
         $('.input-group').show();
         $('input').prop( 'disabled', false );
+        $('select').prop( 'disabled', false );
         $('input[name=\'downlink_low\']').prev().html('Downlink Low');
         $('input[name=\'uplink_low\']').prev().html('Uplink Low');
         break;

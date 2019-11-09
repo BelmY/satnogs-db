@@ -6,12 +6,15 @@ import django_filters
 from django_filters import rest_framework as filters
 from django_filters.rest_framework import FilterSet
 
-from db.base.models import DemodData, Satellite, Transmitter
+from db.base.models import DemodData, Mode, Satellite, Transmitter
 
 
 class TransmitterViewFilter(FilterSet):
     """SatNOGS DB Transmitter API View Filter"""
     alive = filters.BooleanFilter(field_name='status', label='Alive', method='filter_status')
+    mode = django_filters.ModelChoiceFilter(
+        field_name='downlink_mode', lookup_expr='exact', queryset=Mode.objects.all()
+    )
 
     # see https://django-filter.readthedocs.io/en/master/ref/filters.html for
     # W0613
@@ -25,7 +28,10 @@ class TransmitterViewFilter(FilterSet):
 
     class Meta:
         model = Transmitter
-        fields = ['uuid', 'mode', 'type', 'satellite__norad_cat_id', 'alive', 'status', 'service']
+        fields = [
+            'uuid', 'mode', 'uplink_mode', 'type', 'satellite__norad_cat_id', 'alive', 'status',
+            'service'
+        ]
 
 
 class SatelliteViewFilter(FilterSet):

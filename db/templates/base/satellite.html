@@ -114,8 +114,11 @@
                         {% if transmitter.service %}
                           {% include "includes/field.html" with name="Service" value=transmitter.service %}
                         {% endif %}
-                        {% if transmitter.mode %}
-                          {% include "includes/field.html" with name="Mode" value=transmitter.mode %}
+                        {% if transmitter.downlink_mode %}
+                          {% include "includes/field.html" with name="Downlink Mode" value=transmitter.downlink_mode %}
+                        {% endif %}
+                        {% if transmitter.uplink_mode %}
+                          {% include "includes/field.html" with name="Uplink Mode" value=transmitter.uplink_mode %}
                         {% endif %}
                         {% if transmitter.baud %}
                           {% include "includes/field.html" with name="Baud" value=transmitter.baud %}
@@ -243,11 +246,22 @@
                                 </select>
                               </div>
                               <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Mode</div>
-                                <select class="form-control" name="mode">
+                                <div class="input-group-addon">Downlink mode</div>
+                                <select class="form-control" name="downlink_mode">
                                   <option value="" selected></option>
                                   {% for mode in modes %}
-                                    <option value="{{ mode.id }}" {% ifequal transmitter.mode mode %}selected{% endifequal %}>
+                                    <option value="{{ mode.id }}" {% ifequal transmitter.downlink_mode mode %}selected{% endifequal %}>
+                                      {{ mode }}
+                                    </option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                              <div class="input-group transmitter-element-suggest">
+                                <div class="input-group-addon">Uplink mode</div>
+                                <select class="form-control" name="uplink_mode">
+                                  <option value="" selected></option>
+                                  {% for mode in modes %}
+                                    <option value="{{ mode.id }}" {% ifequal transmitter.uplink_mode mode %}selected{% endifequal %}>
                                       {{ mode }}
                                     </option>
                                   {% endfor %}
@@ -358,8 +372,11 @@
                           {% if transmitter_suggestion.service %}
                             {% include "includes/field.html" with name="Service" value=transmitter_suggestion.service original=transmitter_suggestion.transmitter.service %}
                           {% endif %}
-                          {% if transmitter_suggestion.mode %}
-                            {% include "includes/field.html" with name="Mode" value=transmitter_suggestion.mode original=transmitter_suggestion.transmitter.mode %}
+                          {% if transmitter_suggestion.downlink_mode %}
+                            {% include "includes/field.html" with name="Downlink Mode" value=transmitter_suggestion.downlink_mode original=transmitter_suggestion.transmitter.downlink_mode %}
+                          {% endif %}
+                          {% if transmitter_suggestion.uplink_mode %}
+                            {% include "includes/field.html" with name="Uplink Mode" value=transmitter_suggestion.uplink_mode original=transmitter_suggestion.transmitter.uplink_mode %}
                           {% endif %}
                           {% if transmitter_suggestion.invert %}
                             {% include "includes/field.html" with name="Invert" value=transmitter_suggestion.invert original=transmitter_suggestion.transmitter.invert %}
@@ -584,8 +601,19 @@
                 </select>
               </div>
               <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Mode</div>
-                <select class="form-control" name="mode">
+                <div class="input-group-addon">Downlink Mode</div>
+                <select class="form-control" name="downlink_mode">
+                  <option value="" selected></option>
+                  {% for mode in modes %}
+                    <option value="{{ mode.id }}">
+                      {{ mode }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="input-group transmitter-element-suggest">
+                <div class="input-group-addon">Uplink mode</div>
+                <select class="form-control" name="uplink_mode">
                   <option value="" selected></option>
                   {% for mode in modes %}
                     <option value="{{ mode.id }}">

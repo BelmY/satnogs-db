@@ -167,8 +167,19 @@ class TransmitterEntry(models.Model):
     downlink_low = models.BigIntegerField(blank=True, null=True)
     downlink_high = models.BigIntegerField(blank=True, null=True)
     downlink_drift = models.IntegerField(blank=True, null=True)
-    mode = models.ForeignKey(
-        Mode, blank=True, null=True, on_delete=models.SET_NULL, related_name='transmitter_entries'
+    downlink_mode = models.ForeignKey(
+        Mode,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='transmitter_downlink_entries'
+    )
+    uplink_mode = models.ForeignKey(
+        Mode,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='transmitter_uplink_entries'
     )
     invert = models.BooleanField(default=False)
     baud = models.FloatField(validators=[MinValueValidator(0)], blank=True, null=True)

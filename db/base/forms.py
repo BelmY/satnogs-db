@@ -30,6 +30,6 @@ class TransmitterEntryForm(forms.ModelForm):
         model = TransmitterEntry
         fields = [
             'description', 'status', 'type', 'uplink_low', 'uplink_high', 'downlink_low',
-            'downlink_high', 'uplink_drift', 'downlink_drift', 'mode', 'invert', 'baud',
-            'satellite', 'citation', 'service'
+            'downlink_high', 'uplink_drift', 'downlink_drift', 'downlink_mode', 'uplink_mode',
+            'invert', 'baud', 'satellite', 'citation', 'service'
         ]

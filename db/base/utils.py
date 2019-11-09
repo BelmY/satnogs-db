@@ -85,7 +85,9 @@ def calculate_mode_stats(transmitters):
     mode_data = []
 
     for mode in modes:
-        filtered_transmitters = transmitters.filter(mode=mode).count()
+        filtered_transmitters = transmitters.filter(
+            downlink_mode=mode
+        ).count() + transmitters.filter(uplink_mode=mode).count()
         mode_label.append(mode.name)
         mode_data.append(filtered_transmitters)
 

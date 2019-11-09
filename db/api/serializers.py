@@ -28,8 +28,9 @@ class SatelliteSerializer(serializers.ModelSerializer):
 class TransmitterSerializer(serializers.ModelSerializer):
     """SatNOGS DB Transmitter API Serializer"""
     norad_cat_id = serializers.SerializerMethodField()
-    mode_id = serializers.SerializerMethodField()
     mode = serializers.SerializerMethodField()
+    mode_id = serializers.SerializerMethodField()
+    uplink_mode = serializers.SerializerMethodField()
     alive = serializers.SerializerMethodField()
     updated = serializers.DateTimeField(source='created')
 
@@ -37,8 +38,8 @@ class TransmitterSerializer(serializers.ModelSerializer):
         model = Transmitter
         fields = (
             'uuid', 'description', 'alive', 'type', 'uplink_low', 'uplink_high', 'uplink_drift',
-            'downlink_low', 'downlink_high', 'downlink_drift', 'mode_id', 'mode', 'invert', 'baud',
-            'norad_cat_id', 'status', 'updated', 'citation', 'service'
+            'downlink_low', 'downlink_high', 'downlink_drift', 'mode', 'mode_id', 'uplink_mode',
+            'invert', 'baud', 'norad_cat_id', 'status', 'updated', 'citation', 'service'
         )
 
     # Keeping alive field for compatibility issues
@@ -47,16 +48,20 @@ class TransmitterSerializer(serializers.ModelSerializer):
         return obj.status == TRANSMITTER_STATUS[0]
 
     def get_mode_id(self, obj):
-        """Returns mode ID"""
+        """Returns downlink mode id"""
+        return obj.downlink_mode.id
+
+    def get_mode(self, obj):
+        """Returns downlink mode name"""
         try:
-            return obj.mode.id
+            return obj.downlink_mode.name
         except Exception:  # pylint: disable=W0703
             return None
 
-    def get_mode(self, obj):
-        """Returns mode name"""
+    def get_uplink_mode(self, obj):
+        """Returns uplink mode name"""
         try:
-            return obj.mode.name
+            return obj.uplink_mode.name
         except Exception:  # pylint: disable=W0703
             return None
 

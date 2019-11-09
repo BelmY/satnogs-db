@@ -90,9 +90,9 @@ class SatelliteAdmin(admin.ModelAdmin):
 class TransmitterEntryAdmin(admin.ModelAdmin):
     """Defines TransmitterEntry view in django admin UI"""
     list_display = (
-        'uuid', 'description', 'satellite', 'service', 'type', 'mode', 'baud', 'downlink_low',
-        'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'reviewed',
-        'approved', 'status', 'created', 'citation', 'user'
+        'uuid', 'description', 'satellite', 'service', 'type', 'downlink_mode', 'uplink_mode',
+        'baud', 'downlink_low', 'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high',
+        'uplink_drift', 'reviewed', 'approved', 'status', 'created', 'citation', 'user'
     )
     search_fields = ('satellite__id', 'uuid', 'satellite__name', 'satellite__norad_cat_id')
     list_filter = (
@@ -101,7 +101,8 @@ class TransmitterEntryAdmin(admin.ModelAdmin):
         'type',
         'status',
         'service',
-        'mode',
+        'downlink_mode',
+        'uplink_mode',
         'baud',
     )
     readonly_fields = ('uuid', 'satellite')
@@ -111,21 +112,22 @@ class TransmitterEntryAdmin(admin.ModelAdmin):
 class TransmitterSuggestionAdmin(admin.ModelAdmin):
     """Defines TransmitterSuggestion view in django admin UI"""
     list_display = (
-        'uuid', 'description', 'satellite', 'service', 'type', 'mode', 'baud', 'downlink_low',
-        'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'status',
-        'created', 'citation', 'user'
+        'uuid', 'description', 'satellite', 'service', 'type', 'downlink_mode', 'uplink_mode',
+        'baud', 'downlink_low', 'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high',
+        'uplink_drift', 'status', 'created', 'citation', 'user'
     )
     search_fields = ('satellite__id', 'uuid', 'satellite__name', 'satellite__norad_cat_id')
     list_filter = (
         'type',
-        'mode',
+        'downlink_mode',
+        'uplink_mode',
         'baud',
         'service',
     )
     readonly_fields = (
         'uuid', 'description', 'status', 'type', 'uplink_low', 'uplink_high', 'uplink_drift',
-        'downlink_low', 'downlink_high', 'downlink_drift', 'mode', 'invert', 'baud', 'satellite',
-        'reviewed', 'approved', 'created', 'citation', 'user'
+        'downlink_low', 'downlink_high', 'downlink_drift', 'downlink_mode', 'uplink_mode',
+        'invert', 'baud', 'satellite', 'reviewed', 'approved', 'created', 'citation', 'user'
     )
     actions = ['approve_suggestion', 'reject_suggestion']
 
@@ -193,16 +195,17 @@ class TransmitterSuggestionAdmin(admin.ModelAdmin):
 class TransmitterAdmin(admin.ModelAdmin):
     """Defines Transmitter view in django admin UI"""
     list_display = (
-        'uuid', 'description', 'satellite', 'service', 'type', 'mode', 'baud', 'downlink_low',
-        'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high', 'uplink_drift', 'status',
-        'created', 'citation', 'user'
+        'uuid', 'description', 'satellite', 'service', 'type', 'downlink_mode', 'uplink_mode',
+        'baud', 'downlink_low', 'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high',
+        'uplink_drift', 'status', 'created', 'citation', 'user'
     )
     search_fields = ('satellite__id', 'uuid', 'satellite__name', 'satellite__norad_cat_id')
     list_filter = (
         'type',
         'status',
         'service',
-        'mode',
+        'downlink_mode',
+        'uplink_mode',
         'baud',
     )
     readonly_fields = ('uuid', 'satellite')
