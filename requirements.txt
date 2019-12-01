@@ -52,7 +52,7 @@ redis==3.3.9
 requests==2.22.0
 requests-oauthlib==1.2.0
 rjsmin==1.1.0
-satellitetle==0.7.0
+satellitetle==0.8.0
 satnogs-decoders~=1.0
 sentry-sdk==0.12.3
 sgp4==1.4
