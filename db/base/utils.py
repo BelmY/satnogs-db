@@ -217,7 +217,8 @@ def write_influx(json_obj):
         settings.INFLUX_USER,
         settings.INFLUX_PASS,
         settings.INFLUX_DB,
-        ssl=settings.INFLUX_SSL
+        ssl=settings.INFLUX_SSL,
+        verify_ssl=settings.INFLUX_VERIFY_SSL
     )
     client.write_points(json_obj)
 

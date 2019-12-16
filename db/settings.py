@@ -307,6 +307,7 @@ INFLUX_USER = config('INFLUX_USER', default='db')
 INFLUX_PASS = config('INFLUX_PASS', default='db')
 INFLUX_DB = config('INFLUX_DB', default='db')
 INFLUX_SSL = config('INFLUX_SSL', default=False, cast=bool)
+INFLUX_VERIFY_SSL = config('INFLUX_VERIFY_SSL', default=False, cast=bool)
 
 if AUTH0:
     SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
