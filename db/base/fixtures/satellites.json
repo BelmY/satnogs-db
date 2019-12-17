@@ -595,8 +595,8 @@
         "name": "NO-83",
         "names": "BRICSat-P",
         "description": "This amateur satellite carries a PSK31 transponder as well as a APRS transponder for digipeating. It is one of a pair, see also NO-83.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:09:59Z"
     }
 },
 {
@@ -1903,8 +1903,8 @@
         "name": "ITF-2",
         "names": "",
         "description": "Imagine The Future 2 (ITF2) is a student led satellite for amateur radio purposes. It uses a FRAM microprocessor to support radio amateur networking and to test a 1/20th wavelength antenna.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:10:34Z"
     }
 },
 {
@@ -1987,8 +1987,8 @@
         "name": "QBEE",
         "names": "SE01\r\nON01SE",
         "description": "Part of the QB50 mission, this 2U satellite was designed and built by Open Cosmos with the Lule\u00e5 Tekniska Universitet to measure the behaviour of oxygen in the lower thermosphere.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:18:41Z"
     }
 },
 {
@@ -1999,8 +1999,8 @@
         "name": "HAVELSAT",
         "names": "TR02\r\nON02TR",
         "description": "Part of the qb50 flock. Built by both HAVELSAN and the Istanbul Technical University this satellite holds a software defined radio (SDR)",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:18:26Z"
     }
 },
 {
@@ -2023,8 +2023,8 @@
         "name": "SOMP2",
         "names": "DE02\r\nON02DE",
         "description": "Part of the QB50 flock",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:15:35Z"
     }
 },
 {
@@ -2047,8 +2047,8 @@
         "name": "PHOENIX",
         "names": "TW01\r\nON01TW",
         "description": "Another QB50 mission satellite built by the student of National Cheng Kung University (NCKU) that carries an Ion Neutral Mass Spectrometer, Thermistors and Solar EUV sensors.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:18:33Z"
     }
 },
 {
@@ -2071,8 +2071,8 @@
         "name": "ZA-AEROSAT",
         "names": "AEROSAT\r\nAZ01\r\nON01AZ",
         "description": "Part of the QB50 mission, this 2U satellite was developed and built at the Stellenbosch University , South Africa . It demonstrates a number of methods for passive control, such as feather antennas as well as active momentum wheel systems.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:16:21Z"
     }
 },
 {
@@ -2095,8 +2095,8 @@
         "name": "SPACECUBE",
         "names": "FR05\r\nON05FR",
         "description": "Part of the QB50 flockDeveloped and built at Mines Paris Tech, this French satellite carried thermosphere experiments using a Flux Probe Experiment (FIPEX) as well as an amateur radio FM transponder.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:16:29Z"
     }
 },
 {
@@ -2131,8 +2131,8 @@
         "name": "NJUST-1",
         "names": "CN03 ON03CN",
         "description": "Carrying  a Flux Probe Experiment (FIPEX) this Chinese 2U satellite from Nanjin University is part of the QB50 mission.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:16:57Z"
     }
 },
 {
@@ -2155,8 +2155,8 @@
         "name": "LILACSAT-1",
         "names": "CN02 ON02CN",
         "description": "Carrying both QB50 mission Ion / Neutral Mass Spectrometery (INMS) and amateur radio payloads this satellite from Harbin Institute of Technology provides a tool for both education as well as radio amateurs .",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:17:04Z"
     }
 },
 {
@@ -2179,8 +2179,8 @@
         "name": "QBITO",
         "names": "ES01 ON01ES",
         "description": "With a QB50 Ion/ Neutral mass Spectrometer (INMS) and additional Phase change material, Infra red detection and attitude control payloads, this Spanish satellite is a Polytechnic University of Madrid designed and built device.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:21:54Z"
     }
 },
 {
@@ -2191,8 +2191,8 @@
         "name": "AALTO-2",
         "names": "FI01 ON01FI",
         "description": "Developed for the QB50 mission and taking design learning from Aalto-1, this 2U cubesat has a Multi Needle Langmuire Probe (MnLP) provides a platform for education and co-operation.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:22:06Z"
     }
 },
 {
@@ -2203,8 +2203,8 @@
         "name": "SUSAT",
         "names": "AU01 ON01AU",
         "description": "Designed and developed for upper atmosphere science and technology demonstration this 2U Cubesat from Adelaide University carries an Ion / Neutral mass Spectrometer (INMS).",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:22:17Z"
     }
 },
 {
@@ -2215,7 +2215,7 @@
         "name": "SNUSAT-1B",
         "names": "KR03 ON03KR",
         "description": "Seoul National University Satellite 1 (SNUSat-1) carries a Flux Probe Experiment (FIPEX) as part of the QB50 mission as well as a secondary mission to test a fault detection, isolation and recovery algorithm developed in house.",
-        "status": "alive",
+        "status": "re-entered",
         "decayed": null
     }
 },
@@ -2251,8 +2251,8 @@
         "name": "AOXIANG-1",
         "names": "CN04 ON04CN",
         "description": "A collaboration between  Shaanxi Engineering Laboratory (SELM) & Northwestern Polytechnical University (NPU), this QB50 contains a Ion/Neutral Mass Spectrometer (INMS) as well as secondary technology demonstrations for satellite control.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:23:36Z"
     }
 },
 {
@@ -2263,8 +2263,8 @@
         "name": "BEEAGLESAT",
         "names": "TR01 ON01TR",
         "description": "This Turkish 2U Cubesat is part of the QB50 mission. It carries a Multi Needle Langmuir Probe (MnLP) for sampling the electron density as well as an X-Ray detector.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:22:25Z"
     }
 },
 {
@@ -2479,8 +2479,8 @@
         "name": "BIRD-B",
         "names": "BRAC Onnesha",
         "description": "Bird are a small technological CubeSat (1U) built by Kyushu Institute of Technology (Kyutech) as the Joint Global Multi-Nation Birds Satellite project, which is a cross-border interdisciplinary satellite project for non-space faring countries supported by Japan. Bird-B or BRAC Onnesha is from Bangladesh.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:22:40Z"
     }
 },
 {
@@ -2491,8 +2491,8 @@
         "name": "BIRD-M",
         "names": "Mazaalai NUMSAT-1",
         "description": "Bird are a small technological CubeSat (1U) built by Kyushu Institute of Technology (Kyutech) as the Joint Global Multi-Nation Birds Satellite project, which is a cross-border interdisciplinary satellite project for non-space faring countries supported by Japan. Bird-M or Mazaalai is from Mongolia.",
-        "status": "alive",
-        "decayed": null
+        "status": "re-entered",
+        "decayed": "2019-11-18T00:22:32Z"
     }
 },
 {
@@ -2959,7 +2959,7 @@
         "name": "SNUSAT-1",
         "names": "KR02 ON02KR",
         "description": "Seoul National University Satellite 1 (SNUSat-1) carries a Flux Probe Experiment (FIPEX) as part of the QB50 mission as well as a secondary mission to test a fault detection, isolation and recovery algorithm developed in house.",
-        "status": "alive",
+        "status": "re-entered",
         "decayed": null
     }
 },
