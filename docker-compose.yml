@@ -7,8 +7,16 @@ services:
       MYSQL_USER: 'satnogsdb'
       MYSQL_PASSWORD: 'satnogsdb'
       MYSQL_ROOT_PASSWORD: 'toor'
+    volumes:
+      - type: 'volume'
+        source: 'db'
+        target: '/var/lib/mysql'
   redis:
     image: 'redis:5.0.7'
+    volumes:
+      - type: 'volume'
+        source: 'redis'
+        target: '/data'
   celery:
     build:
       context: '.'
@@ -27,7 +35,9 @@ services:
     command: ["djangoctl.sh", "develop_celery", "/usr/local/src/satnogs-db"]
     volumes:
       - '.:/usr/local/src/satnogs-db:z'
-      - 'media:/var/lib/satnogs-db/media'
+      - type: 'volume'
+        source: 'media'
+        target: '/var/lib/satnogs-db/media'
   web:
     build:
       context: '.'
@@ -50,8 +60,14 @@ services:
     command: ["djangoctl.sh", "develop", "/usr/local/src/satnogs-db"]
     volumes:
       - '.:/usr/local/src/satnogs-db:z'
-      - 'static:/var/lib/satnogs-db/static'
-      - 'media:/var/lib/satnogs-db/media'
+      - type: 'volume'
+        source: 'static'
+        target: '/var/lib/satnogs-db/staticfiles'
+      - type: 'volume'
+        source: 'media'
+        target: '/var/lib/satnogs-db/media'
 volumes:
+  db:
+  redis:
   static:
   media:
