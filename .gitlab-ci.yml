@@ -154,7 +154,8 @@ deploy:
     variables:
       - $PYPI_USERNAME
       - $PYPI_PASSWORD
-      - $SATNOGS_DECODERS_VERSION == null
+  except:
+    - triggers
 trigger_master:
   stage: trigger
   image: ${GITLAB_CI_IMAGE_ALPINE}
