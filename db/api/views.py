@@ -5,10 +5,10 @@ from __future__ import absolute_import, division, print_function, \
 from django.core.files.base import ContentFile
 from rest_framework import mixins, status, viewsets
 from rest_framework.parsers import FileUploadParser, FormParser
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from db.api import filters, pagination, serializers
+from db.api.perms import SafeMethodsWithPermission
 from db.base.models import DemodData, Mode, Satellite, Transmitter
 from db.base.tasks import update_satellite
 
@@ -42,7 +42,7 @@ class TelemetryView(  # pylint: disable=R0901
     queryset = DemodData.objects.all()
     serializer_class = serializers.TelemetrySerializer
     filter_class = filters.TelemetryViewFilter
-    permission_classes = (AllowAny, )
+    permission_classes = [SafeMethodsWithPermission]
     parser_classes = (FormParser, FileUploadParser)
     pagination_class = pagination.LinkedHeaderPageNumberPagination
 

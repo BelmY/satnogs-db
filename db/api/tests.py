@@ -95,9 +95,9 @@ class TelemetryViewApiTest(TestCase):
     def test_list(self):
         """Test the Telemetry API listing"""
         response = self.client.get('/api/telemetry/', format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_retrieve(self):
         """Test the Telemetry API retrieval"""
         response = self.client.get('/api/telemetry/{0}/'.format(self.datum.id), format='json')
-        self.assertContains(response, self.datum.observer)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
