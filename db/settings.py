@@ -10,7 +10,9 @@ from __future__ import absolute_import, division, print_function, \
 import sentry_sdk
 from decouple import Csv, config
 from dj_database_url import parse as db_url
+from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 from unipath import Path
 
 ROOT = Path(__file__).parent
@@ -231,7 +233,12 @@ LOGGING = {
 # Sentry
 SENTRY_ENABLED = config('SENTRY_ENABLED', default=False, cast=bool)
 if SENTRY_ENABLED:
-    sentry_sdk.init(dsn=config('SENTRY_DSN', default=''), integrations=[DjangoIntegration()])
+    sentry_sdk.init(
+        dsn=config('SENTRY_DSN', default=''),
+        integrations=[CeleryIntegration(),
+                      DjangoIntegration(),
+                      RedisIntegration()]
+    )
 
 # Celery
 CELERY_ENABLE_UTC = USE_TZ
