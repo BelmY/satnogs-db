@@ -7,12 +7,12 @@ import random
 from datetime import datetime, timedelta
 
 import factory
+import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils.timezone import now
 from factory import fuzzy
 
-import pytest
 from db.base.models import DATA_SOURCES, DemodData, Mode, Satellite, \
     Telemetry, Transmitter, TransmitterSuggestion
 
