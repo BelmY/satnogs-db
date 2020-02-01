@@ -25,7 +25,7 @@ class ModeAdmin(admin.ModelAdmin):
 @admin.register(Satellite)
 class SatelliteAdmin(admin.ModelAdmin):
     """Defines Satellite view in django admin UI"""
-    list_display = ('name', 'norad_cat_id', 'status', 'decayed')
+    list_display = ('id', 'name', 'norad_cat_id', 'status', 'decayed')
     search_fields = ('name', 'norad_cat_id')
     list_filter = ('status', 'decayed')
 
