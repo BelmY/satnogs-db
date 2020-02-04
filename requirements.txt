@@ -4,13 +4,13 @@
 # './contrib/refresh-requirements.sh to regenerate this file
 
 amqp==2.5.2
-billiard==3.6.1.0
+billiard==3.6.2.0
 celery==4.3.0
 certifi==2019.11.28
 chardet==3.0.4
 defusedxml==0.6.0
 dj-database-url==0.5.0
-Django==2.2.9
+Django==2.2.10
 django-allauth==0.40.0
 django-appconf==1.0.3
 django-avatar==4.1.0
@@ -48,7 +48,7 @@ pytz==2019.3
 PyYAML==5.1.2
 ratelimiter==1.2.0.post0
 rcssmin==1.0.6
-redis==3.4.0
+redis==3.4.1
 Represent==1.6.0
 requests==2.22.0
 requests-oauthlib==1.3.0
