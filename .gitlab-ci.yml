@@ -106,7 +106,7 @@ docker:
     - pip install "$GITLAB_CI_PYPI_DOCKER_COMPOSE"
   script:
     - |
-      [ -z "$SATNOGS_DECODERS_VERSION" ] || sed -i 's/^\(satnogsdecoders\).*/\1=='"$SATNOGS_DECODERS_VERSION"'/' requirements.txt
+      [ -z "$SATNOGS_DECODERS_VERSION" ] || sed -i 's/^\(satnogs-decoders\).*/\1=='"$SATNOGS_DECODERS_VERSION"'/' requirements.txt
     - |
       [ -z "$CI_REGISTRY_IMAGE" ] || {
           CACHE_IMAGE="$CI_REGISTRY_IMAGE/satnogs-db:$CI_COMMIT_REF_NAME"
