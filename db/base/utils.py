@@ -234,9 +234,8 @@ def decode_data(norad, period=None):
     if not sat.telemetry_decoder_count:
         return
 
-    now = datetime.utcnow()
     if period:
-        time_period = now - timedelta(hours=4)
+        time_period = datetime.utcnow() - timedelta(hours=4)
         time_period = make_aware(time_period)
         data = DemodData.objects.filter(satellite__norad_cat_id=norad, timestamp__gte=time_period)
     else:
@@ -290,7 +289,8 @@ def decode_data(norad, period=None):
                         obj.is_decoded = True
                         obj.save()
                         break
-            except IOError:
+            except (IOError, binascii.Error) as error:
+                LOGGER.error(error, exc_info=True)
                 continue
 
 
