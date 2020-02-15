@@ -32,6 +32,9 @@ container_scanning:
       - $CI_REGISTRY_IMAGE
 dependency_scanning:
   stage: security
+  variables:
+    DS_DISABLE_DIND: 'true'
+    DS_DEFAULT_ANALYZERS: 'gemnasium,gemnasium-python,retire.js'
 sast:
   stage: security
 schema:
