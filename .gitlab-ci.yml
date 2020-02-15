@@ -18,6 +18,7 @@ stages:
 include:
   - template: Container-Scanning.gitlab-ci.yml
   - template: Dependency-Scanning.gitlab-ci.yml
+  - template: SAST.gitlab-ci.yml
 container_scanning:
   stage: security
   variables:
@@ -30,6 +31,8 @@ container_scanning:
     variables:
       - $CI_REGISTRY_IMAGE
 dependency_scanning:
+  stage: security
+sast:
   stage: security
 schema:
   stage: schema
