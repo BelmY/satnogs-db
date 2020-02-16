@@ -35,6 +35,9 @@ dependency_scanning:
   variables:
     DS_DISABLE_DIND: 'true'
     DS_DEFAULT_ANALYZERS: 'gemnasium,gemnasium-python,retire.js'
+gemnasium-python-dependency_scanning:
+  before_script:
+    - apk add --no-cache mariadb-connector-c-dev py3-pillow jpeg-dev
 sast:
   stage: security
 schema:
