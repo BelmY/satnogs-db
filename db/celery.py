@@ -23,21 +23,21 @@ APP.autodiscover_tasks()
 @APP.task
 def update_all_tle():
     """Wrapper task for 'update_all_tle' shared task"""
-    from db.base.tasks import update_all_tle as periodic_task
+    from db.base.tasks import update_all_tle as periodic_task  # pylint: disable=C0415
     periodic_task()
 
 
 @APP.task
 def background_cache_statistics():
     """Wrapper task for 'background_cache_statistics' shared task"""
-    from db.base.tasks import background_cache_statistics as periodic_task
+    from db.base.tasks import background_cache_statistics as periodic_task  # pylint: disable=C0415
     periodic_task()
 
 
 @APP.task
 def decode_recent_data():
     """Wrapper task for 'decocde_recent_data' shared task"""
-    from db.base.tasks import decode_recent_data as periodic_task
+    from db.base.tasks import decode_recent_data as periodic_task  # pylint: disable=C0415
     periodic_task()
 
 

@@ -6,7 +6,6 @@ from rest_framework import permissions
 
 class SafeMethodsWithPermission(permissions.BasePermission):
     """Access non-destructive methods (like GET and HEAD) with API Key"""
-
     def has_permission(self, request, view):
         return self.has_object_permission(request, view)
 

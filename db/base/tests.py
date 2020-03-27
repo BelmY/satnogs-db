@@ -152,7 +152,6 @@ class HomeViewTest(TestCase):
     """
     Simple test to make sure the home page is working
     """
-
     def test_home_page(self):
         """Tests for a known string in the SatNOGS DB home page template"""
         response = self.client.get('/')
@@ -181,7 +180,6 @@ class AboutViewTest(TestCase):
     """
     Test to make sure the about page is working
     """
-
     def test_about_page(self):
         """Tests for a known string in the SatNOGS DB about page template"""
         response = self.client.get('/about/')
@@ -193,7 +191,6 @@ class FaqViewTest(TestCase):
     """
     Test to make sure the faq page is working
     """
-
     def test_faq_page(self):
         """Tests for a known string in the SatNOGS DB FAQ page template"""
         response = self.client.get('/faq/')

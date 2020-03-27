@@ -11,7 +11,6 @@ from db.base.models import TRANSMITTER_STATUS, DemodData, Mode, Satellite, \
 
 class ModeSerializer(serializers.ModelSerializer):
     """SatNOGS DB Mode API Serializer"""
-
     class Meta:
         model = Mode
         fields = ('id', 'name')
@@ -19,7 +18,6 @@ class ModeSerializer(serializers.ModelSerializer):
 
 class SatTelemetrySerializer(serializers.ModelSerializer):
     """SatNOGS DB satellite telemetry API Serializer"""
-
     class Meta:
         model = Telemetry
         fields = ['decoder']
@@ -124,7 +122,6 @@ class TelemetrySerializer(serializers.ModelSerializer):
 
 class SidsSerializer(serializers.ModelSerializer):
     """SatNOGS DB SiDS API Serializer"""
-
     class Meta:
         model = DemodData
         fields = ('satellite', 'payload_frame', 'station', 'lat', 'lng', 'timestamp', 'app_source')
