@@ -37,7 +37,8 @@ dependency_scanning:
     DS_DEFAULT_ANALYZERS: 'gemnasium,gemnasium-python,retire.js'
 gemnasium-python-dependency_scanning:
   before_script:
-    - apk add --no-cache mariadb-connector-c-dev py3-pillow jpeg-dev
+    - apt-get -q update
+    - apt-get -qy install libmariadb-dev python3-pil libjpeg-dev
 sast:
   stage: security
 schema:
