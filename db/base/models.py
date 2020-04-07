@@ -78,6 +78,7 @@ class Satellite(models.Model):
     name = models.CharField(max_length=45)
     names = models.TextField(blank=True)
     description = models.TextField(blank=True)
+    dashboard_url = models.URLField(blank=True, null=True, max_length=200)
     image = models.ImageField(upload_to='satellites', blank=True, help_text='Ideally: 250x250')
     tle1 = models.CharField(max_length=200, blank=True)
     tle2 = models.CharField(max_length=200, blank=True)

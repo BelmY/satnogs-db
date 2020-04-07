@@ -35,6 +35,15 @@
                target="_blank">
               <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> Observations</span>
             </a>
+            {% if satellite.dashboard_url is not null %}
+            <a type="button"
+               title="SatNOGS Grafana dashboard"
+               class="btn btn-default btn-xs"
+               href="https://dashboard.satnogs.org{{ satellite.dashboard_url }}"
+               target="_blank">
+              <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> Dashboard</span>
+            </a>
+            {% endif %}
           </div>
         </div>
         <div class="row panel-body">
