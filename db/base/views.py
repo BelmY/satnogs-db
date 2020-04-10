@@ -89,9 +89,10 @@ def satellite(request, norad):
     types = TRANSMITTER_TYPE
     services = SERVICE_TYPE
     statuses = TRANSMITTER_STATUS
-    sats_cache = cache.get('stats_satellites')
-    if not sats_cache:
-        sats_cache = []
+    sat_cache = cache.get(norad)
+    frame_count = 0
+    if sat_cache is not None:
+        frame_count = sat_cache['count']
 
     try:
         latest_frame = DemodData.objects.filter(satellite=satellite_obj).order_by('-id')[0]
@@ -107,7 +108,7 @@ def satellite(request, norad):
             'services': services,
             'statuses': statuses,
             'latest_frame': latest_frame,
-            'sats_cache': sats_cache,
+            'frame_count': frame_count,
             'mapbox_token': settings.MAPBOX_TOKEN
         }
     )
@@ -217,13 +218,19 @@ def stats(request):
 
     :returns: base/stats.html
     """
-    satellites = cache.get('stats_satellites')
+    satellites = []
+    norads = cache.get('satellites_norad')
     observers = cache.get('stats_observers')
-    if not satellites or not observers:
+    if not norads or not observers:
         try:
             cache_statistics()
         except OperationalError:
             pass
+    else:
+        for norad in norads:
+            stat = cache.get(norad['norad_cat_id'])
+            satellites.append(stat)
+
     return render(request, 'base/stats.html', {'satellites': satellites, 'observers': observers})
 
 

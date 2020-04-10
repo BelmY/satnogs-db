@@ -582,8 +582,7 @@
 
   <!-- Telemetry Frames Section -->
   <!-- This is a hacky way of getting around slow db queries. See #237 -->
-  {% for sat in sats_cache %}
-    {% if sat.norad_cat_id == satellite.norad_cat_id and sat.count != 0 %}
+  {% if frame_count != 0 %}
       <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 satellite-panels">
           <div class="panel panel-default panel-satellite">
@@ -611,16 +610,14 @@
               </div>
             {% endif %}
             <div class="panel-footer">
-              <span class="badge">Frames: {{ sat.count }}</span>
+              <span class="badge">Frames: {{ frame_count }}</span>
               Latest frame submitted on {{ latest_frame.timestamp|date:'Y-m-d H:i:s' }} by
               {{ latest_frame.observer }}
             </div>
           </div>
         </div>
       </div>
-    {% endif %}
-  {% endfor %}
-
+      {% endif %}
   <!-- Transmitter Suggestion Modal -->
   <div class="modal fade" id="NewSuggestionModal" tabindex="-1" role="dialog" aria-labelledby="NewSuggestionModalLabel" aria-hidden="true">
     <div class="modal-dialog">
