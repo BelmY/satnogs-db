@@ -65,7 +65,7 @@ def _set_is_decoded(sender, instance, **kwargs):  # pylint: disable=W0613
 @python_2_unicode_compatible
 class Mode(models.Model):
     """A satellite transmitter RF mode. For example: FM"""
-    name = models.CharField(max_length=12, unique=True)
+    name = models.CharField(max_length=25, unique=True)
 
     def __str__(self):
         return self.name
