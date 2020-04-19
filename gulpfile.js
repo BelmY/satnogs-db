@@ -16,8 +16,7 @@ gulp.task('js:lint', function() {
 
     return gulp.src(lintPathsJS)
         .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+        .pipe(eslint.format());
 });
 
 gulp.task('css:lint', function() {
