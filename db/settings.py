@@ -269,24 +269,32 @@ REST_FRAMEWORK = {
 # Security
 SECRET_KEY = config('SECRET_KEY', default='changeme')
 SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=31536000, cast=int)
-CSP_DEFAULT_SRC = (
-    "'self'",
-    'https://*.mapbox.com',
+CSP_DEFAULT_SRC = config(
+    'CSP_DEFAULT_SRC',
+    cast=lambda v: tuple(s.strip() for s in v.split(',')),
+    default="'self',"
+    'https://*.mapbox.com'
 )
-CSP_SCRIPT_SRC = (
-    "'self'",
-    'https://*.google-analytics.com',
-    "'unsafe-eval'",
+CSP_SCRIPT_SRC = config(
+    'CSP_SCRIPT_SRC',
+    cast=lambda v: tuple(s.strip() for s in v.split(',')),
+    default="'self',"
+    'https://*.google-analytics.com,'
+    "'unsafe-eval'"
 )
-CSP_IMG_SRC = (
-    "'self'",
-    'https://*.gravatar.com',
-    'https://*.mapbox.com',
-    'https://*.google-analytics.com',
-    'data:',
-    'blob:',
+CSP_IMG_SRC = config(
+    'CSP_IMG_SRC',
+    cast=lambda v: tuple(s.strip() for s in v.split(',')),
+    default="'self',"
+    'https://*.gravatar.com,'
+    'https://*.mapbox.com,'
+    'https://*.google-analytics.com,'
+    'data:,'
+    'blob:'
 )
-CSP_CHILD_SRC = ('blob:', )
+CSP_CHILD_SRC = config(
+    'CSP_CHILD_SRC', cast=lambda v: tuple(s.strip() for s in v.split(',')), default='blob:'
+)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
