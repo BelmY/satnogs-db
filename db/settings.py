@@ -148,7 +148,7 @@ TEMPLATES = [
 
 # Static & Media
 STATIC_ROOT = config('STATIC_ROOT', default=Path('staticfiles').resolve())
-STATIC_URL = '/static/'
+STATIC_URL = config('STATIC_URL', default='/static/')
 STATICFILES_DIRS = [
     Path(ROOT).child('static').resolve(),
 ]
@@ -159,7 +159,7 @@ STATICFILES_FINDERS = (
 )
 MEDIA_ROOT = config('MEDIA_ROOT', default=Path('media').resolve())
 FILE_UPLOAD_TEMP_DIR = config('FILE_UPLOAD_TEMP_DIR', default=Path('/tmp').resolve())
-MEDIA_URL = '/media/'
+MEDIA_URL = config('MEDIA_URL', default='/media/')
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 SATELLITE_DEFAULT_IMAGE = '/static/img/sat.png'
 COMPRESS_ENABLED = config('COMPRESS_ENABLED', default=False, cast=bool)
