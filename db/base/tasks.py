@@ -149,7 +149,7 @@ def notify_user_export(filename, norad, email):
     subject = '[satnogs] Your request for exported frames is ready!'
     template = 'emails/exported_frames.txt'
     data = {
-        'url': '{0}{1}download/{2}'.format(site.domain, settings.MEDIA_URL, filename),
+        'url': '{0}{1}download/{2}'.format(site.domain, settings.MEDIA_ROOT, filename),
         'norad': norad
     }
     message = render_to_string(template, {'data': data})
