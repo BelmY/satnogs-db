@@ -222,6 +222,11 @@ class DemodDataAdmin(admin.ModelAdmin):
     """Defines DemodData view in django admin UI"""
     list_display = ('id', 'satellite', 'app_source', 'observer')
     search_fields = ('transmitter__uuid', 'satellite__norad_cat_id', 'observer')
+    list_filter = (
+        'satellite',
+        'app_source',
+        'observer',
+    )
 
     def satellite(self, obj):  # pylint: disable=R0201
         """Returns the Satellite object associated with this DemodData
