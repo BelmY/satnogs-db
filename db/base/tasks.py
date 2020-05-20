@@ -115,6 +115,18 @@ def update_all_tle():
 
 
 @shared_task
+def remove_old_exported_framesets():
+    """Task to export satellite frames in csv."""
+    old_datetime = make_aware(
+        datetime.utcnow() - timedelta(seconds=settings.EXPORTED_FRAMESET_TIME_TO_LIVE)
+    )
+    exported_framesets = ExportedFrameset.objects.filter(created__lte=old_datetime
+                                                         ).exclude(exported_file='')
+    for frameset in exported_framesets:
+        frameset.exported_file.delete()
+
+
+@shared_task
 def export_frames(norad, user_id, period=None):
     """Task to export satellite frames in csv."""
     exported_frameset = ExportedFrameset()

@@ -1,3 +1,4 @@
+# pylint: disable=C0415
 """SatNOGS DB celery task workers"""
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -23,21 +24,28 @@ APP.autodiscover_tasks()
 @APP.task
 def update_all_tle():
     """Wrapper task for 'update_all_tle' shared task"""
-    from db.base.tasks import update_all_tle as periodic_task  # pylint: disable=C0415
+    from db.base.tasks import update_all_tle as periodic_task
     periodic_task()
 
 
 @APP.task
 def background_cache_statistics():
     """Wrapper task for 'background_cache_statistics' shared task"""
-    from db.base.tasks import background_cache_statistics as periodic_task  # pylint: disable=C0415
+    from db.base.tasks import background_cache_statistics as periodic_task
     periodic_task()
 
 
 @APP.task
 def decode_recent_data():
     """Wrapper task for 'decocde_recent_data' shared task"""
-    from db.base.tasks import decode_recent_data as periodic_task  # pylint: disable=C0415
+    from db.base.tasks import decode_recent_data as periodic_task
+    periodic_task()
+
+
+@APP.task
+def remove_old_exported_framesets():
+    """Wrapper task for 'decocde_recent_data' shared task"""
+    from db.base.tasks import remove_old_exported_framesets as periodic_task
     periodic_task()
 
 
@@ -48,6 +56,10 @@ def setup_periodic_tasks(sender, **kwargs):
 
     sender.add_periodic_task(
         RUN_HOURLY, background_cache_statistics.s(), name='background-cache-statistics'
+    )
+
+    sender.add_periodic_task(
+        RUN_HOURLY, remove_old_exported_framesets.s(), name='remove_old_exported_frameset'
     )
 
     sender.add_periodic_task(RUN_EVERY_15, decode_recent_data.s(), name='decode-recent-data')

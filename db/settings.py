@@ -315,6 +315,9 @@ MAPBOX_TOKEN = config('MAPBOX_TOKEN', default='')
 # TLEs
 TLE_SOURCES_REDISTRIBUTABLE = config('TLE_SOURCES_REDISTRIBUTABLE', default='manual', cast=Csv())
 
+# Exported Frames
+EXPORTED_FRAMESET_TIME_TO_LIVE = config('EXPORTED_FRAMESET_TIME_TO_LIVE', default=21600, cast=int)
+
 # Influx DB for decoded data_id
 USE_INFLUX = config('USE_INFLUX', default=False, cast=bool)
 INFLUX_HOST = config('INFLUX_HOST', default='localhost')
