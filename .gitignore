@@ -27,6 +27,7 @@ dist
 
 # Media & Static
 media
+/staticfiles/*
 /db/static/lib/
 node_modules
 
