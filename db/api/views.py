@@ -4,12 +4,15 @@ from __future__ import absolute_import, division, print_function, \
 
 from django.core.files.base import ContentFile
 from rest_framework import mixins, status, viewsets
-from rest_framework.parsers import FileUploadParser, FormParser
+from rest_framework.parsers import FileUploadParser, FormParser, \
+    MultiPartParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
 
 from db.api import filters, pagination, serializers
 from db.api.perms import SafeMethodsWithPermission
-from db.base.models import DemodData, Mode, Satellite, Transmitter
+from db.base.models import Artifact, DemodData, Mode, Satellite, Transmitter
 from db.base.tasks import update_satellite
 
 
@@ -89,3 +92,36 @@ class TelemetryView(  # pylint: disable=R0901
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(status=status.HTTP_201_CREATED, headers=headers)
+
+
+class ArtifactView(  # pylint: disable=R0901
+        mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
+        viewsets.GenericViewSet):
+    """SatNOGS DB Artifact API view class"""
+    queryset = Artifact.objects.all()
+    filter_class = filters.ArtifactViewFilter
+    permission_classes = [IsAuthenticated]
+    parser_classes = (FormParser, MultiPartParser)
+    pagination_class = pagination.LinkedHeaderPageNumberPagination
+
+    def get_serializer_class(self):
+        """Returns the right serializer depending on http method that is used"""
+        if self.action == 'create':
+            return serializers.NewArtifactSerializer
+        return serializers.ArtifactSerializer
+
+    def create(self, request, *args, **kwargs):
+        """Creates artifact"""
+        serializer = self.get_serializer(data=request.data)
+        try:
+            if serializer.is_valid():
+                data = serializer.save()
+                http_response = {}
+                http_response['id'] = data.id
+                response = Response(http_response, status=status.HTTP_200_OK)
+            else:
+                data = serializer.errors
+                response = Response(data, status=status.HTTP_400_BAD_REQUEST)
+        except (ValidationError, ValueError, OSError) as error:
+            response = Response(str(error), status=status.HTTP_400_BAD_REQUEST)
+        return response

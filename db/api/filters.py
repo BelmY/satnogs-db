@@ -6,7 +6,7 @@ import django_filters
 from django_filters import rest_framework as filters
 from django_filters.rest_framework import FilterSet
 
-from db.base.models import DemodData, Mode, Satellite, Transmitter
+from db.base.models import Artifact, DemodData, Mode, Satellite, Transmitter
 
 
 class TransmitterViewFilter(FilterSet):
@@ -57,3 +57,12 @@ class TelemetryViewFilter(FilterSet):
     class Meta:
         model = DemodData
         fields = ['satellite', 'app_source', 'observer', 'transmitter']
+
+
+class ArtifactViewFilter(FilterSet):
+    """SatNOGS DB Artifact API View Filter"""
+    class Meta:
+        model = Artifact
+        fields = [
+            'network_obs_id',
+        ]

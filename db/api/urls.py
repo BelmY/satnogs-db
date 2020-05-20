@@ -8,6 +8,7 @@ from db.api import views
 
 ROUTER = routers.DefaultRouter()
 
+ROUTER.register(r'artifacts', views.ArtifactView)
 ROUTER.register(r'modes', views.ModeView)
 ROUTER.register(r'satellites', views.SatelliteView)
 ROUTER.register(r'transmitters', views.TransmitterView)

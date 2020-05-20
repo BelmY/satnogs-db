@@ -6,6 +6,7 @@ import logging
 from os import path
 from uuid import uuid4
 
+import h5py
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -65,6 +66,18 @@ def _gen_observer(sender, instance, created, **kwargs):  # pylint: disable=W0613
 def _set_is_decoded(sender, instance, **kwargs):  # pylint: disable=W0613
     """Returns true if payload_decoded has data"""
     instance.is_decoded = instance.payload_decoded != ''
+
+
+def _extract_network_obs_id(sender, instance, created, **kwargs):  # pylint: disable=W0613
+    post_save.disconnect(_extract_network_obs_id, sender=Artifact)
+    try:
+        with h5py.File(instance.artifact_file, 'r') as h5_file:
+            instance.network_obs_id = h5_file.attrs["observation_id"]
+    except OSError as error:
+        LOGGER.warning(error)
+
+    instance.save()
+    post_save.connect(_extract_network_obs_id, sender=Artifact)
 
 
 @python_2_unicode_compatible
@@ -377,3 +390,18 @@ class ExportedFrameset(models.Model):
     exported_file = models.FileField(upload_to=_name_exported_frames, blank=True, null=True)
     start = models.DateTimeField(blank=True, null=True)
     end = models.DateTimeField(blank=True, null=True)
+
+
+@python_2_unicode_compatible
+class Artifact(models.Model):
+    """Model for observation artifacts."""
+
+    artifact_file = models.FileField(upload_to='artifacts/', blank=True, null=True)
+
+    network_obs_id = models.BigIntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return 'artifact-{0}'.format(self.id)
+
+
+post_save.connect(_extract_network_obs_id, sender=Artifact)

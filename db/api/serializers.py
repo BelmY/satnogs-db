@@ -3,10 +3,11 @@
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
+import h5py
 from rest_framework import serializers
 
-from db.base.models import TRANSMITTER_STATUS, DemodData, Mode, Satellite, \
-    Telemetry, Transmitter
+from db.base.models import TRANSMITTER_STATUS, Artifact, DemodData, Mode, \
+    Satellite, Telemetry, Transmitter
 
 
 class ModeSerializer(serializers.ModelSerializer):
@@ -125,3 +126,33 @@ class SidsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DemodData
         fields = ('satellite', 'payload_frame', 'station', 'lat', 'lng', 'timestamp', 'app_source')
+
+
+class ArtifactSerializer(serializers.ModelSerializer):
+    """SatNOGS DB Artifacts API Serializer"""
+    class Meta:
+        model = Artifact
+        fields = ('id', 'network_obs_id', 'artifact_file')
+
+
+class NewArtifactSerializer(serializers.ModelSerializer):
+    """SatNOGS Network New Artifact API Serializer"""
+    def validate(self, attrs):
+        """Validates data of incoming artifact"""
+
+        try:
+            with h5py.File(self.initial_data['artifact_file'], 'r') as h5_file:
+                if 'artifact_version' not in h5_file.attrs:
+                    raise serializers.ValidationError(
+                        'Not a valid SatNOGS Artifact.', code='invalid'
+                    )
+        except OSError as error:
+            raise serializers.ValidationError(
+                'Not a valid HDF5 file: {}'.format(error), code='invalid'
+            )
+
+        return attrs
+
+    class Meta:
+        model = Artifact
+        fields = ('artifact_file', )

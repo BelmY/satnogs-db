@@ -11,8 +11,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from db.base.models import DemodData, ExportedFrameset, Mode, Satellite, \
-    Telemetry, Transmitter, TransmitterEntry, TransmitterSuggestion
+from db.base.models import Artifact, DemodData, ExportedFrameset, Mode, \
+    Satellite, Telemetry, Transmitter, TransmitterEntry, \
+    TransmitterSuggestion
 from db.base.tasks import check_celery, decode_all_data
 
 
@@ -243,3 +244,9 @@ class ExportedFramesetAdmin(admin.ModelAdmin):
     list_display = ('id', 'created', 'user', 'satellite', 'exported_file', 'start', 'end')
     search_fields = ('user', 'satellite__norad_cat_id')
     list_filter = ('satellite', 'user')
+
+
+@admin.register(Artifact)
+class ArtifactAdmin(admin.ModelAdmin):
+    """Defines Artifact view in django admin UI"""
+    list_display = ('id', 'network_obs_id', 'artifact_file')
