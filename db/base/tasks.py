@@ -4,19 +4,24 @@ from __future__ import absolute_import, division, print_function, \
 
 import csv
 import logging
+import tempfile
 from datetime import datetime, timedelta
 
 from celery import shared_task
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
+from django.core.files import File
 from django.core.mail import send_mail
+from django.core.validators import URLValidator
 from django.template.loader import render_to_string
 from django.utils.timezone import make_aware
 from satellite_tle import fetch_tle_from_celestrak, fetch_tles
 from sgp4.earth_gravity import wgs72
 from sgp4.io import twoline2rv
 
-from db.base.models import DemodData, Satellite
+from db.base.models import DemodData, ExportedFrameset, Satellite
 from db.base.utils import cache_statistics, decode_data
 
 LOGGER = logging.getLogger('db')
@@ -110,48 +115,58 @@ def update_all_tle():
 
 
 @shared_task
-def export_frames(norad, email, uid, period=None):
+def export_frames(norad, user_id, period=None):
     """Task to export satellite frames in csv."""
-    now = datetime.utcnow()
+    exported_frameset = ExportedFrameset()
+    exported_frameset.user = User.objects.get(pk=user_id)
+    exported_frameset.satellite = Satellite.objects.get(norad_cat_id=norad)
+    exported_frameset.end = datetime.utcnow()
+
     if period:
         if period == '1':
-            time_period = now - timedelta(days=7)
+            exported_frameset.start = make_aware(exported_frameset.end - timedelta(days=7))
             suffix = 'week'
         else:
-            time_period = now - timedelta(days=30)
+            exported_frameset.start = make_aware(exported_frameset.end - timedelta(days=30))
             suffix = 'month'
-        time_period = make_aware(time_period)
         frames = DemodData.objects.filter(
-            satellite__norad_cat_id=norad, timestamp__gte=time_period
+            satellite=exported_frameset.satellite,
+            timestamp__gte=exported_frameset.start,
+            timestamp__lte=exported_frameset.end
         )
     else:
-        frames = DemodData.objects.filter(satellite__norad_cat_id=norad)
+        frames = DemodData.objects.filter(
+            satellite=exported_frameset.satellite, timestamp__lte=exported_frameset.end
+        )
         suffix = 'all'
-    filename = '{0}-{1}-{2}-{3}.csv'.format(norad, uid, now.strftime('%Y%m%dT%H%M%SZ'), suffix)
-    filepath = '{0}/download/{1}'.format(settings.MEDIA_ROOT, filename)
-    write_export_frames(filepath, frames)
-    notify_user_export(filename, norad, email)
 
+    filename = '{0}-{1}-{2}-{3}.csv'.format(
+        norad, user_id, exported_frameset.end.strftime('%Y%m%dT%H%M%SZ'), suffix
+    )
 
-def write_export_frames(filepath, frames):
-    """Helper function to write exported frames to a specified file"""
-    with open(filepath, 'w') as output_file:
-        writer = csv.writer(output_file, delimiter='|')
+    with tempfile.SpooledTemporaryFile(max_size=16777216, mode='w+') as csv_file:
+        writer = csv.writer(csv_file, delimiter='|')
         for obj in frames:
             frame = obj.display_frame()
             if frame is not None:
                 writer.writerow([obj.timestamp.strftime('%Y-%m-%d %H:%M:%S'), frame])
+        content_file = File(csv_file)
+        exported_frameset.exported_file.save(filename, content_file)
+
+    notify_user_export(exported_frameset.exported_file.url, norad, exported_frameset.user.email)
 
 
-def notify_user_export(filename, norad, email):
+def notify_user_export(url, norad, email):
     """Helper function to email a user when their export is complete"""
-    site = Site.objects.get_current()
     subject = '[satnogs] Your request for exported frames is ready!'
-    template = 'emails/exported_frames.txt'
-    data = {
-        'url': '{0}{1}download/{2}'.format(site.domain, settings.MEDIA_ROOT, filename),
-        'norad': norad
-    }
+    template = 'emails/exported_frameset.txt'
+    url_validator = URLValidator()
+    try:
+        url_validator(url)
+        data = {'url': url, 'norad': norad}
+    except ValidationError:
+        site = Site.objects.get_current()
+        data = {'url': '{0}{1}'.format(site.domain, url), 'norad': norad}
     message = render_to_string(template, {'data': data})
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], False)
 

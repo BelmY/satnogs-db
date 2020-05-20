@@ -114,7 +114,8 @@ def request_export(request, norad, period=None):
     completed.
     :returns: the originating satellite page
     """
-    export_frames.delay(norad, request.user.email, request.user.pk, period)
+    get_object_or_404(Satellite, norad_cat_id=norad)
+    export_frames.delay(norad, request.user.id, period)
     messages.success(
         request, ('Your download request was received. '
                   'You will get an email when it\'s ready')

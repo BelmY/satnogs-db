@@ -11,8 +11,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from db.base.models import DemodData, Mode, Satellite, Telemetry, \
-    Transmitter, TransmitterEntry, TransmitterSuggestion
+from db.base.models import DemodData, ExportedFrameset, Mode, Satellite, \
+    Telemetry, Transmitter, TransmitterEntry, TransmitterSuggestion
 from db.base.tasks import check_celery, decode_all_data
 
 
@@ -235,3 +235,11 @@ class DemodDataAdmin(admin.ModelAdmin):
         :returns: Satellite object
         """
         return obj.satellite
+
+
+@admin.register(ExportedFrameset)
+class ExportedFramesetAdmin(admin.ModelAdmin):
+    """Defines ExportedFrameset view in django admin UI"""
+    list_display = ('id', 'created', 'user', 'satellite', 'exported_file', 'start', 'end')
+    search_fields = ('user', 'satellite__norad_cat_id')
+    list_filter = ('satellite', 'user')

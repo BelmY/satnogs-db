@@ -32,6 +32,11 @@ SERVICE_TYPE = [
 ]
 
 
+def _name_exported_frames(instance, filename):  # pylint: disable=W0613
+    """Returns path for a exported frames file"""
+    return path.join('download/', filename)
+
+
 def _name_payload_frame(instance, filename):  # pylint: disable=W0613
     """Returns a unique, timestamped path and filename for a payload
 
@@ -361,3 +366,14 @@ class DemodData(models.Model):
 
 post_save.connect(_gen_observer, sender=DemodData)
 pre_save.connect(_set_is_decoded, sender=DemodData)
+
+
+@python_2_unicode_compatible
+class ExportedFrameset(models.Model):
+    """Model for exported frames."""
+    created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    satellite = models.ForeignKey(Satellite, null=True, on_delete=models.SET_NULL)
+    exported_file = models.FileField(upload_to=_name_exported_frames, blank=True, null=True)
+    start = models.DateTimeField(blank=True, null=True)
+    end = models.DateTimeField(blank=True, null=True)
