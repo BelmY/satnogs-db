@@ -129,7 +129,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'db.base.context_processors.analytics', 'db.base.context_processors.stage_notice',
                 'db.base.context_processors.auth_block', 'db.base.context_processors.logout_block',
-                'db.base.context_processors.version', 'db.base.context_processors.decoders_version'
+                'db.base.context_processors.version',
+                'db.base.context_processors.decoders_version',
+                'db.base.context_processors.login_button'
             ],
             'loaders': [
                 (

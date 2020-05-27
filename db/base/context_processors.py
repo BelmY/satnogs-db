@@ -42,6 +42,15 @@ def logout_block(request):
     return rendered_string
 
 
+def login_button(request):
+    """Displays login button local vs auth0."""
+    if settings.AUTH0:
+        rendered_string = {'login_button': render_to_string('includes/login_button_auth0.html')}
+    else:
+        rendered_string = {'login_button': render_to_string('includes/login_button_local.html')}
+    return rendered_string
+
+
 def version(request):
     """Displays the current satnogs-db version."""
     return {'version': 'Version: {}'.format(__version__)}

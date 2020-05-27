@@ -329,7 +329,7 @@
                           </div>
                           <div class="modal-footer">
                             <button class="btn btn-default" data-dismiss="modal">Close</button>
-                            <a href="{% url 'account_login' %}" class="btn btn-primary">Log In</a>
+                            {{ login_button }}
                           </div>
                         {% endif %}
                       </div>
@@ -740,7 +740,7 @@
           </div>
           <div class="modal-footer">
             <button class="btn btn-default" data-dismiss="modal">Close</button>
-            <a href="{% url 'account_login' %}" class="btn btn-primary">Log In</a>
+            {{ login_button }}
           </div>
         {% endif %}
       </div>
