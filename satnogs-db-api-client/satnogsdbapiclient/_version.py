@@ -9,10 +9,6 @@
 # versioneer-0.18 (https://github.com/warner/python-versioneer)
 
 """Git implementation of _version.py."""
-
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-
 import errno
 import os
 import re

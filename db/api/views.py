@@ -1,7 +1,4 @@
 """SatNOGS DB API django rest framework Views"""
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-
 from django.core.files.base import ContentFile
 from rest_framework import mixins, status, viewsets
 from rest_framework.parsers import FileUploadParser, FormParser, \

@@ -1,8 +1,5 @@
 # pylint: disable=C0415
 """SatNOGS DB celery task workers"""
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-
 import os
 
 from celery import Celery

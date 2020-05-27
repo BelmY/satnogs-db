@@ -1,7 +1,4 @@
 """SatNOGS DB django base Forms class"""
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _

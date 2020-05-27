@@ -4,9 +4,6 @@ For local installation settings please copy .env-dist to .env and edit
 the appropriate settings in that file. You should not need to edit this
 file for local settings!
 """
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-
 import sentry_sdk
 from decouple import Csv, config
 from dj_database_url import parse as db_url

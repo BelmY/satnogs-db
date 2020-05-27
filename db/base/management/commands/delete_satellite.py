@@ -1,7 +1,4 @@
 """SatNOGS DB django management command to delete satellites"""
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 

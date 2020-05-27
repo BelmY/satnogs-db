@@ -1,7 +1,4 @@
 """Django database model for SatNOGS DB"""
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-
 import logging
 from os import path
 from uuid import uuid4

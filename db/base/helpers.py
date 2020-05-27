@@ -1,7 +1,4 @@
 """Helper functions for SatNOGS DB"""
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
-
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.authtoken.models import Token
 

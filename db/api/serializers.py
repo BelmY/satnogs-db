@@ -1,7 +1,5 @@
 """SatNOGS DB API serializers, django rest framework"""
 #  pylint: disable=R0201
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
 
 import h5py
 from rest_framework import serializers
