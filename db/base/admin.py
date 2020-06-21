@@ -197,7 +197,9 @@ class TransmitterAdmin(admin.ModelAdmin):
         'baud', 'downlink_low', 'downlink_high', 'downlink_drift', 'uplink_low', 'uplink_high',
         'uplink_drift', 'status', 'created', 'citation', 'user'
     )
-    search_fields = ('satellite__id', 'uuid', 'satellite__name', 'satellite__norad_cat_id')
+    search_fields = (
+        'satellite__id', 'uuid', 'description', 'satellite__name', 'satellite__norad_cat_id'
+    )
     list_filter = (
         'type',
         'status',
