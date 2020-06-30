@@ -5,11 +5,10 @@
 -r requirements.txt
 
 apipkg==1.5
-appdirs==1.4.3
-attrs==19.3.0
+appdirs==1.4.4
 click==7.1.2
 coverage==5.1
-distlib==0.3.0
+distlib==0.3.1
 docopt==0.6.1
 docopts==0.6.1
 execnet==1.7.1
@@ -17,19 +16,19 @@ factory-boy==2.12.0
 Faker==2.0.5
 filelock==3.0.12
 mock==3.0.5
-more-itertools==8.2.0
-packaging==20.3
+more-itertools==8.4.0
+packaging==20.4
 pluggy==0.13.1
 pur==5.2.2
-py==1.8.1
+py==1.9.0
 pyparsing==2.4.7
-pytest==5.4.1
+pytest==5.4.3
 pytest-cov==2.7.1
 pytest-django==3.5.1
 pytest-forked==1.0.2
 pytest-xdist==1.29.0
 text-unidecode==1.3
-toml==0.10.0
+toml==0.10.1
 tox==3.14.6
-virtualenv==20.0.20
-wcwidth==0.1.9
+virtualenv==20.0.25
+wcwidth==0.2.5
