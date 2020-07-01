@@ -4,23 +4,27 @@ from rest_framework import mixins, status, viewsets
 from rest_framework.parsers import FileUploadParser, FormParser, \
     MultiPartParser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from db.api import filters, pagination, serializers
 from db.api.perms import SafeMethodsWithPermission
+from db.api.renderers import JSONLDRenderer
 from db.base.models import Artifact, DemodData, Mode, Satellite, Transmitter
 from db.base.tasks import update_satellite
 
 
 class ModeView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """SatNOGS DB Mode API view class"""
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer]
     queryset = Mode.objects.all()
     serializer_class = serializers.ModeSerializer
 
 
 class SatelliteView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """SatNOGS DB Satellite API view class"""
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer]
     queryset = Satellite.objects.all()
     serializer_class = serializers.SatelliteSerializer
     filter_class = filters.SatelliteViewFilter
@@ -29,6 +33,7 @@ class SatelliteView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
 
 class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """SatNOGS DB Transmitter API view class"""
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer]
     queryset = Transmitter.objects.all()
     serializer_class = serializers.TransmitterSerializer
     filter_class = filters.TransmitterViewFilter
@@ -39,6 +44,7 @@ class TelemetryView(  # pylint: disable=R0901
         mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
         viewsets.GenericViewSet):
     """SatNOGS DB Telemetry API view class"""
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer]
     queryset = DemodData.objects.all()
     serializer_class = serializers.TelemetrySerializer
     filter_class = filters.TelemetryViewFilter
