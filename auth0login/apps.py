@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """SatNOGS DB Auth0 login app config"""
-from __future__ import unicode_literals
-
 from django.apps import AppConfig
 
 

@@ -1,6 +1,4 @@
 """SatNOGS DB API permissions, django rest framework"""
-from __future__ import absolute_import
-
 from rest_framework import permissions
 
 
