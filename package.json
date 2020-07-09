@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "bootstrap": "^3.4.1",
+        "bootstrap-table": "^1.17.0",
         "chart.js": "^2.8.0",
         "dnt-helper": "github:schalkneethling/dnt-helper",
         "gpredict.js": "github:kerel-fs/gpredict.js",
@@ -27,6 +28,10 @@
         "bootstrap/dist/css/bootstrap.min.css",
         "bootstrap/dist/js/bootstrap.min.js",
         "bootstrap/dist/fonts/*",
+        "bootstrap-table/dist/bootstrap-table.min.css",
+        "bootstrap-table/dist/bootstrap-table.min.js",
+        "bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.css",
+        "bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js",
         "chart.js/dist/Chart.min.js",
         "dnt-helper/js/dnt-helper.js",
         "gpredict.js/dist/gpredict.min.js",

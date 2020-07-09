@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %} - Transmitters List{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'lib/bootstrap-table/dist/bootstrap-table.min.css' %}">
+{% endblock css %}
+
+{% block content %}
+  <div class="row trans">
+    <table data-toggle="table"
+           data-sortable="true"
+           data-filter-control="true"
+           data-search="true"
+           data-show-columns="true"
+           data-show-columns-search="true"
+           id="transmitters-table">
+        <thead>
+            <tr>
+                <th data-visible="false">UUID</th>
+                <th data-sortable="true">Satellite</th>
+                <th data-sortable="true">Type</th>
+                <th data-sortable="true">Description</th>
+                <th data-sortable="true">Downlink</th>
+                <th data-sortable="true" data-visible="false">Downlink Drift</th>
+                <th data-sortable="true" data-visible="false">Uplink</th>
+                <th data-sortable="true" data-visible="false">Uplink Drift</th>
+                <th data-sortable="true" data-visible="false">Inverted</th>
+                <th data-sortable="true" data-filter-control="select">Mode</th>
+                <th data-sortable="true">Baud</th>
+                <th data-sortable="true">Service</th>
+                <th data-sortable="true">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for trans in transmitters %}
+            <tr>
+                <td>{{ trans.uuid }}</td>
+                <td>
+                  <a href="{% url 'satellite' norad=trans.satellite.norad_cat_id %}">
+                    {{ trans.satellite }}</a>
+                  </a>
+                </td>
+                <td>{{ trans.type }}</td>
+                <td>{{ trans.description }}</td>
+                <td class="frequency">{{ trans.downlink_low }}</td>
+                <td>{{ trans.downlink_drift }}</td>
+                <td class="frequency">{{ trans.uplink }}</td>
+                <td>{{ trans.uplink_drift }}</td>
+                <td>{{ trans.invert }}</td>
+                <td>{{ trans.downlink_mode }}</td>
+                <td>{{ trans.baud }}</td>
+                <td>{{ trans.service }}</td>
+                <td>{{ trans.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+  </div>
+
+{% endblock %}
+
+{% block javascript %}
+  <script src="{% static 'lib/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
+  <script src="{% static 'js/transmitters.js' %}"></script>
+{% endblock %}

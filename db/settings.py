@@ -270,14 +270,16 @@ CSP_DEFAULT_SRC = config(
     'CSP_DEFAULT_SRC',
     cast=lambda v: tuple(s.strip() for s in v.split(',')),
     default="'self',"
-    'https://*.mapbox.com'
+    'https://*.mapbox.com,'
+    "'unsafe-inline'"
 )
 CSP_SCRIPT_SRC = config(
     'CSP_SCRIPT_SRC',
     cast=lambda v: tuple(s.strip() for s in v.split(',')),
     default="'self',"
     'https://*.google-analytics.com,'
-    "'unsafe-eval'"
+    "'unsafe-eval',"
+    "'unsafe-inline'"
 )
 CSP_IMG_SRC = config(
     'CSP_IMG_SRC',

@@ -7,6 +7,7 @@ BASE_URLPATTERNS = (
     [
         url(r'^$', views.home, name='home'),
         url(r'^about/$', views.about, name='about'),
+        url(r'^transmitters/$', views.transmitters_list, name='transmitters_list'),
         url(r'^faq/$', views.faq, name='faq'),
         url(r'^satellite/(?P<norad>[0-9]+)/$', views.satellite, name='satellite'),
         url(r'^frames/(?P<norad>[0-9]+)/$', views.request_export, name='request_export_all'),

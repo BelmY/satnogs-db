@@ -334,6 +334,13 @@ footer {
     }
 }
 
+/* Transmitters List page
+==================== */
+
+#transmitters-table {
+    opacity: 0;
+}
+
 /* Statistics page
 ==================== */
 

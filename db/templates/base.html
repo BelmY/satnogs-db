@@ -39,8 +39,9 @@
 
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-              <li class="{% active request 'home' %}"><a href="{% url 'home' %}">Home</a></li>
               <li class="{% active request 'about' %}"><a href="{% url 'about' %}">About</a></li>
+              <li class="{% active request 'home' %}"><a href="{% url 'home' %}">Satellites</a></li>
+              <li class="{% active request 'transmitters_list' %}"><a href="{% url 'transmitters_list' %}">Transmitters</a></li>
               <li class="{% active request 'stats' %}"><a href="{% url 'stats' %}">Statistics</a></li>
               <li class="{% active request 'faq' %}"><a href="{% url 'faq' %}">FAQ</a></li>
               <li><a href="https://community.libre.space/c/satnogs/" target="_blank">Community</a></li>

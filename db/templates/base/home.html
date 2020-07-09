@@ -22,7 +22,7 @@
           {{ statistics.transmitters }}
         </p>
         {% if transmitter_suggestions %}
-          <p class="statistics" title="transmitter_suggestions" data-toggle="tooltip">
+          <p class="statistics" title="transmitter suggestions" data-toggle="tooltip">
             <img src="{% static 'img/transmitter_suggestions.png' %}">
             {{ transmitter_suggestions }}
           </p>
@@ -53,12 +53,7 @@
             <div class="satellite-names">{{ sat.names }}&nbsp;</div>
           </div>
           <div class="panel-footer">
-            {% with total=sat.transmitters.all.count %}
-              {{ total }} transmitter{{ total|pluralize }}
-            {% endwith %}
-            {% if request.user.is_superuser and sat.transmitter_suggestion_count %}
-              - <span class="glyphicon glyphicon-edit" title="Suggest edits"></span> {{  sat.transmitter_suggestion_count }}
-            {% endif %}
+            {{ sat.transmitters_count }} Transmitters
           </div>
         </a>
       </div>

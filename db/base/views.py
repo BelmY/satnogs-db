@@ -9,6 +9,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import OperationalError
+from django.db.models import Count
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
@@ -31,7 +32,7 @@ def home(request):
 
     :returns: base/home.html
     """
-    satellites = Satellite.objects.all()
+    satellites = Satellite.objects.annotate(transmitters_count=Count('transmitter_entries'))
     transmitter_suggestions = TransmitterSuggestion.objects.count()
     contributors = User.objects.filter(is_active=1).count()
     cached_stats = cache.get('stats_transmitters')
@@ -49,6 +50,16 @@ def home(request):
             'transmitter_suggestions': transmitter_suggestions
         }
     )
+
+
+def transmitters_list(request):
+    """View to render transmitters list page.
+
+    :returns: base/transmitters.html
+    """
+    transmitters = Transmitter.objects.prefetch_related('satellite', 'downlink_mode')
+
+    return render(request, 'base/transmitters.html', {'transmitters': transmitters})
 
 
 def robots(request):
