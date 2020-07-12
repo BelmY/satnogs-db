@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load tags %}
 
 {% block title %} - Transmitters List{% endblock %}
 
@@ -24,7 +25,7 @@
                     data-sortable="true"
                     data-filter-control="select">Type</th>
                 <th data-sortable="true">Description</th>
-                <th data-sortable="true">Downlink</th>
+                <th data-sortable="true" data-sorter="freqSorter">Downlink</th>
                 <th data-sortable="true" data-visible="false">Downlink Drift</th>
                 <th data-sortable="true" data-visible="false">Uplink</th>
                 <th data-sortable="true" data-visible="false">Uplink Drift</th>
@@ -50,13 +51,13 @@
                 </td>
                 <td>{{ trans.type }}</td>
                 <td>{{ trans.description }}</td>
-                <td class="frequency">{{ trans.downlink_low }}</td>
+                <td class="frequency">{{ trans.downlink_low | frq }}</td>
                 <td>{{ trans.downlink_drift }}</td>
                 <td class="frequency">{{ trans.uplink }}</td>
                 <td>{{ trans.uplink_drift }}</td>
                 <td>{{ trans.invert }}</td>
                 <td>{{ trans.downlink_mode }}</td>
-                <td>{{ trans.baud }}</td>
+                <td>{{ trans.baud | floatformat }}</td>
                 <td>{{ trans.service }}</td>
                 <td>{{ trans.status }}</td>
             </tr>

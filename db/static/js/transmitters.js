@@ -3,30 +3,19 @@ function ppb_to_freq(freq, drift) {
     return Math.round(freq_obs);
 }
 
-function format_freq(frequency) {
-    if (isNaN(frequency) || frequency == ''){
-        return 'None';
-    } else if (frequency < 1000) {
-    // Frequency is in Hz range
-        return frequency.toFixed(3) + ' Hz';
-    } else if (frequency < 1000000) {
-        return (frequency/1000).toFixed(3) + ' kHz';
-    } else {
-        return (frequency/1000000).toFixed(3) + ' MHz';
-    }
+/* eslint-disable no-unused-vars */
+/* Disabling eslint for the following function since it is called by the Bootstrap Table library */
+function freqSorter(a, b) {
+    var aa = a.split(' ', 1);
+    var bb = b.split(' ', 1);
+    return aa - bb;
 }
+/* eslint-enable no-unused-vars */
 
 $(document).ready(function() {
 
     $('#transmitters-table').bootstrapTable();
     $('#transmitters-table').css('opacity','1');
-
-    $( '#transmitters-table' ).on('pre-body.bs.table', function() {
-        $('.frequency').each(function() {
-            var to_format = $(this).html();
-            $(this).html(format_freq(to_format));
-        });
-    });
 
     // Calculate the drifted frequencies
     $('.drifted').each(function() {
