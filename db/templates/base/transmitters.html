@@ -5,12 +5,12 @@
 
 {% block css %}
   <link rel="stylesheet" href="{% static 'lib/bootstrap-table/dist/bootstrap-table.min.css' %}">
+  <link rel="stylesheet" href="{% static 'lib/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.css' %}">
 {% endblock css %}
 
 {% block content %}
   <div class="row trans">
-    <table data-toggle="table"
-           data-sortable="true"
+    <table data-sortable="true"
            data-filter-control="true"
            data-search="true"
            data-show-columns="true"
@@ -20,17 +20,23 @@
             <tr>
                 <th data-visible="false">UUID</th>
                 <th data-sortable="true">Satellite</th>
-                <th data-sortable="true">Type</th>
+                <th data-field="type"
+                    data-sortable="true"
+                    data-filter-control="select">Type</th>
                 <th data-sortable="true">Description</th>
                 <th data-sortable="true">Downlink</th>
                 <th data-sortable="true" data-visible="false">Downlink Drift</th>
                 <th data-sortable="true" data-visible="false">Uplink</th>
                 <th data-sortable="true" data-visible="false">Uplink Drift</th>
                 <th data-sortable="true" data-visible="false">Inverted</th>
-                <th data-sortable="true" data-filter-control="select">Mode</th>
+                <th data-field="mode" data-filter-control="select">Mode</th>
                 <th data-sortable="true">Baud</th>
-                <th data-sortable="true">Service</th>
-                <th data-sortable="true">Status</th>
+                <th data-field="service"
+                    data-sortable="true"
+                    data-filter-control="select">Service</th>
+                <th data-field="status"
+                    data-sortable="true"
+                    data-filter-control="select">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -39,7 +45,7 @@
                 <td>{{ trans.uuid }}</td>
                 <td>
                   <a href="{% url 'satellite' norad=trans.satellite.norad_cat_id %}">
-                    {{ trans.satellite }}</a>
+                    {{ trans.satellite }}
                   </a>
                 </td>
                 <td>{{ trans.type }}</td>
@@ -63,5 +69,6 @@
 
 {% block javascript %}
   <script src="{% static 'lib/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js' %}"></script>
   <script src="{% static 'js/transmitters.js' %}"></script>
 {% endblock %}

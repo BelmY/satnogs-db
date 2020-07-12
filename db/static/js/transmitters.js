@@ -4,7 +4,7 @@ function ppb_to_freq(freq, drift) {
 }
 
 function format_freq(frequency) {
-    if (frequency == 'None' ){
+    if (isNaN(frequency) || frequency == ''){
         return 'None';
     } else if (frequency < 1000) {
     // Frequency is in Hz range
@@ -18,19 +18,19 @@ function format_freq(frequency) {
 
 $(document).ready(function() {
 
-    $('#transmitters-table').bootstrapTable('hideLoading');
+    $('#transmitters-table').bootstrapTable();
     $('#transmitters-table').css('opacity','1');
+
+    $( '#transmitters-table' ).on('pre-body.bs.table', function() {
+        $('.frequency').each(function() {
+            var to_format = $(this).html();
+            $(this).html(format_freq(to_format));
+        });
+    });
 
     // Calculate the drifted frequencies
     $('.drifted').each(function() {
         var drifted = ppb_to_freq($(this).data('freq_or'),$(this).data('drift'));
         $(this).html(drifted);
     });
-
-    // Format all frequencies
-    $('.frequency').each(function() {
-        var to_format = $(this).html();
-        $(this).html(format_freq(to_format));
-    });
-
 });
