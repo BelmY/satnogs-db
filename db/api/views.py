@@ -27,7 +27,7 @@ class SatelliteView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer]
     queryset = Satellite.objects.all()
     serializer_class = serializers.SatelliteSerializer
-    filter_class = filters.SatelliteViewFilter
+    filterset_class = filters.SatelliteViewFilter
     lookup_field = 'norad_cat_id'
 
 
@@ -36,7 +36,7 @@ class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer]
     queryset = Transmitter.objects.all()
     serializer_class = serializers.TransmitterSerializer
-    filter_class = filters.TransmitterViewFilter
+    filterset_class = filters.TransmitterViewFilter
     lookup_field = 'uuid'
 
 
@@ -47,7 +47,7 @@ class TelemetryView(  # pylint: disable=R0901
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer]
     queryset = DemodData.objects.all()
     serializer_class = serializers.TelemetrySerializer
-    filter_class = filters.TelemetryViewFilter
+    filterset_class = filters.TelemetryViewFilter
     permission_classes = [SafeMethodsWithPermission]
     parser_classes = (FormParser, FileUploadParser)
     pagination_class = pagination.LinkedHeaderPageNumberPagination
@@ -102,7 +102,7 @@ class ArtifactView(  # pylint: disable=R0901
         viewsets.GenericViewSet):
     """SatNOGS DB Artifact API view class"""
     queryset = Artifact.objects.all()
-    filter_class = filters.ArtifactViewFilter
+    filterset_class = filters.ArtifactViewFilter
     permission_classes = [IsAuthenticated]
     parser_classes = (FormParser, MultiPartParser)
     pagination_class = pagination.LinkedHeaderPageNumberPagination

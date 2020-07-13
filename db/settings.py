@@ -294,8 +294,8 @@ CSP_IMG_SRC = config(
     'data:,'
     'blob:'
 )
-CSP_CHILD_SRC = config(
-    'CSP_CHILD_SRC', cast=lambda v: tuple(s.strip() for s in v.split(',')), default='blob:'
+CSP_FRAME_SRC = config(
+    'CSP_FRAME_SRC', cast=lambda v: tuple(s.strip() for s in v.split(',')), default='blob:'
 )
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
