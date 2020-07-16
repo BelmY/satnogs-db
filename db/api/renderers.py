@@ -12,6 +12,9 @@ class JSONLDRenderer(JSONRenderer):
 
     def render(self, data, accepted_media_type=None, renderer_context=None):
         """ Render `data` into JSONLD, returning a bytestring. """
+        if renderer_context['response'].exception:
+            return super().render(data, accepted_media_type, renderer_context)
+
         structured_data = get_structured_data(renderer_context['view'].basename, data)
         jsonld = structured_data.get_jsonld()
-        return super(JSONLDRenderer, self).render(jsonld, accepted_media_type, renderer_context)
+        return super().render(jsonld, accepted_media_type, renderer_context)
