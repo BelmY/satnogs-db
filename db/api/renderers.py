@@ -1,5 +1,5 @@
 """SatNOGS DB django rest framework API custom renderers"""
-from rest_framework.renderers import JSONRenderer
+from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 
 from db.base.structured_data import get_structured_data
 
@@ -18,3 +18,11 @@ class JSONLDRenderer(JSONRenderer):
         structured_data = get_structured_data(renderer_context['view'].basename, data)
         jsonld = structured_data.get_jsonld()
         return super().render(jsonld, accepted_media_type, renderer_context)
+
+
+class BrowserableJSONLDRenderer(BrowsableAPIRenderer):
+    """ Renderer for Browserable API with JSONLD format. """
+    format = 'browse-json-ld'
+
+    def get_default_renderer(self, view):
+        return JSONLDRenderer()

@@ -10,21 +10,25 @@ from rest_framework.serializers import ValidationError
 
 from db.api import filters, pagination, serializers
 from db.api.perms import SafeMethodsWithPermission
-from db.api.renderers import JSONLDRenderer
+from db.api.renderers import BrowserableJSONLDRenderer, JSONLDRenderer
 from db.base.models import Artifact, DemodData, Mode, Satellite, Transmitter
 from db.base.tasks import update_satellite
 
 
 class ModeView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """SatNOGS DB Mode API view class"""
-    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer]
+    renderer_classes = [
+        JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer, BrowserableJSONLDRenderer
+    ]
     queryset = Mode.objects.all()
     serializer_class = serializers.ModeSerializer
 
 
 class SatelliteView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """SatNOGS DB Satellite API view class"""
-    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer]
+    renderer_classes = [
+        JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer, BrowserableJSONLDRenderer
+    ]
     queryset = Satellite.objects.all()
     serializer_class = serializers.SatelliteSerializer
     filterset_class = filters.SatelliteViewFilter
@@ -33,7 +37,9 @@ class SatelliteView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
 
 class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """SatNOGS DB Transmitter API view class"""
-    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer]
+    renderer_classes = [
+        JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer, BrowserableJSONLDRenderer
+    ]
     queryset = Transmitter.objects.all()
     serializer_class = serializers.TransmitterSerializer
     filterset_class = filters.TransmitterViewFilter
@@ -44,7 +50,9 @@ class TelemetryView(  # pylint: disable=R0901
         mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
         viewsets.GenericViewSet):
     """SatNOGS DB Telemetry API view class"""
-    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer]
+    renderer_classes = [
+        JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer, BrowserableJSONLDRenderer
+    ]
     queryset = DemodData.objects.all()
     serializer_class = serializers.TelemetrySerializer
     filterset_class = filters.TelemetryViewFilter
