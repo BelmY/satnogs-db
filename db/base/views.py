@@ -89,7 +89,7 @@ def satellite(request, norad):
     types = TRANSMITTER_TYPE
     services = SERVICE_TYPE
     statuses = TRANSMITTER_STATUS
-    sat_cache = cache.get(norad)
+    sat_cache = cache.get(satellite_obj.id)
     frame_count = 0
     if sat_cache is not None:
         frame_count = sat_cache['count']
@@ -219,16 +219,16 @@ def stats(request):
     :returns: base/stats.html
     """
     satellites = []
-    norads = cache.get('satellites_norad')
+    ids = cache.get('satellites_ids')
     observers = cache.get('stats_observers')
-    if not norads or not observers:
+    if not ids or not observers:
         try:
             cache_statistics()
         except OperationalError:
             pass
     else:
-        for norad in norads:
-            stat = cache.get(norad['norad_cat_id'])
+        for sid in ids:
+            stat = cache.get(sid['id'])
             satellites.append(stat)
 
     return render(request, 'base/stats.html', {'satellites': satellites, 'observers': observers})

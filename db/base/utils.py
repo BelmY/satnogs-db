@@ -300,18 +300,17 @@ def cache_statistics():
     statistics = calculate_statistics()
     cache.set('stats_transmitters', statistics, 60 * 60 * 2)
 
-    norads = Satellite.objects \
-                      .values('norad_cat_id')
-    cache.set('satellites_norad', norads, 60 * 60 * 2)
+    ids = Satellite.objects.values('id')
+    cache.set('satellites_ids', ids, 60 * 60 * 2)
 
     satellites = Satellite.objects \
-                          .values('name', 'norad_cat_id') \
+                          .values('name', 'norad_cat_id', 'id') \
                           .annotate(count=Count('telemetry_data'),
                                     latest_payload=Max('telemetry_data__timestamp')) \
                           .order_by('-count')
 
     for sat in satellites:
-        cache.set(sat['norad_cat_id'], sat, 60 * 60 * 2)
+        cache.set(sat['id'], sat, 60 * 60 * 2)
 
     observers = DemodData.objects \
                          .values('observer') \
