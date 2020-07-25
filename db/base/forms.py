@@ -1,9 +1,10 @@
 """SatNOGS DB django base Forms class"""
-from django import forms
+from bootstrap_modal_forms.forms import BSModalModelForm
 from django.core.exceptions import ValidationError
+from django.forms import NumberInput, TextInput
 from django.utils.translation import ugettext_lazy as _
 
-from db.base.models import Transmitter, TransmitterEntry
+from db.base.models import Satellite, Transmitter, TransmitterEntry
 
 
 def existing_uuid(value):
@@ -18,15 +19,52 @@ def existing_uuid(value):
         )
 
 
-class TransmitterEntryForm(forms.ModelForm):
+class TransmitterModelForm(BSModalModelForm):  # pylint: disable=too-many-ancestors
     """Model Form class for TransmitterEntry objects"""
-
-    uuid = forms.CharField(required=False, validators=[existing_uuid])
-
     class Meta:
         model = TransmitterEntry
         fields = [
             'description', 'status', 'type', 'uplink_low', 'uplink_high', 'downlink_low',
             'downlink_high', 'uplink_drift', 'downlink_drift', 'downlink_mode', 'uplink_mode',
-            'invert', 'baud', 'satellite', 'citation', 'service'
+            'invert', 'baud', 'citation', 'service'
         ]
+        widgets = {
+            'description': TextInput(),
+        }
+
+
+class TransmitterUpdateForm(BSModalModelForm):  # pylint: disable=too-many-ancestors
+    """Model Form class for TransmitterEntry objects"""
+    class Meta:
+        model = TransmitterEntry
+        fields = [
+            'description', 'status', 'type', 'service', 'uplink_low', 'uplink_drift',
+            'uplink_high', 'downlink_low', 'uplink_mode', 'downlink_drift', 'downlink_high',
+            'downlink_mode', 'invert', 'baud', 'created', 'citation'
+        ]
+        widgets = {
+            'description': TextInput(),
+            'created': TextInput(attrs={'readonly': True}),
+        }
+
+
+class SatelliteModelForm(BSModalModelForm):
+    """Form that uses django-bootstrap-modal-forms for satellite editing"""
+    class Meta:
+        model = Satellite
+        fields = [
+            'norad_cat_id', 'name', 'names', 'operator', 'status', 'description', 'countries',
+            'website', 'dashboard_url', 'launched', 'deployed', 'decayed', 'image'
+        ]
+        labels = {
+            'norad_cat_id': _('Norad ID'),
+            'names': _('Other names'),
+            'countries': _('Countries of Origin'),
+            'launched': _('Launch Date'),
+            'deployed': _('Deploy Date'),
+            'decayed': _('Re-entry Date'),
+            'description': _('Description'),
+            'dashboard_url': _('Dashboard URL'),
+            'operator': _('Owner/Operator'),
+        }
+        widgets = {'norad_cat_id': NumberInput(attrs={'readonly': True}), 'names': TextInput()}

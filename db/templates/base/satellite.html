@@ -1,756 +1,442 @@
-{% extends "base/home.html" %}
+{% extends "base.html" %}
 
 {% load tags %}
-{% load staticfiles %}
+{% load static %}
 
-{% block title %} - {{ satellite }}{% endblock %}
+{% block title %} - {{ satellite.name }}{% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" href="{% static 'lib/mapbox-gl/dist/mapbox-gl.css' %}">
+<link rel="stylesheet" href="{% static 'lib/mapbox-gl/dist/mapbox-gl.css' %}">
+<link rel="stylesheet" href="{% static 'lib/flag-icon-css/css/flag-icon.min.css' %}">
 {% endblock css %}
 
-{% block top %}{% endblock %}
+{% block top-menu-left %}
+<h5 class="mb-0 mr-3">{{ satellite.name }}</h5>
+{% endblock %}
+
+{% block top-menu-right %}
+
+  <ul class="navbar-nav nav nav-pills" data-widget="treeview" role="menu" data-accordion="false" id="tabs"
+    role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+        aria-selected="true"><i class="nav-icon fas fa-satellite"></i>
+        <p class="d-none d-lg-inline-block">Info</p>
+      </a>
+    </li>
+    <li class="nav-item{% if satellite.status == 're-entered' %} disabled{% endif %}">
+      {% if satellite.status == 're-entered' %}
+      <a class="nav-link disabled">
+        {% else %}
+        <a class="nav-link" id="mapcontent-tab" data-toggle="tab" href="#mapcontent" role="tab"
+          aria-controls="mapcontent" aria-selected="false">
+          {% endif %}
+          <i class="nav-icon fas fa-map-marked-alt"></i>
+          <p class="d-none d-lg-inline-block">Map</p>
+        </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="transmitters-tab" data-toggle="tab" href="#transmitters" role="tab"
+        aria-controls="transmitters" aria-selected="false">
+        <i class="nav-icon fas fa-satellite-dish"></i>
+        {% if satellite.transmitters %}
+        <span class="badge badge-satnogs-primary navbar-badge">{{ satellite.transmitters.count }}</span>
+        {% endif %}
+        {% if request.user.is_superuser and satellite.transmitter_suggestion_count %}
+        <!-- <span class="badge badge-warning navbar-badge">{{ satellite.transmitter_suggestion_count }}</span> -->
+        {% endif %}
+        <p class="d-none d-lg-inline-block">Transmitters</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data"
+        aria-selected="false">
+        <i class="nav-icon fas fa-chart-bar"></i>
+        {% if satellite.telemetry_data_count %}
+        <span class="badge badge-satnogs-primary navbar-badge">{{ satellite.telemetry_data_count }}</span>
+        {% endif %}
+        <p class="d-none d-lg-inline-block">Data</p>
+      </a>
+    </li>
+
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="nav-icon fas fa-edit"></i>
+        <p class="d-none d-lg-inline-block">Edit</p>
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item d-flex align-items-center create-transmitter-link" href="#" id="create-transmitter-side"
+          data-form-url="{% url 'create_transmitter' satellite_pk=satellite.id %}">
+          <i class="nav-icon mr-2 fas fa-plus-square"></i>
+          <p class="mb-0">Submit New Transmitter</p>
+        </a>
+      {% if perms.base.change_satellite %}
+          <a class="dropdown-item d-flex align-items-center bs-modal" id="satellite-update" href="#"
+            data-form-url="{% url 'update_satellite' satellite.id %}">
+            <i class="nav-icon mr-2 fas fa-edit"></i>
+            <p class="mb-0">Edit {{ satellite.name }}</p>
+          </a>
+      {% endif %}
+      </div>
+    </li>
+  </ul>
+
+{% endblock %}
 
 {% block content %}
 
-  <!-- Satellite Overview Section -->
-  <div class="row">
-    <div class="col-md-12 satellite-panels">
-      <div class="panel panel-default panel-satellite">
-        <div class="panel-heading">
-          <div class="satellite-title">
-            {{ satellite }}
-          </div>
-          <div class="pull-right">
-            {% if satellite.names %}
-              <div class="satellite-names-full hidden-xs">{{ satellite.names }}</div>
-            {% endif %}
-            <span class="label satellite-status" data-status="{{ satellite.status }}">
-              {{ satellite.status }}
-            </span>
-            <a type="button"
-               title="SatNOGS Network observations"
-               class="btn btn-default btn-xs"
-               href="https://network.satnogs.org/observations/?norad={{ satellite.norad_cat_id }}"
-               target="_blank">
-              <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> Observations</span>
-            </a>
-            {% if satellite.dashboard_url is not null %}
-            <a type="button"
-               title="SatNOGS Grafana dashboard"
-               class="btn btn-default btn-xs"
-               href="{{ satellite.dashboard_url }}"
-               target="_blank">
-              <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> Dashboard</span>
-            </a>
-            {% endif %}
-          </div>
-        </div>
-        <div class="row panel-body">
-          <div class="col-sm-3">
-            <div>
-              <img src="{{ satellite.get_image }}" alt="{{ satellite.name }}" class="satellite-img-full">
-            </div>
-            <div class="satellite-description">
-              {{ satellite.get_description|safe }}
-            </div>
-          </div>
-          <div class="col-sm-9">
-          {% if satellite.status != 're-entered' %}
-              <div id="map"
-                   data-name="{{ satellite.name }}"
-                   data-tle1="{{ satellite.latest_tle.tle1 }}"
-                   data-tle2="{{ satellite.latest_tle.tle2 }}"
-                   data-mapboxtoken="{{ mapbox_token }}"></div>
-          {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="row h-100 pl-2 pr-3">
+  <!-- The following div is managed by the tab menus -->
+  <div class="col-12 tab-content mx-2 pt-3" id="myTabContent">
 
-  <!-- Transmitters Section -->
-  <div class="row">
-    <div class="col-md-12 satellite-panels">
-      <div class="panel panel-default panel-satellite">
-        <div class="panel-heading">
-          <div class="satellite-title">
-            Transmitters <span class="badge hidden-xs">{{ satellite.transmitter_set.count }}</span>
-            {% if transmitter_suggestions %}
-              <div class="transmitter-suggestions-counter label label-default hidden-xs">
-                {{ transmitter_suggestions.count }} suggestion{{ transmitter_suggestions.count|pluralize }} pending
-              </div>
-            {% endif %}
-          </div>
-          <div class="satellite-suggest pull-right">
-            <button type="button"
-                    class="btn btn-primary btn-sm"
-                    data-toggle="modal" data-target="#NewSuggestionModal">
-              <span class="glyphicon glyphicon-plus" title="Suggest edits"></span> Suggest <span class="hidden-xs">New Transmitter</span>
-            </button>
-          </div>
-        </div>
-        <div class="row panel-body">
-          <div class="col-md-12">
-            <div class="row">
-              {% for transmitter in satellite.transmitters.all %}
-                <div class="col-md-4">
-                  <div class="panel {% if satellite.status == 're-entered' %}panel-default{% elif transmitter.status == 'active' %}panel-success{% else %}panel-danger{% endif %} panel-transmitter">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">
-                        <span class="transmitter-title">{{ transmitter.description }}</span>
-                        <button type="button"
-                                title="UUID: {{ transmitter.uuid }}"
-                                class="btn btn-default btn-sm pull-right transmitter-uuid js-copy"
-                                data-toggle="tooltip"
-                                data-placement="bottom"
-                                data-copy="{{ transmitter.uuid }}">
-                          <span class="glyphicon glyphicon-info-sign" title="Suggest edits"></span>
-                        </button>
-                        <button type="button"
-                                class="btn btn-default btn-sm pull-right suggest-transmitter"
-                                data-toggle="modal"
-                                data-target="#EditSuggestionModal-{{ transmitter.id }}">
-                          <span class="glyphicon glyphicon-edit" title="Suggest edits"></span>
-                        </button>
-                      </h3>
-                    </div>
-                    <div class="row panel-body">
-                      <div class="col-md-12">
-                        {% if transmitter.type %}
-                          {% include "includes/field.html" with name="Type" value=transmitter.type %}
-                        {% endif %}
-                        {% if transmitter.service %}
-                          {% include "includes/field.html" with name="Service" value=transmitter.service %}
-                        {% endif %}
-                        {% if transmitter.downlink_mode %}
-                          {% include "includes/field.html" with name="Downlink Mode" value=transmitter.downlink_mode %}
-                        {% endif %}
-                        {% if transmitter.uplink_mode %}
-                          {% include "includes/field.html" with name="Uplink Mode" value=transmitter.uplink_mode %}
-                        {% endif %}
-                        {% if transmitter.baud %}
-                          {% include "includes/field.html" with name="Baud" value=transmitter.baud %}
-                        {% endif %}
-                        {% if transmitter.type == 'Transmitter' %}
-                          {% if transmitter.downlink_low %}
-                            {% include "includes/field.html" with name="Downlink" value=transmitter.downlink_low hz=transmitter.downlink_low %}
-                          {% endif %}
-                          {% if transmitter.downlink_drift %}
-                            {% include "includes/field.html" with name="Downlink Drifted" value=transmitter.downlink_drift hz=transmitter.downlink_drift class="drifted" freq_or=transmitter.downlink_low %}
-                          {% endif %}
-                        {% endif %}
-                        {% if transmitter.type == 'Transceiver' %}
-                          {% if transmitter.downlink_low %}
-                            {% include "includes/field.html" with name="Downlink" value=transmitter.downlink_low hz=transmitter.downlink_low %}
-                          {% endif %}
-                          {% if transmitter.downlink_drift %}
-                            {% include "includes/field.html" with name="Downlink Drifted" value=transmitter.downlink_drift hz=transmitter.downlink_drift class="drifted" freq_or=transmitter.downlink_low %}
-                          {% endif %}
-                          {% if transmitter.uplink_low %}
-                            {% include "includes/field.html" with name="Uplink" value=transmitter.uplink_low hz=transmitter.uplink_low %}
-                          {% endif %}
-                          {% if transmitter.uplink_drift %}
-                            {% include "includes/field.html" with name="Uplink Drifted" value=transmitter.uplink_drift hz=transmitter.uplink_drift class="drifted" freq_or=transmitter.uplink_low %}
-                          {% endif %}
-                        {% endif %}
-                        {% if transmitter.type == 'Transponder' %}
-                          {% if transmitter.downlink_low %}
-                            {% include "includes/field.html" with name="Downlink Low" value=transmitter.downlink_low hz=transmitter.downlink_low %}
-                          {% endif %}
-                          {% if transmitter.downlink_high %}
-                            {% include "includes/field.html" with name="Downlink High" value=transmitter.downlink_high hz=transmitter.downlink_high %}
-                          {% endif %}
-                          {% if transmitter.downlink_drift %}
-                            {% include "includes/field.html" with name="Downlink Drift" value=transmitter.downlink_drift hz=transmitter.downlink_drift %}
-                          {% endif %}
-                          {% if transmitter.uplink_low %}
-                            {% include "includes/field.html" with name="Uplink Low" value=transmitter.uplink_low hz=transmitter.uplink_low %}
-                          {% endif %}
-                          {% if transmitter.uplink_high %}
-                            {% include "includes/field.html" with name="Uplink High" value=transmitter.uplink_high hz=transmitter.uplink_high %}
-                          {% endif %}
-                          {% if transmitter.uplink_drift %}
-                            {% include "includes/field.html" with name="Uplink Drift" value=transmitter.uplink_drift hz=transmitter.uplink_drift %}
-                          {% endif %}
-                          {% if transmitter.invert %}
-                            {% include "includes/field.html" with name="Invert" value=transmitter.invert %}
-                          {% endif %}
-                        {% endif %}
-                      </div>
-                    </div>
-                    <div class="panel-footer transmitter-citation-footer">
-                        Updated on {{ transmitter.created|date:'Y-m-d H:i' }} by {{ transmitter.user }}
-                        <button type="button"
-                                class="btn btn-default btn-sm pull-right transmitter-citation"
-                                data-toggle="modal"
-                                data-target="#TransmitterCitation-{{ transmitter.id }}">
-                          Citation
-                        </button>
-                    </div>
-                  </div>
-
-                  <!-- Citation Modal -->
-                  <div class="modal fade" id="TransmitterCitation-{{ transmitter.id }}" tabindex="-1" role="dialog" aria-labelledby="CitationModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                          <h4 class="modal-title" id="CitationModalLabel">Citation for {{ transmitter.uuid }}</h4>
-                        </div>
-                        <div class="modal-body">
-                          {{ transmitter.citation }}
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Edit Suggestion Modal -->
-                  <div class="modal fade transmitter_suggestion-edit-modal" id="EditSuggestionModal-{{ transmitter.id }}" tabindex="-1" role="dialog" aria-labelledby="EditSuggestionModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                          <h4 class="modal-title" id="EditSuggestionModalLabel">Suggest an edit to this Transmitter</h4>
-                        </div>
-                        {% if request.user.is_authenticated %}
-                          <form action="{% url 'transmitter_suggestion' %}" method="post" id="edittransmitter_suggestion-form">{% csrf_token %}
-                            <div class="modal-body">
-                              <input type="hidden" name="uuid" value="{{ transmitter.uuid }}"></input>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Description</div>
-                                <input type="text" class="form-control" name="description" value="{{ transmitter.description }}">
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Status</div>
-                                <select class="form-control transmitter_suggestion-status" name="status">
-                                  {% for status in statuses %}
-                                    <option value="{{ status }}" {% ifequal transmitter.status status %}selected{% endifequal %}>
-                                      {{ status }}
-                                    </option>
-                                  {% endfor %}
-                                </select>
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Type</div>
-                                <select class="form-control transmitter_suggestion-type" name="type">
-                                  {% for type in types %}
-                                    <option value="{{ type }}" {% ifequal transmitter.type type %}selected{% endifequal %}>
-                                      {{ type }}
-                                    </option>
-                                  {% endfor %}
-                                </select>
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Service</div>
-                                <select class="form-control transmitter_suggestion-service" name="service">
-                                  {% for service in services %}
-                                    <option value="{{ service }}" {% ifequal transmitter.service service %}selected{% endifequal %}>
-                                      {{ service }}
-                                    </option>
-                                  {% endfor %}
-                                </select>
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Downlink mode</div>
-                                <select class="form-control" name="downlink_mode">
-                                  <option value="" selected></option>
-                                  {% for mode in modes %}
-                                    <option value="{{ mode.id }}" {% ifequal transmitter.downlink_mode mode %}selected{% endifequal %}>
-                                      {{ mode }}
-                                    </option>
-                                  {% endfor %}
-                                </select>
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Uplink mode</div>
-                                <select class="form-control" name="uplink_mode">
-                                  <option value="" selected></option>
-                                  {% for mode in modes %}
-                                    <option value="{{ mode.id }}" {% ifequal transmitter.uplink_mode mode %}selected{% endifequal %}>
-                                      {{ mode }}
-                                    </option>
-                                  {% endfor %}
-                                </select>
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Uplink Low</div>
-                                <input type="number" class="form-control" name="uplink_low" value="{{ transmitter.uplink_low|default_if_none:'' }}">
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Uplink High</div>
-                                <input type="number" class="form-control" name="uplink_high" value="{{ transmitter.uplink_high|default_if_none:'' }}">
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Uplink Drifted</div>
-                                <input type="number" class="form-control uplink-drifted-sugedit" name="" value="{{ transmitter.uplink_low|default_if_none:'' }}">
-                                <div class="input-group-addon">PPB Drift</div>
-                                <input type="text" class="form-control uplink-ppb-sugedit" name="uplink_drift" value="{{ transmitter.uplink_drift|default_if_none:'' }}" readonly>
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Downlink Low</div>
-                                <input type="number" class="form-control" name="downlink_low" value="{{ transmitter.downlink_low|default_if_none:'' }}">
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Downlink High</div>
-                                <input type="number" class="form-control" name="downlink_high" value="{{ transmitter.downlink_high|default_if_none:'' }}">
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Downlink Drifted</div>
-                                <input type="number" class="form-control downlink-drifted-sugedit" name="" value="{{ transmitter.downlink_low|default_if_none:'' }}">
-                                <div class="input-group-addon">PPB Drift</div>
-                                <input type="text" class="form-control downlink-ppb-sugedit" name="downlink_drift" value="{{ transmitter.downlink_drift|default_if_none:'' }}" readonly>
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <input type="checkbox" value="1" name="invert" {% if transmitter.invert %}checked{% endif %}> Invert
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Baud Rate</div>
-                                <input type="number" class="form-control" name="baud" value="{{ transmitter.baud|default_if_none:'' }}">
-                              </div>
-                              <div class="input-group transmitter-element-suggest">
-                                <div class="input-group-addon">Citation URL</div>
-                                <input type="text" class="form-control" name="citation" maxlength="255" required>
-                              </div>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-primary">Send</button>
-                            </div>
-                            <input type="hidden" name="transmitter" value="{{ transmitter.pk }}">
-                            <input type="hidden" name="satellite" value="{{ satellite.pk }}">
-                          </form>
-                        {% else %}
-                          <div class="modal-body">
-                            <div class="text-danger">You need to login first to add a new transmitter suggestion.</div>
-                          </div>
-                          <div class="modal-footer">
-                            <button class="btn btn-default" data-dismiss="modal">Close</button>
-                            {{ login_button }}
-                          </div>
-                        {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {% if forloop.counter|divisibleby:3 %}
-                  </div>
-                   {% if not loop.last %}
-                     <div class="row">
-                   {% endif %}
-                {% endif %}
-              {% empty %}
-                <div class="row panel-body">
-                  <div class="col-md-12">
-                    <span class="text-danger">No approved transmitters yet for this Satellite.</span>
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-
-            {% if request.user.is_superuser %}
-              <hr>
-              <div class="row">
-                {% for transmitter_suggestion in transmitter_suggestions %}
-                  <div class="col-md-4">
-                    <div class="panel panel-{% if transmitter_suggestion.transmitter %}info{% else %}warning{% endif %} panel-transmitter">
-                      <div class="panel-heading">
-                        <h3 class="panel-title">
-                          <span class="transmitter-title">{{ transmitter_suggestion.description }}</span>
-                          <a type="button" href="{% url 'admin:base_transmittersuggestion_changelist' %}"
-                             target="_blank" title="Edit on admin"
-                             class="btn btn-default btn-sm pull-right suggest-transmitter">
-                            <span class="glyphicon glyphicon-wrench" ></span>
-                          </a>
-                        </h3>
-                      </div>
-                      <div class="row panel-body">
-                        <div class="col-md-12">
-                          {% if transmitter_suggestion.description != transmitter_suggestion.transmitter.description %}
-                            {% include "includes/field.html" with name="Description" value=transmitter_suggestion.description original=transmitter_suggestion.transmitter.description %}
-                          {% endif %}
-                          {% if transmitter_suggestion.status %}
-                            {% include "includes/field.html" with name="Status" value=transmitter_suggestion.status original=transmitter_suggestion.transmitter.status %}
-                          {% endif %}
-                          {% if transmitter_suggestion.type %}
-                            {% include "includes/field.html" with name="Type" value=transmitter_suggestion.type original=transmitter_suggestion.transmitter.type %}
-                          {% endif %}
-                          {% if transmitter_suggestion.service %}
-                            {% include "includes/field.html" with name="Service" value=transmitter_suggestion.service original=transmitter_suggestion.transmitter.service %}
-                          {% endif %}
-                          {% if transmitter_suggestion.downlink_mode %}
-                            {% include "includes/field.html" with name="Downlink Mode" value=transmitter_suggestion.downlink_mode original=transmitter_suggestion.transmitter.downlink_mode %}
-                          {% endif %}
-                          {% if transmitter_suggestion.uplink_mode %}
-                            {% include "includes/field.html" with name="Uplink Mode" value=transmitter_suggestion.uplink_mode original=transmitter_suggestion.transmitter.uplink_mode %}
-                          {% endif %}
-                          {% if transmitter_suggestion.invert %}
-                            {% include "includes/field.html" with name="Invert" value=transmitter_suggestion.invert original=transmitter_suggestion.transmitter.invert %}
-                          {% endif %}
-                          {% if transmitter_suggestion.baud %}
-                            {% include "includes/field.html" with name="Baud" value=transmitter_suggestion.baud original=transmitter_suggestion.transmitter.baud %}
-                          {% endif %}
-                          {% if transmitter_suggestion.uplink_low %}
-                            {% include "includes/field.html" with name="Uplink Low" value=transmitter_suggestion.uplink_low original=transmitter_suggestion.transmitter.uplink_low hz=transmitter.uplink_low %}
-                          {% endif %}
-                          {% if transmitter_suggestion.uplink_high %}
-                            {% include "includes/field.html" with name="Uplink High" value=transmitter_suggestion.uplink_high original=transmitter_suggestion.transmitter.uplink_high hz=transmitter.uplink_high %}
-                          {% endif %}
-                          {% if transmitter_suggestion.uplink_drift %}
-                            {% include "includes/field.html" with name="Uplink Drift" value=transmitter_suggestion.uplink_drift original=transmitter_suggestion.transmitter.uplink_drift hz=transmitter.uplink_drift %}
-                          {% endif %}
-                          {% if transmitter_suggestion.downlink_low %}
-                            {% include "includes/field.html" with name="Downlink Low" value=transmitter_suggestion.downlink_low original=transmitter_suggestion.transmitter.downlink_low hz=transmitter.downlink_low %}
-                          {% endif %}
-                          {% if transmitter_suggestion.downlink_high %}
-                            {% include "includes/field.html" with name="Downlink High" value=transmitter_suggestion.downlink_high original=transmitter_suggestion.transmitter.downlink_high hz=transmitter.downlink_high %}
-                          {% endif %}
-                          {% if transmitter_suggestion.downlink_drift %}
-                            {% include "includes/field.html" with name="Downlink Drift" value=transmitter_suggestion.downlink_drift original=transmitter_suggestion.transmitter.downlink_drift hz=transmitter.downlink_drift %}
-                          {% endif %}
-                          {% if transmitter_suggestion.citation %}
-                            {% include "includes/field.html" with name="Citation" value=transmitter_suggestion.citation|urlizetrunc:35 original=transmitter_suggestion.transmitter.citation|urlizetrunc:35 %}
-                          {% endif %}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {% if forloop.counter|divisibleby:3 %}
-                    </div>
-                     {% if not loop.last %}
-                       <div class="row">
-                     {% endif %}
-                  {% endif %}
-                {% endfor %}
-              </div>
-            {% endif %}
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script id="telemetryDescriptorsTemplate" type="text/template">
-    <li class="list-group-item telemetry-key" data-key="<%- key %>" data-unit="<%- unit %>"><%- description %></li>
-  </script>
-
-
-  <!-- Data Structs Section -->
-  {% if satellite.telemetry_decoder_count %}
-    <div class="row">
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 satellite-panels">
-        <div class="panel panel-default panel-satellite">
-          <div class="panel-heading">
-            <div class="satellite-title" id="telemetry-block" data-satid="{{ satellite.norad_cat_id }}">
-              Data Decoding Structs
-            </div>
-          </div>
-          <div class="row panel-body">
-            <div class="col-md-12">
-              <div class="row">
-                {% for telemetry in satellite.telemetries.all %}
-                  <div class="col-md-4">
-                    <div class="panel panel-primary panel-transmitter">
-                      <div class="panel-heading">
-                        <h3 class="panel-title">
-                          <span class="transmitter-title">{{ telemetry.name }}</span>
-                        </h3>
-                      </div>
-                      <div class="row panel-body">
-                        <div class="col-md-12">
-                          {% include "includes/field.html" with name="Decoder Script" value=telemetry.decoder %}
-                          <div class="row transmitter-element">
-                            <div class="col-md-6">
-                              <span class="label label-default">Decoder Struct</span>
-                            </div>
-                            <div class="col-md-6">
-                              <a href="#" data-toggle="modal"
-                                 data-target="#StructModal-{{ telemetry.id }}">
-                                Click here
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Struct Modal -->
-                  <div class="modal fade" id="StructModal-{{ telemetry.id }}" tabindex="-1" role="dialog" aria-labelledby="StructModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                          <h4 class="modal-title" id="EditSuggestionModalLabel">Kaitai Struct for {{ telemetry.name }}</h4>
-                        </div>
-                        <div class="modal-body">
-                          {% if not telemetry.schema == '' %}
-                            <div class="kaitai-header">
-                              See <a href="http://kaitai.io" target="_blank">kaitai.io</a> for more information on the format.
-                            </div>
-                            <div class="kaitai-struct">
-                              <pre>{{ telemetry.schema }}</pre>
-                            </div>
-                          {% else %}
-                            <div>
-                              Struct format appears to be missing.
-                            </div>
-                          {% endif %}
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                {% empty %}
-                  <div class="row panel-body">
-                    <div class="col-md-12">
-                      <span class="text-danger">No data structs yet for this Satellite.</span>
-                    </div>
-                  </div>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  <!-- Orbital Elements Section -->
-  {% if satellite.latest_tle.redistributable %}
-  <div class="row">
-    <div class="col-md-12 satellite-panels">
-      <div class="panel panel-default panel-satellite">
-        <div class="panel-heading">
-          <div class="satellite-title">
-            Orbital Elements
-          </div>
-        </div>
-        <div class="row panel-body">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-primary panel-tle">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">
-                      <span class="tle-title">Latest TLE</span>
-                    </h3>
-                  </div>
-                  <div class="row panel-body">
-                    <div class="col-md-12">
-                      <div class="row tle-element">
-                        <div class="col-md-2">
-                          <span class="label label-default">NORAD ID</span>
-                        </div>
-                        <div class="col-md-10">
-                          {{ satellite.latest_tle.norad_cat_id }}
-                        </div>
-                      </div>
-                      <div class="row tle-element">
-                        <div class="col-md-2">
-                          <span class="label label-default">TLE source</span>
-                        </div>
-                        <div class="col-md-10">
-                          {{ satellite.latest_tle.source }}
-                        </div>
-                      </div>
-                      <div class="row tle-element">
-                        <div class="col-md-2">
-                          <span class="label label-default">TLE</span>
-                        </div>
-                        <div class="col-md-10">
-                          <pre>{{ satellite.latest_tle.tle1 }}<br>{{ satellite.latest_tle.tle2 }}</pre>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endif %}
-
-  <!-- Telemetry Frames Section -->
-  <!-- This is a hacky way of getting around slow db queries. See #237 -->
-  {% if frame_count != 0 %}
+    <!-- Profile panel -->
+    <div class="tab-pane fade show active mx-1" id="profile" role="tabpanel" aria-labelledby="profile-tab">
       <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 satellite-panels">
-          <div class="panel panel-default panel-satellite">
-            <div class="panel-heading">
+        <div class="col-12 col-md-6">
+          <img src="{{ satellite.get_image }}" alt="{{ satellite.name }}" class="satellite-img-full mb-3">
+          <div class="lead mr-md-2">
+            {{ satellite.get_description|safe }}
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <dl class="row">
+            <dt class="col-sm-4" id="satellite_name" data-needshelp="{{ satellite.needs_help }}">{{ satellite.name }}</dt>
+            <dd class="col-sm-8">
+              {% for country in satellite.countries %}
+              <span class="flag-icon flag-icon-{{ country.code|lower }} fa-2x mr-1"></span>
+              {% endfor %}
+            </dd>
+            <dt class="col-sm-4">Status</dt>
+            <dd class="col-sm-8">
+              <img class="" src="
+              {% if satellite.status == 'alive' %}
+              {% static 'img/status_alive.png' %}
+              {% elif satellite.status == 're-entered' %}
+              {% static 'img/status_decayed.png' %}
+              {% elif satellite.status == 'dead' %}
+              {% static 'img/status_dead.png' %}
+              {% else %}
+              {% static 'img/status_unknown.png' %}
+              {% endif %}
+              " height="35">
+            </dd>
+            <dt class="col-sm-4">NORAD ID</dt>
+            <dd class="col-sm-8">{{ satellite.norad_cat_id }}</dd>
+            {% if satellite.names %}
+            <dt class="col-sm-4">Alternate Names</dt>
+            <dd class="col-sm-8">{{ satellite.names }}</dd>
+            {% endif %}
+            {% if satellite.website %}
+            <dt class="col-sm-4">Website</dt>
+            <dd class="col-sm-8">
+              <a href="{{ satellite.website }}" target="_blank">{{ satellite.website }}</a>
+            </dd>
+            {% endif %}
+            {% if satellite.operator %}
+            <dt class="col-sm-4">Operator</dt>
+            <dd class="col-sm-8">
+              {% if satellite.operator.website %}
+              <a href="{{ satellite.operator.website }}" target="_blank">
+                {{ satellite.operator.name }} - {{ satellite.operator.names }}
+              </a>
+              {% else %}
+              {{ satellite.operator.name }} - {{ satellite.operator.names }}
+              {% endif %}
+            </dd>
+            {% endif %}
+            {% if satellite.countries %}
+            {% if satellite.countries|length > 1 %}
+            <dt class="col-sm-4">Countries of Origin</dt>
+            {% else %}
+            <dt class="col-sm-4">Country of Origin</dt>
+            {% endif %}
+            <dd class="col-sm-8">
+              {% for country in satellite.countries %}
+              <p class="mb-0">{{ country.name }}</p>
+              {% endfor %}
+            </dd>
+            {% endif %}
+            {% if satellite.launched %}
+            <dt class="col-sm-4">Launch Date</dt>
+            <dd class="col-sm-8">{{ satellite.launched|date:"SHORT_DATE_FORMAT" }}</dd>
+            {% endif %}
+            {% if satellite.deployed %}
+            <dt class="col-sm-4">Deploy Date</dt>
+            <dd class="col-sm-8">{{ satellite.deployed|date:"SHORT_DATE_FORMAT" }}</dd>
+            {% endif %}
+            <dt class="col-sm-4">SatNOGS Network Observations</dt>
+            <dd class="col-sm-8">      
+              <a class="d-flex align-content-center" 
+              href="https://network.satnogs.org/observations/?norad={{ satellite.norad_cat_id }}" target="_blank">
+                <p class="mb-0 mr-2">Network Observations</p>
+                <i class="mr-2 fas fa-external-link-alt"></i>
+              </a>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="tab-pane fade flex-stretch" id="mapcontent" role="tabpanel" aria-labelledby="mapcontent-tab">
+      <div class="w-100 h-100">
+        {% if satellite.status != 're-entered' %}
+        <div id="map" data-name="{{ satellite.name }}" data-tle1="{{ satellite.latest_tle.tle1 }}"
+          data-tle2="{{ satellite.latest_tle.tle2 }}" data-mapboxtoken="{{ mapbox_token }}"></div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Transmitters Section -->
+    <div class="tab-pane fade" id="transmitters" role="tabpanel" aria-labelledby="transmitters-tab">
+      <div class="card-deck">
+        <!-- show all transmitters for this satellite in their card format -->
+        {% for transmitter in satellite.transmitters.all %}
+        <div class="col-sm-12 col-md-6 col-xl-4 my-2">
+        {% include 'includes/cards/transmitter_card.html' with satellite=satellite transmitter=transmitter %}
+        </div>
+        {% empty %}
+        <div class="w-100">
+          <div class="card shadow card-accent-primary">
+            <div class="card-body transmitter-card-body">
+              <div class="row align-items-center no-gutters">
+                <div class="col mr-2">
+                  <div class="text-uppercase text-satnogs-primary font-weight-bold h6 mb-1"><span>No Transmitters
+                      Found</span></div>
+                </div>
+                <div class="col-auto"><i class="fas fa-exclamation-circle fa-2x text-satnogs-inactive"></i></div>
+              </div>
+              <div class="col-12">
+                <span>No approved transmitters yet for this Satellite. Help us improve our database, you can find
+                  instructions at this <a href="https://wiki.satnogs.org/SatNOGS_DB" target="_blank">wiki
+                    link</a></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        <!-- show the pending transmitter suggestions for super users -->
+        {% if request.user.is_superuser and satellite.transmitter_suggestion_count %}
+        {% for transmitter in transmitter_suggestions %}
+        <div class="col-sm-12 col-md-6 col-xl-4 my-2">
+        {% include 'includes/cards/transmitter_card.html' with satellite=satellite transmitter=transmitter suggestion_card=True %}
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Data panel -->
+    <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
+      <script id="telemetryDescriptorsTemplate" type="text/template">
+        <li class="list-group-item telemetry-key" data-key="<%- key %>" data-unit="<%- unit %>"><%- description %></li>
+      </script>
+
+      <div class="container-fluid card-deck">
+        {% if satellite.telemetry_decoder_count %}
+        {% for telemetry in satellite.telemetries.all %}
+        <div class="col-12 col-md-6 my-2">
+          <div class="card">
+            <div class="card-body">
+              <div class="row align-items-center no-gutters">
+                <div class="col mr-2">
+                  <div class="font-weight-bold h5 mb-1"><span>Decoder:
+                      {{ telemetry.name }}</span></div>
+                </div>
+              </div>
+              <div class="col-12">
+                {% include "includes/field.html" with name="Decoder Script" value=telemetry.decoder %}
+                <div class="row transmitter-element">
+                  <div class="col-md-6">
+                    <span class="badge badge-secondary satellite-detail-badge">Decoder Struct</span>
+                  </div>
+                  <div class="col-md-6">
+                    <a href="#" data-toggle="modal" data-target="#StructModal-{{ telemetry.id }}">
+                      Click here
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Struct Modal -->
+        <div class="modal fade" id="StructModal-{{ telemetry.id }}" tabindex="-1" role="dialog"
+          aria-labelledby="StructModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="StructModalLabel">Kaitai Struct for {{ telemetry.name }}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">×</span></button>
+              </div>
+              <div class="modal-body">
+                {% if not telemetry.schema == '' %}
+                <div class="kaitai-header">
+                  See <a href="http://kaitai.io" target="_blank">kaitai.io</a> for more information on the format.
+                </div>
+                <div class="kaitai-struct">
+                  <pre>{{ telemetry.schema }}</pre>
+                </div>
+                {% else %}
+                <div>
+                  Struct format appears to be missing.
+                </div>
+                {% endif %}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12 col-md-6 my-2">
+          <div class="card">
+            <div class="card-body transmitter-card-body">
+              <div class="row align-items-center no-gutters">
+                <div class="col mr-2">
+                  <div class="text-uppercase text-satnogs-primary font-weight-bold h6 mb-1"><span>No Decoders
+                      Found</span></div>
+                </div>
+                <div class="col-auto"><i class="fas fa-exclamation-circle fa-2x text-satnogs-inactive"></i></div>
+              </div>
+              <div class="col-12">
+                <span>Help us develop a decoder, you can find instructions at this <a
+                    href="https://wiki.satnogs.org/Adding_a_new_data_decoder" target="_blank">wiki link</a></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Telemetry Frames Section -->
+        {% if frame_count != 0 %}
+        <div class="col-12 col-md-6 my-2">
+          <div class="card panel-default">
+            <div class="card-header">
               <div class="satellite-title" id="telemetry-block" data-satid="{{ satellite.norad_cat_id }}">
                 Telemetry (frames)
               </div>
             </div>
             {% if request.user.is_authenticated %}
-              <div class="row panel-body">
-                <div class="panel-satellite chart">
-                  <div class="col-md-3 panel-satellite">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="glyphicon glyphicon-download"></span> Download <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a href="{% url 'request_export_all' norad=satellite.norad_cat_id %}">Everything</a></li>
-                        <li><a href="{% url 'request_export' norad=satellite.norad_cat_id period=1 %}">Last week</a></li>
-                        <li><a href="{% url 'request_export' norad=satellite.norad_cat_id period=2 %}">Last month</a></li>
-                      </ul>
-                    </div>
+            <div class="card-body">
+              <div class="chart">
+                <div class="col-md-3">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-satnogs-primary dropdown-toggle" data-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-download"></i> Download <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a href="{% url 'request_export_all' norad=satellite.norad_cat_id %}">Everything</a></li>
+                      <li><a href="{% url 'request_export' norad=satellite.norad_cat_id period=1 %}">Last week</a></li>
+                      <li><a href="{% url 'request_export' norad=satellite.norad_cat_id period=2 %}">Last month</a></li>
+                    </ul>
                   </div>
                 </div>
               </div>
+            </div>
             {% endif %}
-            <div class="panel-footer">
-              <span class="badge">Frames: {{ frame_count }}</span>
+            <div class="card-footer">
+              <span class="badge badge-secondary satellite-detail-badge">Frames: {{ frame_count }}</span>
               Latest frame submitted on {{ latest_frame.timestamp|date:'Y-m-d H:i:s' }} by
               {{ latest_frame.observer }}
             </div>
           </div>
         </div>
-      </div>
-      {% endif %}
-  <!-- Transmitter Suggestion Modal -->
-  <div class="modal fade" id="NewSuggestionModal" tabindex="-1" role="dialog" aria-labelledby="NewSuggestionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="NewSuggestionModalLabel">Suggest a new Transmitter</h4>
+        {% endif %}
+
+
+        <!-- Orbital Elements Section -->
+        {% if satellite.latest_tle.redistributable %}
+        <div class="row">
+          <div class="col-md-12 satellite-panels">
+            <div class="card panel-default panel-satellite">
+              <div class="card-header satnogs-card-header">
+                <div class="satellite-title">
+                  Orbital Elements
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="card panel-primary panel-tle">
+                        <div class="card-header satnogs-card-header">
+                          <span class="tle-title">Latest TLE</span>
+                        </div>
+                        <div class="card-body">
+                          <div class="col-md-12">
+                            <div class="row tle-element">
+                              <div class="col-md-2">
+                                <span class="badge badge-secondary satellite-detail-badge">NORAD ID</span>
+                              </div>
+                              <div class="col-md-10">
+                                {{ satellite.latest_tle.norad_cat_id }}
+                              </div>
+                            </div>
+                            <div class="row tle-element">
+                              <div class="col-md-2">
+                                <span class="badge lbadge-secondary satellite-detail-badge">TLE source</span>
+                              </div>
+                              <div class="col-md-10">
+                                {{ satellite.latest_tle.source }}
+                              </div>
+                            </div>
+                            <div class="row tle-element">
+                              <div class="col-md-2">
+                                <span class="badge badge-secondary satellite-detail-badge">TLE</span>
+                              </div>
+                              <div class="col-md-10">
+                                <pre>{{ satellite.latest_tle.tle1 }}<br>{{ satellite.latest_tle.tle2 }}</pre>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        {% if request.user.is_authenticated %}
-          <form action="{% url 'transmitter_suggestion' %}" method="post" id="newtransmitter_suggestion-form">{% csrf_token %}
-            <div class="modal-body">
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Description</div>
-                <input type="text" class="form-control" name="description">
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Status</div>
-                <select class="form-control transmitter_suggestion-status" name="status">
-                  {% for status in statuses %}
-                    <option value="{{ status }}">
-                      {{ status }}
-                    </option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Type</div>
-                <select class="form-control transmitter_suggestion-type" name="type">
-                  {% for type in types %}
-                    <option value="{{ type }}">
-                      {{ type }}
-                    </option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Service</div>
-                <select class="form-control" name="service" required>
-                  {% for service in services %}
-                    <option value="{{ service }}">
-                      {{ service }}
-                    </option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Downlink Mode</div>
-                <select class="form-control" name="downlink_mode">
-                  <option value="" selected></option>
-                  {% for mode in modes %}
-                    <option value="{{ mode.id }}">
-                      {{ mode }}
-                    </option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Uplink mode</div>
-                <select class="form-control" name="uplink_mode">
-                  <option value="" selected></option>
-                  {% for mode in modes %}
-                    <option value="{{ mode.id }}">
-                      {{ mode }}
-                    </option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Uplink_Low</div>
-                <input type="number" class="form-control" name="uplink_low">
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Uplink High</div>
-                <input type="number" class="form-control" name="uplink_high">
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Uplink Drifted</div>
-                <input type="number" class="form-control uplink-drifted-sugedit" name="">
-                <div class="input-group-addon">PPB Drift</div>
-                <input type="text" class="form-control uplink-ppb-sugedit" name="uplink_drift" readonly>
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Downlink Low</div>
-                <input type="number" class="form-control" name="downlink_low">
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Downlink High</div>
-                <input type="number" class="form-control" name="downlink_high">
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Downlink Drifted</div>
-                <input type="number" class="form-control downlink-drifted-sugedit" name="" value="{{ transmitter.downlink_low|default_if_none:'' }}">
-                <div class="input-group-addon">PPB Drift</div>
-                <input type="text" class="form-control downlink-ppb-sugedit" name="downlink_drift" value="{{ transmitter.downlink_drift|default_if_none:'' }}" readonly>
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <input type="checkbox" value="1" name="invert"> Invert
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Baud Rate</div>
-                <input type="number" class="form-control" name="baud">
-              </div>
-              <div class="input-group transmitter-element-suggest">
-                <div class="input-group-addon">Citation URL</div>
-                <input type="text" class="form-control" name="citation" maxlength="255" required>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Send</button>
-            </div>
-            <input type="hidden" name="satellite" value="{{ satellite.pk }}">
-          </form>
-        {% else %}
-          <div class="modal-body">
-            <div class="text-danger">You need to login first to add a new transmitter suggestion.</div>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-default" data-dismiss="modal">Close</button>
-            {{ login_button }}
-          </div>
         {% endif %}
       </div>
     </div>
   </div>
 
+  <!-- django-bootstrap-modal-forms modals -->
+  <div class="modal fade" id="create-transmitter-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="update-transmitter-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content"></div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
 
 {% block javascript %}
-  <script src="{% static 'lib/moment/min/moment.min.js' %}"></script>
-  <script src="{% static 'lib/mapbox-gl/dist/mapbox-gl.js' %}"></script>
-  <script src="{% static 'lib/gpredict.js/dist/gpredict.min.js' %}"></script>
-  <script src="{% static 'js/map.js' %}"></script>
-  <script src="{% static 'js/satellite.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+<script src="{% static 'lib/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'lib/gpredict.js/dist/gpredict.min.js' %}"></script>
+<script src="{% static 'js/satellite.js' %}"></script>
+{% if satellite.status != 're-entered' %}
+<script src="{% static 'lib/mapbox-gl/dist/mapbox-gl.js' %}"></script>
+<script src="{% static 'js/map.js' %}"></script>
+{% endif %}
 {% endblock %}

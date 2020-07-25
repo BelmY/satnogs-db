@@ -75,30 +75,40 @@ $(document).ready(function() {
             $('#transmitters-numbers').hide();
         } else {
             var i;
-            var r;
-            var g;
-            var b;
-            var a;
+            var h;
+            var s;
+            var l;
             var color;
+            var mode_total = 0;
+            var band_total = 0;
             // Create colors for Mode Chart
             var mode_colors = [];
             for (i = 0; i < data.mode_label.length; i++) {
-                r = Math.floor(data.mode_data[i]* 10);
-                b = Math.floor(0.3 * 255);
-                g = Math.floor(data.mode_data[i]* 10);
-                a = 0.5;
-                color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+                mode_total += data.mode_data[i];
+            }
+            for (i = 0; i < data.band_label.length; i++) {
+                band_total += data.band_data[i];
+            }
+            for (i = 0; i < data.mode_label.length; i++) {
+                // Switching to HSL to stick with hue of LSF logo
+                h = 235;
+                l = data.mode_data[i]/mode_total*100;
+                l *= 3; // adjust for better visibility
+                s = data.mode_data[i]/mode_total*100;
+                s *= 3; // adjust for better visibility
+                color = 'hsl(' + h + ',' + Math.floor(s) + '%,' + Math.floor(l) + '%)';
                 mode_colors.push(color);
             }
 
             // Create colors for Band Chart
             var band_colors = [];
             for (i = 0; i < data.band_label.length; i++) {
-                b = Math.floor(0.1 * 255);
-                g = Math.floor(data.band_data[i]);
-                r = Math.floor(data.band_data[i]);
-                a = 0.5;
-                color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+                h = 235;
+                l = data.band_data[i]/band_total*100;
+                l *= 1.25; // adjust for better visibility
+                s = data.band_data[i]/band_total*100;
+                s *= 1.25; // adjust for better visibility
+                color = 'hsl(' + h + ',' + s + '%,' + l + '%)';
                 band_colors.push(color);
             }
 

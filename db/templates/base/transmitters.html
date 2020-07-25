@@ -1,75 +1,76 @@
 {% extends "base.html" %}
-{% load staticfiles %}
-{% load tags %}
+{% load static %}
 
-{% block title %} - Transmitters List{% endblock %}
+{% block title %} - Transmitter List{% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" href="{% static 'lib/bootstrap-table/dist/bootstrap-table.min.css' %}">
-  <link rel="stylesheet" href="{% static 'lib/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.css' %}">
-{% endblock css %}
+<link rel="stylesheet" href="{% static 'lib/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'lib/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}">
+{% endblock %}
 
 {% block content %}
-  <div class="row trans">
-    <table data-sortable="true"
-           data-filter-control="true"
-           data-search="true"
-           data-show-columns="true"
-           data-show-columns-search="true"
-           id="transmitters-table">
-        <thead>
-            <tr>
-                <th data-visible="false">UUID</th>
-                <th data-sortable="true">Satellite</th>
-                <th data-field="type"
-                    data-sortable="true"
-                    data-filter-control="select">Type</th>
-                <th data-sortable="true">Description</th>
-                <th data-sortable="true" data-sorter="freqSorter">Downlink</th>
-                <th data-sortable="true" data-visible="false">Downlink Drift</th>
-                <th data-sortable="true" data-visible="false">Uplink</th>
-                <th data-sortable="true" data-visible="false">Uplink Drift</th>
-                <th data-sortable="true" data-visible="false">Inverted</th>
-                <th data-field="mode" data-filter-control="select">Mode</th>
-                <th data-sortable="true">Baud</th>
-                <th data-field="service"
-                    data-sortable="true"
-                    data-filter-control="select">Service</th>
-                <th data-field="status"
-                    data-sortable="true"
-                    data-filter-control="select">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for trans in transmitters %}
-            <tr>
-                <td>{{ trans.uuid }}</td>
-                <td>
-                  <a href="{% url 'satellite' norad=trans.satellite.norad_cat_id %}">
-                    {{ trans.satellite }}
-                  </a>
-                </td>
-                <td>{{ trans.type }}</td>
-                <td>{{ trans.description }}</td>
-                <td class="frequency">{{ trans.downlink_low | frq }}</td>
-                <td>{{ trans.downlink_drift }}</td>
-                <td class="frequency">{{ trans.uplink }}</td>
-                <td>{{ trans.uplink_drift }}</td>
-                <td>{{ trans.invert }}</td>
-                <td>{{ trans.downlink_mode }}</td>
-                <td>{{ trans.baud | floatformat }}</td>
-                <td>{{ trans.service }}</td>
-                <td>{{ trans.status }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-      </table>
-  </div>
+<div class="p-3">
 
+  <table id="transmitters" class="table table-sm display responsive table-striped" width="100%">
+    <thead>
+      <tr>
+        <th data-priority="1"></th>
+        <th data-visible="false" data-priority="20">UUID</th>
+        <th data-sortable="true" data-priority="1">Satellite</th>
+        <th data-sortable="true" data-priority="4">Type</th>
+        <th data-sortable="true" data-priority="1">Description</th>
+        <th data-sortable="true" data-priority="2">Downlink</th>
+        <th data-sortable="true" data-visible="false" data-priority="10">Downlink Drift</th>
+        <th data-sortable="true" data-visible="false" data-priority="10">Uplink</th>
+        <th data-sortable="true" data-visible="false" data-priority="10">Uplink Drift</th>
+        <th data-sortable="true" data-visible="false" data-priority="10">Inverted</th>
+        <th data-sortable="true" data-priority="3">Mode</th>
+        <th data-sortable="true" data-priority="4">Baud</th>
+        <th data-sortable="true" data-priority="10">Service</th>
+        <th data-sortable="true" data-priority="10">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for trans in transmitters %}
+      <tr>
+        <td class='details-control'>
+          <i class="fa fa-plus-square" aria-hidden="true"></i>
+        </td>
+
+        <td>{{ trans.uuid }}</td>
+        <td>
+          {% if trans.satellite.norad_cat_id %}
+          <a href="{% url 'satellite' norad=trans.satellite.norad_cat_id %}">
+            {{ trans.satellite }}
+          </a>
+          {% else %}
+          {{ trans.satellite }}
+          {% endif %}
+        </td>
+        <td>{{ trans.type }}</td>
+        <td>{{ trans.description }}</td>
+        <td class="frequency">{{ trans.downlink_low }}</td>
+        <td>{{ trans.downlink_drift }}</td>
+        <td class="frequency">{{ trans.uplink }}</td>
+        <td>{{ trans.uplink_drift }}</td>
+        <td>{{ trans.invert }}</td>
+        <td>{{ trans.downlink_mode }}</td>
+        <td>{{ trans.baud }}</td>
+        <td>{{ trans.service }}</td>
+        <td>{{ trans.status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
 
 {% block javascript %}
-  <script src="{% static 'lib/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
-  <script src="{% static 'lib/bootstrap-table/dist/extensions/filter-control/bootstrap-table-filter-control.min.js' %}"></script>
-  <script src="{% static 'js/transmitters.js' %}"></script>
+<script src="{% static 'lib/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-buttons/js/buttons.colVis.js' %}"></script>
+<script src="{% static 'lib/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'js/transmitters.js' %}"></script>
 {% endblock %}

@@ -119,7 +119,8 @@ $(document).ready(function() {
 
     var map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/pierros/cj8kftshl4zll2slbelhkndwo',
+        // style: 'mapbox://styles/pierros/cj8kftshl4zll2slbelhkndwo',
+        style: 'mapbox://styles/cshields/ckc1a24y45smb1ht9bbhrcrk6',
         zoom: 2,
         center: sat_location
     });
@@ -222,5 +223,11 @@ $(document).ready(function() {
             map.getSource('sat_footprint').setData(footprint_data);
         }
         setInterval(update_map, 5000);
+    });
+
+    // couldn't get this to work with shown.bs.tab, have to go with click
+    // timeout is necessary for the first click for some reason
+    document.getElementById('mapcontent-tab').addEventListener('click', function() {
+        setTimeout( function() { map.resize();}, 200);
     });
 });

@@ -2,24 +2,75 @@
 
 {% block title %} - About{% endblock %}
 
+{% block top-menu-left %}
+<h5 class="mb-0 mr-3">About</h5>
+{% endblock %}
+
+{% block top-menu-right %}
+
+<ul class="navbar-nav nav nav-pills" data-widget="treeview" role="menu" data-accordion="false" id="tabs"
+role="tablist">
+<li class="nav-item">
+  <a class="nav-link active" id="satnogsdb-tab" data-toggle="tab" href="#satnogsdb" role="tab" aria-controls="satnogsdb"
+    aria-selected="true"><i class="nav-icon fas fa-info-circle"></i>
+    <p class="d-none d-lg-inline-block">SatNOGS DB</p>
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" id="api-tab" data-toggle="tab" href="#api" role="tab"
+    aria-controls="api" aria-selected="false">
+    <i class="nav-icon fas fa-info-circle"></i>
+    <p class="d-none d-lg-inline-block">API</p>
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" id="lsf-tab" data-toggle="tab" href="#lsf" role="tab"
+    aria-controls="lsf" aria-selected="false">
+    <i class="nav-icon fas fa-info-circle"></i>
+    <p class="d-none d-lg-inline-block">Libre Space Foundation</p>
+  </a>
+</li>
+{% endblock %}
+
 {% block content %}
-  <div class="row text">
-    <div class="col-md-12">
-      <h1>About</h1>
-      SatNOGS DB is an effort to create an hollistic, unified, global transmitter database for all satellite
-      transmitters. You can export the data or even connect your application using our API.
-      It's part of the <a href="https://satnogs.org/" target="_blank">SatNOGS project</a>.
-      <h3>Data</h3>
-      The DB is open to everyone. Anyone is able to submit suggestions or use the existing Transmitters
-      All data are public and freely under the
-      <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Atribution-Share Alike</a> license.
-      <h3>Coding</h3>
-      Fluent in Python and/or JS? We need you to help with satnogs-db web application. Take a look to our
-      <a href="https://gitlab.com/librespacefoundation/satnogs/satnogs-db" target="_blank">source code</a> or visit
-      our <a href="https://gitlab.com/librespacefoundation/satnogs/satnogs-db/issues" target="_blank">issues tracker</a>
-      to start filling bugs, feature requests or code fixes for existing ones.
-      Detailed contribution and development documentation is also availble at
-      <a href="https://docs.satnogs.org/projects/satnogs-db/en/stable/" target="_blank">docs.satnogs.org</a>.
+<!-- The following div is managed by the tab menus -->
+<div class="col-12 tab-content pt-3 mx-2" id="myTabContent">
+
+  <!-- SatNOGS DB panel -->
+  <div class="tab-pane fade show active mx-1" id="satnogsdb" role="tabpanel" aria-labelledby="satnogsdb-tab">
+    <div class="row">
+      <div class="col-md-12">
+        SatNOGS DB is an effort to create an hollistic, unified, global transmitter database for all satellite
+        transmitters. You can export the data or even connect your application using our API.
+        It's part of the <a href="https://satnogs.org/" target="_blank">SatNOGS project</a>.
+        <h3>Data</h3>
+        The DB is open to everyone. Anyone is able to submit suggestions or use the existing Transmitters
+        All data are public and freely under the
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Atribution-Share Alike</a> license.
+        <h3>Coding</h3>
+        Fluent in Python and/or JS? We need you to help with satnogs-db web application. Take a look to our
+        <a href="https://gitlab.com/librespacefoundation/satnogs/satnogs-db" target="_blank">source code</a> or visit
+        our <a href="https://gitlab.com/librespacefoundation/satnogs/satnogs-db/issues" target="_blank">issues tracker</a>
+        to start filling bugs, feature requests or code fixes for existing ones.
+        Detailed contribution and development documentation is also availble at
+        <a href="https://docs.satnogs.org/projects/satnogs-db/en/stable/" target="_blank">docs.satnogs.org</a>.
+      </div>
     </div>
   </div>
+
+  <!-- API panel -->
+  <div class="tab-pane fademx-1" id="api" role="tabpanel" aria-labelledby="api-tab">
+    <div class="row">
+      API info coming soon..
+    </div>
+  </div>
+
+  <!-- LSF panel -->
+  <div class="tab-pane fade mx-1" id="lsf" role="tabpanel" aria-labelledby="lsf-tab">
+    <div class="row">
+      Libre Space Foundation info coming soon. Visit <a href="https://libre.space" target="_blank">https://libre.space</a>
+    </div>
+  </div>
+
+</div>
 {% endblock content %}

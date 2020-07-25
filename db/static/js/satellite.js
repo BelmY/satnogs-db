@@ -1,3 +1,4 @@
+/* eslint new-cap: "off" */
 function copyToClipboard(text, el) {
     var copyTest = document.queryCommandSupported('copy');
     var elOriginalText = el.attr('data-original-title');
@@ -41,7 +42,7 @@ function transmitter_suggestion_type(selection) {
         $('.input-group').has('input[name=\'invert\']').hide();
         $('.input-group').has('select[name=\'uplink_mode\']').hide();
 
-        $('.input-group-addon:contains(\'Downlink Low\')').html('Downlink');
+        $('.input-group-prepend:contains(\'Downlink Low\')').html('<span class="input-group-text">Downlink</span>');
         break;
     case 'Transceiver':
         $('.input-group').show();
@@ -54,15 +55,15 @@ function transmitter_suggestion_type(selection) {
         $('.input-group').has('input[name=\'downlink_high\']').hide();
         $('.input-group').has('input[name=\'invert\']').hide();
 
-        $('input[name=\'downlink_low\']').prev().html('Downlink');
-        $('input[name=\'uplink_low\']').prev().html('Uplink');
+        $('input[name=\'downlink_low\']').prev().html('<span class="input-group-text">Downlink</span>');
+        $('input[name=\'uplink_low\']').prev().html('<span class="input-group-text">Uplink</span>');
         break;
     case 'Transponder':
         $('.input-group').show();
         $('input').prop( 'disabled', false );
         $('select').prop( 'disabled', false );
-        $('input[name=\'downlink_low\']').prev().html('Downlink Low');
-        $('input[name=\'uplink_low\']').prev().html('Uplink Low');
+        $('input[name=\'downlink_low\']').prev().html('<span class="input-group-text">Downlink Low</span>');
+        $('input[name=\'uplink_low\']').prev().html('<span class="input-group-text">Uplink Low</span>');
         break;
     }
 }
@@ -97,7 +98,7 @@ $(document).ready(function() {
         transmitter_suggestion_type(selection);
     });
 
-    $('.transmitter_suggestion-edit-modal').on('show.bs.modal', function(){
+    $('.transmitter_suggestion-modal').on('show.bs.modal', function(){
         var selection =  $(this).find('.transmitter_suggestion-type').val();
         transmitter_suggestion_type(selection);
 
@@ -114,10 +115,6 @@ $(document).ready(function() {
         }
     });
 
-    $('#NewSuggestionModal').on('show.bs.modal', function(){
-        transmitter_suggestion_type('Transmitter');
-    });
-
     // Calculate the drifted frequencies
     $('.drifted').each(function() {
         var drifted = ppb_to_freq($(this).data('freq_or'),$(this).data('drift'));
@@ -126,13 +123,13 @@ $(document).ready(function() {
 
     $('.uplink-drifted-sugedit').on('change click', function(){
         var freq_obs = parseInt($(this).val());
-        var freq = parseInt($('.in input[name=\'uplink_low\']').val());
+        var freq = parseInt($('input[name=\'uplink_low\']:visible').val());
         $('.uplink-ppb-sugedit').val(freq_to_ppb(freq_obs,freq));
     });
 
     $('.downlink-drifted-sugedit').on('change click', function(){
         var freq_obs = parseInt($(this).val());
-        var freq = parseInt($('.in input[name=\'downlink_low\']').val());
+        var freq = parseInt($('input[name=\'downlink_low\']:visible').val());
         $('.downlink-ppb-sugedit').val(freq_to_ppb(freq_obs,freq));
     });
 
@@ -148,4 +145,39 @@ $(document).ready(function() {
         var el = $(this);
         copyToClipboard(text, el);
     });
+
+    // Update Satellite
+    $('.bs-modal').each(function () {
+        $(this).modalForm({
+            formURL: $(this).data('form-url')
+        });
+    });
+
+    // Update Transmitter
+    $('.update-transmitter-link').each(function () {
+        $(this).modalForm({
+            formURL: $(this).data('form-url'),
+            modalID: '#update-transmitter-modal'
+        });
+    });
+
+    // New transmitter links
+    $('.create-transmitter-link').each(function () {
+        $(this).modalForm({
+            formURL: $(this).data('form-url'),
+            modalID: '#create-transmitter-modal'
+        });
+    });
+
+    // Ask for help in a toast if this Satellite object is flagged as in need
+    if ($('#satellite_name').data('needshelp') == 'True') {
+        $(document).Toasts('create', {
+            title: 'Please Help!',
+            class: 'alert-warning',
+            autohide: true,
+            delay: 6000,
+            icon: 'fas fa-hand-holding-medical',
+            body: 'This Satellite needs editing. <a href="https://wiki.satnogs.org/Get_In_Touch" target="_blank">Contact us</a> to become an editor.'
+        });
+    }
 });

@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 
 from db.base.models import Artifact, DemodData, ExportedFrameset, Mode, \
-    Satellite, Telemetry, Transmitter, TransmitterEntry, \
+    Operator, Satellite, Telemetry, Transmitter, TransmitterEntry, \
     TransmitterSuggestion
 from db.base.tasks import check_celery, decode_all_data
 
@@ -18,6 +18,13 @@ from db.base.tasks import check_celery, decode_all_data
 class ModeAdmin(admin.ModelAdmin):
     """Defines Mode view in django admin UI"""
     list_display = ('name', )
+
+
+@admin.register(Operator)
+class OperatorAdmin(admin.ModelAdmin):
+    """Defines Operator view in django admin UI"""
+    list_display = ('name', 'names', 'website')
+    search_fields = ('name', 'names')
 
 
 @admin.register(Satellite)

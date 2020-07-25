@@ -1,67 +1,84 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load static %}
 
-{% block title %}{% endblock %}
+{% block title %} - Home{% endblock %}
 
-{% block top %}
-  <div class="row" id="search">
-    <div class="col-md-7">
-      <input type="text" list="satellites-list"
-             class="form-control input-lg satellite-search"
-             placeholder="Filter by Name or NORAD Cat ID"
-             autocomplete="off">
-    </div>
-    <div class="col-md-5">
-      <div class="row hidden-xs hidden-sm">
-        <p class="statistics" title="satellites" data-toggle="tooltip">
-          <img src="{% static 'img/satellites.png' %}">
-          {{ statistics.total_satellites }}
-        </p>
-        <p class="statistics" title="transmitters" data-toggle="tooltip">
-          <img src="{% static 'img/transmitters.png' %}">
-          {{ statistics.transmitters }}
-        </p>
-        {% if transmitter_suggestions %}
-          <p class="statistics" title="transmitter suggestions" data-toggle="tooltip">
-            <img src="{% static 'img/transmitter_suggestions.png' %}">
-            {{ transmitter_suggestions }}
-          </p>
-        {% endif %}
-        <p class="statistics" title="telemetry" data-toggle="tooltip">
-          <img src="{% static 'img/payloads.png' %}">
-          {{ statistics.total_data }}
-        </p>
-        <p class="statistics" title="contributors" data-toggle="tooltip">
-          <img src="{% static 'img/contributors.png' %}">
-          {{ contributors }}
-        </p>
-      </div>
-    </div>
-  </div>
+{% block css %}
+<link rel="stylesheet" href="{% static 'lib/flag-icon-css/css/flag-icon.min.css' %}" />
+{% endblock css %}
+
+{% block top-menu-left %}
+<h5 class="mb-0 mr-3">Welcome to SatNOGS DB</h5>
 {% endblock %}
 
 {% block content %}
-  <div class="row sats">
-    {% for sat in satellites %}
-      <div class="satellite-group-item"
-           data-selector="{{ sat.name|lower }}{{ sat.norad_cat_id }}{{ sat.names|lower }}"
-           data-image="{{ sat.get_image }}">
-        <a href="{% url 'satellite' norad=sat.norad_cat_id %}" class="panel panel-default satellite-item">
-          <div class="panel-heading"></div>
-          <div class="panel-body">
-            <div class="satellite-title">{{ sat.norad_cat_id }} - {{ sat.name }}</div>
-            <div class="satellite-names">{{ sat.names }}&nbsp;</div>
-          </div>
-          <div class="panel-footer">
-            {{ sat.transmitters_count }} Transmitters
-          </div>
-        </a>
-      </div>
+<div class="row px-2 pt-2 card-deck">
+  <div class="col-md-6 col-xl-4 satellite-panels">
+    <h4 class="text-satnogs text-center mb-0">New Satellites</h4>
+
+    {% for satellite in newest_sats %} 
+    {% include 'includes/cards/satellite_card.html' with satellite=satellite %}
     {% endfor %}
   </div>
 
-  <div class="info row">
-    <div class="col-md-4">
+  <div class="col-md-6 col-xl-4 satellite-panels">
+    <h4 class="text-satnogs text-center mb-0">Latest Data</h4>
+
+    {% for satellite in latest_data %}
+    {% include 'includes/cards/satellite_card.html' with satellite=satellite %}
+    {% endfor %}
+  </div>
+
+  <div class="col-xs-12 col-xl-4 satellite-panels">
+    <h4 class="text-satnogs text-center mb-0">Recent Contributors</h4>
+    <div class="card shadow card-outline card-satnogs my-3">
+      {% if latest_submitters.count %}
+      <div class="card-header py-1">
+        <div class="row">
+          <div class="pl-1">
+            <span class="card-title">Data - Last 24h</span><br />
+          </div>
+        </div>
+      </div>
+      <div class="card-body satellite-card-body py-2 px-2">
+        <div class="d-flex flex-row no-gutters text-nowrap align-items-center justify-content-between">
+          <div class="d-flex flex-column float-left align-self-center">
+            {% for contributor in latest_submitters %}
+            <div class="d-flex flex-row">
+              <div class="d-flex satellite-card-body-row align-self-center justify-content-center">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="d-inline-flex">
+                {{ contributor.station }} - {{ contributor.c }} frames
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="card-body d-flex flex-row">
+        <div class="d-inline-flex">
+          <p class="text-wrap">
+            It appears there have been no contributions in the past 24 hours.
+            Please visit
+            <a href="https://wiki.satnogs.org" target="_blank">wiki.satnogs.org</a>
+            to learn how to contribute data!
+          </p>
+        </div>
+      </div>
+      {% endif %}
+      <div class="card-footer">
+        <span class="text-value-sm">Thank you to our contributors! Please visit
+          <a href="https://wiki.satnogs.org" target="_blank">wiki.satnogs.org</a>
+          to learn how to contribute data.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="info row p-3">
+    <div class="col-lg-4">
       <h3>Open</h3>
       <p>
         SatNOGS DB is, and will always be, an open database. We aspire to create an hollistic,
@@ -69,14 +86,14 @@
         data or even connect your application using our API.
       </p>
     </div>
-    <div class="col-md-4">
+    <div class="col-lg-4">
       <h3>Crowd-sourced</h3>
       <p>
         We rely on user submitted crowd-sourced information. Create an account and start
         suggesting additions and/or modifications on our Database. We need your help!
       </p>
     </div>
-    <div class="col-md-4">
+    <div class="col-lg-4">
       <h3>Extensible</h3>
       <p>
         We designed SatNOGS-DB to be easily extensible to accommodate additions and modification
@@ -84,9 +101,7 @@
         <a href="https://gitlab.com/librespacefoundation/satnogs/satnogs-db">our repo</a>.
       </p>
     </div>
-  </div>
-{% endblock %}
-
-{% block javascript %}
-  <script src="{% static 'js/home.js' %}"></script>
+  </div> -->
+{% endblock %} {% block javascript %}
+<script src="{% static 'js/home.js' %}"></script>
 {% endblock %}

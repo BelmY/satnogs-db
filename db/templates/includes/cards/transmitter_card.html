@@ -1,0 +1,182 @@
+<div class="card shadow card-outline {% if suggestion_card %}card-warning{% else %}card-satnogs{% endif %}">
+{% comment %}
+  <div class="card-header align-items-center no-gutters">
+    <div class="row px-2">
+      <div class="col mr-2">
+        <h5 class="card-title">{% if suggestion_card %}Suggestion - {% endif %}{{ transmitter.description }}</h5>
+      </div>
+      <div class="col-auto">
+        <div class="row">
+          <i class="fas fa-satellite fa-2x {% if satellite.status == 're-entered' %}text-satnogs-inactive{% elif transmitter.status == 'active' %}text-satnogs-active{% else %}text-satnogs-inactive{% endif %}"></i>
+          <div class="btn-group" role="group">
+            <btn class="btn btn-satnogs dropdown-toggle ml-3" data-toggle="dropdown" aria-expanded="false"
+              id="dropdown-{{ transmitter.id }}"><i class="fas fa-bars"></i></btn>
+            <div class="dropdown-menu" aria-labelledby="dropdown-{{ transmitter.id }}">
+              {% if request.user.is_superuser and suggestion_card %}
+              <form action="{% url 'transmitter_suggestion_handler' %}" method="post"
+                id="transmitter_suggestion_handler-form">
+                {% csrf_token %}
+                <input type="hidden" name="uuid" value="{{ transmitter.uuid }}">
+                <button type="submit" name="approve" class="btn btn-satnogs btn-outline-success dropdown-item">
+                  <i class="fas fa-check-square mr-2"></i>
+                  Approve Suggestion
+                </button>
+                <button type="submit" name="reject" class="btn btn-satnogs btn-outline-danger dropdown-item">
+                  <i class="fas fa-minus-square mr-2"></i>
+                  Reject Suggestion
+                </button>
+              </form>
+              {% endif %}
+              {% if request.user.is_authenticated %}
+              <a class="dropdown-item" data-toggle="modal" data-target="#EditSuggestionModal-{{ transmitter.id }}">
+                <i class="fas fa-edit mr-2"></i>
+                Edit
+              </a>
+              {% endif %}
+              <a class="dropdown-item" data-toggle="modal" data-target="#TransmitterCitation-{{ transmitter.id }}">
+                <i class="fas fa-quote-left mr-2"></i>
+                Citation
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endcomment %}
+  <div class="card-header align-items-center no-gutters py-1">
+    <div class="row">
+        <span class="card-title align-self-center">{% if suggestion_card %}Suggestion - {% endif %}{{ transmitter.description }}</span>
+        <div class="row ml-auto">
+          <i class="fas fa-satellite fa-lg align-self-center {% if satellite.status == 're-entered' %}text-satnogs-inactive{% elif transmitter.status == 'active' %}text-satnogs-active{% else %}text-satnogs-inactive{% endif %}"></i>
+          <div class="btn-group" role="group">
+            <btn class="btn btn-satnogs dropdown-toggle ml-3" data-toggle="dropdown" aria-expanded="false"
+              id="dropdown-{{ transmitter.id }}"><i class="fas fa-bars"></i></btn>
+            <div class="dropdown-menu" aria-labelledby="dropdown-{{ transmitter.id }}">
+              {% if request.user.is_superuser and suggestion_card %}
+              <form action="{% url 'transmitter_suggestion_handler' %}" method="post"
+                id="transmitter_suggestion_handler-form">
+                {% csrf_token %}
+                <input type="hidden" name="uuid" value="{{ transmitter.uuid }}">
+                <button type="submit" name="approve" class="btn btn-satnogs btn-outline-success dropdown-item">
+                  <i class="fas fa-check-square mr-2"></i>
+                  Approve Suggestion
+                </button>
+                <button type="submit" name="reject" class="btn btn-satnogs btn-outline-danger dropdown-item">
+                  <i class="fas fa-minus-square mr-2"></i>
+                  Reject Suggestion
+                </button>
+              </form>
+              {% endif %}
+              {% if request.user.is_authenticated %}
+              <a class="dropdown-item update-transmitter-link" data-toggle="modal" href="#"
+              data-form-url="{% url 'update_transmitter' transmitter.id %}">
+                <i class="fas fa-edit mr-2"></i>
+                Edit
+              </a>
+              {% endif %}
+              <a class="dropdown-item" data-toggle="modal" data-target="#TransmitterCitation-{{ transmitter.id }}">
+                <i class="fas fa-quote-left mr-2"></i>
+                Citation
+              </a>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="col-12">
+      {% if transmitter.type %}
+      {% include "includes/field.html" with name="Type" value=transmitter.type %}
+      {% endif %}
+      {% if transmitter.service %}
+      {% include "includes/field.html" with name="Service" value=transmitter.service %}
+      {% endif %}
+      {% if transmitter.downlink_mode %}
+      {% include "includes/field.html" with name="Downlink Mode" value=transmitter.downlink_mode %}
+      {% endif %}
+      {% if transmitter.uplink_mode %}
+      {% include "includes/field.html" with name="Uplink Mode" value=transmitter.uplink_mode %}
+      {% endif %}
+      {% if transmitter.baud %}
+      {% include "includes/field.html" with name="Baud" value=transmitter.baud %}
+      {% endif %}
+      {% if transmitter.type == 'Transmitter' %}
+      {% if transmitter.downlink_low %}
+      {% include "includes/field.html" with name="Downlink" value=transmitter.downlink_low hz=transmitter.downlink_low %}
+      {% endif %}
+      {% if transmitter.downlink_drift %}
+      {% include "includes/field.html" with name="Downlink Drifted" value=transmitter.downlink_drift hz=transmitter.downlink_drift class="drifted" freq_or=transmitter.downlink_low %}
+      {% endif %}
+      {% endif %}
+      {% if transmitter.type == 'Transceiver' %}
+      {% if transmitter.downlink_low %}
+      {% include "includes/field.html" with name="Downlink" value=transmitter.downlink_low hz=transmitter.downlink_low %}
+      {% endif %}
+      {% if transmitter.downlink_drift %}
+      {% include "includes/field.html" with name="Downlink Drifted" value=transmitter.downlink_drift hz=transmitter.downlink_drift class="drifted" freq_or=transmitter.downlink_low %}
+      {% endif %}
+      {% if transmitter.uplink_low %}
+      {% include "includes/field.html" with name="Uplink" value=transmitter.uplink_low hz=transmitter.uplink_low %}
+      {% endif %}
+      {% if transmitter.uplink_drift %}
+      {% include "includes/field.html" with name="Uplink Drifted" value=transmitter.uplink_drift hz=transmitter.uplink_drift class="drifted" freq_or=transmitter.uplink_low %}
+      {% endif %}
+      {% endif %}
+      {% if transmitter.type == 'Transponder' %}
+      {% if transmitter.downlink_low %}
+      {% include "includes/field.html" with name="Downlink Low" value=transmitter.downlink_low hz=transmitter.downlink_low %}
+      {% endif %}
+      {% if transmitter.downlink_high %}
+      {% include "includes/field.html" with name="Downlink High" value=transmitter.downlink_high hz=transmitter.downlink_high %}
+      {% endif %}
+      {% if transmitter.downlink_drift %}
+      {% include "includes/field.html" with name="Downlink Drift" value=transmitter.downlink_drift hz=transmitter.downlink_drift %}
+      {% endif %}
+      {% if transmitter.uplink_low %}
+      {% include "includes/field.html" with name="Uplink Low" value=transmitter.uplink_low hz=transmitter.uplink_low %}
+      {% endif %}
+      {% if transmitter.uplink_high %}
+      {% include "includes/field.html" with name="Uplink High" value=transmitter.uplink_high hz=transmitter.uplink_high %}
+      {% endif %}
+      {% if transmitter.uplink_drift %}
+      {% include "includes/field.html" with name="Uplink Drift" value=transmitter.uplink_drift hz=transmitter.uplink_drift %}
+      {% endif %}
+      {% if transmitter.invert %}
+      {% include "includes/field.html" with name="Invert" value=transmitter.invert %}
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+  <div class="card-footer align-items-baseline justify-content-between transmitter-card-footer">
+    Updated on {{ transmitter.created|date:'Y-m-d H:i' }} by {{ transmitter.user }}
+  </div>
+</div>
+</div>
+
+<!-- Citation Modal -->
+<div class="modal fade" id="TransmitterCitation-{{ transmitter.id }}" tabindex="-1" role="dialog"
+aria-labelledby="CitationModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="CitationModalLabel">Citation for {{ transmitter.uuid }}</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+          aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+      {{ transmitter.citation }}
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Suggestion Modal -->
+{% comment %}
+<div class="modal fade transmitter_suggestion-modal" id="EditSuggestionModal-{{ transmitter.id }}" tabindex="-1"
+  role="dialog" aria-labelledby="EditSuggestionModalLabel" aria-hidden="true">
+  {% include 'includes/transmitter_suggestion_modal.html' with transmitter=transmitter %}
+</div>
+{% endcomment %}

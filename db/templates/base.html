@@ -1,129 +1,248 @@
-{% load staticfiles %}
+{% load static %}
 {% load avatar_tags %}
 {% load tags %}
 {% load compress %}
+{% load fontawesome_5 %}
 
 <!DOCTYPE html>
 <html lang="en" ng-app>
-  <head>
-    <meta charset="utf-8">
-    <title>SatNOGS DB{% block title %}{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% compress css %}
-      <link rel="stylesheet" href="{% static 'lib/bootstrap/dist/css/bootstrap.min.css' %}">
-      <link rel="stylesheet" href="{% static 'css/app.css' %}">
-      {% block css %}{% endblock %}
-    {% endcompress %}
 
-    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+<head>
+  <meta charset="utf-8">
+  <title>SatNOGS DB{% block title %}{% endblock title %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% compress css %}
+  <link rel="stylesheet" href="{% static 'lib/admin-lte/dist/css/adminlte.min.css' %}">
 
-  </head>
+  <link rel="stylesheet" href="{% static 'css/newapp.css' %}">
+  {% block css %}{% endblock %}
+  {% endcompress %}
+  {% fontawesome_5_static %}
 
-  <body>
-    {{ stage_notice }}
+  <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
 
-    <div class="container">
-      <nav class="navbar navbar-default" role="navigation" id="main-navbar">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{% url 'home' %}">
-              <img id="navbar-logo" src="{% static 'img/satnogs_db.png' %}" alt="SatNOGS net">
+</head>
+
+<body class="layout-fixed">
+  <div class="wrapper bg-light">
+
+    <!-- Top Navbar menu -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <ul class="navbar-nav d-lg-none">
+        <a class="nav-link keychainify-checked" data-widget="pushmenu" href="#" role="button"><i
+            class="fas fa-bars"></i></a>
+      </ul>
+      <span class="d-lg-none font-weight-light pr-2">SatNOGS DB</span>
+
+      <!-- hacky, push dyamic content and/or user menu to the right -->
+      <div class="pl-3 mr-auto">
+        {% block top-menu-left %}
+        {% endblock %}
+      </div> 
+      {% block top-menu-right %}
+      {% endblock %}
+
+      {% if request.user.is_authenticated %}
+        <ul class="nav navbar-nav py-2">
+          <li class="user user-menu">
+            <a href="#" id="control-sidebar-toggle" data-widget="control-sidebar">
+              {% avatar request.user %}
             </a>
-          </div>
+          </li>
+        </ul>
 
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-              <li class="{% active request 'about' %}"><a href="{% url 'about' %}">About</a></li>
-              <li class="{% active request 'home' %}"><a href="{% url 'home' %}">Satellites</a></li>
-              <li class="{% active request 'transmitters_list' %}"><a href="{% url 'transmitters_list' %}">Transmitters</a></li>
-              <li class="{% active request 'stats' %}"><a href="{% url 'stats' %}">Statistics</a></li>
-              <li class="{% active request 'faq' %}"><a href="{% url 'faq' %}">FAQ</a></li>
-              <li><a href="https://community.libre.space/c/satnogs/" target="_blank">Community</a></li>
-              <li><a href="https://wiki.satnogs.org/" target="_blank">Wiki</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="https://www.timeanddate.com/worldclock" target="_blank" class="hidden-sm"><span id="current_utc">--:-- UTC</span></a></li>
-              {% if request.user.is_authenticated %}
-              <li class="dropdown">
-                <a href="#"
-                   class="dropdown-toggle"
-                   data-toggle="dropdown">{% avatar request.user 35 %} {{ request.user.username }}
-                   <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="{% url 'users_edit' %}">Settings/API Key</a></li>
-                  {{ logout_block }}
-                </ul>
-              </li>
-              {% else %}
-                {{ auth_block }}
-              {% endif %}
-            </ul>
+      {% else %}
+      {{ auth_block }}
+      {% endif %}
+    </nav>
+
+    <!-- Sidebar menu -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4 h-100" id="sidebar">
+      <div class="brand-link border-bottom-0">
+        <img src="{% static 'img/satnogs-logo-only-light.png' %}" alt="SatNOGS Logo" class="brand-image"
+          style="opacity: .8;">
+        <span class="brand-text font-weight-light">SatNOGS DB</span>
+      </div>
+      <div class="sidebar d-flex flex-column">        
+        
+        <form class="form-inline mt-1" action="{% url 'search_results' %}" method="GET">
+          <div class="input-group input-group-sm">
+            <input class="form-control form-control-sidebar" type="search" name="q"
+              placeholder="Satellite name or ID" aria-label="Search">
+            <div class="input-group-append">
+              <button class="btn btn-navbar-satnogs" type="submit">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
           </div>
+        </form>
+
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+              <a class="nav-link{% if request.resolver_match.url_name == 'home' %} active{% endif %}"
+                href="{% url 'home' %}">
+                <i class="nav-icon fas fa-home"></i>
+                <p>Home</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if request.resolver_match.url_name == 'about' %} active{% endif %}"
+                href="{% url 'about' %}">
+                <i class="nav-icon fas fa-info-circle"></i>
+                <p>About</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if request.resolver_match.url_name == 'satellites' %} active{% endif %}"
+                href="{% url 'satellites' %}">
+                <i class="nav-icon fas fa-satellite"></i>
+                <p>All Satellites</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if request.resolver_match.url_name == 'transmitters_list' %} active{% endif %}"
+                href="{% url 'transmitters_list' %}">
+                <i class="nav-icon fas fa-satellite-dish"></i>
+                <p>All Transmitters</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if request.resolver_match.url_name == 'stats' %} active{% endif %}"
+                href="{% url 'stats' %}">
+                <i class="nav-icon fas fa-chart-bar"></i>
+                <p>Statistics</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="disabled nav-link{% if request.resolver_match.url_name == 'news' %} active{% endif %}"
+                href="">
+                <i class="nav-icon fas fa-newspaper"></i>
+                <p>News</p>
+              </a>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-link"></i>
+                <p>
+                  SatNOGS Links
+                  <i class="right align-middle fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a class="nav-link" href="https://network.satnogs.org">
+                    <i class="nav-icon fas fa-external-link-alt"></i>
+                    <p>Ground Station Control</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="https://wiki.satnogs.org">
+                    <i class="nav-icon fas fa-external-link-alt"></i>
+                    <p>Wiki</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="https://community.libre.space">
+                    <i class="nav-icon fas fa-external-link-alt"></i>
+                    <p>Forums</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <!-- /.nav-sidebar -->
+        </nav>
+        
+        <div class="mt-auto satnogs-sidebar-footer">
+          <div>
+            <span class="align-self-center"><i class="far fa-copyright"></i> 2014<span id="copy"></span>
+              <a href="https://libre.space" target="_blank">Libre Space Foundation</a></span>
+          </div>
+          <div>
+            <span>
+              {{ version }}
+              <br>
+              {{ decoders_version }}
+            </span>
+          </div>
+          <!-- /.panel-collapse -->
         </div>
-      </nav>
-    </div>
+        <!-- /.satnogs-sidebar-footer -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
+    <!-- /.main-sidebar -->
 
-    <div class="container">
+    <!-- Control Sidebar (Right Menu) -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+      <div class="p-3">
+        <div class="row justify-content-center border-bottom">
+          <h5 class="mb-1 text-sm">{{ user.username }}</h5>
+        </div>
+        <nav>
+          <ul class="nav nav-pills nav-sidebar flex-column">
+            <li class="nav-item">
+              <a href="#" class="nav-link basemodal-link control-sidebar-link" data-form-url="/users/edit/">
+                <i class="nav-icon fas fa-cog"></i>
+                <p>Settings / API Key</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link basemodal-link control-sidebar-link" data-form-url="/help/">
+                <i class="nav-icon fas fa-question-circle"></i>
+                <p>Help</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              {{ logout_block }}
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+    <!-- /.control-sidebar -->
 
+    <!-- Content window -->
+    <div class="content-wrapper bg-light">
       {% if messages %}
-        <div class="row messages">
-          <div class="col-md-12">
-            {% for notification in messages %}
-              <div class="alert alert-{{ notification.tags }}" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                {{ notification.message }}
-              </div>
-            {% endfor %}
-          </div>
+        <!-- This is hidden, transitional to Toasts - see app.js -->
+        {% for notification in messages %}
+        <div hidden class="alert alert-{{ notification.tags }}" data-alertclass="alert-{{ notification.tags }}" data-alertmessage="{{ notification.message }}" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{ notification.message }}
         </div>
+        <!-- /.alert -->
+        {% endfor %}
       {% endif %}
 
       {% block top %}{% endblock %}
 
       {% block content %}{% endblock content %}
-
     </div>
-
-    <footer>
-      <div class="container">
-        <hr>
-        <div class="row">
-          <div class="col-md-6">
-            <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span> 2014<span id="copy"></span>
-            <a href="http://librespacefoundation.org/" target="_blank">Libre Space Foundation</a>.<br>
-            <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
-            Transmitter data are freely distributed under the
-            <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA</a> license.
-          </div>
-          <div class="col-md-6 text-right footer-options">
-            <a href="https://satnogs.org/" target="_blank">SatNOGS</a> |
-            <a href="#top">Back to top</a>
-            <p>
-              {{ version }}
-              <br>
-              {{ decoders_version }}
-            </p>
-          </div>
-        </div>
+    <!-- /.content-wrapper -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="basemodal">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content"></div>
       </div>
-    </footer>
+    </div>
+  </div>
+  <!-- /.wrapper -->
 
-    {% compress js %}
-      <script src="{% static 'lib/jquery/dist/jquery.min.js' %}"></script>
-      <script src="{% static 'lib/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-      <script src="{% static 'js/app.js' %}"></script>
-      <script src="{% static 'js/current_utc.js'%}"></script>
-      {% block javascript %}{% endblock javascript %}
-      {{ analytics_code }}
-    {% endcompress %}
+  {% compress js %}
+  <script src="{% static 'lib/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/popper.js/dist/umd/popper.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'lib/admin-lte/dist/js/adminlte.min.js' %}"></script>
+  <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+  <!-- <script src="{% static 'js/current_utc.js'%}"></script> -->
+  {% block javascript %}{% endblock javascript %}
+  {{ analytics_code }}
+  {% endcompress %}
 </body>
+
 </html>

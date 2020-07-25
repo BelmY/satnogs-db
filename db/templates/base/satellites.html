@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} - Satellite List{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'lib/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'lib/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'lib/flag-icon-css/css/flag-icon.min.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="p-3">
+
+  <table id="sats" class="table table-sm display responsive table-striped" width="100%">
+    <thead>
+      <tr>
+        <th data-priority="1"></th>
+        <th data-priority="2">Name</th>
+        <th data-priority="3">NORAD</th>
+        <th data-priority="4">Status</th>
+        <th data-priority="6">Alt. Names</th>
+        <th data-priority="5">XMit</th>
+        <th data-priority="10" data-sortable="true" data-visible="false">Operator</th>
+        <th data-priority="10" data-sortable="true" data-visible="false">Launched</th>
+        <th data-priority="10" data-sortable="true" data-visible="false">Website</th>
+        <th data-priority="10" data-sortable="true" data-visible="false">Dashboard</th>
+
+        <th data-priority="6" data-sortable="false"><i class="fa fa-flag-o px-0"></i></th>
+        {% if perms.base.change_satellite %}
+        <th data-priority="2" data-sortable="false"></th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for sat in satellites %}
+      <tr>
+        <td class='details-control'>
+          <i class="fa fa-plus-square" aria-hidden="true"></i>
+        </td>
+        <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{ sat.name|lower }}</a></td>
+        <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{ sat.norad_cat_id }}</a></td>
+        <td class="d-flex justify-content-center">
+          {% if sat.status == 'alive' %}
+          <img height="32" src="{% static 'img/status_alive.png' %}" alt="alive">
+          {% elif sat.status == 're-entered' %}
+          <img height="32" src="{% static 'img/status_decayed.png' %}" alt="re-entered">
+          {% elif sat.status == 'dead' %}
+          <img height="32" src="{% static 'img/status_dead.png' %}" alt="dead">
+          {% else %}
+          <img height="32" src="{% static 'img/status_unknown.png' %}" alt="unknown">
+          {% endif %}
+        </td>
+        <td>{{ sat.names|lower }}</td>
+        <td>{{ sat.transmitters_count }}</td>
+        <td>{{ sat.operator }}</td>
+        <td>{{ sat.launched }}</td>
+        <td>{{ sat.website }}</td>
+        <td>{{ sat.dashboard_url }}</td>
+        <td><span class="align-middle flag-icon flag-icon-{{ sat.country.code|lower }}"></span></td>
+        {% if perms.base.change_satellite %}
+        <td><button type="button" class="bs-modal btn btn-sm btn-satnogs-primary"
+            data-form-url="{% url 'update_satellite' sat.id %}">
+            <span class="fa fa-pencil"></span>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Satellite update modal -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'lib/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-buttons/js/buttons.colVis.js' %}"></script>
+<script src="{% static 'lib/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+<script src="{% static 'js/satellites.js' %}"></script>
+{% endblock %}

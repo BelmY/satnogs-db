@@ -1,59 +1,130 @@
 {% extends "base.html" %}
 
 {% load tags %}
-{% load staticfiles %}
+{% load static %}
 
 {% block title %} - Stats{% endblock %}
 
+{% block top-menu-left %}
+<h5 class="mb-0 mr-3">Statistics</h5>
+{% endblock %}
+
+{% block top-menu-right %}
+
+<ul class="navbar-nav nav nav-pills" data-widget="treeview" role="menu" data-accordion="false" id="tabs" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab"
+      aria-controls="dashboard" aria-selected="true"><i class="nav-icon fas fa-chart-line"></i>
+      <p class="d-none d-lg-inline-block">Dashboard</p>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="sat-leaderboard-tab" data-toggle="tab" href="#sat-leaderboard" role="tab"
+      aria-controls="sat-leaderboard" aria-selected="false">
+      <i class="nav-icon fas fa-satellite"></i>
+      <p class="d-none d-lg-inline-block">Satellites</p>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="user-leaderboard-tab" data-toggle="tab" href="#user-leaderboard" role="tab"
+      aria-controls="user-leaderboard" aria-selected="false">
+      <i class="nav-icon fas fa-house-user"></i>
+      <p class="d-none d-lg-inline-block">Ground Stations</p>
+    </a>
+  </li>
+</ul>
+{% endblock %}
+
 {% block content %}
-  <!-- Transmitter stats -->
-  <div class="row text" id="transmitters-charts">
-    <div class="col-md-12">
-      <h2>Transmitters</h2>
-    </div>
-  </div>
-  <div class="row stats" id="transmitters-numbers">
-    <div class="col-md-4">
-      <canvas id="modes" width="300" height="300"></canvas>
-    </div>
-    <div class="col-md-4">
-      <canvas id="bands" width="300" height="300"></canvas>
-    </div>
-    <div class="col-md-4">
+<!-- SatNOGS DB Stats -->
+<!-- The following div is managed by the tab menus -->
+<div class="col-12 tab-content pt-3 mx-2" id="myTabContent">
+
+  <!-- Dashboard panel -->
+  <div class="tab-pane fade show active mx-1" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+    <div class="container-fluid">
       <div class="row">
-        <p class="stats-hud">
-          Total satellites
-          <span class="stats-hud-num" id="stats-satellites">120</span>
-        </p>
-      </div>
-      <div class="row">
-        <p class="stats-hud">
-          Total transmitters
-          <span class="stats-hud-num" id="stats-transmitters">230</span>
-        </p>
-      </div>
-      <div class="row">
-        <p class="stats-hud">
-          Alive transmitters
-          <span class="stats-hud-num" id="stats-alive"></span>
-        </p>
-      </div>
-      <div class="row">
-        <p class="stats-hud">
-          Total data
-          <span class="stats-hud-num" id="stats-data"></span>
-        </p>
+        <div class="col-xs-12 col-md-4">
+          <div class="small-box small-box-satnogs">
+            <div class="inner">
+              <h3 id="stats-satellites">#</h3>
+              <p>Total Satellites</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-satellite"></i>
+            </div>
+            <a href="{% url 'satellites' %}" class="small-box-footer">
+              Satellites <i class="fas fa-arrow-circle-right"></i>
+            </a>
+          </div>
+          <div class="small-box small-box-satnogs">
+            <div class="inner">
+              <h3 id="stats-transmitters">#</h3>
+              <p>Total Transmitters</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-satellite-dish"></i>
+            </div>
+            <a href="{% url 'transmitters_list' %}" class="small-box-footer">
+              Transmitters <i class="fas fa-arrow-circle-right"></i>
+            </a>
+          </div>
+          <div class="small-box small-box-satnogs">
+            <div class="inner">
+              <h3 id="stats-alive">#</h3>
+              <p>Alive Transmitters</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-satellite-dish"></i>
+            </div>
+            <a href="{% url 'transmitters_list' %}" class="small-box-footer">
+              Transmitters <i class="fas fa-arrow-circle-right"></i>
+            </a>
+          </div>
+          <div class="small-box small-box-satnogs">
+            <div class="inner">
+              <h3 id="stats-data">#</h3>
+              <p>Total Data</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-database"></i>
+            </div>
+            <!-- <a href="#" class="small-box-footer">
+              Data <i class="fas fa-arrow-circle-right"></i>
+            </a> -->
+          </div>
+        </div>
+        <div class="col-xs-12 col-md-4">
+          <div class="card satnogs-card mb-4">
+            <div class="card-header background-satnogs-header d-flex justify-content-between align-items-center">
+              <h6 class="text-satnogs-header font-weight-bold m-0">Transmitter Modes</h6>
+            </div>
+            <div class="card-body">
+              <canvas id="modes" width="300" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-md-4">
+          <div class="card satnogs-card mb-4">
+            <div class="card-header background-satnogs-header d-flex justify-content-between align-items-center">
+              <h6 class="text-satnogs-header font-weight-bold m-0">Transmitter Bands</h6>
+            </div>
+            <div class="card-body">
+              <canvas id="bands" width="300" height="300"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <hr>
   {% if satellites and observers %}
   <!-- Data paylod stats -->
-  <div class="row">
-    <div class="col-md-6">
-      <h2>Satellites</h2>
-      <table class="table table-hover">
+  <div class="tab-pane fade px-2" id="sat-leaderboard" role="tabpanel"
+    aria-labelledby="sat-leaderboard-tab">
+    <div class="row justify-content-center">
+      <h4>Satellites</h4>
+      <table class="table table-hover table-striped">
         <thead>
           <tr>
             <th>Norad ID</th>
@@ -64,22 +135,25 @@
         </thead>
         <tbody>
           {% for sat in satellites %}
-            {% if sat.count != 0 %}
-              <tr>
-                <td>{{sat.norad_cat_id}}</td>
-                <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{sat.name}}</a></td>
-                <td>{{sat.count}}</td>
-                <td>{{sat.latest_payload|date:"Y-m-d H:i:s"}}</td>
-              </tr>
-            {% endif %}
+          {% if sat.count != 0 %}
+          <tr>
+            <td>{{sat.norad_cat_id}}</td>
+            <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{sat.name}}</a></td>
+            <td>{{sat.count}}</td>
+            <td>{{sat.latest_payload|date:"Y-m-d H:i:s"}}</td>
+          </tr>
+          {% endif %}
           {% endfor %}
         </tbody>
       </table>
     </div>
-    <div class="col-md-6">
-        <h2>Stations</h2>
+  </div>
+  <div class="tab-pane fade px-2" id="user-leaderboard" role="tabpanel"
+    aria-labelledby="user-leaderboard-tab">
+    <div class="row justify-content-center">
+      <h4>Stations</h4>
 
-      <table class="table table-hover">
+      <table class="table table-hover table-striped">
         <thead>
           <tr>
             <th>#</th>
@@ -90,21 +164,22 @@
         </thead>
         <tbody>
           {% for obs in observers %}
-            <tr>
-              <td>{{forloop.counter}}</td>
-              <td>{{obs.observer}}</td>
-              <td>{{obs.count}}</td>
-              <td>{{obs.latest_payload|date:"Y-m-d H:i:s"}}</td>
-            </tr>
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{obs.observer}}</td>
+            <td>{{obs.count}}</td>
+            <td>{{obs.latest_payload|date:"Y-m-d H:i:s"}}</td>
+          </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
   {% endif %}
+</div>
 {% endblock %}
 
 {% block javascript %}
-  <script src="{% static 'lib/chart.js/dist/Chart.min.js' %}"></script>
-  <script src="{% static 'js/stats.js' %}"></script>
+<script src="{% static 'lib/chart.js/dist/Chart.min.js' %}"></script>
+<script src="{% static 'js/stats.js' %}"></script>
 {% endblock %}

@@ -30,9 +30,13 @@ DJANGO_APPS = (
 )
 THIRD_PARTY_APPS = (
     'avatar',
+    'bootstrap_modal_forms',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_countries',
     'django_filters',
+    'fontawesome_5',
+    'widget_tweaks',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -159,8 +163,8 @@ STATICFILES_FINDERS = (
 MEDIA_ROOT = config('MEDIA_ROOT', default=Path('media').resolve())
 FILE_UPLOAD_TEMP_DIR = config('FILE_UPLOAD_TEMP_DIR', default=Path('/tmp').resolve())
 MEDIA_URL = config('MEDIA_URL', default='/media/')
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
-SATELLITE_DEFAULT_IMAGE = '/static/img/sat.png'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+SATELLITE_DEFAULT_IMAGE = '/static/img/sat_purple.png'
 COMPRESS_ENABLED = config('COMPRESS_ENABLED', default=False, cast=bool)
 COMPRESS_OFFLINE = config('COMPRESS_OFFLINE', default=False, cast=bool)
 COMPRESS_CACHE_BACKEND = config('COMPRESS_CACHE_BACKEND', default='default')
@@ -279,6 +283,9 @@ CSP_DEFAULT_SRC = config(
     cast=lambda v: tuple(s.strip() for s in v.split(',')),
     default="'self',"
     'https://*.mapbox.com,'
+    'https://kit-free.fontawesome.com,'
+    'https://ka-f.fontawesome.com,'
+    'https://fonts.gstatic.com,'
     "'unsafe-inline'"
 )
 CSP_SCRIPT_SRC = config(
@@ -286,8 +293,8 @@ CSP_SCRIPT_SRC = config(
     cast=lambda v: tuple(s.strip() for s in v.split(',')),
     default="'self',"
     'https://*.google-analytics.com,'
-    "'unsafe-eval',"
-    "'unsafe-inline'"
+    'https://kit-free.fontawesome.com,'
+    'https://kit.fontawesome.com,'
 )
 CSP_IMG_SRC = config(
     'CSP_IMG_SRC',
@@ -301,6 +308,12 @@ CSP_IMG_SRC = config(
 )
 CSP_FRAME_SRC = config(
     'CSP_FRAME_SRC', cast=lambda v: tuple(s.strip() for s in v.split(',')), default='blob:'
+)
+CSP_WORKER_SRC = config(
+    'CSP_WORKER_SRC',
+    cast=lambda v: tuple(s.strip() for s in v.split(',')),
+    default="'self',"
+    'blob:'
 )
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_CONTENT_TYPE_NOSNIFF = True

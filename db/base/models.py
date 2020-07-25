@@ -12,6 +12,7 @@ from django.db.models import OuterRef, Subquery
 from django.db.models.signals import post_save, pre_save
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
+from django_countries.fields import CountryField
 from markdown import markdown
 from shortuuidfield import ShortUUIDField
 
@@ -87,6 +88,18 @@ class Mode(models.Model):
 
 
 @python_2_unicode_compatible
+class Operator(models.Model):
+    """Satellite Owner/Operator"""
+    name = models.CharField(max_length=255, unique=True)
+    names = models.TextField(blank=True)
+    description = models.TextField(blank=True)
+    website = models.URLField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible
 class Satellite(models.Model):
     """Model for all the satellites."""
     norad_cat_id = models.PositiveIntegerField()
@@ -102,6 +115,20 @@ class Satellite(models.Model):
         choices=list(zip(SATELLITE_STATUS, SATELLITE_STATUS)), max_length=10, default='alive'
     )
     decayed = models.DateTimeField(null=True, blank=True)
+
+    # new fields below, metasat etc
+    # countries is multiple for edge cases like ISS/Zarya
+    countries = CountryField(blank=True, multiple=True, blank_label='(select countries)')
+    website = models.URLField(blank=True)
+    launched = models.DateTimeField(null=True, blank=True)
+    deployed = models.DateTimeField(null=True, blank=True)
+    operator = models.ForeignKey(
+        Operator,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='satellite_operator'
+    )
 
     class Meta:
         ordering = ['norad_cat_id']
@@ -181,6 +208,47 @@ class Satellite(models.Model):
             'tle2': self.tle2,
             'redistributable': self.tle_redistributable
         }
+
+    @property
+    def latest_data(self):
+        """Returns the latest DemodData for this Satellite
+
+        :returns: dict with most recent DemodData for this Satellite
+        """
+        data = DemodData.objects.filter(satellite=self.id).order_by('-id')[:1]
+        return {
+            'data_id': data[0].data_id,
+            'payload_frame': data[0].payload_frame,
+            'timestamp': data[0].timestamp,
+            'is_decoded': data[0].is_decoded,
+            'station': data[0].station,
+            'observer': data[0].observer,
+        }
+
+    @property
+    def needs_help(self):
+        """Returns a boolean based on whether or not this Satellite could
+            use some editorial help based on a configurable threshold
+
+        :returns: bool
+        """
+        score = 0
+        if self.description and self.description != '':
+            score += 1
+        if self.countries and self.countries != '':
+            score += 1
+        if self.website and self.website != '':
+            score += 1
+        if self.names and self.names != '':
+            score += 1
+        if self.launched and self.launched != '':
+            score += 1
+        if self.operator and self.operator != '':
+            score += 1
+        if self.image and self.image != '':
+            score += 1
+
+        return score <= 2
 
     def __str__(self):
         return '{0} - {1}'.format(self.norad_cat_id, self.name)
