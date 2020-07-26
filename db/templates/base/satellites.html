@@ -52,7 +52,7 @@
           {% endif %}
         </td>
         <td>{{ sat.names|lower }}</td>
-        <td>{{ sat.transmitters_count }}</td>
+        <td>{{ sat.approved_transmitters|length }}</td>
         <td>{{ sat.operator }}</td>
         <td>{{ sat.launched }}</td>
         <td>{{ sat.website }}</td>
@@ -61,7 +61,7 @@
         {% if perms.base.change_satellite %}
         <td><button type="button" class="bs-modal btn btn-sm btn-satnogs-primary"
             data-form-url="{% url 'update_satellite' sat.id %}">
-            <span class="fa fa-pencil"></span>
+            <span class="fa fa-edit"></span>
         </td>
         {% endif %}
       </tr>

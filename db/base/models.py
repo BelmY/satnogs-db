@@ -188,6 +188,15 @@ class Satellite(models.Model):
         return decoder_count
 
     @property
+    def transmitter_count(self):
+        """Returns number of approved transmitter suggestions for this Satellite
+
+        :returns: number of approved transmitter suggestions for this Satellite
+        """
+        approved_count = Transmitter.objects.filter(satellite=self.id).count()
+        return approved_count
+
+    @property
     def tle_redistributable(self):
         """Returns True if re-distribution of the TLE is allowed, False otherwise
 

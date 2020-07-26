@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import OperationalError
-from django.db.models import Count, Max, Q
+from django.db.models import Count, Max, Prefetch, Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -42,12 +42,21 @@ def home(request):
 
     :returns: base/home.html
     """
-    newest_sats = Satellite.objects.all().order_by('-id')[:5].annotate(
-        transmitters_count=Count('transmitter_entries')
+    newest_sats = Satellite.objects.all().order_by('-id')[:5].prefetch_related(
+        Prefetch(
+            'transmitter_entries',
+            queryset=Transmitter.objects.all(),
+            to_attr='approved_transmitters'
+        )
     )
-    latest_data = Satellite.objects.annotate(
-        latest=Max('telemetry_data__timestamp'), transmitters_count=Count('transmitter_entries')
-    ).order_by('-latest')[:5]
+    latest_data = Satellite.objects.annotate(latest=Max('telemetry_data__timestamp')
+                                             ).order_by('-latest')[:5].prefetch_related(
+                                                 Prefetch(
+                                                     'transmitter_entries',
+                                                     queryset=Transmitter.objects.all(),
+                                                     to_attr='approved_transmitters'
+                                                 )
+                                             )  # noqa: E126 flake8 and yapf disagree
 
     # Calculate latest contributors
     date_from = timezone.now() - timedelta(days=1)
@@ -101,9 +110,14 @@ def satellites(request):
 
     :returns: base/satellites.html
     """
-    satellite_objects = Satellite.objects.annotate(
-        transmitters_count=Count('transmitter_entries')
-    ).prefetch_related('operator')
+    satellite_objects = Satellite.objects.prefetch_related(
+        'operator',
+        Prefetch(
+            'transmitter_entries',
+            queryset=Transmitter.objects.all(),
+            to_attr='approved_transmitters'
+        )
+    )
     suggestion_count = TransmitterSuggestion.objects.count()
     contributor_count = User.objects.filter(is_active=1).count()
     cached_stats = cache.get('stats_transmitters')
@@ -150,6 +164,14 @@ def satellite(request, norad):
     except (ObjectDoesNotExist, IndexError):
         latest_frame = ''
 
+    try:
+        # pull the last 5 observers and their submission timestamps for this satellite
+        recent_observers = DemodData.objects.filter(satellite=satellite_obj) \
+            .values('observer', 'timestamp').annotate(latest_payload=Max('timestamp')) \
+            .order_by('-latest_payload')[:5]
+    except (ObjectDoesNotExist, IndexError):
+        recent_observers = ''
+
     return render(
         request, 'base/satellite.html', {
             'satellite': satellite_obj,
@@ -160,7 +182,8 @@ def satellite(request, norad):
             'statuses': statuses,
             'latest_frame': latest_frame,
             'frame_count': frame_count,
-            'mapbox_token': settings.MAPBOX_TOKEN
+            'mapbox_token': settings.MAPBOX_TOKEN,
+            'recent_observers': recent_observers
         }
     )
 
@@ -321,7 +344,13 @@ def search(request):
     results = Satellite.objects.filter(
         Q(name__icontains=query_string) | Q(names__icontains=query_string)
         | Q(norad_cat_id__icontains=query_string)  # noqa: W503 google W503 it is evil
-    ).order_by('name').annotate(transmitters_count=Count('transmitter_entries'))
+    ).order_by('name').prefetch_related(
+        Prefetch(
+            'transmitter_entries',
+            queryset=Transmitter.objects.all(),
+            to_attr='approved_transmitters'
+        )
+    )
 
     if results.count() == 1:
         return redirect(reverse('satellite', kwargs={'norad': results[0].norad_cat_id}))

@@ -80,11 +80,9 @@
       </div>
     </li>
   </ul>
-
 {% endblock %}
 
 {% block content %}
-
 <div class="row h-100 pl-2 pr-3">
   <!-- The following div is managed by the tab menus -->
   <div class="col-12 tab-content mx-2 pt-3" id="myTabContent">
@@ -233,6 +231,40 @@
       </script>
 
       <div class="container-fluid card-deck">
+        <!-- Satellite Data Leaderboard -->
+        <div class="col-12 col-md-6 my-2">
+          <div class="card panel-default">
+            <div class="card-header">
+              <div class="satellite-title">
+                <i class="fas fa-user-alt"></i>
+                Most Recent Observers
+              </div>
+            </div>
+            <div class="card-body">
+              {% if recent_observers|length > 0 %}
+              <table class="table table-sm table-borderless">
+                <thead>
+                  <tr>
+                    <th>Observer</th>
+                    <th>Latest Data</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for obs in recent_observers %}
+                  <tr>
+                    <td>{{obs.observer}}</td>
+                    <td>{{obs.timestamp|date:"Y-m-d H:i:s"}} UTC</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% else %}
+              <p>No observations recorded for {{ satellite.name }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
         {% if satellite.telemetry_decoder_count %}
         {% for telemetry in satellite.telemetries.all %}
         <div class="col-12 col-md-6 my-2">
@@ -273,7 +305,9 @@
               <div class="modal-body">
                 {% if not telemetry.schema == '' %}
                 <div class="kaitai-header">
-                  See <a href="http://kaitai.io" target="_blank">kaitai.io</a> for more information on the format.
+                  See <a href="http://kaitai.io" target="_blank">kaitai.io</a> for more information on the format
+                  and <a href="https://gitlab.com/librespacefoundation/satnogs/satnogs-decoders" target="_blank">
+                    the satnogs-decoders repository</a> for the most recent decoders.
                 </div>
                 <div class="kaitai-struct">
                   <pre>{{ telemetry.schema }}</pre>
@@ -312,37 +346,25 @@
         {% endif %}
 
         <!-- Telemetry Frames Section -->
-        {% if frame_count != 0 %}
+        {% if satellite.telemetry_data_count > 0 and request.user.is_authenticated %}
         <div class="col-12 col-md-6 my-2">
           <div class="card panel-default">
             <div class="card-header">
               <div class="satellite-title" id="telemetry-block" data-satid="{{ satellite.norad_cat_id }}">
-                Telemetry (frames)
+                <i class="fas fa-download"></i>
+                Data Export (frames)
               </div>
             </div>
-            {% if request.user.is_authenticated %}
             <div class="card-body">
-              <div class="chart">
-                <div class="col-md-3">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-satnogs-primary dropdown-toggle" data-toggle="dropdown"
-                      aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-download"></i> Download <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a href="{% url 'request_export_all' norad=satellite.norad_cat_id %}">Everything</a></li>
-                      <li><a href="{% url 'request_export' norad=satellite.norad_cat_id period=1 %}">Last week</a></li>
-                      <li><a href="{% url 'request_export' norad=satellite.norad_cat_id period=2 %}">Last month</a></li>
-                    </ul>
-                  </div>
-                </div>
+              <div class="col">
+              <p>You can request an export of data for {{ satellite.name }}. 
+                Please note that this export process happens in the background, and you 
+                will be notified by email when your download is ready. You can request
+                from the following options:</p>
+              <div><a href="{% url 'request_export_all' norad=satellite.norad_cat_id %}">Everything</a></div>
+              <div><a href="{% url 'request_export' norad=satellite.norad_cat_id period=1 %}">Last week</a></div>
+              <div><a href="{% url 'request_export' norad=satellite.norad_cat_id period=2 %}">Last month</a></div>
               </div>
-            </div>
-            {% endif %}
-            <div class="card-footer">
-              <span class="badge badge-secondary satellite-detail-badge">Frames: {{ frame_count }}</span>
-              Latest frame submitted on {{ latest_frame.timestamp|date:'Y-m-d H:i:s' }} by
-              {{ latest_frame.observer }}
             </div>
           </div>
         </div>
