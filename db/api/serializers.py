@@ -26,10 +26,23 @@ class SatelliteSerializer(serializers.ModelSerializer):
     """SatNOGS DB Satellite API Serializer"""
 
     telemetries = SatTelemetrySerializer(many=True, read_only=True)
+    countries = serializers.SerializerMethodField()
+    operator = serializers.SerializerMethodField()
 
     class Meta:
         model = Satellite
-        fields = ('norad_cat_id', 'name', 'names', 'image', 'status', 'decayed', 'telemetries')
+        fields = (
+            'norad_cat_id', 'name', 'names', 'image', 'status', 'decayed', 'launched', 'deployed',
+            'website', 'operator', 'countries', 'telemetries'
+        )
+
+    def get_operator(self, obj):
+        """Returns operator text"""
+        return str(obj.operator)
+
+    def get_countries(self, obj):
+        """Returns countires"""
+        return ','.join(map(str, obj.countries))
 
 
 class TransmitterSerializer(serializers.ModelSerializer):
