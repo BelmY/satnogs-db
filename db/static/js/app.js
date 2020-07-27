@@ -7,8 +7,7 @@ $(document).ready(function() {
     $('#copy').text(current_year);
 
     // Enable tooltips
-    // $('[data-toggle="tooltip"]').tooltip();
-    // $('[data-toggle="popover"]').popover();
+    $('[data-toggle="tooltip"]').tooltip();
 
     // User Settings / API Modal Form Link
     $('.basemodal-link').each(function () {

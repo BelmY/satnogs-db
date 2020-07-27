@@ -75,6 +75,10 @@
                 Edit
               </a>
               {% endif %}
+              <a class="dropdown-item transmitter-uuid js-copy" title="UUID: {{ transmitter.uuid }}" data-toggle="tooltip" data-placement="left" data-copy="{{ transmitter.uuid }}">
+                <i class="far fa-copy mr-2"></i>
+                Copy UUID
+              </a>
               <a class="dropdown-item" data-toggle="modal" data-target="#TransmitterCitation-{{ transmitter.id }}">
                 <i class="fas fa-quote-left mr-2"></i>
                 Citation
