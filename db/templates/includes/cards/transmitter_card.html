@@ -1,53 +1,10 @@
 <div class="card shadow card-outline {% if suggestion_card %}card-warning{% else %}card-satnogs{% endif %}">
-{% comment %}
-  <div class="card-header align-items-center no-gutters">
-    <div class="row px-2">
-      <div class="col mr-2">
-        <h5 class="card-title">{% if suggestion_card %}Suggestion - {% endif %}{{ transmitter.description }}</h5>
-      </div>
-      <div class="col-auto">
-        <div class="row">
-          <i class="fas fa-satellite fa-2x {% if satellite.status == 're-entered' %}text-satnogs-inactive{% elif transmitter.status == 'active' %}text-satnogs-active{% else %}text-satnogs-inactive{% endif %}"></i>
-          <div class="btn-group" role="group">
-            <btn class="btn btn-satnogs dropdown-toggle ml-3" data-toggle="dropdown" aria-expanded="false"
-              id="dropdown-{{ transmitter.id }}"><i class="fas fa-bars"></i></btn>
-            <div class="dropdown-menu" aria-labelledby="dropdown-{{ transmitter.id }}">
-              {% if request.user.is_superuser and suggestion_card %}
-              <form action="{% url 'transmitter_suggestion_handler' %}" method="post"
-                id="transmitter_suggestion_handler-form">
-                {% csrf_token %}
-                <input type="hidden" name="uuid" value="{{ transmitter.uuid }}">
-                <button type="submit" name="approve" class="btn btn-satnogs btn-outline-success dropdown-item">
-                  <i class="fas fa-check-square mr-2"></i>
-                  Approve Suggestion
-                </button>
-                <button type="submit" name="reject" class="btn btn-satnogs btn-outline-danger dropdown-item">
-                  <i class="fas fa-minus-square mr-2"></i>
-                  Reject Suggestion
-                </button>
-              </form>
-              {% endif %}
-              {% if request.user.is_authenticated %}
-              <a class="dropdown-item" data-toggle="modal" data-target="#EditSuggestionModal-{{ transmitter.id }}">
-                <i class="fas fa-edit mr-2"></i>
-                Edit
-              </a>
-              {% endif %}
-              <a class="dropdown-item" data-toggle="modal" data-target="#TransmitterCitation-{{ transmitter.id }}">
-                <i class="fas fa-quote-left mr-2"></i>
-                Citation
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endcomment %}
   <div class="card-header align-items-center no-gutters py-1">
     <div class="row">
-        <span class="card-title align-self-center">{% if suggestion_card %}Suggestion - {% endif %}{{ transmitter.description }}</span>
-        <div class="row ml-auto">
+        <div class="col">
+          <span class="card-title align-self-center">{% if suggestion_card %}Suggestion - {% endif %}{{ transmitter.description }}</span>
+        </div>
+        <div class="row ml-auto align-items-center">
           <i class="fas fa-satellite fa-lg align-self-center {% if satellite.status == 're-entered' %}text-satnogs-inactive{% elif transmitter.status == 'active' %}text-satnogs-active{% else %}text-satnogs-inactive{% endif %}"></i>
           <div class="btn-group" role="group">
             <btn class="btn btn-satnogs dropdown-toggle ml-3" data-toggle="dropdown" aria-expanded="false"
