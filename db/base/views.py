@@ -26,7 +26,7 @@ from db.base.models import SERVICE_TYPE, TRANSMITTER_STATUS, \
     TRANSMITTER_TYPE, DemodData, Mode, Satellite, Transmitter, \
     TransmitterEntry, TransmitterSuggestion
 from db.base.tasks import export_frames
-from db.base.utils import cache_statistics
+from db.base.utils import cache_statistics, millify
 
 LOGGER = logging.getLogger('db')
 
@@ -183,7 +183,8 @@ def satellite(request, norad):
             'latest_frame': latest_frame,
             'frame_count': frame_count,
             'mapbox_token': settings.MAPBOX_TOKEN,
-            'recent_observers': recent_observers
+            'recent_observers': recent_observers,
+            'badge_telemetry_count': millify(satellite_obj.telemetry_data_count)
         }
     )
 

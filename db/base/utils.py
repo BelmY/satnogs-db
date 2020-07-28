@@ -1,7 +1,9 @@
 """Miscellaneous functions for SatNOGS DB"""
 import binascii
 import logging
+import math
 from datetime import datetime, timedelta
+from decimal import Decimal
 
 from django.conf import settings
 from django.core.cache import cache
@@ -318,3 +320,25 @@ def cache_statistics():
                                    latest_payload=Max('timestamp')) \
                          .order_by('-count')
     cache.set('stats_observers', observers, 60 * 60 * 2)
+
+
+def remove_exponent(converted_number):
+    """Remove exponent."""
+    return converted_number.quantize(
+        Decimal(1)
+    ) if converted_number == converted_number.to_integral() else converted_number.normalize()
+
+
+def millify(number, precision=0):
+    """Humanize number."""
+    millnames = ['', 'k', 'M', 'B', 'T', 'P', 'E', 'Z', 'Y']
+    number = float(number)
+    millidx = max(
+        0,
+        min(
+            len(millnames) - 1, int(math.floor(0 if number == 0 else math.log10(abs(number)) / 3))
+        )
+    )
+    result = '{:.{precision}f}'.format(number / 10**(3 * millidx), precision=precision)
+    result = remove_exponent(Decimal(result))
+    return '{0}{dx}'.format(result, dx=millnames[millidx])
