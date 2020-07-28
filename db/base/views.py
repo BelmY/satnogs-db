@@ -339,19 +339,22 @@ def search(request):
 
     :returns: base/search.html
     """
+    query_string = None
+    results = Satellite.objects.none()
     if ('q' in request.GET) and request.GET['q'].strip():
         query_string = request.GET['q']
 
-    results = Satellite.objects.filter(
-        Q(name__icontains=query_string) | Q(names__icontains=query_string)
-        | Q(norad_cat_id__icontains=query_string)  # noqa: W503 google W503 it is evil
-    ).order_by('name').prefetch_related(
-        Prefetch(
-            'transmitter_entries',
-            queryset=Transmitter.objects.all(),
-            to_attr='approved_transmitters'
+    if query_string is not None:
+        results = Satellite.objects.filter(
+            Q(name__icontains=query_string) | Q(names__icontains=query_string)
+            | Q(norad_cat_id__icontains=query_string)  # noqa: W503 google W503 it is evil
+        ).order_by('name').prefetch_related(
+            Prefetch(
+                'transmitter_entries',
+                queryset=Transmitter.objects.all(),
+                to_attr='approved_transmitters'
+            )
         )
-    )
 
     if results.count() == 1:
         return redirect(reverse('satellite', kwargs={'norad': results[0].norad_cat_id}))
