@@ -6,7 +6,9 @@ from uuid import uuid4
 import h5py
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator, \
+    URLValidator
 from django.db import models
 from django.db.models import OuterRef, Subquery
 from django.db.models.signals import post_save, pre_save
@@ -29,6 +31,11 @@ SERVICE_TYPE = [
     'Maritime', 'Meteorological', 'Mobile', 'Radiolocation', 'Radionavigational',
     'Space Operation', 'Space Research', 'Standard Frequency and Time Signal', 'Unknown'
 ]
+URL_REGEX = r"(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"
+MIN_FREQ = 130000000
+MAX_FREQ = 40000000000
+MIN_FREQ_MSG = "Ensure this value is greater than or equal to 130Mhz"
+MAX_FREQ_MSG = "Ensure this value is less than or equal to 40Ghz"
 
 
 def _name_exported_frames(instance, filename):  # pylint: disable=W0613
@@ -93,7 +100,9 @@ class Operator(models.Model):
     name = models.CharField(max_length=255, unique=True)
     names = models.TextField(blank=True)
     description = models.TextField(blank=True)
-    website = models.URLField(blank=True)
+    website = models.URLField(
+        blank=True, validators=[URLValidator(schemes=['http', 'https'], regex=URL_REGEX)]
+    )
 
     def __str__(self):
         return self.name
@@ -106,7 +115,12 @@ class Satellite(models.Model):
     name = models.CharField(max_length=45)
     names = models.TextField(blank=True)
     description = models.TextField(blank=True)
-    dashboard_url = models.URLField(blank=True, null=True, max_length=200)
+    dashboard_url = models.URLField(
+        blank=True,
+        null=True,
+        max_length=200,
+        validators=[URLValidator(schemes=['http', 'https'], regex=URL_REGEX)]
+    )
     image = models.ImageField(upload_to='satellites', blank=True, help_text='Ideally: 250x250')
     tle1 = models.CharField(max_length=200, blank=True)
     tle2 = models.CharField(max_length=200, blank=True)
@@ -119,7 +133,9 @@ class Satellite(models.Model):
     # new fields below, metasat etc
     # countries is multiple for edge cases like ISS/Zarya
     countries = CountryField(blank=True, multiple=True, blank_label='(select countries)')
-    website = models.URLField(blank=True)
+    website = models.URLField(
+        blank=True, validators=[URLValidator(schemes=['http', 'https'], regex=URL_REGEX)]
+    )
     launched = models.DateTimeField(null=True, blank=True)
     deployed = models.DateTimeField(null=True, blank=True)
     operator = models.ForeignKey(
@@ -276,12 +292,46 @@ class TransmitterEntry(models.Model):
         max_length=11,
         default='Transmitter'
     )
-    uplink_low = models.BigIntegerField(blank=True, null=True)
-    uplink_high = models.BigIntegerField(blank=True, null=True)
-    uplink_drift = models.IntegerField(blank=True, null=True)
-    downlink_low = models.BigIntegerField(blank=True, null=True)
-    downlink_high = models.BigIntegerField(blank=True, null=True)
-    downlink_drift = models.IntegerField(blank=True, null=True)
+    uplink_low = models.BigIntegerField(
+        blank=True,
+        null=True,
+        validators=[
+            MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
+            MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
+        ]
+    )
+    uplink_high = models.BigIntegerField(
+        blank=True,
+        null=True,
+        validators=[
+            MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
+            MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
+        ]
+    )
+    uplink_drift = models.IntegerField(
+        blank=True, null=True, validators=[MinValueValidator(-99999),
+                                           MaxValueValidator(99999)]
+    )
+    downlink_low = models.BigIntegerField(
+        blank=True,
+        null=True,
+        validators=[
+            MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
+            MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
+        ]
+    )
+    downlink_high = models.BigIntegerField(
+        blank=True,
+        null=True,
+        validators=[
+            MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
+            MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
+        ]
+    )
+    downlink_drift = models.IntegerField(
+        blank=True, null=True, validators=[MinValueValidator(-99999),
+                                           MaxValueValidator(99999)]
+    )
     downlink_mode = models.ForeignKey(
         Mode,
         blank=True,
@@ -326,6 +376,19 @@ class TransmitterEntry(models.Model):
         # through the admin UI
         self.id = None  # pylint: disable=C0103, W0201
         super(TransmitterEntry, self).save()
+
+    def clean(self):
+        if self.downlink_low is not None and self.downlink_high is not None:
+            if self.downlink_low > self.downlink_high:
+                raise ValidationError(
+                    "Downlink low frequency must be lower or equal than downlink high frequency"
+                )
+
+        if self.uplink_low is not None and self.uplink_high is not None:
+            if self.uplink_low > self.uplink_high:
+                raise ValidationError(
+                    "Uplink low frequency must be lower or equal than uplink high frequency"
+                )
 
 
 class TransmitterSuggestionManager(models.Manager):  # pylint: disable=R0903
