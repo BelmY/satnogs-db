@@ -38,7 +38,7 @@ $(document).ready(function() {
         // https://datatables.net/reference/option/dom
         dom: '<"row"<"d-none d-md-block col-md-6"B><"col-sm-12 col-md-6"f>>' +
         '<"row"<"col-sm-12"tr>>' +
-        '<"row"<"col-sm-12 col-xl-3"i><"col-sm-12 col-md-6 col-xl-3"l><"col-sm-12 col-md-6 col-xl-6"p>>',
+        '<"row"<"col-sm-12 col-xl-3 align-self-center"i><"col-sm-12 col-md-6 col-xl-3 align-self-center"l><"col-sm-12 col-md-6 col-xl-6"p>>',
         buttons: [
             'colvis'
         ],

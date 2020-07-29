@@ -27,7 +27,7 @@
   <div class="wrapper bg-light">
 
     <!-- Top Navbar menu -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light py-1">
       <ul class="navbar-nav d-lg-none">
         <a class="nav-link keychainify-checked" data-widget="pushmenu" href="#" role="button"><i
             class="fas fa-bars"></i></a>
@@ -43,7 +43,7 @@
       {% endblock %}
 
       {% if request.user.is_authenticated %}
-        <ul class="nav navbar-nav py-2">
+        <ul class="nav navbar-nav ml-1">
           <li class="user user-menu">
             <a href="#" id="control-sidebar-toggle" data-widget="control-sidebar">
               {% avatar request.user %}

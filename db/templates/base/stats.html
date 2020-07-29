@@ -5,6 +5,11 @@
 
 {% block title %} - Stats{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'lib/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'lib/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}">
+{% endblock %}
+
 {% block top-menu-left %}
 <h5 class="mb-0 mr-3">Statistics</h5>
 {% endblock %}
@@ -28,7 +33,7 @@
   <li class="nav-item">
     <a class="nav-link" id="user-leaderboard-tab" data-toggle="tab" href="#user-leaderboard" role="tab"
       aria-controls="user-leaderboard" aria-selected="false">
-      <i class="nav-icon fas fa-house-user"></i>
+      <i class="nav-icon fas fa-broadcast-tower"></i>
       <p class="d-none d-lg-inline-block">Ground Stations</p>
     </a>
   </li>
@@ -38,10 +43,10 @@
 {% block content %}
 <!-- SatNOGS DB Stats -->
 <!-- The following div is managed by the tab menus -->
-<div class="col-12 tab-content pt-3 mx-2" id="myTabContent">
+<div class="col-12 tab-content pt-3" id="myTabContent">
 
   <!-- Dashboard panel -->
-  <div class="tab-pane fade show active mx-1" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+  <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12 col-md-4">
@@ -120,11 +125,9 @@
 
   {% if satellites and observers %}
   <!-- Data paylod stats -->
-  <div class="tab-pane fade px-2" id="sat-leaderboard" role="tabpanel"
+  <div class="tab-pane fade" id="sat-leaderboard" role="tabpanel"
     aria-labelledby="sat-leaderboard-tab">
-    <div class="row justify-content-center">
-      <h4>Satellites</h4>
-      <table class="table table-hover table-striped">
+      <table id="sats" class="table table-sm display w-100 px-2 responsive table-striped">
         <thead>
           <tr>
             <th>Norad ID</th>
@@ -146,17 +149,13 @@
           {% endfor %}
         </tbody>
       </table>
-    </div>
   </div>
-  <div class="tab-pane fade px-2" id="user-leaderboard" role="tabpanel"
+  <div class="tab-pane fade" id="user-leaderboard" role="tabpanel"
     aria-labelledby="user-leaderboard-tab">
-    <div class="row justify-content-center">
-      <h4>Stations</h4>
 
-      <table class="table table-hover table-striped">
+      <table id="stations" class="table table-sm display w-100 px-2 responsive table-striped">
         <thead>
           <tr>
-            <th>#</th>
             <th>Name</th>
             <th>Data</th>
             <th>Latest</th>
@@ -165,7 +164,6 @@
         <tbody>
           {% for obs in observers %}
           <tr>
-            <td>{{forloop.counter}}</td>
             <td>{{obs.observer}}</td>
             <td>{{obs.count}}</td>
             <td>{{obs.latest_payload|date:"Y-m-d H:i:s"}}</td>
@@ -173,13 +171,17 @@
           {% endfor %}
         </tbody>
       </table>
-    </div>
   </div>
   {% endif %}
 </div>
 {% endblock %}
 
 {% block javascript %}
+<script src="{% static 'lib/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'lib/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"></script>
 <script src="{% static 'lib/chart.js/dist/Chart.min.js' %}"></script>
 <script src="{% static 'js/stats.js' %}"></script>
 {% endblock %}

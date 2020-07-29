@@ -241,8 +241,13 @@
     font-weight: bold;
 }
 
-a {
+a,
+.user > a:hover {
     color: var(--satnogs-color-primary);
+}
+
+.user > a {
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .page-item.active .page-link {
