@@ -121,50 +121,54 @@
                 <p>News</p>
               </a>
             </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-link"></i>
-                <p>
-                  SatNOGS Links
-                  <i class="right align-middle fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a class="nav-link" href="https://network.satnogs.org">
-                    <i class="nav-icon fas fa-external-link-alt"></i>
-                    <p>Ground Station Control</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="https://wiki.satnogs.org">
-                    <i class="nav-icon fas fa-external-link-alt"></i>
-                    <p>Wiki</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="https://community.libre.space">
-                    <i class="nav-icon fas fa-external-link-alt"></i>
-                    <p>Forums</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
           </ul>
           <!-- /.nav-sidebar -->
         </nav>
         
-        <div class="mt-auto satnogs-sidebar-footer">
-          <div>
-            <span class="align-self-center"><i class="far fa-copyright"></i> 2014<span id="copy"></span>
-              <a href="https://libre.space" target="_blank">Libre Space Foundation</a></span>
-          </div>
-          <div>
+        <div class="mt-auto">
+          <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+              <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-link"></i>
+                  <p>
+                    SatNOGS Links
+                    <i class="right align-middle fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a class="nav-link" href="https://network.satnogs.org">
+                      <i class="nav-icon fas fa-external-link-alt"></i>
+                      <p>Ground Station Control</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="https://wiki.satnogs.org">
+                      <i class="nav-icon fas fa-external-link-alt"></i>
+                      <p>Wiki</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="https://community.libre.space">
+                      <i class="nav-icon fas fa-external-link-alt"></i>
+                      <p>Forums</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+          <div class="satnogs-sidebar-footer text-center">
             <span>
               {{ version }}
               <br>
               {{ decoders_version }}
             </span>
+          </div>
+          <div class="satnogs-sidebar-footer text-center">
+            <span class="align-self-center"><i class="far fa-copyright"></i> 2014<span id="copy"></span>
+              <a href="https://libre.space" target="_blank">Libre Space Foundation</a></span>
           </div>
           <!-- /.panel-collapse -->
         </div>

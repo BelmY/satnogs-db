@@ -18,6 +18,11 @@
     --color-scheme-text-color: #4d4e59;
 }
 
+.row {
+    margin-left: 0 !important; /* stylelint-disable-line declaration-no-important */
+    margin-right: 0 !important; /* stylelint-disable-line declaration-no-important */
+}
+
 .satellite-title {
     font-weight: bold;
     font-size: 1.2em;
@@ -382,4 +387,12 @@ a.dropdown-item {
 
 .tooltip-inner {
     font-size: 11px;
+}
+
+.first-card {
+    margin-top: 1rem;
+}
+
+.card-satnogs-header {
+    background-color: var(--satnogs-color-text) !important; /* stylelint-disable-line declaration-no-important */
 }
