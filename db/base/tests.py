@@ -152,7 +152,7 @@ class HomeViewTest(TestCase):
     def test_home_page(self):
         """Tests for a known string in the SatNOGS DB home page template"""
         response = self.client.get('/')
-        self.assertContains(response, 'SatNOGS DB is, and will always be, an open database.')
+        self.assertContains(response, 'Welcome to SatNOGS DB')
 
 
 @pytest.mark.django_db(transaction=True)

@@ -119,7 +119,6 @@ $(document).ready(function() {
 
     var map = new mapboxgl.Map({
         container: 'map',
-        // style: 'mapbox://styles/pierros/cj8kftshl4zll2slbelhkndwo',
         style: 'mapbox://styles/cshields/ckc1a24y45smb1ht9bbhrcrk6',
         zoom: 2,
         center: sat_location
