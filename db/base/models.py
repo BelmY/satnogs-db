@@ -378,17 +378,34 @@ class TransmitterEntry(models.Model):
         super(TransmitterEntry, self).save()
 
     def clean(self):
-        if self.downlink_low is not None and self.downlink_high is not None:
-            if self.downlink_low > self.downlink_high:
+        if self.type == TRANSMITTER_TYPE[0]:
+            if self.uplink_low is not None or self.uplink_high is not None \
+                    or self.uplink_drift is not None:
+                raise ValidationError("Uplink shouldn't be filled in for a transmitter")
+
+            if self.downlink_high:
                 raise ValidationError(
-                    "Downlink low frequency must be lower or equal than downlink high frequency"
+                    "Downlink high frequency shouldn't be filled in for a transmitter"
                 )
 
-        if self.uplink_low is not None and self.uplink_high is not None:
-            if self.uplink_low > self.uplink_high:
-                raise ValidationError(
-                    "Uplink low frequency must be lower or equal than uplink high frequency"
-                )
+        elif self.type == TRANSMITTER_TYPE[1]:
+            if self.uplink_high is not None or self.downlink_high is not None:
+                raise ValidationError("Frequency range shouldn't be filled in for a transceiver")
+
+        elif self.type == TRANSMITTER_TYPE[2]:
+            if self.downlink_low is not None and self.downlink_high is not None:
+                if self.downlink_low > self.downlink_high:
+                    raise ValidationError(
+                        "Downlink low frequency must be lower or equal \
+                        than downlink high frequency"
+                    )
+
+            if self.uplink_low is not None and self.uplink_high is not None:
+                if self.uplink_low > self.uplink_high:
+                    raise ValidationError(
+                        "Uplink low frequency must be lower or equal \
+                        than uplink high frequency"
+                    )
 
 
 class TransmitterSuggestionManager(models.Manager):  # pylint: disable=R0903
