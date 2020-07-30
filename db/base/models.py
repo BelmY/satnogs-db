@@ -298,7 +298,8 @@ class TransmitterEntry(models.Model):
         validators=[
             MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
             MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
-        ]
+        ],
+        help_text="Hz"
     )
     uplink_high = models.BigIntegerField(
         blank=True,
@@ -306,11 +307,14 @@ class TransmitterEntry(models.Model):
         validators=[
             MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
             MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
-        ]
+        ],
+        help_text="Hz"
     )
     uplink_drift = models.IntegerField(
-        blank=True, null=True, validators=[MinValueValidator(-99999),
-                                           MaxValueValidator(99999)]
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(-99999), MaxValueValidator(99999)],
+        help_text="Hz"
     )
     downlink_low = models.BigIntegerField(
         blank=True,
@@ -318,7 +322,8 @@ class TransmitterEntry(models.Model):
         validators=[
             MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
             MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
-        ]
+        ],
+        help_text="Hz"
     )
     downlink_high = models.BigIntegerField(
         blank=True,
@@ -326,11 +331,14 @@ class TransmitterEntry(models.Model):
         validators=[
             MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
             MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
-        ]
+        ],
+        help_text="Hz"
     )
     downlink_drift = models.IntegerField(
-        blank=True, null=True, validators=[MinValueValidator(-99999),
-                                           MaxValueValidator(99999)]
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(-99999), MaxValueValidator(99999)],
+        help_text="Hz"
     )
     downlink_mode = models.ForeignKey(
         Mode,

@@ -21,6 +21,7 @@
         <div class="input-group my-1">
             <label class="input-group-prepend input-group-text" for="{{ field.id_for_label }}">{{ field.label }}</label>
             {% render_field field class="form-control" placeholder=field.label %}
+            {{ field.help_text }}
             <div class="{% if field.errors %} invalid{% endif %}">
                 {% for error in field.errors %}
                 <p class="help-block">{{ error }}</p>
