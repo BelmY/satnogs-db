@@ -272,25 +272,28 @@
         {% for telemetry in satellite.telemetries.all %}
         <div class="col-12 col-md-6 my-2">
           <div class="card">
-            <div class="card-body">
-              <div class="row align-items-center no-gutters">
-                <div class="col mr-2">
-                  <div class="font-weight-bold h5 mb-1"><span>Decoder:
-                      {{ telemetry.name }}</span></div>
-                </div>
+            <div class="card-header">
+              <div class="satellite-title">
+                <i class="fas fa-code"></i>
+                Decoder: {{ telemetry.name }}
               </div>
+            </div>
+            <div class="card-body">
               <div class="col-12">
-                {% include "includes/field.html" with name="Decoder Script" value=telemetry.decoder %}
-                <div class="row transmitter-element">
-                  <div class="col-md-6">
-                    <span class="badge badge-secondary satellite-detail-badge">Decoder Struct</span>
-                  </div>
-                  <div class="col-md-6">
+                <dl class="row mb-0">
+                  <dt class="col-sm-4">Script Name</dt>
+                  <dd class="col-sm-8">{{ telemetry.decoder }}</dd>
+                </dl>
+                <dl class="row mb-0">
+                  <dt class="col-sm-4">
+                    Decoder Fields
+                  </dt>
+                  <dd class="col-sm-8">
                     <a href="#" data-toggle="modal" data-target="#StructModal-{{ telemetry.id }}">
                       Click here
                     </a>
-                  </div>
-                </div>
+                  </dd>
+                </dl>
               </div>
             </div>
           </div>
@@ -301,23 +304,25 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h4 class="modal-title" id="StructModalLabel">Kaitai Struct for {{ telemetry.name }}</h4>
+                <h4 class="modal-title" id="StructModalLabel">Kaitai decoder fields for {{ telemetry.name }}</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                     aria-hidden="true">×</span></button>
               </div>
               <div class="modal-body">
                 {% if not telemetry.schema == '' %}
                 <div class="kaitai-header">
-                  See <a href="http://kaitai.io" target="_blank">kaitai.io</a> for more information on the format
+                  See <a href="http://kaitai.io" target="_blank">kaitai.io <i class="fas fa-external-link-alt fa-xs"></i></a> for more information on the format
                   and <a href="https://gitlab.com/librespacefoundation/satnogs/satnogs-decoders" target="_blank">
-                    the satnogs-decoders repository</a> for the most recent decoders.
+                    the satnogs-decoders repository <i class="fas fa-external-link-alt fa-xs"></i></a> for the most recent decoders.
                 </div>
-                <div class="kaitai-struct">
-                  <pre>{{ telemetry.schema }}</pre>
+                <div class="kaitai-struct m-2">
+                  {% for field in telemetry.get_kaitai_fields %}
+                  <code>{{ field }}</code><br/>
+                  {% endfor %}
                 </div>
                 {% else %}
                 <div>
-                  Struct format appears to be missing.
+                  Struct fields appear to be missing.
                 </div>
                 {% endif %}
               </div>
@@ -331,14 +336,13 @@
         {% else %}
         <div class="col-12 col-md-6 my-2">
           <div class="card">
-            <div class="card-body transmitter-card-body">
-              <div class="row align-items-center no-gutters">
-                <div class="col mr-2">
-                  <div class="text-uppercase text-satnogs-primary font-weight-bold h6 mb-1"><span>No Decoders
-                      Found</span></div>
-                </div>
-                <div class="col-auto"><i class="fas fa-exclamation-circle fa-2x text-satnogs-inactive"></i></div>
+            <div class="card-header">
+              <div class="satellite-title">
+                <i class="fas fa-code"></i>
+                No Decoders Found
               </div>
+            </div>
+            <div class="card-body">
               <div class="col-12">
                 <span>Help us develop a decoder, you can find instructions at this <a
                     href="https://wiki.satnogs.org/Adding_a_new_data_decoder" target="_blank">wiki link</a></span>

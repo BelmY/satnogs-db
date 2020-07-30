@@ -81,7 +81,8 @@ function freq_to_ppb(freq_obs, freq) {
     }
 }
 
-function format_freq(frequency) {
+function format_freq(freq) {
+    var frequency = +freq; 
     if (frequency < 1000) {
     // Frequency is in Hz range
         return frequency.toFixed(3) + ' Hz';

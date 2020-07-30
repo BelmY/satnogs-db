@@ -4,6 +4,7 @@ from os import path
 from uuid import uuid4
 
 import h5py
+import satnogsdecoders
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -487,6 +488,18 @@ class Telemetry(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_kaitai_fields(self):
+        """Return an empty-value dict of fields for this kaitai.io struct
+        Beware the overuse of "decoder" in satnogsdecoders and "decoder" the
+        field above in this Telemetry model"""
+        results = {}
+        try:
+            decoder_class = getattr(satnogsdecoders.decoder, self.decoder.capitalize())
+            results = satnogsdecoders.decoder.get_fields(decoder_class, empty=True)
+        except AttributeError:
+            pass
+        return results
 
 
 @python_2_unicode_compatible
