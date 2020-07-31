@@ -7,7 +7,7 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'lib/mapbox-gl/dist/mapbox-gl.css' %}">
-<link rel="stylesheet" href="{% static 'lib/flag-icon-css/css/flag-icon.min.css' %}">
+<link rel="stylesheet" href="{% static 'lib/admin-lte/plugins/flag-icon-css/css/flag-icon.min.css' %}">
 {% endblock css %}
 
 {% block top-menu-left %}
@@ -245,7 +245,7 @@
                 Most Recent Observers
               </div>
             </div>
-            <div class="card-body">
+            <div class="card-body text-sm">
               {% if recent_observers|length > 0 %}
               <table class="table table-sm table-borderless">
                 <thead>
@@ -467,7 +467,7 @@
 
 {% block javascript %}
 <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
-<script src="{% static 'lib/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'lib/admin-lte/plugins/moment/moment.min.js' %}"></script>
 <script src="{% static 'lib/gpredict.js/dist/gpredict.min.js' %}"></script>
 <script src="{% static 'js/satellite.js' %}"></script>
 {% if satellite.status != 're-entered' %}

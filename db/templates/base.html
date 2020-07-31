@@ -12,10 +12,9 @@
   <title>SatNOGS DB{% block title %}{% endblock title %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% compress css %}
-  <link rel="stylesheet" href="{% static 'lib/admin-lte/dist/css/adminlte.min.css' %}">
-
-  <link rel="stylesheet" href="{% static 'css/newapp.css' %}">
   {% block css %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'lib/admin-lte/dist/css/adminlte.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/newapp.css' %}">
   {% endcompress %}
   {% fontawesome_5_static %}
 
@@ -236,11 +235,11 @@
   <!-- /.wrapper -->
 
   {% compress js %}
-  <script src="{% static 'lib/jquery/dist/jquery.min.js' %}"></script>
-  <script src="{% static 'lib/popper.js/dist/umd/popper.min.js' %}"></script>
-  <script src="{% static 'lib/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-  <script src="{% static 'lib/admin-lte/dist/js/adminlte.min.js' %}"></script>
+  <script src="{% static 'lib/admin-lte/plugins/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/admin-lte/plugins/popper/umd/popper.min.js' %}"></script>
+  <script src="{% static 'lib/admin-lte/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
   <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+  <script src="{% static 'lib/admin-lte/dist/js/adminlte.min.js' %}"></script>
   <script src="{% static 'js/app.js' %}"></script>
   {% block javascript %}{% endblock javascript %}
   {{ analytics_code }}
