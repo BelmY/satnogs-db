@@ -372,6 +372,7 @@ a.dropdown-item {
 [class*='sidebar-dark'] .satnogs-sidebar-footer a {
     color: rgba(255, 255, 255, .5);
     font-size: .7rem;
+    margin-bottom: .2rem;
 }
 
 .toasts-top-right {
@@ -395,4 +396,12 @@ a.dropdown-item {
 
 .card-satnogs-header {
     background-color: var(--satnogs-color-text) !important; /* stylelint-disable-line declaration-no-important */
+}
+
+#nav-logo {
+    margin-top: .25rem;
+    margin-left: 2rem;
+    float: none;
+    max-height: 20px;
+    opacity: .9;
 }
