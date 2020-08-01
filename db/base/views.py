@@ -167,7 +167,7 @@ def satellite(request, norad):
     try:
         # pull the last 5 observers and their submission timestamps for this satellite
         recent_observers = DemodData.objects.filter(satellite=satellite_obj) \
-            .values('observer', 'timestamp').annotate(latest_payload=Max('timestamp')) \
+            .values('observer').annotate(latest_payload=Max('timestamp')) \
             .order_by('-latest_payload')[:5]
     except (ObjectDoesNotExist, IndexError):
         recent_observers = ''

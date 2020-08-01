@@ -258,7 +258,7 @@
                   {% for obs in recent_observers %}
                   <tr>
                     <td>{{obs.observer}}</td>
-                    <td>{{obs.timestamp|date:"Y-m-d H:i:s"}} UTC</td>
+                    <td>{{obs.latest_payload|date:"Y-m-d H:i:s"}} UTC</td>
                   </tr>
                   {% endfor %}
                 </tbody>
