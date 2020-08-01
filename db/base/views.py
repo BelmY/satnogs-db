@@ -339,12 +339,12 @@ def search(request):
 
     :returns: base/search.html
     """
-    query_string = None
+    query_string = ''
     results = Satellite.objects.none()
     if ('q' in request.GET) and request.GET['q'].strip():
         query_string = request.GET['q']
 
-    if query_string is not None:
+    if query_string:
         results = Satellite.objects.filter(
             Q(name__icontains=query_string) | Q(names__icontains=query_string)
             | Q(norad_cat_id__icontains=query_string)  # noqa: W503 google W503 it is evil
@@ -359,10 +359,7 @@ def search(request):
     if results.count() == 1:
         return redirect(reverse('satellite', kwargs={'norad': results[0].norad_cat_id}))
 
-    # else  (no-else-return)
-    return render(request, 'base/search.html', {
-        'results': results,
-    })
+    return render(request, 'base/search.html', {'results': results, 'q': query_string})
 
 
 def stats(request):

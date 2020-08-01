@@ -66,7 +66,7 @@
         <form class="form-inline mt-1" action="{% url 'search_results' %}" method="GET">
           <div class="input-group input-group-sm">
             <input class="form-control form-control-sidebar" type="search" name="q"
-              placeholder="Satellite name or ID" aria-label="Search">
+              placeholder="Satellite name or ID" aria-label="Search" value="{{ q }}">
             <div class="input-group-append">
               <button class="btn btn-navbar-satnogs" type="submit">
                 <i class="fas fa-search"></i>
