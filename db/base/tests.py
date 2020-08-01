@@ -181,14 +181,3 @@ class AboutViewTest(TestCase):
         """Tests for a known string in the SatNOGS DB about page template"""
         response = self.client.get('/about/')
         self.assertContains(response, 'SatNOGS DB is an effort to create an hollistic')
-
-
-@pytest.mark.django_db(transaction=True)
-class FaqViewTest(TestCase):
-    """
-    Test to make sure the faq page is working
-    """
-    def test_faq_page(self):
-        """Tests for a known string in the SatNOGS DB FAQ page template"""
-        response = self.client.get('/faq/')
-        self.assertContains(response, 'How do I suggest a new transmitter?')

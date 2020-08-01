@@ -141,22 +141,6 @@
     text-align: center;
 }
 
-.satellite-item {
-    display: block;
-}
-
-.satellite-item .panel-heading {
-    background-image: url('/static/img/sat.png');
-    background-size: cover;
-    height: 120px;
-}
-
-a.satellite-item:hover {
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease-out 0s;
-    text-decoration: none;
-}
-
 .satellite-title {
     font-weight: bold;
     font-size: 1.2em;
@@ -299,10 +283,6 @@ a.satellite-item:hover {
 
 .text {
     max-width: 900px;
-}
-
-.faq > li {
-    margin-top: 20px;
 }
 
 footer {

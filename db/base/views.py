@@ -318,14 +318,6 @@ def about(request):
     return render(request, 'base/about.html')
 
 
-def faq(request):
-    """View to render faq page.
-
-    :returns: base/faq.html
-    """
-    return render(request, 'base/faq.html')
-
-
 def satnogs_help(request):
     """View to render help modal. Have to avoid builtin 'help' name
 

@@ -8,7 +8,6 @@ BASE_URLPATTERNS = (
     [
         path('', views.home, name='home'),
         path('about/', views.about, name='about'),
-        path('faq/', views.faq, name='faq'),
         path('satellites/', views.satellites, name='satellites'),
         path('satellite/<int:norad>/', views.satellite, name='satellite'),
         path('frames/<int:norad>/', views.request_export, name='request_export_all'),
