@@ -295,6 +295,7 @@ CSP_SCRIPT_SRC = config(
     'https://*.google-analytics.com,'
     'https://kit-free.fontawesome.com,'
     'https://kit.fontawesome.com,'
+    "'sha256-poSsg4msM/d4NUuFqtWj+1p7OhspHij16g58RBWo7Nk=',"  # transmitter_modal.js
 )
 CSP_IMG_SRC = config(
     'CSP_IMG_SRC',
@@ -314,6 +315,9 @@ CSP_WORKER_SRC = config(
     cast=lambda v: tuple(s.strip() for s in v.split(',')),
     default="'self',"
     'blob:'
+)
+CSP_CHILD_SRC = config(
+    'CSP_CHILD_SRC', cast=lambda v: tuple(s.strip() for s in v.split(',')), default='blob:'
 )
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_CONTENT_TYPE_NOSNIFF = True

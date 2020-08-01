@@ -23,11 +23,18 @@ class TransmitterModelForm(BSModalModelForm):  # pylint: disable=too-many-ancest
     """Model Form class for TransmitterEntry objects"""
     class Meta:
         model = TransmitterEntry
+        # yapf: disable
         fields = [
-            'description', 'status', 'type', 'uplink_low', 'uplink_high', 'downlink_low',
-            'downlink_high', 'uplink_drift', 'downlink_drift', 'downlink_mode', 'uplink_mode',
-            'invert', 'baud', 'citation', 'service'
+            'description', 'type', 'status', 'uplink_low', 'uplink_high', 'uplink_drift',
+            'uplink_mode', 'downlink_low', 'downlink_high', 'downlink_drift',
+            'downlink_mode', 'invert', 'baud', 'citation', 'service'
         ]
+        # yapf: enable
+        labels = {
+            'downlink_low': _('Downlink'),
+            'uplink_low': _('Uplink'),
+            'invert': _('Inverted Transponder?'),
+        }
         widgets = {
             'description': TextInput(),
         }
@@ -37,11 +44,19 @@ class TransmitterUpdateForm(BSModalModelForm):  # pylint: disable=too-many-ances
     """Model Form class for TransmitterEntry objects"""
     class Meta:
         model = TransmitterEntry
+        # yapf: disable
         fields = [
-            'description', 'status', 'type', 'service', 'uplink_low', 'uplink_drift',
-            'uplink_high', 'downlink_low', 'uplink_mode', 'downlink_drift', 'downlink_high',
-            'downlink_mode', 'invert', 'baud', 'created', 'citation'
+            'description', 'type', 'status', 'uplink_low', 'uplink_high', 'uplink_drift',
+            'uplink_mode', 'downlink_low', 'downlink_high', 'downlink_drift',
+            'downlink_mode', 'invert', 'baud', 'citation', 'service', 'created'
         ]
+        # yapf: enable
+        labels = {
+            'downlink_low': _('Downlink'),
+            'uplink_low': _('Uplink'),
+            'invert': _('Inverted Transponder?'),
+            'created': _('Updated'),
+        }
         widgets = {
             'description': TextInput(),
             'created': TextInput(attrs={'readonly': True}),

@@ -23,51 +23,6 @@ function copyToClipboard(text, el) {
     }
 }
 
-function transmitter_suggestion_type(selection) {
-    switch(selection){
-    case 'Transmitter':
-        $('.input-group').show();
-        $('input').prop( 'disabled', false );
-        $('select').prop( 'disabled', false );
-        $('input[name=\'uplink_low\']').prop( 'disabled', true );
-        $('input[name=\'uplink_high\']').prop( 'disabled', true );
-        $('input[name=\'uplink_drift\']').prop( 'disabled', true );
-        $('input[name=\'downlink_high\']').prop( 'disabled', true );
-        $('input[name=\'invert\']').prop( 'disabled', true );
-        $('select[name=\'uplink_mode\']').prop( 'disabled', true );
-        $('.input-group').has('input[name=\'uplink_low\']').hide();
-        $('.input-group').has('input[name=\'uplink_high\']').hide();
-        $('.input-group').has('input[name=\'uplink_drift\']').hide();
-        $('.input-group').has('input[name=\'downlink_high\']').hide();
-        $('.input-group').has('input[name=\'invert\']').hide();
-        $('.input-group').has('select[name=\'uplink_mode\']').hide();
-
-        $('.input-group-prepend:contains(\'Downlink Low\')').html('<span class="input-group-text">Downlink</span>');
-        break;
-    case 'Transceiver':
-        $('.input-group').show();
-        $('input').prop( 'disabled', false );
-        $('select').prop( 'disabled', false );
-        $('input[name=\'uplink_high\']').prop( 'disabled', true );
-        $('input[name=\'downlink_high\']').prop( 'disabled', true );
-        $('input[name=\'invert\']').prop( 'disabled', true );
-        $('.input-group').has('input[name=\'uplink_high\']').hide();
-        $('.input-group').has('input[name=\'downlink_high\']').hide();
-        $('.input-group').has('input[name=\'invert\']').hide();
-
-        $('input[name=\'downlink_low\']').prev().html('<span class="input-group-text">Downlink</span>');
-        $('input[name=\'uplink_low\']').prev().html('<span class="input-group-text">Uplink</span>');
-        break;
-    case 'Transponder':
-        $('.input-group').show();
-        $('input').prop( 'disabled', false );
-        $('select').prop( 'disabled', false );
-        $('input[name=\'downlink_low\']').prev().html('<span class="input-group-text">Downlink Low</span>');
-        $('input[name=\'uplink_low\']').prev().html('<span class="input-group-text">Uplink Low</span>');
-        break;
-    }
-}
-
 function ppb_to_freq(freq, drift) {
     var freq_obs = freq + ((freq * drift) / Math.pow(10,9));
     return Math.round(freq_obs);
@@ -94,28 +49,6 @@ function format_freq(freq) {
 }
 
 $(document).ready(function() {
-    $('.transmitter_suggestion-type').on('change click', function(){
-        var selection = $(this).val();
-        transmitter_suggestion_type(selection);
-    });
-
-    $('.transmitter_suggestion-modal').on('show.bs.modal', function(){
-        var selection =  $(this).find('.transmitter_suggestion-type').val();
-        transmitter_suggestion_type(selection);
-
-        var downlink_ppb = parseInt($(this).find('.downlink-ppb-sugedit').val());
-        if(downlink_ppb){
-            var freq_down = parseInt($(this).find('input[name=\'downlink_low\']').val());
-            $('.downlink-drifted-sugedit').val(ppb_to_freq(freq_down,downlink_ppb));
-        }
-
-        var uplink_ppb = parseInt($(this).find('.uplink-ppb-sugedit').val());
-        if(uplink_ppb){
-            var freq_up = parseInt($(this).find('input[name=\'uplink_low\']').val());
-            $('.uplink-drifted-sugedit').val(ppb_to_freq(freq_up,uplink_ppb));
-        }
-    });
-
     // Calculate the drifted frequencies
     $('.drifted').each(function() {
         var drifted = ppb_to_freq($(this).data('freq_or'),$(this).data('drift'));

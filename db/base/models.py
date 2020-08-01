@@ -315,7 +315,7 @@ class TransmitterEntry(models.Model):
         blank=True,
         null=True,
         validators=[MinValueValidator(-99999), MaxValueValidator(99999)],
-        help_text="Hz"
+        help_text="PPB"
     )
     downlink_low = models.BigIntegerField(
         blank=True,
@@ -339,7 +339,7 @@ class TransmitterEntry(models.Model):
         blank=True,
         null=True,
         validators=[MinValueValidator(-99999), MaxValueValidator(99999)],
-        help_text="Hz"
+        help_text="PPB"
     )
     downlink_mode = models.ForeignKey(
         Mode,
