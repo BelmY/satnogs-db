@@ -175,6 +175,16 @@
                 <i class="mr-2 fas fa-external-link-alt"></i>
               </a>
             </dd>
+            {% if satellite.dashboard_url %}
+            <dt class="col-sm-4">Satellite Dashboard</dt>
+            <dd class="col-sm-8">      
+              <a class="d-flex align-content-center" 
+              href="{{ satellite.dashboard_url }}" target="_blank">
+                <p class="mb-0 mr-2">Dashboard</p>
+                <i class="mr-2 fas fa-external-link-alt"></i>
+              </a>
+            </dd>
+            {% endif %}
           </dl>
         </div>
       </div>
