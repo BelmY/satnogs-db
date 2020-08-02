@@ -8,8 +8,12 @@
 <link rel="stylesheet" href="{% static 'lib/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
 {% endblock %}
 
+{% block top-menu-left %}
+<span class="h4 mb-0 mr-3 text-truncate d-none d-md-block">Transmitters</span>
+{% endblock %}
+
 {% block top %}
-<span class="h4 mb-0 d-inline d-lg-none">Transmitters</span>
+<span class="h4 mb-0">Transmitters</span>
 {% endblock %}
 
 {% block content %}

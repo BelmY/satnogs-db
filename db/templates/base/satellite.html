@@ -8,10 +8,10 @@
 {% block css %}
 <link rel="stylesheet" href="{% static 'lib/mapbox-gl/dist/mapbox-gl.css' %}">
 <link rel="stylesheet" href="{% static 'lib/admin-lte/plugins/flag-icon-css/css/flag-icon.min.css' %}">
-{% endblock css %}
+{% endblock %}
 
 {% block top-menu-left %}
-<span class="h4 mb-0 mr-3 text-truncate">{{ satellite.name }}</span>
+<span class="h4 mb-0 mr-3 text-truncate d-none d-md-block">{{ satellite.name }}</span>
 {% endblock %}
 
 {% block top-menu-right %}

@@ -23,20 +23,21 @@
 </head>
 
 <body class="layout-fixed layout-navbar-fixed layout-md-navbar-not-fixed">
-  {{ stage_notice }}
   <div class="wrapper bg-light">
     
     <!-- Top Navbar menu -->
     <nav class="main-header navbar navbar-white navbar-light navbar-expand">
-      <ul class="navbar-nav d-lg-none ml-1">
+      <ul class="navbar-nav d-lg-none ml-2">
         <a data-widget="pushmenu" href="#" role="button">
           <!-- <i class="fas fa-bars"></i> -->
-          <img src="{% static 'img/satnogs-logo-only-purple.png' %}" class="navbar-menu-logo">
+          <img src="{% static 'img/satnogs-db-logo-mobile.png' %}" class="navbar-menu-logo">
         </a>
       </ul>
 
       <!-- hacky, push dyamic content and/or user menu to the right -->
-      <div class="mr-auto"></div>
+      <div class="pl-3 mr-auto">
+        {% block top-menu-left %}{% endblock %}
+      </div>
 
       {% block top-menu-right %}
       {% endblock %}
@@ -201,6 +202,7 @@
 
     <!-- Content window -->
     <div class="content-wrapper bg-light">
+      {{ stage_notice }}
       {% if messages %}
         <!-- This is hidden, transitional to Toasts - see app.js -->
         {% for notification in messages %}
@@ -214,7 +216,7 @@
         {% endfor %}
       {% endif %}
 
-      <div class="row w-100 justify-content-center justify-content-lg-start pl-md-3 pb-1 pt-2 pt-md-1">
+      <div class="row w-100 justify-content-center justify-content-lg-start pl-md-3 pb-1 pt-2 pt-md-1 d-md-none">
       {% block top %}{% endblock %}
       </div>
 
