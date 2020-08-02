@@ -19,11 +19,30 @@
         </div>
 
         {% for field in form %}
-        <div class="input-group my-1">
+        {% if 'drift' in field.id_for_label %}
+        <div class="input-group my-1"
+        {% if field.help_text %}
+        data-toggle="tooltip" data-placement="bottom" title="Drifted frequency, when different from the published frequency"
+        {% endif %}
+        >
+            <label class="input-group-prepend input-group-text" for="{{ field.id_for_label }}_hz">{{ field.label }} freq.</label>
+            <input type="number" name="{{ field.name }}_hz" min="-9223372036854775808" max="9223372036854775807" 
+                placeholder="Drifted Frequency" class="form-control" id="{{ field.id_for_label }}_hz">
+            <label class="input-group-text input-group-append">Hz</label>
+        </div>
+        {% endif %}
+        <div class="input-group my-1"
+        {% if field.help_text %}
+        data-toggle="tooltip" data-placement="bottom" title="{{ field.help_text }}"
+        {% endif %}
+        >
             <label class="input-group-prepend input-group-text" for="{{ field.id_for_label }}">{{ field.label }}</label>
             {% render_field field class="form-control" placeholder=field.label %}
-            {% if field.help_text %}
-            <label class="input-group-text input-group-append">{{ field.help_text }}</label>
+
+            {% if 'drift' in field.id_for_label %}
+            <label class="input-group-text input-group-append">PPB</label>
+            {% elif 'low' in field.id_for_label or 'high' in field.id_for_label %}
+            <label class="input-group-text input-group-append">Hz</label>
             {% endif %}
             <div class="{% if field.errors %} invalid{% endif %}">
                 {% for error in field.errors %}

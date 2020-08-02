@@ -295,7 +295,7 @@ CSP_SCRIPT_SRC = config(
     'https://*.google-analytics.com,'
     'https://kit-free.fontawesome.com,'
     'https://kit.fontawesome.com,'
-    "'sha256-poSsg4msM/d4NUuFqtWj+1p7OhspHij16g58RBWo7Nk=',"  # transmitter_modal.js
+    "'sha256-wMIRCqWVu9YgOwizZzrYvTWAiAn0Y8PQTRdiHy2BNRk=',"  # transmitter_modal.js
 )
 CSP_IMG_SRC = config(
     'CSP_IMG_SRC',

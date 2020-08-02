@@ -284,9 +284,14 @@ class Satellite(models.Model):
 class TransmitterEntry(models.Model):
     """Model for satellite transmitters."""
     uuid = ShortUUIDField(db_index=True)
-    description = models.TextField()
+    description = models.TextField(
+        help_text='Short description for this entry, like: UHF 9k6 AFSK Telemetry'
+    )
     status = models.CharField(
-        choices=list(zip(TRANSMITTER_STATUS, TRANSMITTER_STATUS)), max_length=8, default='active'
+        choices=list(zip(TRANSMITTER_STATUS, TRANSMITTER_STATUS)),
+        max_length=8,
+        default='active',
+        help_text='Functional state of this transmitter'
     )
     type = models.CharField(
         choices=list(zip(TRANSMITTER_TYPE, TRANSMITTER_TYPE)),
@@ -300,7 +305,8 @@ class TransmitterEntry(models.Model):
             MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
             MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
         ],
-        help_text="Hz"
+        help_text='Frequency (in Hz) for the uplink, or bottom of the uplink range for a \
+            transponder'
     )
     uplink_high = models.BigIntegerField(
         blank=True,
@@ -309,13 +315,14 @@ class TransmitterEntry(models.Model):
             MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
             MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
         ],
-        help_text="Hz"
+        help_text='Frequency (in Hz) for the top of the uplink range for a transponder'
     )
     uplink_drift = models.IntegerField(
         blank=True,
         null=True,
         validators=[MinValueValidator(-99999), MaxValueValidator(99999)],
-        help_text="PPB"
+        help_text='Receiver drift from the published uplink frequency, stored in parts \
+            per billion (PPB)'
     )
     downlink_low = models.BigIntegerField(
         blank=True,
@@ -324,7 +331,8 @@ class TransmitterEntry(models.Model):
             MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
             MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
         ],
-        help_text="Hz"
+        help_text='Frequency (in Hz) for the downlink, or bottom of the downlink range \
+            for a transponder'
     )
     downlink_high = models.BigIntegerField(
         blank=True,
@@ -333,40 +341,57 @@ class TransmitterEntry(models.Model):
             MinValueValidator(MIN_FREQ, message=MIN_FREQ_MSG),
             MaxValueValidator(MAX_FREQ, message=MAX_FREQ_MSG)
         ],
-        help_text="Hz"
+        help_text='Frequency (in Hz) for the top of the downlink range for a transponder'
     )
     downlink_drift = models.IntegerField(
         blank=True,
         null=True,
         validators=[MinValueValidator(-99999), MaxValueValidator(99999)],
-        help_text="PPB"
+        help_text='Transmitter drift from the published downlink frequency, stored in \
+            parts per billion (PPB)'
     )
     downlink_mode = models.ForeignKey(
         Mode,
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        related_name='transmitter_downlink_entries'
+        related_name='transmitter_downlink_entries',
+        help_text='Modulation mode for the downlink'
     )
     uplink_mode = models.ForeignKey(
         Mode,
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        related_name='transmitter_uplink_entries'
+        related_name='transmitter_uplink_entries',
+        help_text='Modulation mode for the uplink'
     )
-    invert = models.BooleanField(default=False)
-    baud = models.FloatField(validators=[MinValueValidator(0)], blank=True, null=True)
+    invert = models.BooleanField(
+        default=False, help_text='True if this is an inverted transponder'
+    )
+    baud = models.FloatField(
+        validators=[MinValueValidator(0)],
+        blank=True,
+        null=True,
+        help_text='The number of modulated symbols that the transmitter sends every second'
+    )
     satellite = models.ForeignKey(
         Satellite, null=True, related_name='transmitter_entries', on_delete=models.SET_NULL
     )
     reviewed = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
-    created = models.DateTimeField(default=now)
-    citation = models.CharField(max_length=512, default='CITATION NEEDED - https://xkcd.com/285/')
+    created = models.DateTimeField(default=now, help_text='Timestamp for this entry or edit')
+    citation = models.CharField(
+        max_length=512,
+        default='CITATION NEEDED - https://xkcd.com/285/',
+        help_text='A reference (preferrably URL) for this entry or edit'
+    )
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     service = models.CharField(
-        choices=zip(SERVICE_TYPE, SERVICE_TYPE), max_length=34, default='Unknown'
+        choices=zip(SERVICE_TYPE, SERVICE_TYPE),
+        max_length=34,
+        default='Unknown',
+        help_text='The published usage category for this transmitter'
     )
 
     # NOTE: future fields will need to be added to forms.py and to

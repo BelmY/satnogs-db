@@ -31,8 +31,8 @@ class TransmitterModelForm(BSModalModelForm):  # pylint: disable=too-many-ancest
         ]
         # yapf: enable
         labels = {
-            'downlink_low': _('Downlink'),
-            'uplink_low': _('Uplink'),
+            'downlink_low': _('Downlink freq.'),
+            'uplink_low': _('Uplink freq.'),
             'invert': _('Inverted Transponder?'),
         }
         widgets = {
@@ -52,8 +52,8 @@ class TransmitterUpdateForm(BSModalModelForm):  # pylint: disable=too-many-ances
         ]
         # yapf: enable
         labels = {
-            'downlink_low': _('Downlink'),
-            'uplink_low': _('Uplink'),
+            'downlink_low': _('Downlink freq.'),
+            'uplink_low': _('Uplink freq.'),
             'invert': _('Inverted Transponder?'),
             'created': _('Updated'),
         }
