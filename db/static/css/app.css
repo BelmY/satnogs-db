@@ -449,6 +449,10 @@ a.dropdown-item {
     background-color: var(--satnogs-color-text) !important; /* stylelint-disable-line declaration-no-important */
 }
 
+.satnogs-link-btn {
+    background-color: var(--satnogs-color-text);
+}
+
 #nav-logo {
     margin-top: .25rem;
     margin-left: 2rem;
@@ -483,4 +487,8 @@ a.dropdown-item {
     .card-columns {
         column-count: 3;
     }
+}
+
+.helper-icon {
+    opacity: .7;
 }

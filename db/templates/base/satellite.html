@@ -98,6 +98,57 @@
     <div class="tab-pane fade show active mx-1" id="profile" role="tabpanel" aria-labelledby="profile-tab">
       <div class="row">
         <div class="card-columns">
+          <!-- Mission Status-->
+            <div class="info-box 
+                        {% if satellite.status == 'alive' %}
+                          bg-success
+                        {% elif satellite.status == 're-entered' %}
+                          bg-danger
+                        {% elif satellite.status == 'dead' %}
+                          bg-warning
+                        {% else %}
+                          bg-info
+                        {% endif %}">
+              <span class="info-box-icon"><img src="
+                {% if satellite.status == 'alive' %}
+                  {% static 'img/status_alive.png' %}
+                {% elif satellite.status == 're-entered' %}
+                  {% static 'img/status_decayed.png' %}
+                {% elif satellite.status == 'dead' %}
+                  {% static 'img/status_dead.png' %}
+                {% else %}
+                  {% static 'img/status_unknown.png' %}
+                {% endif %}
+                " height="30"></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Status</span>
+                <span class="info-box-number">
+                  {% if satellite.status == 'alive' %}
+                    Operational
+                  {% elif satellite.status == 're-entered' %}
+                    Decayed
+                  {% elif satellite.status == 'dead' %}
+                    Mulfunctioning
+                  {% else %}
+                    Unknown
+                  {% endif %}
+                </span>
+              </div>
+              <span class="icon helper-icon m-2">
+                <span class="fas fa-info-circle"
+                      data-toggle="tooltip"
+                      data-placement="left"
+                      title="{% if satellite.status == 'alive' %}
+                                Satellite is in orbit and operational
+                             {% elif satellite.status == 're-entered' %}
+                                Satellite has re-entered
+                             {% elif satellite.status == 'dead' %}
+                                Satellite appears to be malfunctioning
+                             {% else %}
+                                Status of the satellite is unknown
+                             {% endif %}"></span>
+              </span>
+            </div>
           <!-- Satellite Mission Information -->
             <div class="card card-info">
               <div class="card-header card-satnogs-header">
@@ -111,20 +162,6 @@
                   <dt class="col-sm-4">Alternate Names</dt>
                   <dd class="col-sm-8">{{ satellite.names }}</dd>
                   {% endif %}
-                  <dt class="col-sm-4">Status</dt>
-                  <dd class="col-sm-8">
-                    <img class="" src="
-                    {% if satellite.status == 'alive' %}
-                    {% static 'img/status_alive.png' %}
-                    {% elif satellite.status == 're-entered' %}
-                    {% static 'img/status_decayed.png' %}
-                    {% elif satellite.status == 'dead' %}
-                    {% static 'img/status_dead.png' %}
-                    {% else %}
-                    {% static 'img/status_unknown.png' %}
-                    {% endif %}
-                    " height="30"> {{ satellite.status }}
-                  </dd>
                   <dt class="col-sm-4">NORAD ID</dt>
                   <dd class="col-sm-8">{{ satellite.norad_cat_id }}</dd>
                   {% if satellite.website %}
@@ -152,9 +189,9 @@
                   <dt class="col-sm-4">Country of Origin</dt>
                   {% endif %}
                   <dd class="col-sm-8">
-                    {% for country in satellite.countries %}
-                    <span class="flag-icon flag-icon-{{ country.code|lower }} fa-2x mr-1"></span>
-                    <span class="mb-0">{{ country.name }}</span>
+                    {% for country in satellite.countries %}<p>
+                    <span class="flag-icon flag-icon-{{ country.code|lower }}"></span>
+                    <span class="mb-0">{{ country.name }}</span></p>
                     {% endfor %}
                   </dd>
                   {% endif %}
@@ -226,7 +263,7 @@
                 SatNOGS Links
               </div>
               <div class="card-body text-center">
-                  <a class="btn btn-info m-1" 
+                  <a class="btn btn-info m-1 satnogs-link-btn" 
                      href="https://network.satnogs.org/observations/?norad={{ satellite.norad_cat_id }}"
                      target="_blank"
                      role="button">
@@ -234,7 +271,7 @@
                     <i class="mr-2 fas fa-external-link-alt"></i>
                   </a>
                 {% if satellite.dashboard_url %}
-                  <a class="btn btn-info m-1" 
+                  <a class="btn btn-info m-1 satnogs-link-btn" 
                       href="{{ satellite.dashboard_url }}"
                       target="_blank"
                       role="button">
