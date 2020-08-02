@@ -347,12 +347,10 @@
       <div class="container-fluid card-deck">
         <!-- Satellite Data Leaderboard -->
         <div class="col-12 col-md-6 my-2">
-          <div class="card panel-default">
-            <div class="card-header">
-              <div class="satellite-title">
+          <div class="card card-info">
+            <div class="card-header card-satnogs-header">
                 <i class="fas fa-user-alt"></i>
                 Most Recent Observers
-              </div>
             </div>
             <div class="card-body text-sm">
               {% if recent_observers|length > 0 %}
@@ -379,15 +377,12 @@
           </div>
         </div>
 
-        {% if satellite.telemetry_decoder_count %}
         {% for telemetry in satellite.telemetries.all %}
         <div class="col-12 col-md-6 my-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="satellite-title">
+          <div class="card card-info">
+            <div class="card-header card-satnogs-header">
                 <i class="fas fa-code"></i>
                 Decoder: {{ telemetry.name }}
-              </div>
             </div>
             <div class="card-body">
               <div class="col-12">
@@ -443,15 +438,12 @@
             </div>
           </div>
         </div>
-        {% endfor %}
-        {% else %}
+        {% empty %}
         <div class="col-12 col-md-6 my-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="satellite-title">
+          <div class="card card-info">
+            <div class="card-header card-satnogs-header">
                 <i class="fas fa-code"></i>
                 No Decoders Found
-              </div>
             </div>
             <div class="card-body">
               <div class="col-12">
@@ -461,17 +453,15 @@
             </div>
           </div>
         </div>
-        {% endif %}
+        {% endfor %}
 
         <!-- Telemetry Frames Section -->
         {% if satellite.telemetry_data_count > 0 and request.user.is_authenticated %}
         <div class="col-12 col-md-6 my-2">
-          <div class="card panel-default">
-            <div class="card-header">
-              <div class="satellite-title" id="telemetry-block" data-satid="{{ satellite.norad_cat_id }}">
+          <div class="card card-info">
+            <div class="card-header card-satnogs-header" id="telemetry-block" data-satid="{{ satellite.norad_cat_id }}">
                 <i class="fas fa-download"></i>
                 Data Export (frames)
-              </div>
             </div>
             <div class="card-body">
               <div class="col">
@@ -493,11 +483,9 @@
         {% if satellite.latest_tle.redistributable %}
         <div class="row">
           <div class="col-md-12 satellite-panels">
-            <div class="card panel-default panel-satellite">
-              <div class="card-header satnogs-card-header">
-                <div class="satellite-title">
+            <div class="card card-info">
+              <div class="card-header card-satnogs-header">
                   Orbital Elements
-                </div>
               </div>
               <div class="card-body">
                 <div class="col-md-12">
