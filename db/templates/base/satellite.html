@@ -11,7 +11,7 @@
 {% endblock css %}
 
 {% block top-menu-left %}
-<h5 class="mb-0 mr-3">{{ satellite.name }}</h5>
+<h4 class="mb-0 mr-3">{{ satellite.name }}</h4>
 {% endblock %}
 
 {% block top-menu-right %}
@@ -97,97 +97,153 @@
     <!-- Profile panel -->
     <div class="tab-pane fade show active mx-1" id="profile" role="tabpanel" aria-labelledby="profile-tab">
       <div class="row">
-        <div class="col-12 col-md-6">
-          <img src="{{ satellite.get_image }}" alt="{{ satellite.name }}" class="satellite-img-full mb-3">
-          <div class="lead mr-md-2">
-            {{ satellite.get_description|safe }}
-          </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <dl class="row">
-            <dt class="col-sm-4" id="satellite_name" data-needshelp="{{ satellite.needs_help }}">{{ satellite.name }}</dt>
-            <dd class="col-sm-8">
-              {% for country in satellite.countries %}
-              <span class="flag-icon flag-icon-{{ country.code|lower }} fa-2x mr-1"></span>
-              {% endfor %}
-            </dd>
-            <dt class="col-sm-4">Status</dt>
-            <dd class="col-sm-8">
-              <img class="" src="
-              {% if satellite.status == 'alive' %}
-              {% static 'img/status_alive.png' %}
-              {% elif satellite.status == 're-entered' %}
-              {% static 'img/status_decayed.png' %}
-              {% elif satellite.status == 'dead' %}
-              {% static 'img/status_dead.png' %}
-              {% else %}
-              {% static 'img/status_unknown.png' %}
-              {% endif %}
-              " height="35">
-            </dd>
-            <dt class="col-sm-4">NORAD ID</dt>
-            <dd class="col-sm-8">{{ satellite.norad_cat_id }}</dd>
-            {% if satellite.names %}
-            <dt class="col-sm-4">Alternate Names</dt>
-            <dd class="col-sm-8">{{ satellite.names }}</dd>
+        <div class="card-columns">
+          <!-- Satellite Mission Information -->
+            <div class="card card-info">
+              <div class="card-header card-satnogs-header">
+                Mission information
+              </div>
+              <div class="card-body">
+                <dl class="row">
+                  <dt class="col-sm-4" data-needshelp="{{ satellite.needs_help }}">Name</dt>
+                  <dd class="col-sm-8">{{ satellite.name }}</dd>
+                  {% if satellite.names %}
+                  <dt class="col-sm-4">Alternate Names</dt>
+                  <dd class="col-sm-8">{{ satellite.names }}</dd>
+                  {% endif %}
+                  <dt class="col-sm-4">Status</dt>
+                  <dd class="col-sm-8">
+                    <img class="" src="
+                    {% if satellite.status == 'alive' %}
+                    {% static 'img/status_alive.png' %}
+                    {% elif satellite.status == 're-entered' %}
+                    {% static 'img/status_decayed.png' %}
+                    {% elif satellite.status == 'dead' %}
+                    {% static 'img/status_dead.png' %}
+                    {% else %}
+                    {% static 'img/status_unknown.png' %}
+                    {% endif %}
+                    " height="30"> {{ satellite.status }}
+                  </dd>
+                  <dt class="col-sm-4">NORAD ID</dt>
+                  <dd class="col-sm-8">{{ satellite.norad_cat_id }}</dd>
+                  {% if satellite.website %}
+                  <dt class="col-sm-4">Website</dt>
+                  <dd class="col-sm-8">
+                    <a href="{{ satellite.website }}" target="_blank">{{ satellite.website }}</a>
+                  </dd>
+                  {% endif %}
+                  {% if satellite.operator %}
+                  <dt class="col-sm-4">Operator</dt>
+                  <dd class="col-sm-8">
+                    {% if satellite.operator.website %}
+                    <a href="{{ satellite.operator.website }}" target="_blank">
+                      {{ satellite.operator.name }} - {{ satellite.operator.names }}
+                    </a>
+                    {% else %}
+                    {{ satellite.operator.name }} - {{ satellite.operator.names }}
+                    {% endif %}
+                  </dd>
+                  {% endif %}
+                  {% if satellite.countries %}
+                  {% if satellite.countries|length > 1 %}
+                  <dt class="col-sm-4">Countries of Origin</dt>
+                  {% else %}
+                  <dt class="col-sm-4">Country of Origin</dt>
+                  {% endif %}
+                  <dd class="col-sm-8">
+                    {% for country in satellite.countries %}
+                    <span class="flag-icon flag-icon-{{ country.code|lower }} fa-2x mr-1"></span>
+                    <span class="mb-0">{{ country.name }}</span>
+                    {% endfor %}
+                  </dd>
+                  {% endif %}
+                </dl>
+              </div>
+            </div>
+          <!-- Satellite Image -->
+            <div class="card card-info">
+              <div class="card-header card-satnogs-header">
+                Image
+              </div>
+              <div class="card-body">
+                <img src="{{ satellite.get_image }}" alt="{{ satellite.name }}" class="satellite-img-full mb-3">
+              </div>
+            </div>
+          <!-- Mission timeline -->
+            {% if satellite.launched or satellite.deployed or satellite.decayed %}
+            <div class="card card-info">
+              <div class="card-header card-satnogs-header">
+                Mission timeline
+              </div>
+              <div class="card-body">
+                <dl class="row">
+                  {% if satellite.launched %}
+                  <dt class="col-sm-4">Launch Date</dt>
+                  <dd class="col-sm-8"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="{{ satellite.launched }}">
+                    {{ satellite.launched|date:"SHORT_DATE_FORMAT" }}
+                  </dd>
+                  {% endif %}
+                  {% if satellite.deployed %}
+                  <dt class="col-sm-4">Deploy Date</dt>
+                  <dd class="col-sm-8"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="{{ satellite.deployed }}">
+                    {{ satellite.deployed|date:"SHORT_DATE_FORMAT" }}
+                  </dd>
+                  {% endif %}
+                  {% if satellite.decayed %}
+                  <dt class="col-sm-4">Decay Date</dt>
+                  <dd class="col-sm-8"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="{{ satellite.decayed }}">
+                    {{ satellite.decayed|date:"SHORT_DATE_FORMAT" }}
+                  </dd>
+                  {% endif %}
+                </dl>
+              </div>
+            </div>
             {% endif %}
-            {% if satellite.website %}
-            <dt class="col-sm-4">Website</dt>
-            <dd class="col-sm-8">
-              <a href="{{ satellite.website }}" target="_blank">{{ satellite.website }}</a>
-            </dd>
+          <!-- Satellite Description -->
+            {% if satellite.get_description %}
+            <div class="card card-info">
+              <div class="card-header card-satnogs-header">
+                Description
+              </div>
+              <div class="card-body">
+                {{ satellite.get_description|safe }}
+              </div>
+            </div>
             {% endif %}
-            {% if satellite.operator %}
-            <dt class="col-sm-4">Operator</dt>
-            <dd class="col-sm-8">
-              {% if satellite.operator.website %}
-              <a href="{{ satellite.operator.website }}" target="_blank">
-                {{ satellite.operator.name }} - {{ satellite.operator.names }}
-              </a>
-              {% else %}
-              {{ satellite.operator.name }} - {{ satellite.operator.names }}
-              {% endif %}
-            </dd>
-            {% endif %}
-            {% if satellite.countries %}
-            {% if satellite.countries|length > 1 %}
-            <dt class="col-sm-4">Countries of Origin</dt>
-            {% else %}
-            <dt class="col-sm-4">Country of Origin</dt>
-            {% endif %}
-            <dd class="col-sm-8">
-              {% for country in satellite.countries %}
-              <p class="mb-0">{{ country.name }}</p>
-              {% endfor %}
-            </dd>
-            {% endif %}
-            {% if satellite.launched %}
-            <dt class="col-sm-4">Launch Date</dt>
-            <dd class="col-sm-8">{{ satellite.launched|date:"SHORT_DATE_FORMAT" }}</dd>
-            {% endif %}
-            {% if satellite.deployed %}
-            <dt class="col-sm-4">Deploy Date</dt>
-            <dd class="col-sm-8">{{ satellite.deployed|date:"SHORT_DATE_FORMAT" }}</dd>
-            {% endif %}
-            <dt class="col-sm-4">SatNOGS Network Observations</dt>
-            <dd class="col-sm-8">      
-              <a class="d-flex align-content-center" 
-              href="https://network.satnogs.org/observations/?norad={{ satellite.norad_cat_id }}" target="_blank">
-                <p class="mb-0 mr-2">Network Observations</p>
-                <i class="mr-2 fas fa-external-link-alt"></i>
-              </a>
-            </dd>
-            {% if satellite.dashboard_url %}
-            <dt class="col-sm-4">Satellite Dashboard</dt>
-            <dd class="col-sm-8">      
-              <a class="d-flex align-content-center" 
-              href="{{ satellite.dashboard_url }}" target="_blank">
-                <p class="mb-0 mr-2">Dashboard</p>
-                <i class="mr-2 fas fa-external-link-alt"></i>
-              </a>
-            </dd>
-            {% endif %}
-          </dl>
+          <!-- SatNOGS Links -->
+            <div class="card card-info">
+              <div class="card-header card-satnogs-header">
+                SatNOGS Links
+              </div>
+              <div class="card-body text-center">
+                  <a class="btn btn-info m-1" 
+                     href="https://network.satnogs.org/observations/?norad={{ satellite.norad_cat_id }}"
+                     target="_blank"
+                     role="button">
+                    Network Observations
+                    <i class="mr-2 fas fa-external-link-alt"></i>
+                  </a>
+                {% if satellite.dashboard_url %}
+                  <a class="btn btn-info m-1" 
+                      href="{{ satellite.dashboard_url }}"
+                      target="_blank"
+                      role="button">
+                    Telemetry Dashboard
+                    <i class="mr-2 fas fa-external-link-alt"></i>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
         </div>
       </div>
     </div>
