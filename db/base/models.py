@@ -13,7 +13,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator, \
 from django.db import models
 from django.db.models import OuterRef, Subquery
 from django.db.models.signals import post_save, pre_save
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
 from django_countries.fields import CountryField
 from markdown import markdown
@@ -86,7 +85,6 @@ def _extract_network_obs_id(sender, instance, created, **kwargs):  # pylint: dis
     post_save.connect(_extract_network_obs_id, sender=Artifact)
 
 
-@python_2_unicode_compatible
 class Mode(models.Model):
     """A satellite transmitter RF mode. For example: FM"""
     name = models.CharField(max_length=25, unique=True)
@@ -95,7 +93,6 @@ class Mode(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
 class Operator(models.Model):
     """Satellite Owner/Operator"""
     name = models.CharField(max_length=255, unique=True)
@@ -109,7 +106,6 @@ class Operator(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
 class Satellite(models.Model):
     """Model for all the satellites."""
     norad_cat_id = models.PositiveIntegerField()
@@ -280,7 +276,6 @@ class Satellite(models.Model):
         return '{0} - {1}'.format(self.norad_cat_id, self.name)
 
 
-@python_2_unicode_compatible
 class TransmitterEntry(models.Model):
     """Model for satellite transmitters."""
     uuid = ShortUUIDField(db_index=True)
@@ -453,7 +448,6 @@ class TransmitterSuggestionManager(models.Manager):  # pylint: disable=R0903
         return TransmitterEntry.objects.filter(reviewed=False)
 
 
-@python_2_unicode_compatible
 class TransmitterSuggestion(TransmitterEntry):
     """TransmitterSuggestion is an unreviewed TransmitterEntry object"""
     objects = TransmitterSuggestionManager()
@@ -483,7 +477,6 @@ class TransmitterManager(models.Manager):  # pylint: disable=R0903
         ).filter(created=Subquery(subquery.values('created')[:1]))
 
 
-@python_2_unicode_compatible
 class Transmitter(TransmitterEntry):
     """Associates a generic Transmitter object with their TransmitterEntries
     that are managed by TransmitterManager
@@ -497,7 +490,6 @@ class Transmitter(TransmitterEntry):
         proxy = True
 
 
-@python_2_unicode_compatible
 class Telemetry(models.Model):
     """Model for satellite telemetry decoders."""
     satellite = models.ForeignKey(
@@ -527,7 +519,6 @@ class Telemetry(models.Model):
         return results
 
 
-@python_2_unicode_compatible
 class DemodData(models.Model):
     """Model for satellite for observation data."""
     satellite = models.ForeignKey(
@@ -581,7 +572,6 @@ post_save.connect(_gen_observer, sender=DemodData)
 pre_save.connect(_set_is_decoded, sender=DemodData)
 
 
-@python_2_unicode_compatible
 class ExportedFrameset(models.Model):
     """Model for exported frames."""
     created = models.DateTimeField(auto_now_add=True)
@@ -592,7 +582,6 @@ class ExportedFrameset(models.Model):
     end = models.DateTimeField(blank=True, null=True)
 
 
-@python_2_unicode_compatible
 class Artifact(models.Model):
     """Model for observation artifacts."""
 
