@@ -27,16 +27,18 @@
     <li class="nav-item{% if satellite.status == 're-entered' %} disabled{% endif %}">
       {% if satellite.status == 're-entered' %}
       <span data-toggle="tooltip" title="No map available for re-entered satellites" data-placement="bottom">
-      <a class="nav-link disabled">
+        <a class="nav-link disabled">
+          <i class="nav-icon fas fa-map-marked-alt"></i>
+          <p class="d-none d-lg-inline-block">Map</p>
+        </a>
+      </span>
         {% else %}
-        <span>
         <a class="nav-link" id="mapcontent-tab" data-toggle="tab" href="#mapcontent" role="tab"
           aria-controls="mapcontent" aria-selected="false">
-          {% endif %}
           <i class="nav-icon fas fa-map-marked-alt"></i>
           <p class="d-none d-lg-inline-block">Map</p>
       </a>
-      </span>
+      {% endif %}
     </li>
     <li class="nav-item">
       <a class="nav-link" id="transmitters-tab" data-toggle="tab" href="#transmitters" role="tab"
