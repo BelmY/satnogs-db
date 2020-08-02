@@ -497,3 +497,7 @@ a.dropdown-item {
 .helper-icon {
     opacity: .7;
 }
+
+blockquote {
+    border-left: .7rem solid var(--satnogs-color-primary);
+}
