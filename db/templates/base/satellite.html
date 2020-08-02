@@ -11,7 +11,7 @@
 {% endblock css %}
 
 {% block top-menu-left %}
-<h4 class="mb-0 mr-3">{{ satellite.name }}</h4>
+<span class="h4 mb-0 mr-3 text-truncate">{{ satellite.name }}</span>
 {% endblock %}
 
 {% block top-menu-right %}
@@ -21,7 +21,7 @@
     <li class="nav-item">
       <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
         aria-selected="true"><i class="nav-icon fas fa-satellite"></i>
-        <p class="d-none d-lg-inline-block">Info</p>
+        <p class="d-none d-lg-inline-block text-sm">Info</p>
       </a>
     </li>
     <li class="nav-item{% if satellite.status == 're-entered' %} disabled{% endif %}">
@@ -29,14 +29,14 @@
       <span data-toggle="tooltip" title="No map available for re-entered satellites" data-placement="bottom">
         <a class="nav-link disabled">
           <i class="nav-icon fas fa-map-marked-alt"></i>
-          <p class="d-none d-lg-inline-block">Map</p>
+          <p class="d-none d-lg-inline-block text-sm">Map</p>
         </a>
       </span>
         {% else %}
         <a class="nav-link" id="mapcontent-tab" data-toggle="tab" href="#mapcontent" role="tab"
           aria-controls="mapcontent" aria-selected="false">
           <i class="nav-icon fas fa-map-marked-alt"></i>
-          <p class="d-none d-lg-inline-block">Map</p>
+          <p class="d-none d-lg-inline-block text-sm">Map</p>
       </a>
       {% endif %}
     </li>
@@ -50,7 +50,7 @@
         {% if request.user.is_superuser and satellite.transmitter_suggestion_count %}
         <!-- <span class="badge badge-warning navbar-badge">{{ satellite.transmitter_suggestion_count }}</span> -->
         {% endif %}
-        <p class="d-none d-lg-inline-block">Transmitters</p>
+        <p class="d-none d-lg-inline-block text-sm">Transmitters</p>
       </a>
     </li>
     <li class="nav-item">
@@ -60,7 +60,7 @@
         {% if satellite.telemetry_data_count %}
         <span class="badge badge-satnogs-primary navbar-badge">{{ badge_telemetry_count }}</span>
         {% endif %}
-        <p class="d-none d-lg-inline-block">Data</p>
+        <p class="d-none d-lg-inline-block text-sm">Data</p>
       </a>
     </li>
 
@@ -68,7 +68,7 @@
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="nav-icon fas fa-edit"></i>
-        <p class="d-none d-lg-inline-block">Edit</p>
+        <p class="d-none d-lg-inline-block text-sm">Edit</p>
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item d-flex align-items-center create-transmitter-link" href="#" id="create-transmitter-side"
@@ -87,6 +87,10 @@
     </li>
     {% endif %}
   </ul>
+{% endblock %}
+
+{% block top %}
+<span class="h4 mb-0">{{ satellite.name }}</span>
 {% endblock %}
 
 {% block content %}

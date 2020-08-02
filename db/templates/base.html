@@ -22,23 +22,22 @@
 
 </head>
 
-<body class="layout-fixed">
+<body class="layout-fixed layout-navbar-fixed layout-md-navbar-not-fixed">
   {{ stage_notice }}
   <div class="wrapper bg-light">
     
     <!-- Top Navbar menu -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light py-1">
-      <ul class="navbar-nav d-lg-none">
-        <a class="nav-link keychainify-checked" data-widget="pushmenu" href="#" role="button"><i
-            class="fas fa-bars"></i></a>
+    <nav class="main-header navbar navbar-white navbar-light navbar-expand">
+      <ul class="navbar-nav d-lg-none ml-1">
+        <a data-widget="pushmenu" href="#" role="button">
+          <!-- <i class="fas fa-bars"></i> -->
+          <img src="{% static 'img/satnogs-logo-only-purple.png' %}" class="navbar-menu-logo">
+        </a>
       </ul>
-      <span class="d-lg-none font-weight-light pr-2">SatNOGS DB</span>
 
       <!-- hacky, push dyamic content and/or user menu to the right -->
-      <div class="pl-3 mr-auto">
-        {% block top-menu-left %}
-        {% endblock %}
-      </div> 
+      <div class="mr-auto"></div>
+
       {% block top-menu-right %}
       {% endblock %}
 
@@ -215,7 +214,9 @@
         {% endfor %}
       {% endif %}
 
+      <div class="row w-100 justify-content-center justify-content-lg-start pl-md-3 pb-1 pt-2 pt-md-1">
       {% block top %}{% endblock %}
+      </div>
 
       {% block content %}{% endblock content %}
     </div>

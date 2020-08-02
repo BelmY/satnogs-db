@@ -355,6 +355,11 @@ a,
     padding: 0 0 0 0;
 }
 
+.navbar-menu-logo {
+    max-height: 30px;
+    float: none;
+}
+
 .nav-sidebar > .nav-item .nav-icon {
     font-size: 24px;
 }
