@@ -32,9 +32,9 @@ SERVICE_TYPE = [
     'Space Operation', 'Space Research', 'Standard Frequency and Time Signal', 'Unknown'
 ]
 URL_REGEX = r"(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"
-MIN_FREQ = 130000000
+MIN_FREQ = 0
 MAX_FREQ = 40000000000
-MIN_FREQ_MSG = "Ensure this value is greater than or equal to 130Mhz"
+MIN_FREQ_MSG = "Ensure this value is greater than or equal to 0Hz"
 MAX_FREQ_MSG = "Ensure this value is less than or equal to 40Ghz"
 
 
