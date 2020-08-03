@@ -1,5 +1,6 @@
 """SatNOGS DB Celery task functions"""
 import csv
+import json
 import logging
 import tempfile
 from datetime import datetime, timedelta
@@ -14,11 +15,11 @@ from django.core.mail import send_mail
 from django.core.validators import URLValidator
 from django.template.loader import render_to_string
 from django.utils.timezone import make_aware
-from satellite_tle import fetch_tle_from_celestrak, fetch_tles
+from satellite_tle import fetch_all_tles, fetch_tle_from_celestrak, fetch_tles
 from sgp4.earth_gravity import wgs72
 from sgp4.io import twoline2rv
 
-from db.base.models import DemodData, ExportedFrameset, Satellite
+from db.base.models import DemodData, ExportedFrameset, Satellite, Tle
 from db.base.utils import cache_statistics, decode_data
 
 LOGGER = logging.getLogger('db')
@@ -109,6 +110,55 @@ def update_all_tle():
     for norad_id in sorted(temporary_norad_ids):
         satellite = satellites.get(norad_cat_id=norad_id)
         print('Ignored {} with temporary NORAD ID {}'.format(satellite.name, norad_id))
+
+
+@shared_task
+def update_tle_sets():
+    """Task to update all satellite TLEs"""
+    satellites = Satellite.objects.exclude(status='re-entered')
+    norad_ids = set(int(sat.norad_cat_id) for sat in satellites)
+
+    # Filter only officially announced NORAD IDs
+    catalog_norad_ids = {norad_id for norad_id in norad_ids if norad_id < 99000}
+
+    # Check for TLE custom sources
+    other_sources = {}
+    if settings.TLE_SOURCES_JSON:
+        try:
+            sources_json = json.loads(settings.TLE_SOURCES_JSON)
+            other_sources['sources'] = list(sources_json.items())
+        except json.JSONDecodeError as error:
+            print('TLE Sources JSON ignored as it is invalid: {}'.format(error))
+    if settings.SPACE_TRACK_USERNAME and settings.SPACE_TRACK_PASSWORD:
+        other_sources['spacetrack_config'] = {
+            'identity': settings.SPACE_TRACK_USERNAME,
+            'password': settings.SPACE_TRACK_PASSWORD
+        }
+
+    print("==Fetching TLEs==")
+    tles = fetch_all_tles(catalog_norad_ids, **other_sources)
+
+    for satellite in satellites:
+        norad_id = satellite.norad_cat_id
+        if norad_id in tles.keys():
+            for source, tle in tles[norad_id]:
+                (tle, created) = Tle.objects.get_or_create(
+                    tle0=tle[0], tle1=tle[1], tle2=tle[2], satellite=satellite, tle_source=source
+                )
+                if created:
+                    print(
+                        '{} - {} - {}: [ADDED] TLE set is added'.format(
+                            satellite.name, norad_id, source
+                        )
+                    )
+                else:
+                    print(
+                        '{} - {} - {}: [EXISTS] TLE set already exists'.format(
+                            satellite.name, norad_id, source
+                        )
+                    )
+        else:
+            print('{} - {}: [NOT FOUND] TLE set wasn\'t found'.format(satellite.name, norad_id))
 
 
 @shared_task

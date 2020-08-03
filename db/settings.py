@@ -336,8 +336,13 @@ DATA_FETCH_DAYS = config('DATA_FETCH_DAYS', default=10, cast=int)
 MAPBOX_GEOCODE_URL = 'https://api.tiles.mapbox.com/v4/geocode/mapbox.places/'
 MAPBOX_TOKEN = config('MAPBOX_TOKEN', default='')
 
-# TLEs
+# TLE Sources
 TLE_SOURCES_REDISTRIBUTABLE = config('TLE_SOURCES_REDISTRIBUTABLE', default='manual', cast=Csv())
+TLE_SOURCES_JSON = config('TLE_SOURCES_JSON', default='')
+
+# SpaceTrack.org Credentials
+SPACE_TRACK_USERNAME = config('SPACE_TRACK_USERNAME', default='')
+SPACE_TRACK_PASSWORD = config('SPACE_TRACK_PASSWORD', default='')
 
 # Exported Frames
 EXPORTED_FRAMESET_TIME_TO_LIVE = config('EXPORTED_FRAMESET_TIME_TO_LIVE', default=21600, cast=int)
