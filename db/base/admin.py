@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 
 from db.base.models import Artifact, DemodData, ExportedFrameset, Mode, \
-    Operator, Satellite, Telemetry, Transmitter, TransmitterEntry, \
+    Operator, Satellite, Telemetry, Tle, Transmitter, TransmitterEntry, \
     TransmitterSuggestion
 from db.base.tasks import check_celery, decode_all_data
 
@@ -217,6 +217,17 @@ class TransmitterAdmin(admin.ModelAdmin):
         'baud',
     )
     readonly_fields = ('uuid', 'satellite')
+
+
+@admin.register(Tle)
+class TleAdmin(admin.ModelAdmin):
+    """Define TLE view in django admin UI"""
+    list_display = ('satellite_name', 'tle0', 'tle1', 'updated', 'tle_source')
+    list_filter = ('tle_source', 'satellite__name')
+
+    def satellite_name(self, obj):  # pylint: disable=no-self-use
+        """Return the satellite name"""
+        return obj.satellite.name
 
 
 @admin.register(Telemetry)

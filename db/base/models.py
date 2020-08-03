@@ -9,8 +9,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator, \
-    URLValidator
+from django.core.validators import MaxLengthValidator, MaxValueValidator, \
+    MinLengthValidator, MinValueValidator, URLValidator
 from django.db import models
 from django.db.models import OuterRef, Subquery
 from django.db.models.signals import post_save, pre_save
@@ -494,6 +494,73 @@ class Transmitter(TransmitterEntry):
 
     class Meta:
         proxy = True
+
+
+class Tle(models.Model):
+    """Model for TLEs."""
+    tle0 = models.CharField(
+        max_length=69, blank=True, validators=[MinLengthValidator(1),
+                                               MaxLengthValidator(69)]
+    )
+    tle1 = models.CharField(
+        max_length=69, blank=True, validators=[MinLengthValidator(69),
+                                               MaxLengthValidator(69)]
+    )
+    tle2 = models.CharField(
+        max_length=69, blank=True, validators=[MinLengthValidator(69),
+                                               MaxLengthValidator(69)]
+    )
+    tle_source = models.CharField(max_length=300, blank=True)
+    updated = models.DateTimeField(auto_now=True, blank=True)
+    satellite = models.ForeignKey(
+        Satellite, related_name='tles', on_delete=models.CASCADE, null=True, blank=True
+    )
+
+    class Meta:
+        ordering = ['-updated']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['tle1', 'tle2', 'tle_source', 'satellite'],
+                name='unique_entry_from_source_for_satellite'
+            ),
+        ]
+        indexes = [
+            models.Index(fields=['-updated']),
+            models.Index(fields=['tle1', 'tle2', 'tle_source', 'satellite'])
+        ]
+
+    def __str__(self):
+        return '{:d} - {:s}'.format(self.id, self.tle0)
+
+    @property
+    def str_array(self):
+        """Return TLE in string array format"""
+        # tle fields are unicode, pyephem and others expect python strings
+        return [str(self.tle0), str(self.tle1), str(self.tle2)]
+
+
+class LatestTleManager(models.Manager):  # pylint: disable=R0903
+    """Django Manager for latest Tle objects"""
+    def get_queryset(self):
+        """Returns query of latest Tle
+
+        :returns: the latest Tle for each Satellite
+        """
+        subquery = Tle.objects.filter(satellite=OuterRef('satellite')).order_by('-updated')
+        return super(LatestTleManager,
+                     self).get_queryset().filter(updated=Subquery(subquery.values('updated')[:1]))
+
+
+class LatestTle(Tle):
+    """LatestTle is the latest entry of a Satellite Tle objects
+    """
+    objects = LatestTleManager()
+
+    class Meta:
+        proxy = True
+
+    def __str__(self):
+        return '{:d} - {:s}'.format(self.id, self.tle0)
 
 
 class Telemetry(models.Model):
