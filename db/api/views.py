@@ -11,7 +11,8 @@ from rest_framework.serializers import ValidationError
 from db.api import filters, pagination, serializers
 from db.api.perms import SafeMethodsWithPermission
 from db.api.renderers import BrowserableJSONLDRenderer, JSONLDRenderer
-from db.base.models import Artifact, DemodData, Mode, Satellite, Transmitter
+from db.base.models import Artifact, DemodData, LatestTle, Mode, Satellite, \
+    Transmitter
 from db.base.tasks import update_satellite
 
 
@@ -44,6 +45,14 @@ class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     serializer_class = serializers.TransmitterSerializer
     filterset_class = filters.TransmitterViewFilter
     lookup_field = 'uuid'
+
+
+class TleView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
+    """SatNOGS DB Tle API view class"""
+    renderer_classes = [JSONRenderer]
+    queryset = LatestTle.objects.all()
+    serializer_class = serializers.TleSerializer
+    filterset_class = filters.TleViewFilter
 
 
 class TelemetryView(  # pylint: disable=R0901

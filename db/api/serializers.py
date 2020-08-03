@@ -5,7 +5,7 @@ import h5py
 from rest_framework import serializers
 
 from db.base.models import TRANSMITTER_STATUS, Artifact, DemodData, Mode, \
-    Satellite, Telemetry, Transmitter
+    Satellite, Telemetry, Tle, Transmitter
 
 
 class ModeSerializer(serializers.ModelSerializer):
@@ -84,6 +84,20 @@ class TransmitterSerializer(serializers.ModelSerializer):
             return obj.uplink_mode.name
         except Exception:  # pylint: disable=W0703
             return None
+
+    def get_norad_cat_id(self, obj):
+        """Returns Satellite NORAD ID"""
+        return obj.satellite.norad_cat_id
+
+
+class TleSerializer(serializers.ModelSerializer):
+    """SatNOGS DB Tle API Serializer"""
+
+    norad_cat_id = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Tle
+        fields = ('tle0', 'tle1', 'tle2', 'tle_source', 'norad_cat_id', 'updated')
 
     def get_norad_cat_id(self, obj):
         """Returns Satellite NORAD ID"""
