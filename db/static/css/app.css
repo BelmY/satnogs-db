@@ -507,3 +507,8 @@ a.dropdown-item {
 blockquote {
     border-left: .7rem solid var(--satnogs-color-primary);
 }
+
+.bg-satnogs-info {
+    color: var(--satnogs-color-white);
+    background-color: var(--satnogs-color-text);
+}
