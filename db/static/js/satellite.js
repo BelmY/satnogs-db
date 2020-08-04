@@ -24,57 +24,118 @@ function copyToClipboard(text, el) {
 }
 
 function ppb_to_freq(freq, drift) {
-    var freq_obs = freq + ((freq * drift) / Math.pow(10,9));
+    var freq_obs = freq + ((freq * drift) / Math.pow(10, 9));
     return Math.round(freq_obs);
 }
 
 function freq_to_ppb(freq_obs, freq) {
-    if(freq == 0){
+    if (freq == 0) {
         return 0;
     } else {
-        return Math.round(((freq_obs / freq) - 1) * Math.pow(10,9));
+        return Math.round(((freq_obs / freq) - 1) * Math.pow(10, 9));
     }
 }
 
 function format_freq(freq) {
-    var frequency = +freq; 
+    var frequency = +freq;
     if (frequency < 1000) {
-    // Frequency is in Hz range
+        // Frequency is in Hz range
         return frequency.toFixed(3) + ' Hz';
     } else if (frequency < 1000000) {
-        return (frequency/1000).toFixed(3) + ' kHz';
+        return (frequency / 1000).toFixed(3) + ' kHz';
     } else {
-        return (frequency/1000000).toFixed(3) + ' MHz';
+        return (frequency / 1000000).toFixed(3) + ' MHz';
     }
 }
 
-$(document).ready(function() {
+function chart_recent_data(results) {
+    // Split timestamp and data into separate arrays. Since influx does not
+    // have a native way to calculate total data points, we have to iterate
+    // on an unknown number of fields returned
+    var labels = [];
+    var data = [];
+    results['series']['0']['values'].forEach(function (point) {
+        // First point is unixtime (label)
+        // the API returns all decoded points and we only want to count individual frames
+        // with good data so we have to look for a data point and avoid dupes in the frame
+        var i;
+        var pointPlaceholder = 0;
+        for (i = 0; i < point.length; i++) {
+            if (i == 0) {
+                var date = new Date(point[i] * 1000);
+                var formattedDate = '' + date.getUTCFullYear() + '/' + date.getUTCMonth() + '/' + date.getUTCDate();
+                labels.push(formattedDate);
+            } else {
+                if (point[i] > pointPlaceholder) {
+                    pointPlaceholder = point[i];
+                }
+            }
+        }
+        data.push(pointPlaceholder);
+    });
+
+    var tempData = {
+        labels: labels,
+        datasets: [{
+            label: 'Decoded Data Frames',
+            borderColor: 'rgba(101,111,219,0.2)',
+            backgroundColor: 'rgba(101,111,219,0.5)',
+            data: data
+        }]
+    };
+
+    // un-hide the canvas element
+    $('#dataChart').removeClass('d-none');
+    // Get the context of the canvas element we want to select
+    var ctx = document.getElementById('dataChart').getContext('2d');
+
+    // Instantiate a new chart, requires chart.js
+    /*global Chart*/
+    new Chart(ctx, {
+        type: 'line',
+        data: tempData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    },
+                    type: 'logarithmic',
+                }]
+            }
+        }
+    });
+}
+
+$(document).ready(function () {
     // Calculate the drifted frequencies
-    $('.drifted').each(function() {
-        var drifted = ppb_to_freq($(this).data('freq_or'),$(this).data('drift'));
+    $('.drifted').each(function () {
+        var drifted = ppb_to_freq($(this).data('freq_or'), $(this).data('drift'));
         $(this).html(drifted);
     });
 
-    $('.uplink-drifted-sugedit').on('change click', function(){
+    $('.uplink-drifted-sugedit').on('change click', function () {
         var freq_obs = parseInt($(this).val());
         var freq = parseInt($('input[name=\'uplink_low\']:visible').val());
-        $('.uplink-ppb-sugedit').val(freq_to_ppb(freq_obs,freq));
+        $('.uplink-ppb-sugedit').val(freq_to_ppb(freq_obs, freq));
     });
 
-    $('.downlink-drifted-sugedit').on('change click', function(){
+    $('.downlink-drifted-sugedit').on('change click', function () {
         var freq_obs = parseInt($(this).val());
         var freq = parseInt($('input[name=\'downlink_low\']:visible').val());
-        $('.downlink-ppb-sugedit').val(freq_to_ppb(freq_obs,freq));
+        $('.downlink-ppb-sugedit').val(freq_to_ppb(freq_obs, freq));
     });
 
     // Format all frequencies
-    $('.frequency').each(function() {
+    $('.frequency').each(function () {
         var to_format = $(this).html();
         $(this).html(format_freq(to_format));
     });
 
     // Copy UUIDs
-    $('.js-copy').click(function() {
+    $('.js-copy').click(function () {
         var text = $(this).attr('data-copy');
         var el = $(this);
         copyToClipboard(text, el);
@@ -114,4 +175,17 @@ $(document).ready(function() {
             body: 'This Satellite needs editing. <a href="https://wiki.satnogs.org/Get_In_Touch" target="_blank">Contact us</a> to become an editor.'
         });
     }
+
+    var satid = $('#dataChart').data('satid');
+    $.ajax({
+        url: '/api/recent_decoded_cnt/' + satid,
+        dataType: 'json',
+    }).done(function (response) {
+        try {
+            chart_recent_data(response);
+        } catch(e) {
+            // unhide the placeholder message if the chart errors out
+            $('#dataChartError').removeClass('d-none');
+        }
+    });
 });

@@ -8,6 +8,7 @@
 {% block css %}
 <link rel="stylesheet" href="{% static 'lib/mapbox-gl/dist/mapbox-gl.css' %}">
 <link rel="stylesheet" href="{% static 'lib/admin-lte/plugins/flag-icon-css/css/flag-icon.min.css' %}">
+<link rel="stylesheet" href="{% static 'lib/admin-lte/plugins/chart.js/Chart.min.css' %}">
 {% endblock %}
 
 {% block top-menu-left %}
@@ -377,6 +378,29 @@
           </div>
         </div>
 
+        <!-- 30 day Decoded Data Frames -->
+        <div class="col-12 col-md-6 my-2">
+          <div class="card card-info">
+            <div class="card-header card-satnogs-header">
+                <i class="fas fa-chart-line"></i>
+                Data Frames Decoded - 30 Days
+                <div class="card-tools d-none d-md-inline">
+                  <!-- Maximize Button -->
+                  <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                </div>
+            </div>
+            <div id="dataChartDiv" class="card-body text-sm">
+              <span id="dataChartError" class="d-none">There is no decoded data for this satellite in the last 30 days.</span>
+              <canvas id="dataChart" class="d-none" data-satid="{{ satellite.norad_cat_id }}"></canvas>
+            </div>
+            {% if satellite.dashboard_url %}
+            <div class="card-footer text-sm text-truncate">
+              <a href="{{ satellite.dashboard_url }}" target="_blank">Click here to see the full dashboard for {{ satellite.name }}</a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
         {% for telemetry in satellite.telemetries.all %}
         <div class="col-12 col-md-6 my-2">
           <div class="card card-info">
@@ -445,7 +469,7 @@
                 <i class="fas fa-code"></i>
                 No Decoders Found
             </div>
-            <div class="card-body">
+            <div class="card-body text-sm">
               <div class="col-12">
                 <span>Help us develop a decoder, you can find instructions at this <a
                     href="https://wiki.satnogs.org/Adding_a_new_data_decoder" target="_blank">wiki link</a></span>
@@ -463,7 +487,7 @@
                 <i class="fas fa-download"></i>
                 Data Export (frames)
             </div>
-            <div class="card-body">
+            <div class="card-body text-sm">
               <div class="col">
               <p>You can request an export of data for {{ satellite.name }}. 
                 Please note that this export process happens in the background, and you 
@@ -565,6 +589,7 @@
 {% block javascript %}
 <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
 <script src="{% static 'lib/admin-lte/plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'lib/admin-lte/plugins/chart.js/Chart.bundle.min.js' %}"></script>
 <script src="{% static 'lib/gpredict.js/dist/gpredict.min.js' %}"></script>
 <script src="{% static 'js/satellite.js' %}"></script>
 {% if satellite.status != 're-entered' %}

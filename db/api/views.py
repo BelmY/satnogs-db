@@ -1,5 +1,6 @@
 """SatNOGS DB API django rest framework Views"""
 from django.core.files.base import ContentFile
+from django.http import JsonResponse
 from rest_framework import mixins, status, viewsets
 from rest_framework.parsers import FileUploadParser, FormParser, \
     MultiPartParser
@@ -13,6 +14,7 @@ from db.api.perms import SafeMethodsWithPermission
 from db.api.renderers import BrowserableJSONLDRenderer, JSONLDRenderer
 from db.base.models import Artifact, DemodData, Mode, Satellite, Transmitter
 from db.base.tasks import update_satellite
+from db.base.utils import read_influx
 
 
 class ModeView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
@@ -136,3 +138,13 @@ class ArtifactView(  # pylint: disable=R0901
         except (ValidationError, ValueError, OSError) as error:
             response = Response(str(error), status=status.HTTP_400_BAD_REQUEST)
         return response
+
+
+def recent_decoded_cnt(request, norad):
+    """Returns a query of InfluxDB for a count of points across a given measurement
+    (norad) over the last 30 days, with a timestamp in unixtime.
+
+    :returns: JSON of point counts as JsonResponse
+    """
+    results = read_influx(norad)
+    return JsonResponse(results, safe=False)

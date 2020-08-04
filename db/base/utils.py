@@ -342,3 +342,33 @@ def millify(number, precision=0):
     result = '{:.{precision}f}'.format(number / 10**(3 * millidx), precision=precision)
     result = remove_exponent(Decimal(result))
     return '{0}{dx}'.format(result, dx=millnames[millidx])
+
+
+def read_influx(norad):
+    """Queries influxdb for the last 30d of data points (counted) in 1d resolution.
+
+    :param norad: the NORAD ID of the satellite to query influxdb for
+    :returns: a raw json of the measurement, timestamps, and point counts
+    """
+    client = InfluxDBClient(
+        settings.INFLUX_HOST,
+        settings.INFLUX_PORT,
+        settings.INFLUX_USER,
+        settings.INFLUX_PASS,
+        settings.INFLUX_DB,
+        ssl=settings.INFLUX_SSL,
+        verify_ssl=settings.INFLUX_VERIFY_SSL
+    )
+
+    # check against injection
+    if isinstance(norad, int):
+        # epoch:s to set the return timestamp in unixtime for easier conversion
+        params = {'epoch': 's'}
+        results = client.query(
+            'SELECT count(*) FROM "' + str(norad) +
+            '" WHERE time > now() - 30d GROUP BY time(1d) fill(null)',
+            params=params
+        )
+        return results.raw
+    # no-else-return
+    return ''

@@ -456,6 +456,12 @@ a.dropdown-item {
 
 .satnogs-link-btn {
     background-color: var(--satnogs-color-text);
+    border-color: var(--satnogs-color-text);
+}
+
+.satnogs-link-btn:hover {
+    background-color: var(--satnogs-color-primary);
+    border-color: var(--satnogs-color-primary);
 }
 
 #nav-logo {
