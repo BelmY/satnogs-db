@@ -28,7 +28,7 @@
         <th data-priority="3">NORAD</th>
         <th data-priority="4">Status</th>
         <th data-priority="6">Alt. Names</th>
-        <th data-priority="5">XMit</th>
+        <th data-priority="5">Transmitters</th>
         <th data-priority="10" data-sortable="true" data-visible="false">Operator</th>
         <th data-priority="10" data-sortable="true" data-visible="false">Launched</th>
         <th data-priority="10" data-sortable="true" data-visible="false">Website</th>
@@ -46,20 +46,20 @@
         <td class='details-control'>
           <i class="fa fa-plus-square" aria-hidden="true"></i>
         </td>
-        <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{ sat.name|lower }}</a></td>
+        <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{ sat.name|upper }}</a></td>
         <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{ sat.norad_cat_id }}</a></td>
         <td class="d-flex justify-content-center">
           {% if sat.status == 'alive' %}
-          <img height="32" src="{% static 'img/status_alive.png' %}" alt="alive">
+          <img height="32" src="{% static 'img/status_alive.png' %}" alt="Operational">
           {% elif sat.status == 're-entered' %}
-          <img height="32" src="{% static 'img/status_decayed.png' %}" alt="re-entered">
+          <img height="32" src="{% static 'img/status_decayed.png' %}" alt="Decayed">
           {% elif sat.status == 'dead' %}
-          <img height="32" src="{% static 'img/status_dead.png' %}" alt="dead">
+          <img height="32" src="{% static 'img/status_dead.png' %}" alt="Malfunctioning">
           {% else %}
-          <img height="32" src="{% static 'img/status_unknown.png' %}" alt="unknown">
+          <img height="32" src="{% static 'img/status_unknown.png' %}" alt="Unknown">
           {% endif %}
         </td>
-        <td>{{ sat.names|lower }}</td>
+        <td>{{ sat.names|upper }}</td>
         <td>{{ sat.approved_transmitters|length }}</td>
         <td>{{ sat.operator }}</td>
         <td>{{ sat.launched }}</td>
