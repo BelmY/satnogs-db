@@ -14,7 +14,7 @@
 
 {% block content %}
 <div class="row px-2 pt-2 card-deck">
-  <div class="col-md-6 col-xl-4 satellite-panels">
+  <div class="col-md-6 col-xl-4">
     <h4 class="text-satnogs text-center mb-0">New Satellites</h4>
 
     {% for satellite in newest_sats %} 
@@ -22,7 +22,7 @@
     {% endfor %}
   </div>
 
-  <div class="col-md-6 col-xl-4 satellite-panels">
+  <div class="col-md-6 col-xl-4">
     <h4 class="text-satnogs text-center mb-0">Latest Data</h4>
 
     {% for satellite in latest_data %}
@@ -30,7 +30,7 @@
     {% endfor %}
   </div>
 
-  <div class="col-xs-12 col-xl-4 satellite-panels">
+  <div class="col-xs-12 col-xl-4">
     <h4 class="text-satnogs text-center mb-0">Recent Contributors</h4>
     <div class="card shadow card-outline card-satnogs my-3">
       {% if latest_submitters.count %}

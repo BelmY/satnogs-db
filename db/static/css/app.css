@@ -182,6 +182,11 @@
     border-radius: 5px;
 }
 
+.tle-set {
+    border: 1px black solid;
+    width: max-content;
+}
+
 .c-avatar {
     position: relative;
     display: inline-flex;
