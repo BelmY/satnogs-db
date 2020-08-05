@@ -15,11 +15,9 @@ $(document).ready(function() {
             formURL: $(this).data('form-url'),
             modalID: '#basemodal'
         });
-    });
-
-    // User menu toggle
-    $(this).click(function() {
-        $('#control-sidebar-toggle').ControlSidebar('toggle');
+        $(this).click(function() {
+            $('#control-sidebar-toggle').ControlSidebar('toggle');
+        });
     });
 
     // Transitional from inline alerts to Toasts

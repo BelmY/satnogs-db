@@ -22,7 +22,7 @@
 
 </head>
 
-<body class="layout-fixed layout-navbar-fixed layout-md-navbar-not-fixed">
+<body class="layout-fixed layout-navbar-fixed">
   <div class="wrapper bg-light">
     
     <!-- Top Navbar menu -->
@@ -45,7 +45,7 @@
       {% if request.user.is_authenticated %}
         <ul class="nav navbar-nav ml-1">
           <li class="user user-menu">
-            <a href="#" id="control-sidebar-toggle" data-widget="control-sidebar">
+            <a href="#" id="control-sidebar-toggle" data-widget="control-sidebar" role="button" data-slide="true">
               {% avatar request.user %}
             </a>
           </li>
