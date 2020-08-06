@@ -49,10 +49,19 @@ class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
 
 class TleView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """SatNOGS DB Tle API view class"""
-    renderer_classes = [JSONRenderer]
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = LatestTle.objects.all()
     serializer_class = serializers.TleSerializer
     filterset_class = filters.TleViewFilter
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        if self.request.user.has_perm('base.access_all_tles'):
+            return LatestTle.all_latest_tles.all()
+        return self.queryset
 
 
 class TelemetryView(  # pylint: disable=R0901

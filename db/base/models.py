@@ -528,6 +528,7 @@ class Tle(models.Model):
             models.Index(fields=['-updated']),
             models.Index(fields=['tle1', 'tle2', 'tle_source', 'satellite'])
         ]
+        permissions = [('access_all_tles', 'Access all TLEs')]
 
     def __str__(self):
         return '{:d} - {:s}'.format(self.id, self.tle0)
@@ -548,13 +549,28 @@ class LatestTleManager(models.Manager):  # pylint: disable=R0903
         """
         subquery = Tle.objects.filter(satellite=OuterRef('satellite')).order_by('-updated')
         return super(LatestTleManager,
-                     self).get_queryset().filter(updated=Subquery(subquery.values('updated')[:1]))
+                     self).get_queryset().filter(pk=Subquery(subquery.values('pk')[:1]))
+
+
+class LatestDistributableTleManager(models.Manager):  # pylint: disable=R0903
+    """Django Manager for latest Tle objects"""
+    def get_queryset(self):
+        """Returns query of latest Tle
+
+        :returns: the latest Tle for each Satellite
+        """
+        subquery = Tle.objects.filter(tle_source__in=settings.TLE_SOURCES_REDISTRIBUTABLE
+                                      ).filter(satellite=OuterRef('satellite')
+                                               ).order_by('-updated')
+        return super(LatestDistributableTleManager,
+                     self).get_queryset().filter(pk=Subquery(subquery.values('pk')[:1]))
 
 
 class LatestTle(Tle):
     """LatestTle is the latest entry of a Satellite Tle objects
     """
-    objects = LatestTleManager()
+    objects = LatestDistributableTleManager()
+    all_latest_tles = LatestTleManager()
 
     class Meta:
         proxy = True
