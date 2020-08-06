@@ -178,7 +178,7 @@ $(document).ready(function () {
 
     var satid = $('#dataChart').data('satid');
     $.ajax({
-        url: '/api/recent_decoded_cnt/' + satid,
+        url: '/ajax/recent_decoded_cnt/' + satid,
         dataType: 'json',
     }).done(function (response) {
         try {

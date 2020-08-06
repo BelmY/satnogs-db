@@ -26,7 +26,7 @@ from db.base.models import SERVICE_TYPE, TRANSMITTER_STATUS, \
     TRANSMITTER_TYPE, DemodData, Mode, Satellite, Transmitter, \
     TransmitterEntry, TransmitterSuggestion
 from db.base.tasks import export_frames
-from db.base.utils import cache_statistics, millify
+from db.base.utils import cache_statistics, millify, read_influx
 
 LOGGER = logging.getLogger('db')
 
@@ -408,6 +408,16 @@ def users_edit(request):
     """
     token = get_apikey(request.user)
     return render(request, 'base/modals/users_edit.html', {'token': token})
+
+
+def recent_decoded_cnt(request, norad):
+    """Returns a query of InfluxDB for a count of points across a given measurement
+    (norad) over the last 30 days, with a timestamp in unixtime.
+
+    :returns: JSON of point counts as JsonResponse
+    """
+    results = read_influx(norad)
+    return JsonResponse(results, safe=False)
 
 
 class TransmitterCreateView(LoginRequiredMixin, BSModalCreateView):

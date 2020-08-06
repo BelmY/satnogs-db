@@ -39,5 +39,10 @@ BASE_URLPATTERNS = (
             views.TransmitterUpdateView.as_view(),
             name='update_transmitter'
         ),
+        path(
+            'ajax/recent_decoded_cnt/<int:norad>',
+            views.recent_decoded_cnt,
+            name='recent_decoded_cnt'
+        ),
     ]
 )
