@@ -517,3 +517,8 @@ blockquote {
     color: var(--satnogs-color-white);
     background-color: var(--satnogs-color-text);
 }
+
+.satellite-status-icon {
+    width: 60px;
+    border-bottom-left-radius: 0.25rem;
+}
