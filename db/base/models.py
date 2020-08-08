@@ -238,13 +238,14 @@ class Satellite(models.Model):
         :returns: dict with most recent DemodData for this Satellite
         """
         data = DemodData.objects.filter(satellite=self.id).order_by('-id')[:1]
+        latest_datum = data[0]
         return {
-            'data_id': data[0].data_id,
-            'payload_frame': data[0].payload_frame,
-            'timestamp': data[0].timestamp,
-            'is_decoded': data[0].is_decoded,
-            'station': data[0].station,
-            'observer': data[0].observer,
+            'data_id': latest_datum.data_id,
+            'payload_frame': latest_datum.payload_frame,
+            'timestamp': latest_datum.timestamp,
+            'is_decoded': latest_datum.is_decoded,
+            'station': latest_datum.station,
+            'observer': latest_datum.observer,
         }
 
     @property

@@ -41,45 +41,49 @@
             </div>
           </div>
 
-          {% if satellite.telemetry_data_count %}
-          <div class="d-flex flex-row">
-            <div class="d-flex satellite-card-body-row align-self-center justify-content-center" data-toggle="tooltip"
-              title="Data frames">
-              <i class="fas fa-database"></i>
+          {% with data_count=satellite.telemetry_data_count %}
+            {% if data_count %}
+            <div class="d-flex flex-row">
+              <div class="d-flex satellite-card-body-row align-self-center justify-content-center" data-toggle="tooltip"
+                title="Data frames">
+                <i class="fas fa-database"></i>
+              </div>
+              <div class="d-inline-flex">
+                {{ data_count }}
+              </div>
             </div>
-            <div class="d-inline-flex">
-              {{ satellite.telemetry_data_count }}
+            {% with latest_data=satellite.latest_data %}
+            <div class="d-flex flex-row">
+              <div class="d-flex satellite-card-body-row align-self-center justify-content-center" data-toggle="tooltip"
+                title="Latest data timestamp">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="d-inline-flex text-truncate">
+                {{ latest_data.timestamp }}
+              </div>
             </div>
-          </div>
-          <div class="d-flex flex-row">
-            <div class="d-flex satellite-card-body-row align-self-center justify-content-center" data-toggle="tooltip"
-              title="Latest data timestamp">
-              <i class="fas fa-clock"></i>
+            <div class="d-flex flex-row">
+              <div class="d-flex satellite-card-body-row align-self-center justify-content-center" data-toggle="tooltip"
+                title="Latest data submitter">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="d-inline-flex text-truncate">
+                {{ latest_data.station }}
+              </div>
             </div>
-            <div class="d-inline-flex text-truncate">
-              {{ satellite.latest_data.timestamp }}
+            {% endwith %}
+            {% else %}
+            <div class="d-flex flex-row">
+              <div class="d-flex satellite-card-body-row align-self-center justify-content-center" data-toggle="tooltip"
+                title="Data frames">
+                <i class="fas fa-database"></i>
+              </div>
+              <div class="d-inline-flex">
+                No Data
+              </div>
             </div>
-          </div>
-          <div class="d-flex flex-row">
-            <div class="d-flex satellite-card-body-row align-self-center justify-content-center" data-toggle="tooltip"
-              title="Latest data submitter">
-              <i class="fas fa-user"></i>
-            </div>
-            <div class="d-inline-flex text-truncate">
-              {{ satellite.latest_data.station }}
-            </div>
-          </div>
-          {% else %}
-          <div class="d-flex flex-row">
-            <div class="d-flex satellite-card-body-row align-self-center justify-content-center" data-toggle="tooltip"
-              title="Data frames">
-              <i class="fas fa-database"></i>
-            </div>
-            <div class="d-inline-flex">
-              No Data
-            </div>
-          </div>
-          {% endif %}
+            {% endif %}
+          {% endwith %}
         </div>
         <div class="float-right d-flex flex-column align-content-center">
           <img class="rounded img-fluid" src="{{ satellite.get_image }}" style="max-height: 82.5px;" />

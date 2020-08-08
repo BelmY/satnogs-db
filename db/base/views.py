@@ -11,6 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, \
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
 from django.db import OperationalError
 from django.db.models import Count, Max, Prefetch, Q
 from django.http import HttpResponse, JsonResponse
@@ -42,26 +43,41 @@ def home(request):
 
     :returns: base/home.html
     """
-    newest_sats = Satellite.objects.all().order_by('-id')[:5].prefetch_related(
-        Prefetch(
-            'transmitter_entries',
-            queryset=Transmitter.objects.all(),
-            to_attr='approved_transmitters'
-        ),
-        Prefetch(
-            'transmitter_entries',
-            queryset=TransmitterSuggestion.objects.all(),
-            to_attr='suggested_transmitters'
-        )
+    prefetch_approved = Prefetch(
+        'transmitter_entries', queryset=Transmitter.objects.all(), to_attr='approved_transmitters'
     )
-    latest_data = Satellite.objects.annotate(latest=Max('telemetry_data__pk')
-                                             ).order_by('-latest')[:5].prefetch_related(
-                                                 Prefetch(
-                                                     'transmitter_entries',
-                                                     queryset=Transmitter.objects.all(),
-                                                     to_attr='approved_transmitters'
-                                                 )
-                                             )  # noqa: E126 flake8 and yapf disagree
+    prefetch_suggested = Prefetch(
+        'transmitter_entries',
+        queryset=TransmitterSuggestion.objects.all(),
+        to_attr='suggested_transmitters'
+    )
+
+    newest_sats = Satellite.objects.all().order_by('-id')[:5].prefetch_related(
+        prefetch_approved, prefetch_suggested
+    )
+    # Calculate latest contributors
+    latest_data_satellites = []
+    found = False
+    date_from = timezone.now() - timedelta(days=1)
+    data_list = DemodData.objects.filter(timestamp__gte=date_from).order_by('-pk')
+    paginator = Paginator(data_list, 50)
+    page = paginator.page(1)
+    while not found:
+        for data in page.object_list:
+            if data.satellite.id in latest_data_satellites:
+                continue
+            latest_data_satellites.append(data.satellite.id)
+            if len(latest_data_satellites) > 5:
+                found = True
+                break
+        if page.has_next():
+            page = paginator.page(page.next_page_number())
+        else:
+            break
+
+    latest_data = Satellite.objects.filter(
+        pk__in=latest_data_satellites
+    ).prefetch_related(prefetch_approved, prefetch_suggested)
 
     # Calculate latest contributors
     date_from = timezone.now() - timedelta(days=1)
