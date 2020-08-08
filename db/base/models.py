@@ -7,6 +7,7 @@ import h5py
 import satnogsdecoders
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, \
     URLValidator
@@ -188,7 +189,11 @@ class Satellite(models.Model):
 
         :returns: number of DemodData for this Satellite
         """
-        data_count = DemodData.objects.filter(satellite=self.id).count()
+        cached_satellite = cache.get(self.id)
+        if cached_satellite:
+            data_count = cached_satellite['count']
+        else:
+            data_count = DemodData.objects.filter(satellite=self.id).count()
         return data_count
 
     @property
