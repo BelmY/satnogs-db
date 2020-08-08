@@ -49,7 +49,7 @@ def home(request):
             to_attr='approved_transmitters'
         )
     )
-    latest_data = Satellite.objects.annotate(latest=Max('telemetry_data__timestamp')
+    latest_data = Satellite.objects.annotate(latest=Max('telemetry_data__pk')
                                              ).order_by('-latest')[:5].prefetch_related(
                                                  Prefetch(
                                                      'transmitter_entries',
