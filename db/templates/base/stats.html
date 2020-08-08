@@ -145,7 +145,11 @@
           {% if sat.count != 0 %}
           <tr>
             <td>{{sat.norad_cat_id}}</td>
+            {% if sat.norad_cat_id %}
             <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{sat.name}}</a></td>
+            {% else %}
+            <td>{{sat.name}}</td>
+            {% endif %}
             <td>{{sat.count}}</td>
             <td>{{sat.latest_payload|date:"Y-m-d H:i:s"}}</td>
           </tr>
