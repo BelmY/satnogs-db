@@ -47,6 +47,11 @@ def home(request):
             'transmitter_entries',
             queryset=Transmitter.objects.all(),
             to_attr='approved_transmitters'
+        ),
+        Prefetch(
+            'transmitter_entries',
+            queryset=TransmitterSuggestion.objects.all(),
+            to_attr='suggested_transmitters'
         )
     )
     latest_data = Satellite.objects.annotate(latest=Max('telemetry_data__pk')
@@ -64,8 +69,6 @@ def home(request):
                                                  ).values('station').annotate(c=Count('station')
                                                                               ).order_by('-c')
 
-    suggestion_count = TransmitterSuggestion.objects.count()
-    contributor_count = User.objects.filter(is_active=1).count()
     cached_stats = cache.get('stats_transmitters')
     if not cached_stats:
         try:
@@ -78,9 +81,7 @@ def home(request):
             'newest_sats': newest_sats,
             'latest_data': latest_data,
             'latest_submitters': latest_submitters,
-            'statistics': cached_stats,
-            'contributor_count': contributor_count,
-            'suggestion_count': suggestion_count
+            'statistics': cached_stats
         }
     )
 

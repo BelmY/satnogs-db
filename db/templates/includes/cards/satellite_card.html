@@ -9,10 +9,10 @@
         </div>
         
         <div class="d-flex ml-auto">
-          {% if request.user.is_superuser and satellite.transmitter_suggestion_count %}
+          {% if request.user.is_superuser and satellite.suggested_transmitters|length > 0 %}
           <div class="mx-1">
             <span class="badge badge-warning" data-toggle="tooltip"
-            title="Transmitter Suggestions">{{ satellite.transmitter_suggestion_count }}</span>
+            title="Transmitter Suggestions">{{ satellite.suggested_transmitters|length }}</span>
           </div>
           {% endif %}
           {% if satellite.countries %}

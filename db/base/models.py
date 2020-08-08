@@ -543,7 +543,7 @@ class DemodData(models.Model):
         validators=[MaxValueValidator(180), MinValueValidator(-180)], default=0
     )
     is_decoded = models.BooleanField(default=False, db_index=True)
-    timestamp = models.DateTimeField(null=True)
+    timestamp = models.DateTimeField(null=True, db_index=True)
 
     class Meta:
         ordering = ['-timestamp']
