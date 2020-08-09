@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, \
     PermissionRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
@@ -16,6 +17,7 @@ from django.db import OperationalError
 from django.db.models import Count, Max, Prefetch, Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
@@ -224,73 +226,6 @@ def request_export(request, norad, period=None):
     return redirect(reverse('satellite', kwargs={'norad': norad}))
 
 
-# <cshields> leaving this in place for reference while the New UI is fixed up
-# and the functionality below is moved into new modals accordingly.
-# @login_required
-# @require_POST
-# def transmitter_suggestion(request):
-#     """View to process transmitter suggestion form
-
-#     :returns: the originating satellite page unless an error occurs
-#     """
-#     transmitter_form = TransmitterEntryForm(request.POST)
-#     if transmitter_form.is_valid():
-#         transmitter = transmitter_form.save(commit=False)
-#         transmitter.user = request.user
-#         transmitter.reviewed = False
-#         transmitter.approved = False
-#         uuid = transmitter_form.cleaned_data['uuid']
-#         if uuid:
-#             transmitter.uuid = uuid
-#         transmitter.save()
-
-#         # Notify admins
-#         admins = User.objects.filter(is_superuser=True)
-#         site = get_current_site(request)
-#         subject = '[{0}] A new suggestion for {1} was submitted'.format(
-#             site.name, transmitter.satellite.name
-#         )
-#         template = 'emails/new_transmitter_suggestion.txt'
-#         saturl = '{0}{1}'.format(
-#             site.domain,
-#             reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id})
-#         )
-#         data = {
-#             'satname': transmitter.satellite.name,
-#             'saturl': saturl,
-#             'sitedomain': site.domain,
-#             'contributor': transmitter.user
-#         }
-#         message = render_to_string(template, {'data': data})
-#         for user in admins:
-#             try:
-#                 user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
-#             except Exception:  # pylint: disable=W0703
-#                 LOGGER.error('Could not send email to user', exc_info=True)
-
-#         messages.success(
-#             request,
-#             ('Your transmitter suggestion was stored successfully. '
-#              'Thanks for contibuting!')
-#         )
-#         redirect_page = redirect(
-#             reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id})
-#         )
-#     else:
-#         LOGGER.error(
-#             'Suggestion form was not valid %s',
-#             format(transmitter_form.errors),
-#             exc_info=True,
-#             extra={
-#                 'form': transmitter_form.errors,
-#             }
-#         )
-#         messages.error(request, 'We are sorry, but some error occured :(')
-#         redirect_page = redirect(reverse('home'))
-
-#     return redirect_page
-
-
 @login_required
 @require_POST
 @user_passes_test(superuser_check)
@@ -460,8 +395,33 @@ class TransmitterCreateView(LoginRequiredMixin, BSModalCreateView):
         """
         Overridden to add the `Satellite` relation to the `Transmitter` instance.
         """
-        form.instance.satellite = self.satellite
-        form.instance.user = self.user
+        transmitter = form.instance
+        transmitter.satellite = self.satellite
+        transmitter.user = self.user
+
+        # Notify admins
+        admins = User.objects.filter(is_superuser=True)
+        site = Site.objects.get_current()
+        subject = '[{0}] A new suggestion for {1} was submitted'.format(
+            site.name, transmitter.satellite.name
+        )
+        template = 'emails/new_transmitter_suggestion.txt'
+        saturl = '{0}{1}'.format(
+            site.domain,
+            reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id})
+        )
+        data = {
+            'satname': transmitter.satellite.name,
+            'saturl': saturl,
+            'sitedomain': site.domain,
+            'contributor': transmitter.user
+        }
+        message = render_to_string(template, {'data': data})
+        for user in admins:
+            try:
+                user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
+            except Exception:  # pylint: disable=W0703
+                LOGGER.error('Could not send email to user', exc_info=True)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -488,7 +448,35 @@ class TransmitterUpdateView(LoginRequiredMixin, BSModalUpdateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        form.instance.user = self.user
+        transmitter = form.instance
+        transmitter.user = self.user
+        transmitter.reviewed = False
+        transmitter.approved = False
+
+        # Notify admins
+        admins = User.objects.filter(is_superuser=True)
+        site = Site.objects.get_current()
+        subject = '[{0}] A new suggestion for {1} was submitted'.format(
+            site.name, transmitter.satellite.name
+        )
+        template = 'emails/new_transmitter_suggestion.txt'
+        saturl = '{0}{1}'.format(
+            site.domain,
+            reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id})
+        )
+        data = {
+            'satname': transmitter.satellite.name,
+            'saturl': saturl,
+            'sitedomain': site.domain,
+            'contributor': transmitter.user
+        }
+        message = render_to_string(template, {'data': data})
+        for user in admins:
+            try:
+                user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
+            except Exception:  # pylint: disable=W0703
+                LOGGER.error('Could not send email to user', exc_info=True)
+
         return super().form_valid(form)
 
     def get_success_url(self):

@@ -132,7 +132,8 @@ class TransmitterSuggestionAdmin(admin.ModelAdmin):
     readonly_fields = (
         'uuid', 'description', 'status', 'type', 'uplink_low', 'uplink_high', 'uplink_drift',
         'downlink_low', 'downlink_high', 'downlink_drift', 'downlink_mode', 'uplink_mode',
-        'invert', 'baud', 'satellite', 'reviewed', 'approved', 'created', 'citation', 'user'
+        'invert', 'baud', 'satellite', 'reviewed', 'approved', 'created', 'citation', 'user',
+        'service'
     )
     actions = ['approve_suggestion', 'reject_suggestion']
 
