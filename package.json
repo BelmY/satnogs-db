@@ -17,7 +17,6 @@
     },
     "dependencies": {
         "admin-lte": "^3.0",
-        "dnt-helper": "github:schalkneethling/dnt-helper",
         "flot": "^4.2.1",
         "gpredict.js": "github:kerel-fs/gpredict.js",
         "mapbox-gl": "^1.11.0"
@@ -25,7 +24,6 @@
     "assets": [
         "admin-lte/**/*",
         "d3/dist/d3.min.js",
-        "dnt-helper/js/dnt-helper.js",
         "flot/dist/**/*",
         "gpredict.js/dist/gpredict.min.js",
         "mapbox-gl/dist/mapbox-gl.css",
