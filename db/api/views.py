@@ -84,7 +84,7 @@ class TelemetryView(  # pylint: disable=R0901
 
         if not Satellite.objects.filter(norad_cat_id=norad_cat_id).exists():
             try:
-                update_satellite(norad_cat_id, update_name=True, update_tle=True)
+                update_satellite(norad_cat_id, update_name=True)
             except LookupError:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 

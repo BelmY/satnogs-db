@@ -1,7 +1,7 @@
 """SatNOGS DB django management command to update TLE entries"""
 from django.core.management.base import BaseCommand
 
-from db.base.tasks import update_all_tle
+from db.base.tasks import update_tle_sets
 
 
 class Command(BaseCommand):
@@ -9,4 +9,4 @@ class Command(BaseCommand):
     help = 'Update TLEs for existing Satellites'
 
     def handle(self, *args, **options):
-        update_all_tle()
+        update_tle_sets()

@@ -320,8 +320,8 @@
     <div class="tab-pane fade flex-stretch" id="mapcontent" role="tabpanel" aria-labelledby="mapcontent-tab">
       <div class="w-100 h-100">
         {% if showmap %}
-        <div id="map" data-name="{{ satellite.name }}" data-tle1="{{ satellite.latest_tle.tle1 }}"
-          data-tle2="{{ satellite.latest_tle.tle2 }}" data-mapboxtoken="{{ mapbox_token }}"></div>
+        <div id="map" data-name="{{ satellite.name }}" data-tle1="{{ latest_tle.tle1 }}"
+          data-tle2="{{ latest_tle.tle2 }}" data-mapboxtoken="{{ mapbox_token }}"></div>
         {% endif %}
       </div>
     </div>
@@ -535,7 +535,7 @@
 
 
         <!-- Orbital Elements Section -->
-        {% if satellite.latest_tle.redistributable %}
+        {% if latest_tle %}
         <div class="col-12 my-2">
           <div class="card card-info">
             <div class="card-header card-satnogs-header">
@@ -546,15 +546,15 @@
               <dl class="row mb-0">
                 <dt class="col-sm-2">TLE Source</dt>
                 <dd class="col-sm-10">
-                  {{ satellite.latest_tle.source }}
+                  {{ latest_tle.source }}
                 </dd>
               </dl>
               <dl class="row mb-0">
                 <dt class="col-sm-2">
                   TLE Set
                 </dt>
-                <dd class="col-sm-10">
-                  <pre class="tle-set">{{ satellite.latest_tle.tle1 }}<br>{{ satellite.latest_tle.tle2 }}</pre>
+                <dd class="col-sm-10 tle-set-container">
+                  <pre class="tle-set">{{ latest_tle.tle1 }}<br>{{ latest_tle.tle2 }}</pre>
                 </dd>
               </dl>
             </div>

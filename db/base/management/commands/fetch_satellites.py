@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for norad_id in options['norad_ids']:
             try:
-                update_satellite(int(norad_id), update_name=True, update_tle=False)
+                update_satellite(int(norad_id), update_name=True)
             except LookupError:
                 self.stderr.write('Satellite {} not found in Celestrak'.format(norad_id))
                 continue

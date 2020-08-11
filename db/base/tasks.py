@@ -16,7 +16,7 @@ from django.core.validators import URLValidator
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import make_aware
-from satellite_tle import fetch_all_tles, fetch_tle_from_celestrak, fetch_tles
+from satellite_tle import fetch_all_tles, fetch_tle_from_celestrak
 from sgp4.earth_gravity import wgs72
 from sgp4.io import twoline2rv
 
@@ -33,7 +33,7 @@ def check_celery():
 
 
 @shared_task
-def update_satellite(norad_id, update_name=True, update_tle=True):
+def update_satellite(norad_id, update_name=True):
     """Task to update the name and/or the tle of a satellite, or create a
        new satellite in the db if no satellite with given norad_id can be found"""
 
@@ -49,68 +49,12 @@ def update_satellite(norad_id, update_name=True, update_tle=True):
     if update_name:
         satellite.name = tle[0]
 
-    if update_tle:
-        satellite.tle_source = 'Celestrak (satcat)'
-        satellite.tle1 = tle[1]
-        satellite.tle2 = tle[2]
-
     satellite.save()
 
     if satellite_created:
         print('Created satellite {}: {}'.format(satellite.norad_cat_id, satellite.name))
     else:
         print('Updated satellite {}: {}'.format(satellite.norad_cat_id, satellite.name))
-
-
-@shared_task
-def update_all_tle():
-    """Task to update all satellite TLEs"""
-
-    satellites = Satellite.objects.exclude(status__exact='re-entered')
-    norad_ids = set(int(sat.norad_cat_id) for sat in satellites)
-
-    # Filter only officially announced NORAD IDs
-    temporary_norad_ids = {norad_id for norad_id in norad_ids if norad_id >= 99000}
-    public_norad_ids = norad_ids - temporary_norad_ids
-
-    tles = fetch_tles(public_norad_ids)
-
-    missing_norad_ids = []
-    for satellite in satellites:
-        norad_id = satellite.norad_cat_id
-
-        if norad_id not in list(tles.keys()):
-            # No TLE available for this satellite
-            missing_norad_ids.append(norad_id)
-            continue
-
-        source, tle = tles[norad_id]
-
-        if satellite.tle1 and satellite.tle2:
-            try:
-                current_sat = twoline2rv(satellite.tle1, satellite.tle2, wgs72)
-                new_sat = twoline2rv(tle[1], tle[2], wgs72)
-                if new_sat.epoch < current_sat.epoch:
-                    # Epoch of new TLE is larger then the TLE already in the db
-                    continue
-            except ValueError:
-                LOGGER.error('ERROR: TLE malformed for %s', norad_id)
-                continue
-
-        satellite.tle_source = source
-        satellite.tle1 = tle[1]
-        satellite.tle2 = tle[2]
-        satellite.save()
-
-        print('Updated TLE for {}: {} from {}'.format(norad_id, satellite.name, source))
-
-    for norad_id in sorted(missing_norad_ids):
-        satellite = satellites.get(norad_cat_id=norad_id)
-        print('NO TLE found for {}: {}'.format(norad_id, satellite.name))
-
-    for norad_id in sorted(temporary_norad_ids):
-        satellite = satellites.get(norad_cat_id=norad_id)
-        print('Ignored {} with temporary NORAD ID {}'.format(satellite.name, norad_id))
 
 
 @shared_task
@@ -143,6 +87,16 @@ def update_tle_sets():
         norad_id = satellite.norad_cat_id
         if norad_id in tles.keys():
             for source, tle in tles[norad_id]:
+                try:
+                    twoline2rv(tle[1], tle[2], wgs72)
+                except ValueError:
+                    print(
+                        '{} - {} - {}: [ERROR] TLE malformed'.format(
+                            satellite.name, norad_id, source
+                        )
+                    )
+                    continue
+
                 (tle, created) = Tle.objects.get_or_create(
                     tle0=tle[0], tle1=tle[1], tle2=tle[2], satellite=satellite, tle_source=source
                 )

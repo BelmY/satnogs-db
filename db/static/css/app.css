@@ -182,6 +182,10 @@
     border-radius: 5px;
 }
 
+.tle-set-container {
+    overflow: auto;
+}
+
 .tle-set {
     border: 1px black solid;
     width: max-content;

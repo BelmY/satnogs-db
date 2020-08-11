@@ -20,13 +20,6 @@ APP.autodiscover_tasks()
 # Wrapper tasks as workaround for registering shared tasks to beat scheduler
 # See https://github.com/celery/celery/issues/5059
 @APP.task
-def update_all_tle():
-    """Wrapper task for 'update_all_tle' shared task"""
-    from db.base.tasks import update_all_tle as periodic_task
-    periodic_task()
-
-
-@APP.task
 def update_tle_sets():
     """Wrapper task for 'update_tle_sets' shared task"""
     from db.base.tasks import update_tle_sets as periodic_task
@@ -57,8 +50,6 @@ def remove_old_exported_framesets():
 @APP.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
     """Initializes celery tasks that need to run on a scheduled basis"""
-    sender.add_periodic_task(RUN_DAILY, update_all_tle.s(), name='update-all-tle')
-
     sender.add_periodic_task(RUN_EVERY_TWO_HOURS, update_tle_sets.s(), name='update-tle-sets')
 
     sender.add_periodic_task(
