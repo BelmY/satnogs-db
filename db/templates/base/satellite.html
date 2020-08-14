@@ -228,19 +228,19 @@
               {% if satellite.launched %}
               <dt class="col-sm-4">Launch Date</dt>
               <dd class="col-sm-8" data-toggle="tooltip" data-placement="bottom" title="{{ satellite.launched }}">
-                {{ satellite.launched|date:"SHORT_DATE_FORMAT" }}
+                {{ satellite.launched|date:"c" }}
               </dd>
               {% endif %}
               {% if satellite.deployed %}
               <dt class="col-sm-4">Deploy Date</dt>
               <dd class="col-sm-8" data-toggle="tooltip" data-placement="bottom" title="{{ satellite.deployed }}">
-                {{ satellite.deployed|date:"SHORT_DATE_FORMAT" }}
+                {{ satellite.deployed|date:"c" }}
               </dd>
               {% endif %}
               {% if satellite.decayed %}
               <dt class="col-sm-4">Decay Date</dt>
               <dd class="col-sm-8" data-toggle="tooltip" data-placement="bottom" title="{{ satellite.decayed }}">
-                {{ satellite.decayed|date:"SHORT_DATE_FORMAT" }}
+                {{ satellite.decayed|date:"c" }}
               </dd>
               {% endif %}
             </dl>
