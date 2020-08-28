@@ -54,6 +54,10 @@ $(document).ready(function() {
                 orderable: false,
                 targets:   0
             },
+            {
+                type: 'natural',
+                targets: [5, 6, 7, 8, 11]
+            }
         ],
         language: {
             search: 'Filter:',
