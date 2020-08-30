@@ -191,6 +191,12 @@ def satellite(request, norad):
     except (ObjectDoesNotExist, IndexError):
         recent_observers = ''
 
+    # decide whether a map (and map link) will be visible or not (ie: re-entered)
+    showmap = False
+    if (satellite_obj.status != 're-entered' and satellite_obj.tle1 != ''
+            and satellite_obj.tle2 != ''):  # noqa: W503 google W503 it is evil
+        showmap = True
+
     return render(
         request, 'base/satellite.html', {
             'satellite': satellite_obj,
@@ -203,7 +209,8 @@ def satellite(request, norad):
             'frame_count': frame_count,
             'mapbox_token': settings.MAPBOX_TOKEN,
             'recent_observers': recent_observers,
-            'badge_telemetry_count': millify(satellite_obj.telemetry_data_count)
+            'badge_telemetry_count': millify(satellite_obj.telemetry_data_count),
+            'showmap': showmap
         }
     )
 

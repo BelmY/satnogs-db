@@ -229,4 +229,8 @@ $(document).ready(function() {
     document.getElementById('mapcontent-tab').addEventListener('click', function() {
         setTimeout( function() { map.resize();}, 200);
     });
+    // for deep-linking of satellite tab anchors 
+    $('#mapcontent-tab').on('shown.bs.tab', function() {
+        setTimeout( function() { map.resize();}, 200);
+    });
 });

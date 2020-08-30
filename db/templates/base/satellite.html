@@ -6,7 +6,9 @@
 {% block title %} - {{ satellite.name }}{% endblock %}
 
 {% block css %}
+{% if showmap %}
 <link rel="stylesheet" href="{% static 'lib/mapbox-gl/dist/mapbox-gl.css' %}">
+{% endif %}
 <link rel="stylesheet" href="{% static 'lib/admin-lte/plugins/flag-icon-css/css/flag-icon.min.css' %}">
 <link rel="stylesheet" href="{% static 'lib/admin-lte/plugins/chart.js/Chart.min.css' %}">
 {% endblock %}
@@ -25,19 +27,19 @@
     </a>
   </li>
   <li class="nav-item{% if satellite.status == 're-entered' %} disabled{% endif %}">
-    {% if satellite.status == 're-entered' %}
-    <span data-toggle="tooltip" title="No map available for re-entered satellites" data-placement="bottom">
-      <a class="nav-link disabled">
-        <i class="nav-icon fas fa-map-marked-alt"></i>
-        <p class="d-none d-lg-inline-block text-sm">Map</p>
-      </a>
-    </span>
-    {% else %}
+    {% if showmap %}
     <a class="nav-link" id="mapcontent-tab" data-toggle="tab" href="#mapcontent" role="tab" aria-controls="mapcontent"
       aria-selected="false">
       <i class="nav-icon fas fa-map-marked-alt"></i>
       <p class="d-none d-lg-inline-block text-sm">Map</p>
     </a>
+    {% else %}
+    <span data-toggle="tooltip" title="No map available for this satellite" data-placement="bottom">
+      <a class="nav-link disabled">
+        <i class="nav-icon fas fa-map-marked-alt"></i>
+        <p class="d-none d-lg-inline-block text-sm">Map</p>
+      </a>
+    </span>
     {% endif %}
   </li>
   <li class="nav-item">
@@ -285,7 +287,7 @@
     <!-- Map Section -->
     <div class="tab-pane fade flex-stretch" id="mapcontent" role="tabpanel" aria-labelledby="mapcontent-tab">
       <div class="w-100 h-100">
-        {% if satellite.status != 're-entered' %}
+        {% if showmap %}
         <div id="map" data-name="{{ satellite.name }}" data-tle1="{{ satellite.latest_tle.tle1 }}"
           data-tle2="{{ satellite.latest_tle.tle2 }}" data-mapboxtoken="{{ mapbox_token }}"></div>
         {% endif %}
@@ -583,7 +585,7 @@
 <script src="{% static 'lib/admin-lte/plugins/chart.js/Chart.bundle.min.js' %}"></script>
 <script src="{% static 'lib/gpredict.js/dist/gpredict.min.js' %}"></script>
 <script src="{% static 'js/satellite.js' %}"></script>
-{% if satellite.status != 're-entered' %}
+{% if showmap %}
 <script src="{% static 'lib/mapbox-gl/dist/mapbox-gl.js' %}"></script>
 <script src="{% static 'js/map.js' %}"></script>
 {% endif %}
