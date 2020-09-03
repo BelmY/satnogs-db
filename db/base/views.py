@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, \
     PermissionRequiredMixin
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
@@ -17,7 +16,6 @@ from django.db import OperationalError
 from django.db.models import Count, Max, Prefetch, Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
@@ -28,7 +26,7 @@ from db.base.helpers import get_apikey
 from db.base.models import SERVICE_TYPE, TRANSMITTER_STATUS, \
     TRANSMITTER_TYPE, DemodData, Mode, Satellite, Transmitter, \
     TransmitterEntry, TransmitterSuggestion
-from db.base.tasks import export_frames
+from db.base.tasks import export_frames, notify_transmitter_suggestion
 from db.base.utils import cache_statistics, millify, read_influx
 
 LOGGER = logging.getLogger('db')
@@ -405,30 +403,8 @@ class TransmitterCreateView(LoginRequiredMixin, BSModalCreateView):
         transmitter = form.instance
         transmitter.satellite = self.satellite
         transmitter.user = self.user
-
-        # Notify admins
-        admins = User.objects.filter(is_superuser=True)
-        site = Site.objects.get_current()
-        subject = '[{0}] A new suggestion for {1} was submitted'.format(
-            site.name, transmitter.satellite.name
-        )
-        template = 'emails/new_transmitter_suggestion.txt'
-        saturl = '{0}{1}'.format(
-            site.domain,
-            reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id})
-        )
-        data = {
-            'satname': transmitter.satellite.name,
-            'saturl': saturl,
-            'sitedomain': site.domain,
-            'contributor': transmitter.user
-        }
-        message = render_to_string(template, {'data': data})
-        for user in admins:
-            try:
-                user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
-            except Exception:  # pylint: disable=W0703
-                LOGGER.error('Could not send email to user', exc_info=True)
+        if not self.request.is_ajax():
+            notify_transmitter_suggestion.delay(transmitter.satellite.id, self.user.id)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -459,31 +435,8 @@ class TransmitterUpdateView(LoginRequiredMixin, BSModalUpdateView):
         transmitter.user = self.user
         transmitter.reviewed = False
         transmitter.approved = False
-
-        # Notify admins
-        admins = User.objects.filter(is_superuser=True)
-        site = Site.objects.get_current()
-        subject = '[{0}] A new suggestion for {1} was submitted'.format(
-            site.name, transmitter.satellite.name
-        )
-        template = 'emails/new_transmitter_suggestion.txt'
-        saturl = '{0}{1}'.format(
-            site.domain,
-            reverse('satellite', kwargs={'norad': transmitter.satellite.norad_cat_id})
-        )
-        data = {
-            'satname': transmitter.satellite.name,
-            'saturl': saturl,
-            'sitedomain': site.domain,
-            'contributor': transmitter.user
-        }
-        message = render_to_string(template, {'data': data})
-        for user in admins:
-            try:
-                user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
-            except Exception:  # pylint: disable=W0703
-                LOGGER.error('Could not send email to user', exc_info=True)
-
+        if not self.request.is_ajax():
+            notify_transmitter_suggestion.delay(transmitter.satellite.id, self.user.id)
         return super().form_valid(form)
 
     def get_success_url(self):

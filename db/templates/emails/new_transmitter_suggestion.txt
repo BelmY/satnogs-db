@@ -3,7 +3,10 @@
 {% block main %}
 New transmitter suggestion for satellite {{ data.satname }} was submitted by user {{ data.contributor }}!
 
-{{ data.saturl }}
+Current transmitter suggestions awaiting approval for {{ data.satname }}: {{ data.suggestion_count }}
 
-Navigate to {{ data.sitedomain }}/admin/base/transmittersuggestion/ to review and approve it.
+Review and approve the suggestions at the URL below
+
+{{ data.saturl }}#transmitters
+
 {% endblock %}

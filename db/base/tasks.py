@@ -14,6 +14,7 @@ from django.core.files import File
 from django.core.mail import send_mail
 from django.core.validators import URLValidator
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.timezone import make_aware
 from satellite_tle import fetch_all_tles, fetch_tle_from_celestrak, fetch_tles
 from sgp4.earth_gravity import wgs72
@@ -228,6 +229,35 @@ def notify_user_export(url, norad, email):
         data = {'url': '{0}{1}'.format(site.domain, url), 'norad': norad}
     message = render_to_string(template, {'data': data})
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], False)
+
+
+@shared_task
+def notify_transmitter_suggestion(satellite_id, user_id):
+    """Helper function to email admin users when a new transmitter suggestion
+    is submitted"""
+    satellite = Satellite.objects.get(pk=satellite_id)
+    user = User.objects.get(pk=user_id)
+
+    # Notify admins
+    admins = User.objects.filter(is_superuser=True)
+    site = Site.objects.get_current()
+    subject = '[{0}] A new suggestion for {1} was submitted'.format(site.name, satellite.name)
+    template = 'emails/new_transmitter_suggestion.txt'
+    saturl = '{0}{1}'.format(
+        site.domain, reverse('satellite', kwargs={'norad': satellite.norad_cat_id})
+    )
+    data = {
+        'satname': satellite.name,
+        'saturl': saturl,
+        'suggestion_count': satellite.transmitter_suggestion_count,
+        'contributor': user
+    }
+    message = render_to_string(template, {'data': data})
+    for user in admins:
+        try:
+            user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
+        except Exception:  # pylint: disable=W0703
+            LOGGER.error('Could not send email to user', exc_info=True)
 
 
 @shared_task
