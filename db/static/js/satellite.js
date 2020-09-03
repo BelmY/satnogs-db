@@ -191,6 +191,7 @@ $(document).ready(function () {
 
     // Handle deep linking of tabbed panes
     let url = location.href.replace(/\/$/, '');
+    history.replaceState(null, null, url);
 
     if (location.hash) {
         const hash = url.split('#');
@@ -210,7 +211,6 @@ $(document).ready(function () {
         } else {
             newUrl = url.split('#')[0] + hash;
         }
-        newUrl += '/';
         history.replaceState(null, null, newUrl);
     });
 });
