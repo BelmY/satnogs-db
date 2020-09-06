@@ -6,7 +6,7 @@ from uuid import uuid4
 import h5py
 import satnogsdecoders
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MaxValueValidator, \
@@ -392,7 +392,7 @@ class TransmitterEntry(models.Model):
         default='CITATION NEEDED - https://xkcd.com/285/',
         help_text='A reference (preferrably URL) for this entry or edit'
     )
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(get_user_model(), null=True, on_delete=models.SET_NULL)
     service = models.CharField(
         choices=zip(SERVICE_TYPE, SERVICE_TYPE),
         max_length=34,
@@ -438,7 +438,7 @@ class TransmitterEntry(models.Model):
         # this assignment is needed to preserve changes made to a Transmitter
         # through the admin UI
         self.id = None  # pylint: disable=C0103, W0201
-        super(TransmitterEntry, self).save()
+        super().save()
 
     def clean(self):
         if self.type == TRANSMITTER_TYPE[0]:
@@ -506,7 +506,7 @@ class TransmitterManager(models.Manager):  # pylint: disable=R0903
         subquery = TransmitterEntry.objects.filter(
             reviewed=True, approved=True
         ).filter(uuid=OuterRef('uuid')).order_by('-created')
-        return super(TransmitterManager, self).get_queryset().filter(
+        return super().get_queryset().filter(
             reviewed=True, approved=True
         ).filter(created=Subquery(subquery.values('created')[:1]))
 
@@ -576,8 +576,7 @@ class LatestTleManager(models.Manager):  # pylint: disable=R0903
         :returns: the latest Tle for each Satellite
         """
         subquery = Tle.objects.filter(satellite=OuterRef('satellite')).order_by('-updated')
-        return super(LatestTleManager,
-                     self).get_queryset().filter(pk=Subquery(subquery.values('pk')[:1]))
+        return super().get_queryset().filter(pk=Subquery(subquery.values('pk')[:1]))
 
 
 class LatestDistributableTleManager(models.Manager):  # pylint: disable=R0903
@@ -590,8 +589,7 @@ class LatestDistributableTleManager(models.Manager):  # pylint: disable=R0903
         subquery = Tle.objects.filter(tle_source__in=settings.TLE_SOURCES_REDISTRIBUTABLE
                                       ).filter(satellite=OuterRef('satellite')
                                                ).order_by('-updated')
-        return super(LatestDistributableTleManager,
-                     self).get_queryset().filter(pk=Subquery(subquery.values('pk')[:1]))
+        return super().get_queryset().filter(pk=Subquery(subquery.values('pk')[:1]))
 
 
 class LatestTle(Tle):
@@ -692,7 +690,7 @@ pre_save.connect(_set_is_decoded, sender=DemodData)
 class ExportedFrameset(models.Model):
     """Model for exported frames."""
     created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(get_user_model(), null=True, on_delete=models.SET_NULL)
     satellite = models.ForeignKey(Satellite, null=True, on_delete=models.SET_NULL)
     exported_file = models.FileField(upload_to=_name_exported_frames, blank=True, null=True)
     start = models.DateTimeField(blank=True, null=True)

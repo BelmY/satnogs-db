@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 import factory
 import pytest
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils.timezone import now
 from factory import fuzzy
@@ -55,7 +55,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     username = factory.Sequence(lambda n: "user_%d" % n)
 
     class Meta:
-        model = User
+        model = get_user_model()
 
 
 class SatelliteFactory(factory.django.DjangoModelFactory):

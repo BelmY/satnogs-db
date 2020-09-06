@@ -5,10 +5,10 @@ from datetime import timedelta
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, \
     PermissionRequiredMixin
-from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
@@ -23,8 +23,7 @@ from django.views.decorators.http import require_POST
 from db.base.forms import SatelliteModelForm, TransmitterModelForm, \
     TransmitterUpdateForm
 from db.base.helpers import get_apikey
-from db.base.models import SERVICE_TYPE, TRANSMITTER_STATUS, \
-    TRANSMITTER_TYPE, DemodData, Mode, Satellite, Transmitter, \
+from db.base.models import DemodData, Satellite, Transmitter, \
     TransmitterEntry, TransmitterSuggestion
 from db.base.tasks import export_frames, notify_transmitter_suggestion
 from db.base.utils import cache_statistics, millify, read_influx
@@ -85,19 +84,11 @@ def home(request):
                                                  ).values('station').annotate(c=Count('station')
                                                                               ).order_by('-c')
 
-    cached_stats = cache.get('stats_transmitters')
-    if not cached_stats:
-        try:
-            cache_statistics()
-            cached_stats = cache.get('stats_transmitters')
-        except OperationalError:
-            pass
     return render(
         request, 'base/home.html', {
             'newest_sats': newest_sats,
             'latest_data': latest_data,
-            'latest_submitters': latest_submitters,
-            'statistics': cached_stats
+            'latest_submitters': latest_submitters
         }
     )
 
@@ -135,23 +126,7 @@ def satellites(request):
             to_attr='approved_transmitters'
         )
     )
-    suggestion_count = TransmitterSuggestion.objects.count()
-    contributor_count = User.objects.filter(is_active=1).count()
-    cached_stats = cache.get('stats_transmitters')
-    if not cached_stats:
-        try:
-            cache_statistics()
-            cached_stats = cache.get('stats_transmitters')
-        except OperationalError:
-            pass
-    return render(
-        request, 'base/satellites.html', {
-            'satellites': satellite_objects,
-            'statistics': cached_stats,
-            'contributor_count': contributor_count,
-            'suggestion_count': suggestion_count
-        }
-    )
+    return render(request, 'base/satellites.html', {'satellites': satellite_objects})
 
 
 def satellite(request, norad):
@@ -167,19 +142,6 @@ def satellite(request, norad):
             suggestion.transmitter = original_transmitter
         except Transmitter.DoesNotExist:
             suggestion.transmitter = None
-    modes = Mode.objects.all()
-    types = TRANSMITTER_TYPE
-    services = SERVICE_TYPE
-    statuses = TRANSMITTER_STATUS
-    sat_cache = cache.get(satellite_obj.id)
-    frame_count = 0
-    if sat_cache is not None:
-        frame_count = sat_cache['count']
-
-    try:
-        latest_frame = DemodData.objects.filter(satellite=satellite_obj).order_by('-id')[0]
-    except (ObjectDoesNotExist, IndexError):
-        latest_frame = ''
 
     try:
         # pull the last 5 observers and their submission timestamps for this satellite
@@ -199,12 +161,6 @@ def satellite(request, norad):
         request, 'base/satellite.html', {
             'satellite': satellite_obj,
             'transmitter_suggestions': transmitter_suggestions,
-            'modes': modes,
-            'types': types,
-            'services': services,
-            'statuses': statuses,
-            'latest_frame': latest_frame,
-            'frame_count': frame_count,
             'mapbox_token': settings.MAPBOX_TOKEN,
             'recent_observers': recent_observers,
             'badge_telemetry_count': millify(satellite_obj.telemetry_data_count),
@@ -319,13 +275,9 @@ def stats(request):
     cached_satellites = []
     ids = cache.get('satellites_ids')
     observers = cache.get('stats_observers')
-    suggestion_count = TransmitterSuggestion.objects.count()
-    contributor_count = User.objects.filter(is_active=1).count()
-    cached_stats = cache.get('stats_transmitters')
     if not ids or not observers:
         try:
             cache_statistics()
-            cached_stats = cache.get('stats_transmitters')
             ids = cache.get('satellites_ids')
             observers = cache.get('stats_observers')
         except OperationalError:
@@ -337,10 +289,7 @@ def stats(request):
     return render(
         request, 'base/stats.html', {
             'satellites': cached_satellites,
-            'observers': observers,
-            'statistics': cached_stats,
-            'contributor_count': contributor_count,
-            'suggestion_count': suggestion_count,
+            'observers': observers
         }
     )
 
@@ -386,7 +335,7 @@ class TransmitterCreateView(LoginRequiredMixin, BSModalCreateView):
                        reviewed by a moderator. Thanks for contibuting!'
 
     satellite = Satellite()
-    user = User()
+    user = get_user_model()
 
     def dispatch(self, request, *args, **kwargs):
         """
@@ -419,7 +368,7 @@ class TransmitterUpdateView(LoginRequiredMixin, BSModalUpdateView):
     success_message = 'Your transmitter suggestion was stored successfully and will be \
                        reviewed by a moderator. Thanks for contibuting!'
 
-    user = User()
+    user = get_user_model()
 
     def get_initial(self):
         initial = {}

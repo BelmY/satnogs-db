@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 from celery import shared_task
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.core.files import File
@@ -178,7 +178,7 @@ def remove_old_exported_framesets():
 def export_frames(norad, user_id, period=None):
     """Task to export satellite frames in csv."""
     exported_frameset = ExportedFrameset()
-    exported_frameset.user = User.objects.get(pk=user_id)
+    exported_frameset.user = get_user_model().objects.get(pk=user_id)
     exported_frameset.satellite = Satellite.objects.get(norad_cat_id=norad)
     exported_frameset.end = datetime.utcnow()
 
@@ -236,10 +236,10 @@ def notify_transmitter_suggestion(satellite_id, user_id):
     """Helper function to email admin users when a new transmitter suggestion
     is submitted"""
     satellite = Satellite.objects.get(pk=satellite_id)
-    user = User.objects.get(pk=user_id)
+    user = get_user_model().objects.get(pk=user_id)
 
     # Notify admins
-    admins = User.objects.filter(is_superuser=True)
+    admins = get_user_model().objects.filter(is_superuser=True)
     site = Site.objects.get_current()
     subject = '[{0}] A new suggestion for {1} was submitted'.format(site.name, satellite.name)
     template = 'emails/new_transmitter_suggestion.txt'
