@@ -1,4 +1,4 @@
-<div class="card shadow card-outline {% if suggestion_card %}card-warning{% else %}card-satnogs{% endif %}">
+<div class="card shadow card-outline {% if suggestion_card %}card-warning{% elif transmitter.bad_transmitter %}card-danger{% else %}card-satnogs{% endif %}">
   <div class="card-header align-items-center no-gutters py-1">
     <div class="row">
         <div class="col">
@@ -94,6 +94,14 @@
       {% if transmitter.invert %}
       <dt class="col-sm-6">Inverted</dt>
       <dd class="col-sm-6">Yes</dd>
+      {% endif %}
+      {% if transmitter.coordination != '' %}
+      <dt class="col-sm-6">Frequency Coordination</dt>
+      {% endif %}
+      {% if transmitter.coordination_url != '' %}
+      <dd class="col-sm-6"><a href="{{ transmitter.coordination_url }}" target="_blank">{{ transmitter.coordination }}</a></dd>
+      {% else %}
+      <dd class="col-sm-6">{{ transmitter.coordination }}</dd>
       {% endif %}
     </dl>
   </div>

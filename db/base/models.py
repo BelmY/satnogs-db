@@ -32,6 +32,11 @@ SERVICE_TYPE = [
     'Maritime', 'Meteorological', 'Mobile', 'Radiolocation', 'Radionavigational',
     'Space Operation', 'Space Research', 'Standard Frequency and Time Signal', 'Unknown'
 ]
+COORDINATION_STATUS = [
+    'ITU Requested', 'ITU Rejected', 'ITU Coordinated', 'IARU Requested', 'IARU Rejected',
+    'IARU Coordinated', 'Uncoordinated'
+]
+BAD_COORDINATIONS = ['ITU Rejected', 'IARU Rejected', 'Uncoordinated']  # 'violations'
 URL_REGEX = r"(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"
 MIN_FREQ = 0
 MAX_FREQ = 40000000000
@@ -394,9 +399,32 @@ class TransmitterEntry(models.Model):
         default='Unknown',
         help_text='The published usage category for this transmitter'
     )
+    coordination = models.CharField(
+        choices=list(zip(COORDINATION_STATUS, COORDINATION_STATUS)),
+        max_length=20,
+        blank=True,
+        default='',
+        help_text='Frequency coordination status for this transmitter'
+    )
+    coordination_url = models.URLField(
+        blank=True,
+        help_text='URL for more details on this frequency coordination',
+        validators=[URLValidator(schemes=['http', 'https'], regex=URL_REGEX)]
+    )
 
     # NOTE: future fields will need to be added to forms.py and to
     # api/serializers.py
+
+    @property
+    def bad_transmitter(self):
+        """Returns a boolean that indicates whether this transmitter should be
+        flagged as bad with regard to frequency coordination or rejection
+
+        :returns: bool
+        """
+        if self.coordination in BAD_COORDINATIONS:
+            return True
+        return False
 
     class Meta:
         unique_together = ("uuid", "created")

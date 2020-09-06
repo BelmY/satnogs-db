@@ -110,6 +110,12 @@ class TransmitterSuggestionFactory(factory.django.DjangoModelFactory):
     created = fuzzy.FuzzyDateTime(now() - timedelta(days=30), now())
     citation = fuzzy.FuzzyText()
     user = factory.SubFactory(UserFactory)
+    service = fuzzy.FuzzyChoice(
+        choices=['Amateur', 'Broadcasting', 'Earth Exploration', 'Fixed', 'Inter-satellite']
+    )
+    coordination = fuzzy.FuzzyChoice(
+        choices=['', 'IARU Requested', 'IARU Rejected', 'IARU Coordinated', 'Uncoordinated']
+    )
 
     class Meta:
         model = TransmitterSuggestion

@@ -27,7 +27,8 @@ class TransmitterModelForm(BSModalModelForm):  # pylint: disable=too-many-ancest
         fields = [
             'description', 'type', 'status', 'uplink_low', 'uplink_high', 'uplink_drift',
             'uplink_mode', 'downlink_low', 'downlink_high', 'downlink_drift',
-            'downlink_mode', 'invert', 'baud', 'citation', 'service'
+            'downlink_mode', 'invert', 'baud', 'citation', 'service', 'coordination',
+            'coordination_url'
         ]
         # yapf: enable
         labels = {
@@ -48,7 +49,8 @@ class TransmitterUpdateForm(BSModalModelForm):  # pylint: disable=too-many-ances
         fields = [
             'description', 'type', 'status', 'uplink_low', 'uplink_high', 'uplink_drift',
             'uplink_mode', 'downlink_low', 'downlink_high', 'downlink_drift',
-            'downlink_mode', 'invert', 'baud', 'citation', 'service', 'created'
+            'downlink_mode', 'invert', 'baud', 'citation', 'service', 'coordination',
+            'coordination_url', 'created'
         ]
         # yapf: enable
         labels = {
