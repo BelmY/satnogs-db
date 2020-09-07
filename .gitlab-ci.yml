@@ -43,7 +43,23 @@ schema:
   image: ${GITLAB_CI_IMAGE_PYTHON}
   script:
     - pip install --no-cache-dir --no-deps -r "requirements.txt" --force-reinstall .
-    - ./manage.py generateschema > satnogs-db-api-client/api-schema.yml
+    - |
+      ./manage.py generateschema | python -c "
+      # XXX: Workaround for https://github.com/encode/django-rest-framework/issues/7479
+      # XXX: Remove after upgrade to DRF 3.12
+      import yaml
+      import sys
+      class Dumper(yaml.Dumper):
+          def ignore_aliases(self, data):
+              return True
+      sys.stdout.buffer.write(
+          yaml.dump(
+              yaml.safe_load(sys.stdin),
+              default_flow_style=False,
+              sort_keys=False, Dumper=Dumper
+          ).encode('utf-8')
+      )
+      "  > satnogs-db-api-client/api-schema.yml
   artifacts:
     expire_in: 1 week
     when: always
