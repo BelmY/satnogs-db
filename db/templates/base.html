@@ -27,6 +27,7 @@
     
     <!-- Top Navbar menu -->
     <nav class="main-header navbar navbar-white navbar-light navbar-expand">
+      <a class="skip-main" href="#main">Skip to main content</a> <!-- for a11y, see #414 -->
       <ul class="navbar-nav d-lg-none ml-2">
         <a data-widget="pushmenu" href="#" role="button">
           <!-- <i class="fas fa-bars"></i> -->
@@ -62,14 +63,14 @@
         <img src="{% static 'img/satnogs-db-logo.png' %}" alt="SatNOGS DB Logo" class="brand-image"
           id="nav-logo">
       </div>
-      <div class="sidebar d-flex flex-column">        
-        
+      <div class="sidebar d-flex flex-column">
         <form class="form-inline mt-1" action="{% url 'search_results' %}" method="GET">
+          <label class="search-label m-0" for="search" id="search-label">Search</label> <!-- See #416 -->
           <div class="input-group input-group-sm">
-            <input class="form-control form-control-sidebar" type="search" name="q"
-              placeholder="Satellite name or ID" aria-label="Search" value="{{ q }}">
+            <input class="form-control form-control-sidebar" type="search" id="search" name="q"
+              placeholder="Satellite name or ID" aria-labelledby="search-label" value="{{ q }}">
             <div class="input-group-append">
-              <button class="btn btn-navbar-satnogs" type="submit">
+              <button class="btn btn-navbar-satnogs" type="submit" aria-label="Submit Search">
                 <i class="fas fa-search"></i>
               </button>
             </div>
@@ -201,7 +202,7 @@
     <!-- /.control-sidebar -->
 
     <!-- Content window -->
-    <div class="content-wrapper bg-light">
+    <div class="content-wrapper bg-light" id="main">
       {{ stage_notice }}
       {% if messages %}
         <!-- This is hidden, transitional to Toasts - see app.js -->

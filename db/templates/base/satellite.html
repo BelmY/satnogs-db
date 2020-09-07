@@ -22,20 +22,20 @@
 <ul class="navbar-nav nav nav-pills" data-widget="treeview" role="menu" data-accordion="false" id="tabs" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-      aria-selected="true"><i class="nav-icon fas fa-satellite"></i>
+      aria-selected="true" aria-label="Information"><i class="nav-icon fas fa-satellite"></i>
       <p class="d-none d-lg-inline-block text-sm">Info</p>
     </a>
   </li>
   <li class="nav-item{% if satellite.status == 're-entered' %} disabled{% endif %}">
     {% if showmap %}
     <a class="nav-link" id="mapcontent-tab" data-toggle="tab" href="#mapcontent" role="tab" aria-controls="mapcontent"
-      aria-selected="false">
+      aria-selected="false" aria-label="Map">
       <i class="nav-icon fas fa-map-marked-alt"></i>
       <p class="d-none d-lg-inline-block text-sm">Map</p>
     </a>
     {% else %}
     <span data-toggle="tooltip" title="No map available for this satellite" data-placement="bottom">
-      <a class="nav-link disabled">
+      <a class="nav-link disabled" aria-label="Map not available">
         <i class="nav-icon fas fa-map-marked-alt"></i>
         <p class="d-none d-lg-inline-block text-sm">Map</p>
       </a>
@@ -44,7 +44,7 @@
   </li>
   <li class="nav-item">
     <a class="nav-link" id="transmitters-tab" data-toggle="tab" href="#transmitters" role="tab"
-      aria-controls="transmitters" aria-selected="false">
+      aria-controls="transmitters" aria-selected="false" aria-label="Transmitters">
       <i class="nav-icon fas fa-satellite-dish"></i>
       {% if satellite.transmitters %}
       <span class="badge badge-satnogs-primary navbar-badge">{{ satellite.transmitters.count }}</span>
@@ -57,7 +57,7 @@
   </li>
   <li class="nav-item">
     <a class="nav-link" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data"
-      aria-selected="false">
+      aria-selected="false" aria-label="Data">
       <i class="nav-icon fas fa-chart-bar"></i>
       {% if satellite.telemetry_data_count %}
       <span class="badge badge-satnogs-primary navbar-badge">{{ badge_telemetry_count }}</span>
@@ -69,19 +69,19 @@
   {% if request.user.is_authenticated %}
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false">
+      aria-haspopup="true" aria-expanded="false" aria-label="Edit Menu">
       <i class="nav-icon fas fa-edit"></i>
       <p class="d-none d-lg-inline-block text-sm">Edit</p>
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
       <a class="dropdown-item d-flex align-items-center create-transmitter-link" href="#" id="create-transmitter-side"
-        data-form-url="{% url 'create_transmitter' satellite_pk=satellite.id %}">
+        data-form-url="{% url 'create_transmitter' satellite_pk=satellite.id %}" aria-label="Submit new transmitter">
         <i class="nav-icon mr-2 fas fa-plus-square"></i>
         <p class="mb-0">Submit New Transmitter</p>
       </a>
       {% if perms.base.change_satellite %}
       <a class="dropdown-item d-flex align-items-center bs-modal" id="satellite-update" href="#"
-        data-form-url="{% url 'update_satellite' satellite.id %}">
+        data-form-url="{% url 'update_satellite' satellite.id %}" aria-label="Edit this satellite">
         <i class="nav-icon mr-2 fas fa-edit"></i>
         <p class="mb-0">Edit {{ satellite.name }}</p>
       </a>
@@ -160,17 +160,21 @@
           </div>
           <div class="card-body row p-1">
             <div class="satellite-status-icon d-flex">
-              <img src="
+              <img
                 {% if satellite.status == 'alive' %}
-                  {% static 'img/status_alive.png' %}
+                  src="{% static 'img/status_alive.png' %}"
+                  alt="Satellite alive"
                 {% elif satellite.status == 're-entered' %}
-                  {% static 'img/status_decayed.png' %}
+                  src="{% static 'img/status_decayed.png' %}"
+                  alt="Satellite re-entered"
                 {% elif satellite.status == 'dead' %}
-                  {% static 'img/status_dead.png' %}
+                  src="{% static 'img/status_dead.png' %}"
+                  alt="Satellite dead"
                 {% else %}
-                  {% static 'img/status_unknown.png' %}
+                  src="{% static 'img/status_unknown.png' %}"
+                  alt="Status unknown"
                 {% endif %}
-                " height="30" class="m-auto align-self-center">
+                height="30" class="m-auto align-self-center">
             </div>
             <div class="
                 {% if satellite.status == 'alive' %}
@@ -266,18 +270,18 @@
             SatNOGS Links
           </div>
           <div class="card-body text-center">
-            <a class="btn btn-info m-1 satnogs-link-btn"
+            <button class="btn btn-info m-1 satnogs-link-btn"
               href="https://network.satnogs.org/observations/?norad={{ satellite.norad_cat_id }}" target="_blank"
-              role="button">
+              aria-label="Network Observations">
               Network Observations
               <i class="mr-2 fas fa-external-link-alt"></i>
-            </a>
+            </button>
             {% if satellite.dashboard_url %}
-            <a class="btn btn-info m-1 satnogs-link-btn" href="{{ satellite.dashboard_url }}" target="_blank"
-              role="button">
+            <button class="btn btn-info m-1 satnogs-link-btn" href="{{ satellite.dashboard_url }}" target="_blank"
+              aria-label="Telemetry Dashboard">
               Telemetry Dashboard
               <i class="mr-2 fas fa-external-link-alt"></i>
-            </a>
+            </button>
             {% endif %}
           </div>
         </div>

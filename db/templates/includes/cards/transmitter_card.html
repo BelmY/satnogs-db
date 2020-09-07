@@ -1,14 +1,33 @@
-<div class="card shadow card-outline {% if suggestion_card %}card-warning{% elif transmitter.bad_transmitter %}card-danger{% else %}card-satnogs{% endif %}">
+{% if suggestion_card %}
+<div class="card shadow card-outline card-warning" aria-label="Suggested transmitter {{ transmitter.description }}">
+{% elif transmitter.bad_transmitter %}
+<div class="card shadow card-outline card-danger" aria-label="Bad or uncoordinated transmitter {{ transmitter.description }}">
+{% else %}
+<div class="card shadow card-outline card-satnogs" aria-label="Transmitter {{ transmitter.description }}">
+{% endif %}
+
   <div class="card-header align-items-center no-gutters py-1">
     <div class="row">
         <div class="col">
           <span class="card-title align-self-center">{% if suggestion_card %}Suggestion - {% endif %}{{ transmitter.description }}</span>
         </div>
         <div class="row ml-auto align-items-center">
-          <i class="fas fa-satellite fa-lg align-self-center {% if satellite.status == 're-entered' %}text-satnogs-inactive{% elif transmitter.status == 'active' %}text-satnogs-active{% else %}text-satnogs-inactive{% endif %}"></i>
+          {% if satellite.status == 're-entered' %}
+          <i class="fas fa-satellite fa-lg align-self-center text-satnogs-inactive"
+            aria-label="Transmitter is not operational, the satellite has re-entered"
+            data-toggle="tooltip" data-placement="bottom" title="Non-operational"></i>
+          {% elif transmitter.status == 'active' %}
+          <i class="fas fa-satellite fa-lg align-self-center text-satnogs-active"
+            aria-label="Transmitter is operational"
+            data-toggle="tooltip" data-placement="bottom" title="Operational"></i>
+          {% else %}
+          <i class="fas fa-satellite fa-lg align-self-center text-satnogs-inactive"
+            aria-label="Transmitter is inactive or malfunctioning"
+            data-toggle="tooltip" data-placement="bottom" title="Malfunctioning"></i>
+          {% endif %}
           <div class="btn-group" role="group">
-            <btn class="btn btn-satnogs dropdown-toggle ml-3" data-toggle="dropdown" aria-expanded="false"
-              id="dropdown-{{ transmitter.id }}"><i class="fas fa-bars"></i></btn>
+            <button class="btn btn-satnogs dropdown-toggle ml-3" data-toggle="dropdown" aria-expanded="false"
+              id="dropdown-{{ transmitter.id }}"><i class="fas fa-bars"></i></button>
             <div class="dropdown-menu" aria-labelledby="dropdown-{{ transmitter.id }}">
               {% if request.user.is_superuser and suggestion_card %}
               <form action="{% url 'transmitter_suggestion_handler' %}" method="post"
