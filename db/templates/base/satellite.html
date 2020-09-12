@@ -536,47 +536,27 @@
 
         <!-- Orbital Elements Section -->
         {% if satellite.latest_tle.redistributable %}
-        <div class="col-12 col-md-6 my-2">
+        <div class="col-12 my-2">
           <div class="card card-info">
             <div class="card-header card-satnogs-header">
               Orbital Elements
             </div>
             <div class="card-body text-sm">
-              <div class="col-md-12">
-                <div class="card panel-primary panel-tle">
-                  <div class="card-header satnogs-card-header">
-                    <span class="tle-title">Latest TLE</span>
-                  </div>
-                  <div class="card-body">
-                    <div class="col-md-12">
-                      <dl class="row mb-0">
-                        <dt class="col-md-2">
-                          NORAD ID
-                        </dt>
-                        <dd class="col-md-10">
-                          {{ satellite.latest_tle.norad_cat_id }}
-                        </dd>
-                      </dl>
-                      <dl class="row mb-0">
-                        <dt class="col-md-2">
-                          TLE source
-                        </dt>
-                        <dd class="col-md-10">
-                          {{ satellite.latest_tle.source }}
-                        </dd>
-                      </dl>
-                      <dl class="row mb-0">
-                        <dt class="col-md-2">
-                          TLE Set
-                        </dt>
-                        <dd class="col-md-10">
-                          <pre class="tle-set">{{ satellite.latest_tle.tle1 }}<br>{{ satellite.latest_tle.tle2 }}</pre>
-                        </dd>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <div class="font-weight-bolder pb-2 px-2">Latest Two-Line Element (TLE)</div>
+              <dl class="row mb-0">
+                <dt class="col-sm-2">TLE Source</dt>
+                <dd class="col-sm-10">
+                  {{ satellite.latest_tle.source }}
+                </dd>
+              </dl>
+              <dl class="row mb-0">
+                <dt class="col-sm-2">
+                  TLE Set
+                </dt>
+                <dd class="col-sm-10">
+                  <pre class="tle-set">{{ satellite.latest_tle.tle1 }}<br>{{ satellite.latest_tle.tle2 }}</pre>
+                </dd>
+              </dl>
             </div>
           </div>
         </div>
