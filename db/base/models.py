@@ -283,6 +283,20 @@ class Satellite(models.Model):
 
         return score <= 2
 
+    @property
+    def has_bad_transmitter(self):
+        """Returns a boolean based on whether or not this Satellite has a
+            transmitter associated with it that is considered uncoordinated or
+            otherwise bad
+
+        :returns: bool
+        """
+        bad_transmitter_count = 0
+        for transmitter in Transmitter.objects.filter(satellite=self.id):
+            if transmitter.bad_transmitter:
+                bad_transmitter_count += 1
+        return bad_transmitter_count > 0
+
     def __str__(self):
         return '{0} - {1}'.format(self.norad_cat_id, self.name)
 

@@ -213,4 +213,10 @@ $(document).ready(function () {
         }
         history.replaceState(null, null, newUrl);
     });
+
+    // this is a nav-tab link outside of nav tabs
+    $('.outside-tab-link').click(function () {
+        const hash = $(this).attr('href');
+        $('#tabs a[href="' + hash + '"]').tab('show');
+    });
 });
