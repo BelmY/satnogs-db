@@ -56,8 +56,7 @@ class TleView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
 
     def get_queryset(self):
         """
-        This view should return a list of all the purchases
-        for the currently authenticated user.
+        Returns latest TLE queryset depending on user permissions
         """
         if self.request.user.has_perm('base.access_all_tles'):
             return LatestTle.all_latest_tles.all()
