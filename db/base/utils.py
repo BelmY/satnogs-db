@@ -7,7 +7,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.core.cache import cache
-from django.db.models import Count, Max
+from django.db.models import Count, Max, Q
 from django.utils.timezone import make_aware
 from influxdb import InfluxDBClient
 from satnogsdecoders import __version__ as decoders_version
@@ -308,6 +308,8 @@ def cache_statistics():
     satellites = Satellite.objects \
                           .values('name', 'norad_cat_id', 'id') \
                           .annotate(count=Count('telemetry_data'),
+                                    decoded=Count('telemetry_data',
+                                                  filter=Q(telemetry_data__is_decoded=True)),
                                     latest_payload=Max('telemetry_data__timestamp')) \
                           .order_by('-count')
 

@@ -1,53 +1,53 @@
 /* global Chart */
 /* eslint new-cap: "off" */
-$(document).ready(function() {
-    $('#sats').DataTable( {
+$(document).ready(function () {
+    $('#sats').DataTable({
         // the dom field controls the layout and visibility of datatable items
         // and is not intuitive at all. Without layout we have dom: 'ftrilp' 
         // https://datatables.net/reference/option/dom
         dom: '<"row"<"d-none d-md-block col-md-6"><"col-sm-12 col-md-6"f>>' +
-        '<"row"<"col-sm-12"tr>>' +
-        '<"row"<"col-sm-12 col-xl-3 align-self-center"i><"col-sm-12 col-md-6 col-xl-3 align-self-center"l><"col-sm-12 col-md-6 col-xl-6"p>>',
+            '<"row"<"col-sm-12"tr>>' +
+            '<"row"<"col-sm-12 col-xl-3 align-self-center"i><"col-sm-12 col-md-6 col-xl-3 align-self-center"l><"col-sm-12 col-md-6 col-xl-6"p>>',
         responsive: {
             details: {
                 display: $.fn.dataTable.Responsive.display.childRow,
                 type: 'column'
             }
         },
-        columnDefs: [ 
+        columnDefs: [
             {
                 className: 'control',
                 orderable: false,
-                targets:   0
+                targets: 0
             },
         ],
-        order: [ 3, 'desc' ],
+        order: [3, 'desc'],
         pageLength: 25
-    } );
+    });
 
-    $('#stations').DataTable( {
+    $('#stations').DataTable({
         // the dom field controls the layout and visibility of datatable items
         // and is not intuitive at all. Without layout we have dom: 'ftrilp' 
         // https://datatables.net/reference/option/dom
         dom: '<"row"<"d-none d-md-block col-md-6"><"col-sm-12 col-md-6"f>>' +
-        '<"row"<"col-sm-12"tr>>' +
-        '<"row"<"col-sm-12 col-xl-3 align-self-center"i><"col-sm-12 col-md-6 col-xl-3 align-self-center"l><"col-sm-12 col-md-6 col-xl-6"p>>',
+            '<"row"<"col-sm-12"tr>>' +
+            '<"row"<"col-sm-12 col-xl-3 align-self-center"i><"col-sm-12 col-md-6 col-xl-3 align-self-center"l><"col-sm-12 col-md-6 col-xl-6"p>>',
         responsive: {
             details: {
                 display: $.fn.dataTable.Responsive.display.childRow,
                 type: 'column'
             }
         },
-        columnDefs: [ 
+        columnDefs: [
             {
                 className: 'control',
                 orderable: false,
-                targets:   0
+                targets: 0
             },
         ],
-        order: [ 2, 'desc' ],
+        order: [2, 'desc'],
         pageLength: 25
-    } );
+    });
 
     Chart.pluginService.register({
         afterUpdate: function (chart) {
@@ -115,7 +115,7 @@ $(document).ready(function() {
         },
     });
 
-    $.getJSON('/statistics/', function(data) {
+    $.getJSON('/statistics/', function (data) {
         if (data.length == 0) {
             $('#transmitters-charts h2').text('still calculating...');
             $('#transmitters-charts div').append('<p>please come back later</p>');
@@ -139,9 +139,9 @@ $(document).ready(function() {
             for (i = 0; i < data.mode_label.length; i++) {
                 // Switching to HSL to stick with hue of LSF logo
                 h = 235;
-                l = data.mode_data[i]/mode_total*100;
+                l = data.mode_data[i] / mode_total * 100;
                 l *= 3; // adjust for better visibility
-                s = data.mode_data[i]/mode_total*100;
+                s = data.mode_data[i] / mode_total * 100;
                 s *= 3; // adjust for better visibility
                 color = 'hsl(' + h + ',' + Math.floor(s) + '%,' + Math.floor(l) + '%)';
                 mode_colors.push(color);
@@ -151,9 +151,9 @@ $(document).ready(function() {
             var band_colors = [];
             for (i = 0; i < data.band_label.length; i++) {
                 h = 235;
-                l = data.band_data[i]/band_total*100;
+                l = data.band_data[i] / band_total * 100;
                 l *= 1.25; // adjust for better visibility
-                s = data.band_data[i]/band_total*100;
+                s = data.band_data[i] / band_total * 100;
                 s *= 1.25; // adjust for better visibility
                 color = 'hsl(' + h + ',' + s + '%,' + l + '%)';
                 band_colors.push(color);
@@ -161,13 +161,11 @@ $(document).ready(function() {
 
             // Global chart configuration
             Chart.defaults.global.legend.display = false;
-            Chart.defaults.global.title.display = true;
-            Chart.defaults.global.title.fontSize = 16;
-            Chart.defaults.global.title.fontColor= '#444';
+            Chart.defaults.global.title.display = false;
 
             //Mode Chart
             var mode_c = document.getElementById('modes');
-            new Chart(mode_c, {
+            var mode_chart = new Chart(mode_c, {
                 type: 'doughnut',
                 data: {
                     labels: data.mode_label,
@@ -189,13 +187,29 @@ $(document).ready(function() {
                             minFontSize: 1,
                             maxFontSize: 20,
                         }
+                    },
+                    legend: false,
+                    legendCallback: function(chart) {
+                        var legendHtml = [];
+                        legendHtml.push('<dl class="row my-0">');
+                        var item = chart.data.datasets[0];
+                        for (var i=0; i < item.data.length; i++) {
+                            if (item.data[i] > 9) {
+                                legendHtml.push('<dt class="col-sm-8">' + chart.data.labels[i] + '</dt>');
+                                legendHtml.push('<dd class="col-sm-4 my-0">' + item.data[i] + '</dd>');
+                            }
+                        }
+            
+                        legendHtml.push('</dl>');
+                        return legendHtml.join('');
                     }
                 }
             });
+            $('#modes-footer').html(mode_chart.generateLegend());
 
             //Band Chart
             var band_c = document.getElementById('bands');
-            new Chart(band_c, {
+            var band_chart = new Chart(band_c, {
                 type: 'doughnut',
                 data: {
                     labels: data.band_label,
@@ -217,9 +231,25 @@ $(document).ready(function() {
                             minFontSize: 1,
                             maxFontSize: 20,
                         }
+                    },
+                    legend: false,
+                    legendCallback: function(chart) {
+                        var legendHtml = [];
+                        legendHtml.push('<dl class="row my-0">');
+                        var item = chart.data.datasets[0];
+                        for (var i=0; i < item.data.length; i++) {
+                            if (item.data[i] > 9) {
+                                legendHtml.push('<dt class="col-sm-8">' + chart.data.labels[i] + '</dt>');
+                                legendHtml.push('<dd class="col-sm-4 my-0">' + item.data[i] + '</dd>');
+                            }
+                        }
+            
+                        legendHtml.push('</dl>');
+                        return legendHtml.join('');
                     }
                 }
             });
+            $('#bands-footer').html(band_chart.generateLegend());
 
             //HUD Stats
             $('#stats-alive').html(data.transmitters_alive);
@@ -227,7 +257,7 @@ $(document).ready(function() {
             $('#stats-satellites').html(data.total_satellites);
             $('#stats-data').html(data.total_data);
         }
-    }).fail(function() {
+    }).fail(function () {
         $('.transmitters-charts').hide();
     });
 
