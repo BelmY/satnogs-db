@@ -523,6 +523,11 @@ blockquote {
     border-bottom-left-radius: 0.25rem;
 }
 
+.contributor-list {
+    max-height: 600px;
+    overflow-y: scroll;
+}
+
 /* taken from https://accessibility.oit.ncsu.edu/it-accessibility-at-nc-state/developers/accessibility-handbook/mouse-and-keyboard-events/skip-to-main-content/ */
 
 a.skip-main {
