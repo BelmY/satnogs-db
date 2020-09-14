@@ -162,6 +162,7 @@ STATICFILES_FINDERS = (
 )
 MEDIA_ROOT = config('MEDIA_ROOT', default=Path('media').resolve())
 FILE_UPLOAD_TEMP_DIR = config('FILE_UPLOAD_TEMP_DIR', default=Path('/tmp').resolve())
+FILE_UPLOAD_PERMISSIONS = 0o644
 MEDIA_URL = config('MEDIA_URL', default='/media/')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 SATELLITE_DEFAULT_IMAGE = '/static/img/sat_purple.png'
