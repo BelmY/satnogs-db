@@ -1,5 +1,6 @@
 """Miscellaneous functions for SatNOGS DB"""
 import binascii
+import json
 import logging
 import math
 from datetime import datetime, timedelta
@@ -16,6 +17,23 @@ from satnogsdecoders import decoder
 from db.base.models import DemodData, Mode, Satellite, Telemetry, Transmitter
 
 LOGGER = logging.getLogger('db')
+
+
+def get_tle_sources():
+    """Check for and return TLE custom sources"""
+    sources = {}
+    if settings.TLE_SOURCES_JSON:
+        try:
+            sources_json = json.loads(settings.TLE_SOURCES_JSON)
+            sources['sources'] = list(sources_json.items())
+        except json.JSONDecodeError as error:
+            print('TLE Sources JSON ignored as it is invalid: {}'.format(error))
+    if settings.SPACE_TRACK_USERNAME and settings.SPACE_TRACK_PASSWORD:
+        sources['spacetrack_config'] = {
+            'identity': settings.SPACE_TRACK_USERNAME,
+            'password': settings.SPACE_TRACK_PASSWORD
+        }
+    return sources
 
 
 def calculate_statistics():

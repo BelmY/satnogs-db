@@ -115,6 +115,7 @@ class Operator(models.Model):
 class Satellite(models.Model):
     """Model for all the satellites."""
     norad_cat_id = models.PositiveIntegerField()
+    norad_follow_id = models.PositiveIntegerField(blank=True, null=True)
     name = models.CharField(max_length=45)
     names = models.TextField(blank=True)
     description = models.TextField(blank=True)

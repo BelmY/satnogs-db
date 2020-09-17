@@ -30,8 +30,8 @@ class OperatorAdmin(admin.ModelAdmin):
 @admin.register(Satellite)
 class SatelliteAdmin(admin.ModelAdmin):
     """Defines Satellite view in django admin UI"""
-    list_display = ('id', 'name', 'norad_cat_id', 'status', 'decayed')
-    search_fields = ('name', 'norad_cat_id')
+    list_display = ('id', 'name', 'norad_cat_id', 'status', 'decayed', 'norad_follow_id')
+    search_fields = ('name', 'norad_cat_id', 'norad_follow_id')
     list_filter = ('status', 'decayed')
 
     def get_urls(self):

@@ -1,6 +1,5 @@
 """SatNOGS DB Celery task functions"""
 import csv
-import json
 import logging
 import tempfile
 from datetime import datetime, timedelta
@@ -21,7 +20,7 @@ from sgp4.earth_gravity import wgs72
 from sgp4.io import twoline2rv
 
 from db.base.models import DemodData, ExportedFrameset, Satellite, Tle
-from db.base.utils import cache_statistics, decode_data
+from db.base.utils import cache_statistics, decode_data, get_tle_sources
 
 LOGGER = logging.getLogger('db')
 
@@ -61,30 +60,26 @@ def update_satellite(norad_id, update_name=True):
 def update_tle_sets():
     """Task to update all satellite TLEs"""
     satellites = Satellite.objects.exclude(status='re-entered')
-    norad_ids = set(int(sat.norad_cat_id) for sat in satellites)
+    catalog_norad_ids = set()
+    for satellite in satellites:
+        # Check if satellite follows a NORAD ID and it is officially announced
+        if satellite.norad_follow_id and satellite.norad_follow_id < 99000:
+            catalog_norad_ids.add(satellite.norad_follow_id)
+        # Check if satellite has a NORAD ID that is officially announced
+        elif satellite.norad_cat_id < 99000:
+            catalog_norad_ids.add(satellite.norad_cat_id)
 
-    # Filter only officially announced NORAD IDs
-    catalog_norad_ids = {norad_id for norad_id in norad_ids if norad_id < 99000}
-
-    # Check for TLE custom sources
-    other_sources = {}
-    if settings.TLE_SOURCES_JSON:
-        try:
-            sources_json = json.loads(settings.TLE_SOURCES_JSON)
-            other_sources['sources'] = list(sources_json.items())
-        except json.JSONDecodeError as error:
-            print('TLE Sources JSON ignored as it is invalid: {}'.format(error))
-    if settings.SPACE_TRACK_USERNAME and settings.SPACE_TRACK_PASSWORD:
-        other_sources['spacetrack_config'] = {
-            'identity': settings.SPACE_TRACK_USERNAME,
-            'password': settings.SPACE_TRACK_PASSWORD
-        }
+    other_sources = get_tle_sources()
 
     print("==Fetching TLEs==")
     tles = fetch_all_tles(catalog_norad_ids, **other_sources)
 
     for satellite in satellites:
+
         norad_id = satellite.norad_cat_id
+        if satellite.norad_follow_id:
+            norad_id = satellite.norad_follow_id
+
         if norad_id in tles.keys():
             for source, tle in tles[norad_id]:
                 try:
