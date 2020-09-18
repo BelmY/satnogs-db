@@ -11,7 +11,7 @@ from django.urls import reverse
 from db.base.models import Artifact, DemodData, ExportedFrameset, Mode, \
     Operator, Satellite, Telemetry, Tle, Transmitter, TransmitterEntry, \
     TransmitterSuggestion
-from db.base.tasks import check_celery, decode_all_data
+from db.base.tasks import check_celery, decode_all_data, update_tle_sets
 
 
 @admin.register(Mode)
@@ -228,6 +228,28 @@ class TleAdmin(admin.ModelAdmin):
     def satellite_name(self, obj):  # pylint: disable=no-self-use
         """Return the satellite name"""
         return obj.satellite.name
+
+    def get_urls(self):
+        """Returns django urls for Tle view
+
+        update_tle_sets -- url for the update_tle_sets function
+
+        :returns: Django urls for the Tle admin view
+        """
+        urls = super(TleAdmin, self).get_urls()
+        my_urls = [
+            url(r'^update_tle_sets/$', self.update_tle_sets, name='update_tle_sets'),
+        ]
+        return my_urls + urls
+
+    def update_tle_sets(self, request):  # pylint: disable=R0201
+        """Returns the admin home page, while triggering a Celery update tle sets task
+
+        :returns: Admin home page
+        """
+        update_tle_sets.delay()
+        messages.success(request, 'Update TLE sets task was triggered successfully!')
+        return redirect(reverse('admin:index'))
 
 
 @admin.register(Telemetry)
