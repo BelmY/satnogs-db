@@ -536,15 +536,8 @@ class Tle(models.Model):
 
     class Meta:
         ordering = ['-updated']
-        constraints = [
-            models.UniqueConstraint(
-                fields=['tle1', 'tle2', 'tle_source', 'satellite'],
-                name='unique_entry_from_source_for_satellite'
-            ),
-        ]
         indexes = [
             models.Index(fields=['-updated']),
-            models.Index(fields=['tle1', 'tle2', 'tle_source', 'satellite'])
         ]
         permissions = [('access_all_tles', 'Access all TLEs')]
 

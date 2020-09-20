@@ -83,32 +83,48 @@ def update_tle_sets():
         if norad_id in tles.keys():
             for source, tle in tles[norad_id]:
                 try:
-                    twoline2rv(tle[1], tle[2], wgs72)
+                    sgp4_tle = twoline2rv(tle[1], tle[2], wgs72)
                 except ValueError:
                     print(
-                        '{} - {} - {}: [ERROR] TLE malformed'.format(
+                        '[ERROR] {} - {} - {}: TLE malformed'.format(
                             satellite.name, norad_id, source
                         )
                     )
                     continue
 
-                (tle, created) = Tle.objects.get_or_create(
+                try:
+                    last_tle_from_source = Tle.objects.filter(
+                        satellite=satellite, tle_source=source
+                    ).latest('updated')
+                    sgp4_last_tle = twoline2rv(
+                        last_tle_from_source.tle1, last_tle_from_source.tle2, wgs72
+                    )
+
+                    if (sgp4_tle.epoch == sgp4_last_tle.epoch
+                            and last_tle_from_source.tle0 == tle[0]  # noqa: W503
+                            and last_tle_from_source.tle1 == tle[1]  # noqa: W503
+                            and last_tle_from_source.tle2 == tle[2]):  # noqa: W503
+                        print(
+                            '[EXISTS] {} - {} - {}: TLE set already exists'.format(
+                                satellite.name, norad_id, source
+                            )
+                        )
+                        continue
+
+                except Tle.DoesNotExist:
+                    pass
+
+                Tle.objects.create(
                     tle0=tle[0], tle1=tle[1], tle2=tle[2], satellite=satellite, tle_source=source
                 )
-                if created:
-                    print(
-                        '{} - {} - {}: [ADDED] TLE set is added'.format(
-                            satellite.name, norad_id, source
-                        )
+
+                print(
+                    '[ADDED] {} - {} - {}: TLE set is added'.format(
+                        satellite.name, norad_id, source
                     )
-                else:
-                    print(
-                        '{} - {} - {}: [EXISTS] TLE set already exists'.format(
-                            satellite.name, norad_id, source
-                        )
-                    )
+                )
         else:
-            print('{} - {}: [NOT FOUND] TLE set wasn\'t found'.format(satellite.name, norad_id))
+            print('[NOT FOUND] {} - {}: TLE set wasn\'t found'.format(satellite.name, norad_id))
 
 
 @shared_task
