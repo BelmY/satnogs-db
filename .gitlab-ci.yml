@@ -112,7 +112,6 @@ docs:
   before_script:
     - pip install "$GITLAB_CI_PYPI_TOX"
   script:
-    - cp -a satnogs-db-api-client/html2 docs/_static/api
     - rm -rf docs/_build
     - tox -e "docs"
   artifacts:
