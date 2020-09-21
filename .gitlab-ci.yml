@@ -76,6 +76,13 @@ api:
       -g python
       -o satnogs-db-api-client
       -c satnogs-db-api-client/openapi-generator-config.json
+    - >-
+      docker-entrypoint.sh
+      generate
+      -i satnogs-db-api-client/api-schema.yml
+      -g html2
+      -o satnogs-db-api-client/html2
+      -c satnogs-db-api-client/openapi-generator-config.json
   artifacts:
     expire_in: 1 week
     when: always
@@ -105,6 +112,7 @@ docs:
   before_script:
     - pip install "$GITLAB_CI_PYPI_TOX"
   script:
+    - cp -a satnogs-db-api-client/html2 docs/_static/api
     - rm -rf docs/_build
     - tox -e "docs"
   artifacts:
