@@ -162,7 +162,7 @@ def satellite(request, norad):
 
     # decide whether a map (and map link) will be visible or not (ie: re-entered)
     showmap = False
-    if satellite_obj.status != 're-entered' and latest_tle:
+    if (satellite_obj.status != 're-entered' or satellite_obj.status != 'future') and latest_tle:
         showmap = True
 
     return render(

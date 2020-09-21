@@ -59,7 +59,7 @@ def update_satellite(norad_id, update_name=True):
 @shared_task
 def update_tle_sets():
     """Task to update all satellite TLEs"""
-    satellites = Satellite.objects.exclude(status='re-entered')
+    satellites = Satellite.objects.exclude(status='re-entered').exclude(status='future')
     catalog_norad_ids = set()
     for satellite in satellites:
         # Check if satellite follows a NORAD ID and it is officially announced

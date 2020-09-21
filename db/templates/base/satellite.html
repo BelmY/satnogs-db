@@ -26,7 +26,7 @@
       <p class="d-none d-lg-inline-block text-sm">Info</p>
     </a>
   </li>
-  <li class="nav-item{% if satellite.status == 're-entered' %} disabled{% endif %}">
+  <li class="nav-item{% if satellite.status == 're-entered' or satellite.status == 'future' %} disabled{% endif %}">
     {% if showmap %}
     <a class="nav-link" id="mapcontent-tab" data-toggle="tab" href="#mapcontent" role="tab" aria-controls="mapcontent"
       aria-selected="false" aria-label="Map">
@@ -171,6 +171,9 @@
                 {% elif satellite.status == 'dead' %}
                   src="{% static 'img/status_dead.png' %}"
                   alt="Satellite dead"
+                {% elif satellite.status == 'future' %}
+                  src="{% static 'img/status_future.png' %}"
+                  alt="Satellite future"
                 {% else %}
                   src="{% static 'img/status_unknown.png' %}"
                   alt="Status unknown"
@@ -184,6 +187,8 @@
                   satellite-grad-danger
                 {% elif satellite.status == 'dead' %}
                   satellite-grad-warning
+                {% elif satellite.status == 'future' %}
+                  satellite-grad-info
                 {% else %}
                   satellite-grad-info
                 {% endif %}
@@ -197,6 +202,8 @@
                 Decayed
                 {% elif satellite.status == 'dead' %}
                 Malfunctioning
+                {% elif satellite.status == 'future' %}
+                Future
                 {% else %}
                 Unknown
                 {% endif %}
@@ -208,6 +215,8 @@
                 Satellite has re-entered
                 {% elif satellite.status == 'dead' %}
                 Satellite appears to be malfunctioning
+                {% elif satellite.status == 'future' %}
+                Satellite is not yet in orbit
                 {% else %}
                 Status of the satellite is unknown
                 {% endif %}

@@ -24,7 +24,7 @@ from db.base.helpers import gridsquare
 LOGGER = logging.getLogger('db')
 
 DATA_SOURCES = ['manual', 'network', 'sids']
-SATELLITE_STATUS = ['alive', 'dead', 're-entered']
+SATELLITE_STATUS = ['alive', 'dead', 'future', 're-entered']
 TRANSMITTER_STATUS = ['active', 'inactive', 'invalid']
 TRANSMITTER_TYPE = ['Transmitter', 'Transceiver', 'Transponder']
 SERVICE_TYPE = [

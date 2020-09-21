@@ -55,6 +55,8 @@
           <img height="32" src="{% static 'img/status_decayed.png' %}" alt="Decayed">
           {% elif sat.status == 'dead' %}
           <img height="32" src="{% static 'img/status_dead.png' %}" alt="Malfunctioning">
+          {% elif sat.status == 'future' %}
+          <img height="32" src="{% static 'img/status_future.png' %}" alt="Future">
           {% else %}
           <img height="32" src="{% static 'img/status_unknown.png' %}" alt="Unknown">
           {% endif %}
