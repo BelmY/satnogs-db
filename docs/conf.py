@@ -9,15 +9,24 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
-from __future__ import unicode_literals, absolute_import, division, print_function
-import time
-import sys
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import os
+import sys
+import time
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('.'))
+
+import versioneer  # isort:skip
+
+__version__ = versioneer.get_versions()['version']
+full_revisionid = versioneer.get_versions()['full-revisionid']
+
+del versioneer
 
 # -- General configuration ------------------------------------------------
 
@@ -92,7 +101,6 @@ pygments_style = 'sphinx'
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False
-
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -178,26 +186,32 @@ html_static_path = ['_static']
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'satnogs-dbdoc'
 
+html_context = {
+    "display_gitlab": True,
+    "gitlab_user": "librespacefoundation",
+    "gitlab_repo": "satnogs/satnogs-db",
+    "gitlab_version": "master",
+    "conf_py_path": "/docs/",
+}
 
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+    # The paper size ('letterpaper' or 'a4paper').
+    #'papersize': 'letterpaper',
 
-# The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    #'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'satnogs-db.tex', 'satnogs-db Documentation',
-   author, 'manual'),
+    (master_doc, 'satnogs-db.tex', 'satnogs-db Documentation', author, 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -220,19 +234,14 @@ latex_documents = [
 # If false, no module index is generated.
 #latex_domain_indices = True
 
-
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'satnogs-db', 'satnogs-db Documentation',
-     [author], 1)
-]
+man_pages = [(master_doc, 'satnogs-db', 'satnogs-db Documentation', [author], 1)]
 
 # If true, show URL addresses after external links.
 #man_show_urls = False
-
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -240,9 +249,11 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'satnogs-db', 'satnogs-db Documentation',
-   author, 'SatNOGS', 'An hollistic, unified, global transmitter database for all satellite transmitters.',
-   'Miscellaneous'),
+    (
+        master_doc, 'satnogs-db', 'satnogs-db Documentation', author, 'SatNOGS',
+        'An hollistic, unified, global transmitter database for all satellite transmitters.',
+        'Miscellaneous'
+    ),
 ]
 
 # Documents to append as an appendix to all manuals.
@@ -256,3 +267,12 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+rst_epilog = """
+.. |api_reference_url| replace:: {project} API and SDK Documentation
+.. _api_reference_url: https://gitlab.com/{gitlab_user}/{gitlab_repo}/-/jobs/artifacts/{full_revisionid}/file/satnogs-db-api-client/html2/index.html?job=api
+""".format(
+    project=project,
+    gitlab_user=html_context['gitlab_user'],
+    gitlab_repo=html_context['gitlab_repo'],
+    full_revisionid=full_revisionid
+)

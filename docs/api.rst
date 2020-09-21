@@ -23,4 +23,4 @@ This Python client is available in `PyPI <https://pypi.org/project/satnogs-db-ap
 API Reference
 -------------
 
-`SatNOGS DB API and SDK Documentation <_static/api/index.html>`_ contains a full reference of the API.
+|api_reference_url|_ contains a full reference of the API.
