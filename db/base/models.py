@@ -3,7 +3,6 @@ import logging
 from os import path
 from uuid import uuid4
 
-import h5py
 import satnogsdecoders
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -13,13 +12,10 @@ from django.core.validators import MaxLengthValidator, MaxValueValidator, \
     MinLengthValidator, MinValueValidator, URLValidator
 from django.db import models
 from django.db.models import OuterRef, Subquery
-from django.db.models.signals import post_save, pre_save
 from django.utils.timezone import now
 from django_countries.fields import CountryField
 from markdown import markdown
 from shortuuidfield import ShortUUIDField
-
-from db.base.helpers import gridsquare
 
 LOGGER = logging.getLogger('db')
 
@@ -60,35 +56,6 @@ def _name_payload_frame(instance, filename):  # pylint: disable=W0613
     ext = 'raw'
     filename = '{0}_{1}.{2}'.format(filename, uuid4().hex, ext)
     return path.join(folder, filename)
-
-
-def _gen_observer(sender, instance, created, **kwargs):  # pylint: disable=W0613
-    post_save.disconnect(_gen_observer, sender=DemodData)
-    try:
-        qth = gridsquare(instance.lat, instance.lng)
-    except Exception:  # pylint: disable=W0703
-        instance.observer = 'Unknown'
-    else:
-        instance.observer = '{0}-{1}'.format(instance.station, qth)
-    instance.save()
-    post_save.connect(_gen_observer, sender=DemodData)
-
-
-def _set_is_decoded(sender, instance, **kwargs):  # pylint: disable=W0613
-    """Returns true if payload_decoded has data"""
-    instance.is_decoded = instance.payload_decoded != ''
-
-
-def _extract_network_obs_id(sender, instance, created, **kwargs):  # pylint: disable=W0613
-    post_save.disconnect(_extract_network_obs_id, sender=Artifact)
-    try:
-        with h5py.File(instance.artifact_file, 'r') as h5_file:
-            instance.network_obs_id = h5_file.attrs["observation_id"]
-    except OSError as error:
-        LOGGER.warning(error)
-
-    instance.save()
-    post_save.connect(_extract_network_obs_id, sender=Artifact)
 
 
 class Mode(models.Model):
@@ -666,10 +633,6 @@ class DemodData(models.Model):
             return None
 
 
-post_save.connect(_gen_observer, sender=DemodData)
-pre_save.connect(_set_is_decoded, sender=DemodData)
-
-
 class ExportedFrameset(models.Model):
     """Model for exported frames."""
     created = models.DateTimeField(auto_now_add=True)
@@ -689,6 +652,3 @@ class Artifact(models.Model):
 
     def __str__(self):
         return 'artifact-{0}'.format(self.id)
-
-
-post_save.connect(_extract_network_obs_id, sender=Artifact)
