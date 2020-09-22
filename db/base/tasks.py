@@ -252,3 +252,9 @@ def decode_recent_data():
             # an object could have failed decoding for a number of reasons,
             # keep going
             continue
+
+
+@shared_task
+def decode_current_frame(norad, handle):
+    """Task to trigger a decode of a current frame for a satellite."""
+    decode_data(norad, period=None, handle=handle)

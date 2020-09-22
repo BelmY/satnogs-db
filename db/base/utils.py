@@ -286,12 +286,14 @@ def write_influx(json_obj):
     client.write_points(json_obj)
 
 
-def decode_data(norad, period=None):
+def decode_data(norad, period=None, handle=None):  # pylint: disable=R0912,R0914
     """Decode data for a satellite, with an option to limit the scope.
 
     :param norad: the NORAD ID of the satellite to decode data for
     :param period: if period exists, only attempt to decode the last 4 hours,
     otherwise attempt to decode everything
+    :param handle: if handle exists, we are trying to decode the currently
+    saved frame that got in
     """
     sat = Satellite.objects.get(norad_cat_id=norad)
     if not sat.telemetry_decoder_count:
@@ -302,7 +304,10 @@ def decode_data(norad, period=None):
         time_period = make_aware(time_period)
         data = DemodData.objects.filter(satellite__norad_cat_id=norad, timestamp__gte=time_period)
     else:
-        data = DemodData.objects.filter(satellite=sat)
+        if handle:
+            data = DemodData.objects.filter(id=handle)
+        else:
+            data = DemodData.objects.filter(satellite=sat)
     telemetry_decoders = Telemetry.objects.filter(satellite=sat)
 
     # iterate over DemodData objects
