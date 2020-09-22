@@ -14,6 +14,7 @@ from db.base.models import Artifact, DemodData, ExportedFrameset, \
 from db.base.tasks import check_celery, decode_all_data, update_tle_sets
 
 
+
 @admin.register(Mode)
 class ModeAdmin(admin.ModelAdmin):
     """Defines Mode view in django admin UI"""
@@ -252,10 +253,12 @@ class TleAdmin(admin.ModelAdmin):
         return redirect(reverse('admin:index'))
 
 
+
 @admin.register(LatestTleSet)
 class LatestTleSetAdmin(admin.ModelAdmin):
     """Defines LatestTleSet view in django admin UI"""
     list_display = ('satellite', 'latest', 'latest_distributable', 'last_modified')
+    list_filter = ('satellite__name', )
 
 
 @admin.register(Telemetry)
