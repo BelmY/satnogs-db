@@ -20,7 +20,8 @@ from sgp4.earth_gravity import wgs72
 from sgp4.io import twoline2rv
 
 from db.base.models import DemodData, ExportedFrameset, Satellite, Tle
-from db.base.utils import cache_statistics, decode_data, get_tle_sources
+from db.base.utils import cache_statistics, decode_data, get_tle_sources, \
+    update_latest_tle_sets
 
 LOGGER = logging.getLogger('db')
 
@@ -75,7 +76,6 @@ def update_tle_sets():
     tles = fetch_all_tles(catalog_norad_ids, **other_sources)
 
     for satellite in satellites:
-
         norad_id = satellite.norad_cat_id
         if satellite.norad_follow_id:
             norad_id = satellite.norad_follow_id
@@ -125,6 +125,7 @@ def update_tle_sets():
                 )
         else:
             print('[NOT FOUND] {} - {}: TLE set wasn\'t found'.format(satellite.name, norad_id))
+    update_latest_tle_sets()
 
 
 @shared_task

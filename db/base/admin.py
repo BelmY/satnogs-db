@@ -8,9 +8,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from db.base.models import Artifact, DemodData, ExportedFrameset, Mode, \
-    Operator, Satellite, Telemetry, Tle, Transmitter, TransmitterEntry, \
-    TransmitterSuggestion
+from db.base.models import Artifact, DemodData, ExportedFrameset, \
+    LatestTleSet, Mode, Operator, Satellite, Telemetry, Tle, Transmitter, \
+    TransmitterEntry, TransmitterSuggestion
 from db.base.tasks import check_celery, decode_all_data, update_tle_sets
 
 
@@ -250,6 +250,12 @@ class TleAdmin(admin.ModelAdmin):
         update_tle_sets.delay()
         messages.success(request, 'Update TLE sets task was triggered successfully!')
         return redirect(reverse('admin:index'))
+
+
+@admin.register(LatestTleSet)
+class LatestTleSetAdmin(admin.ModelAdmin):
+    """Defines LatestTleSet view in django admin UI"""
+    list_display = ('satellite', 'latest', 'latest_distributable', 'last_modified')
 
 
 @admin.register(Telemetry)

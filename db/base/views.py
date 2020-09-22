@@ -23,7 +23,7 @@ from django.views.decorators.http import require_POST
 from db.base.forms import SatelliteModelForm, TransmitterModelForm, \
     TransmitterUpdateForm
 from db.base.helpers import get_apikey
-from db.base.models import DemodData, LatestTle, Satellite, Transmitter, \
+from db.base.models import DemodData, Satellite, Transmitter, \
     TransmitterEntry, TransmitterSuggestion
 from db.base.tasks import export_frames, notify_transmitter_suggestion
 from db.base.utils import cache_statistics, millify, read_influx
@@ -137,12 +137,15 @@ def satellite(request, norad):
     satellite_obj = get_object_or_404(Satellite.objects, norad_cat_id=norad)
 
     latest_tle = None
-    if request.user.has_perm('base.access_all_tles'):
-        tle_set = LatestTle.all_latest_tles.filter(satellite=satellite_obj)
-    else:
-        tle_set = LatestTle.objects.filter(satellite=satellite_obj)
-    if tle_set:
-        latest_tle = tle_set[0]
+    latest_tle_set = None
+    if hasattr(satellite_obj, 'latest_tle_set'):
+        latest_tle_set = satellite_obj.latest_tle_set
+
+    if latest_tle_set:
+        if request.user.has_perm('base.access_all_tles'):
+            latest_tle = latest_tle_set.latest
+        else:
+            latest_tle = latest_tle_set.latest_distributable
 
     transmitter_suggestions = TransmitterSuggestion.objects.filter(satellite=satellite_obj)
     for suggestion in transmitter_suggestions:
@@ -162,13 +165,13 @@ def satellite(request, norad):
 
     # decide whether a map (and map link) will be visible or not (ie: re-entered)
     showmap = False
-    if (satellite_obj.status != 're-entered' or satellite_obj.status != 'future') and latest_tle:
+    if satellite_obj.status not in ['re-entered', 'future'] and latest_tle:
         showmap = True
 
     return render(
         request, 'base/satellite.html', {
             'satellite': satellite_obj,
-            'tle': latest_tle,
+            'latest_tle': latest_tle,
             'transmitter_suggestions': transmitter_suggestions,
             'mapbox_token': settings.MAPBOX_TOKEN,
             'recent_observers': recent_observers,

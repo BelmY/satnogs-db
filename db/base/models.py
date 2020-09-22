@@ -518,41 +518,16 @@ class Tle(models.Model):
         return [str(self.tle0), str(self.tle1), str(self.tle2)]
 
 
-class LatestTleManager(models.Manager):  # pylint: disable=R0903
-    """Django Manager for latest Tle objects"""
-    def get_queryset(self):
-        """Returns query of latest Tle
-
-        :returns: the latest Tle for each Satellite
-        """
-        subquery = Tle.objects.filter(satellite=OuterRef('satellite')).order_by('-updated')
-        return super().get_queryset().filter(pk=Subquery(subquery.values('pk')[:1]))
-
-
-class LatestDistributableTleManager(models.Manager):  # pylint: disable=R0903
-    """Django Manager for latest Tle objects"""
-    def get_queryset(self):
-        """Returns query of latest Tle
-
-        :returns: the latest Tle for each Satellite
-        """
-        subquery = Tle.objects.filter(tle_source__in=settings.TLE_SOURCES_REDISTRIBUTABLE
-                                      ).filter(satellite=OuterRef('satellite')
-                                               ).order_by('-updated')
-        return super().get_queryset().filter(pk=Subquery(subquery.values('pk')[:1]))
-
-
-class LatestTle(Tle):
-    """LatestTle is the latest entry of a Satellite Tle objects
-    """
-    objects = LatestDistributableTleManager()
-    all_latest_tles = LatestTleManager()
-
-    class Meta:
-        proxy = True
-
-    def __str__(self):
-        return '{:d} - {:s}'.format(self.id, self.tle0)
+class LatestTleSet(models.Model):
+    """LatestTleSet holds the latest entry of a Satellite Tle Set"""
+    satellite = models.OneToOneField(
+        Satellite, related_name='latest_tle_set', on_delete=models.CASCADE
+    )
+    latest = models.ForeignKey(Tle, null=True, related_name='latest', on_delete=models.SET_NULL)
+    latest_distributable = models.ForeignKey(
+        Tle, null=True, related_name='latest_distributable', on_delete=models.SET_NULL
+    )
+    last_modified = models.DateTimeField(auto_now=True)
 
 
 class Telemetry(models.Model):

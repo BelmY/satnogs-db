@@ -1,5 +1,6 @@
 """SatNOGS DB API django rest framework Views"""
 from django.core.files.base import ContentFile
+from django.db.models import F
 from rest_framework import mixins, status, viewsets
 from rest_framework.parsers import FileUploadParser, FormParser, \
     MultiPartParser
@@ -11,8 +12,8 @@ from rest_framework.serializers import ValidationError
 from db.api import filters, pagination, serializers
 from db.api.perms import SafeMethodsWithPermission
 from db.api.renderers import BrowserableJSONLDRenderer, JSONLDRenderer
-from db.base.models import Artifact, DemodData, LatestTle, Mode, Satellite, \
-    Transmitter
+from db.base.models import Artifact, DemodData, LatestTleSet, Mode, \
+    Satellite, Transmitter
 from db.base.tasks import update_satellite
 
 
@@ -47,19 +48,35 @@ class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     lookup_field = 'uuid'
 
 
-class TleView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
+class LatestTleSetView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """SatNOGS DB Tle API view class"""
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
-    queryset = LatestTle.objects.all()
-    serializer_class = serializers.TleSerializer
-    filterset_class = filters.TleViewFilter
+    queryset = LatestTleSet.objects.all().select_related('satellite').exclude(
+        latest_distributable__isnull=True
+    ).annotate(
+        tle0=F('latest_distributable__tle0'),
+        tle1=F('latest_distributable__tle1'),
+        tle2=F('latest_distributable__tle2'),
+        tle_source=F('latest_distributable__tle_source'),
+        updated=F('latest_distributable__updated')
+    )
+    serializer_class = serializers.LatestTleSetSerializer
+    filterset_class = filters.LatestTleSetViewFilter
 
     def get_queryset(self):
         """
         Returns latest TLE queryset depending on user permissions
         """
         if self.request.user.has_perm('base.access_all_tles'):
-            return LatestTle.all_latest_tles.all()
+            return LatestTleSet.objects.all().select_related('satellite').exclude(
+                latest__isnull=True
+            ).annotate(
+                tle0=F('latest__tle0'),
+                tle1=F('latest__tle1'),
+                tle2=F('latest__tle2'),
+                tle_source=F('latest__tle_source'),
+                updated=F('latest__updated')
+            )
         return self.queryset
 
 

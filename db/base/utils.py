@@ -8,15 +8,61 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.core.cache import cache
-from django.db.models import Count, Max, Q
+from django.db.models import Count, Max, OuterRef, Q, Subquery
+from django.db.models.functions import Substr
 from django.utils.timezone import make_aware
 from influxdb import InfluxDBClient
 from satnogsdecoders import __version__ as decoders_version
 from satnogsdecoders import decoder
 
-from db.base.models import DemodData, Mode, Satellite, Telemetry, Transmitter
+from db.base.models import DemodData, LatestTleSet, Mode, Satellite, \
+    Telemetry, Tle, Transmitter
 
 LOGGER = logging.getLogger('db')
+
+
+def remove_latest_tle_set(satellite_pk):
+    """Remove LatestTleSet for specific Satellite"""
+    LatestTleSet.objects.filter(satellite__pk=satellite_pk).delete()
+
+
+def update_latest_tle_sets(satellites=None):
+    """Update LatestTleSet for specific or all Satellites"""
+    if not satellites:
+        satellites = Satellite.objects.exclude(status__in=['re-entered', 'future'])
+
+    sub_subquery = Tle.objects.filter(satellite__pk__in=satellites).filter(
+        satellite=OuterRef('satellite'), tle_source=OuterRef('tle_source')
+    ).order_by('-updated')
+    subquery = Tle.objects.filter(pk=Subquery(sub_subquery.values('pk')[:1])
+                                  ).filter(satellite=OuterRef('satellite')
+                                           ).annotate(epoch=Max(Substr('tle1', 19, 14))
+                                                      ).order_by('-epoch')
+    tle_sets = Tle.objects.filter(pk=Subquery(subquery.values('pk')[:1]))
+
+    sub_subquery = Tle.objects.filter(satellite__pk__in=satellites).filter(
+        tle_source__in=settings.TLE_SOURCES_REDISTRIBUTABLE
+    ).filter(
+        satellite=OuterRef('satellite'), tle_source=OuterRef('tle_source')
+    ).order_by('-updated')
+    subquery = Tle.objects.filter(pk=Subquery(sub_subquery.values('pk')[:1])
+                                  ).filter(satellite=OuterRef('satellite')
+                                           ).annotate(epoch=Max(Substr('tle1', 19, 14))
+                                                      ).order_by('-epoch')
+    distributable_tle_sets = Tle.objects.filter(pk=Subquery(subquery.values('pk')[:1]))
+
+    for tle_set in tle_sets:
+        latest_tle_set, _ = LatestTleSet.objects.get_or_create(satellite=tle_set.satellite)
+        latest_tle_set.latest = tle_set
+        latest_tle_set.save(update_fields=['latest'])
+    for distributable_tle_set in distributable_tle_sets:
+        latest_tle_set, _ = LatestTleSet.objects.get_or_create(
+            satellite=distributable_tle_set.satellite
+        )
+        latest_tle_set.latest_distributable = distributable_tle_set
+        latest_tle_set.save(update_fields=['latest_distributable'])
+
+    LatestTleSet.objects.filter(latest__isnull=True, latest_distributable__isnull=True).delete()
 
 
 def get_tle_sources():

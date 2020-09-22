@@ -3,8 +3,8 @@ import django_filters
 from django_filters import rest_framework as filters
 from django_filters.rest_framework import FilterSet
 
-from db.base.models import Artifact, DemodData, Mode, Satellite, Tle, \
-    Transmitter
+from db.base.models import Artifact, DemodData, LatestTleSet, Mode, \
+    Satellite, Transmitter
 
 
 class TransmitterViewFilter(FilterSet):
@@ -57,14 +57,14 @@ class TelemetryViewFilter(FilterSet):
         fields = ['satellite', 'app_source', 'observer', 'transmitter']
 
 
-class TleViewFilter(FilterSet):
-    """SatNOGS DB Tle API View Filter"""
+class LatestTleSetViewFilter(FilterSet):
+    """SatNOGS DB LatestTleSet API View Filter"""
     norad_cat_id = django_filters.NumberFilter(
         field_name='satellite__norad_cat_id', lookup_expr='exact'
     )
 
     class Meta:
-        model = Tle
+        model = LatestTleSet
         fields = ['norad_cat_id']
 
 

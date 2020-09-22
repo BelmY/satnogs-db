@@ -4,8 +4,8 @@
 import h5py
 from rest_framework import serializers
 
-from db.base.models import TRANSMITTER_STATUS, Artifact, DemodData, Mode, \
-    Satellite, Telemetry, Tle, Transmitter
+from db.base.models import TRANSMITTER_STATUS, Artifact, DemodData, \
+    LatestTleSet, Mode, Satellite, Telemetry, Transmitter
 
 
 class ModeSerializer(serializers.ModelSerializer):
@@ -94,18 +94,43 @@ class TransmitterSerializer(serializers.ModelSerializer):
         return obj.satellite.norad_cat_id
 
 
-class TleSerializer(serializers.ModelSerializer):
-    """SatNOGS DB Tle API Serializer"""
+class LatestTleSetSerializer(serializers.ModelSerializer):
+    """SatNOGS DB LatestTleSet API Serializer"""
 
     norad_cat_id = serializers.SerializerMethodField()
+    tle0 = serializers.SerializerMethodField()
+    tle1 = serializers.SerializerMethodField()
+    tle2 = serializers.SerializerMethodField()
+    tle_source = serializers.SerializerMethodField()
+    updated = serializers.SerializerMethodField()
 
     class Meta:
-        model = Tle
+        model = LatestTleSet
         fields = ('tle0', 'tle1', 'tle2', 'tle_source', 'norad_cat_id', 'updated')
 
     def get_norad_cat_id(self, obj):
         """Returns Satellite NORAD ID"""
         return obj.satellite.norad_cat_id
+
+    def get_tle0(self, obj):
+        """Returns TLE line 0"""
+        return obj.tle0
+
+    def get_tle1(self, obj):
+        """Returns TLE line 1"""
+        return obj.tle1
+
+    def get_tle2(self, obj):
+        """Returns TLE line 2"""
+        return obj.tle2
+
+    def get_tle_source(self, obj):
+        """Returns TLE source"""
+        return obj.tle_source
+
+    def get_updated(self, obj):
+        """Returns TLE updated datetime"""
+        return obj.updated
 
 
 class TelemetrySerializer(serializers.ModelSerializer):
