@@ -12,7 +12,7 @@ from db.base.models import Artifact, DemodData, ExportedFrameset, \
     LatestTleSet, Mode, Operator, Satellite, Telemetry, Tle, Transmitter, \
     TransmitterEntry, TransmitterSuggestion
 from db.base.tasks import check_celery, decode_all_data, update_tle_sets
-
+from db.base.utils import update_latest_tle_sets
 
 
 @admin.register(Mode)
@@ -252,6 +252,18 @@ class TleAdmin(admin.ModelAdmin):
         messages.success(request, 'Update TLE sets task was triggered successfully!')
         return redirect(reverse('admin:index'))
 
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        update_latest_tle_sets(satellites=[obj.satellite.pk])
+
+    def delete_model(self, request, obj):
+        super().delete_model(request, obj)
+        update_latest_tle_sets(satellites=[obj.satellite.pk])
+
+    def delete_queryset(self, request, queryset):
+        satellites = [tle.satellite.pk for tle in queryset]
+        super().delete_queryset(request, queryset)
+        update_latest_tle_sets(satellites=satellites)
 
 
 @admin.register(LatestTleSet)

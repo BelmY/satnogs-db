@@ -2,10 +2,10 @@
 import logging
 
 import h5py
-from django.db.models.signals import post_delete, post_save, pre_save
+from django.db.models.signals import post_save, pre_save
 
 from db.base.helpers import gridsquare
-from db.base.models import Artifact, DemodData, Satellite, Tle
+from db.base.models import Artifact, DemodData, Satellite
 from db.base.tasks import decode_current_frame
 from db.base.utils import remove_latest_tle_set, update_latest_tle_sets
 
@@ -18,11 +18,6 @@ def _remove_latest_tle_set(sender, instance, **kwargs):  # pylint: disable=W0613
         remove_latest_tle_set(instance.pk)
     else:
         update_latest_tle_sets([instance.pk])
-
-
-def _update_latest_tle_set(sender, instance, **kwargs):  # pylint: disable=W0613
-    """Updates if needed LatestTle entries"""
-    update_latest_tle_sets([instance.satellite.pk])
 
 
 def _gen_observer(sender, instance, created, **kwargs):  # pylint: disable=W0613
@@ -70,10 +65,6 @@ def _decode(sender, instance, created, **kwargs):  # pylint: disable=W0613
 
 
 post_save.connect(_remove_latest_tle_set, sender=Satellite)
-
-post_delete.connect(_update_latest_tle_set, sender=Tle)
-
-post_save.connect(_update_latest_tle_set, sender=Tle)
 
 pre_save.connect(_set_is_decoded, sender=DemodData)
 
