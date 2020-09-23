@@ -537,7 +537,7 @@ class Telemetry(models.Model):
     )
     name = models.CharField(max_length=45)
     schema = models.TextField(blank=True)
-    decoder = models.CharField(max_length=20, blank=True)
+    decoder = models.CharField(max_length=200, blank=True)
 
     class Meta:
         ordering = ['satellite__norad_cat_id']
