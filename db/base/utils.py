@@ -15,8 +15,8 @@ from influxdb import InfluxDBClient
 from satnogsdecoders import __version__ as decoders_version
 from satnogsdecoders import decoder
 
-from db.base.models import DemodData, LatestTleSet, Mode, Satellite, \
-    Telemetry, Tle, Transmitter
+from db.base.models import DemodData, LatestTleSet, Mode, Satellite, Tle, \
+    Transmitter
 
 LOGGER = logging.getLogger('db')
 
@@ -295,7 +295,8 @@ def decode_data(norad, period=None, handle=None):  # pylint: disable=R0912,R0914
     :param handle: if handle exists, we are trying to decode the currently
     saved frame that got in
     """
-    sat = Satellite.objects.get(norad_cat_id=norad)
+    sat = Satellite.objects.prefetch_related('telemetries').get(norad_cat_id=norad)
+
     if not sat.telemetry_decoder_count:
         return
 
@@ -308,7 +309,8 @@ def decode_data(norad, period=None, handle=None):  # pylint: disable=R0912,R0914
             data = DemodData.objects.filter(id=handle)
         else:
             data = DemodData.objects.filter(satellite=sat)
-    telemetry_decoders = Telemetry.objects.filter(satellite=sat)
+
+    telemetry_decoders = sat.telemetries.all()
 
     # iterate over DemodData objects
     for obj in data:
@@ -336,7 +338,7 @@ def decode_data(norad, period=None, handle=None):  # pylint: disable=R0912,R0914
                         obj.payload_decoded = 'influxdb'
                         obj.is_decoded = True
                         obj.save()
-                        break
+                        continue
                     except Exception:  # pylint: disable=W0703
                         obj.is_decoded = False
                         obj.save()
@@ -356,7 +358,7 @@ def decode_data(norad, period=None, handle=None):  # pylint: disable=R0912,R0914
                         obj.payload_decoded = json_obj
                         obj.is_decoded = True
                         obj.save()
-                        break
+                        continue
             except (IOError, binascii.Error) as error:
                 LOGGER.error(error, exc_info=True)
                 continue
