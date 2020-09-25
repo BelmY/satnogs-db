@@ -271,6 +271,7 @@ include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
 container_scanning:
   stage: security
   needs:
@@ -310,3 +311,8 @@ secret_detection_default_branch:
       artifacts: true
   variables:
     SAST_DISABLE_BABEL: 'true'
+license_scanning:
+  stage: security
+  needs:
+    - job: api
+      artifacts: true
