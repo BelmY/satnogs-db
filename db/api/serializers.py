@@ -130,7 +130,7 @@ class LatestTleSetSerializer(serializers.ModelSerializer):
 
     def get_updated(self, obj):
         """Returns TLE updated datetime"""
-        return obj.updated
+        return obj.updated.strftime('%Y-%m-%dT%H:%M:%S.%f%z')
 
 
 class TelemetrySerializer(serializers.ModelSerializer):
