@@ -299,6 +299,8 @@ sast:
   needs:
     - job: api
       artifacts: true
+  variables:
+    SAST_DISABLE_BABEL: 'true'
 secret_detection:
   stage: security
   needs:
@@ -309,8 +311,6 @@ secret_detection_default_branch:
   needs:
     - job: api
       artifacts: true
-  variables:
-    SAST_DISABLE_BABEL: 'true'
 license_scanning:
   stage: security
   needs:
