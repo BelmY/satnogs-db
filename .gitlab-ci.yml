@@ -236,6 +236,9 @@ pages:
 # 'trigger' stage
 trigger_master:
   stage: trigger
+  needs:
+    - job: docker
+      artifacts: false
   image: ${GITLAB_CI_IMAGE_ALPINE}
   before_script:
     - apk add --no-cache curl
@@ -248,6 +251,9 @@ trigger_master:
       - $PIPELINE_TRIGGERS_MASTER
 trigger_latest:
   stage: trigger
+  needs:
+    - job: docker
+      artifacts: false
   image: ${GITLAB_CI_IMAGE_ALPINE}
   before_script:
     - apk add --no-cache curl
