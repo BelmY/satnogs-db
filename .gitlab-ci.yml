@@ -149,6 +149,20 @@ build:
   script:
     - rm -rf dist
     - tox -e build
+  artifacts:
+    expire_in: 1 week
+    when: always
+    paths:
+      - dist
+build_api:
+  stage: build
+  needs:
+    - job: api
+      artifacts: true
+  image: ${GITLAB_CI_IMAGE_PYTHON}
+  before_script:
+    - pip install "$GITLAB_CI_PYPI_TOX"
+  script:
     - cd satnogs-db-api-client
     - rm -rf dist
     - tox -e build
@@ -156,7 +170,6 @@ build:
     expire_in: 1 week
     when: always
     paths:
-      - dist
       - satnogs-db-api-client/dist
 test:
   stage: test
