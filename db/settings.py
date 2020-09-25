@@ -340,6 +340,8 @@ MAPBOX_TOKEN = config('MAPBOX_TOKEN', default='')
 # TLE Sources
 TLE_SOURCES_REDISTRIBUTABLE = config('TLE_SOURCES_REDISTRIBUTABLE', default='manual', cast=Csv())
 TLE_SOURCES_JSON = config('TLE_SOURCES_JSON', default='')
+# Comma separated TLE sources name that will be ignored on latest TLE calculations
+TLE_SOURCES_IGNORE_FROM_LATEST = config('TLE_SOURCES_IGNORE_FROM_LATEST', default='', cast=Csv())
 
 # SpaceTrack.org Credentials
 SPACE_TRACK_USERNAME = config('SPACE_TRACK_USERNAME', default='')

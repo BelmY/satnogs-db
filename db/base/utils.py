@@ -31,7 +31,9 @@ def update_latest_tle_sets(satellites=None):
     if not satellites:
         satellites = Satellite.objects.exclude(status__in=['re-entered', 'future'])
 
-    sub_subquery = Tle.objects.filter(satellite__pk__in=satellites).filter(
+    sub_subquery = Tle.objects.filter(satellite__pk__in=satellites).exclude(
+        tle_source__in=settings.TLE_SOURCES_IGNORE_FROM_LATEST
+    ).filter(
         satellite=OuterRef('satellite'), tle_source=OuterRef('tle_source')
     ).order_by('-updated')
     subquery = Tle.objects.filter(pk=Subquery(sub_subquery.values('pk')[:1])
@@ -40,9 +42,9 @@ def update_latest_tle_sets(satellites=None):
                                                       ).order_by('-epoch')
     tle_sets = Tle.objects.filter(pk=Subquery(subquery.values('pk')[:1]))
 
-    sub_subquery = Tle.objects.filter(satellite__pk__in=satellites).filter(
-        tle_source__in=settings.TLE_SOURCES_REDISTRIBUTABLE
-    ).filter(
+    sub_subquery = Tle.objects.filter(satellite__pk__in=satellites).exclude(
+        tle_source__in=settings.TLE_SOURCES_IGNORE_FROM_LATEST
+    ).filter(tle_source__in=settings.TLE_SOURCES_REDISTRIBUTABLE).filter(
         satellite=OuterRef('satellite'), tle_source=OuterRef('tle_source')
     ).order_by('-updated')
     subquery = Tle.objects.filter(pk=Subquery(sub_subquery.values('pk')[:1])
