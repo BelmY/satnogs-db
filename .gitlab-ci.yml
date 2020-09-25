@@ -43,6 +43,8 @@ secret_detection:
   stage: security
 secret_detection_default_branch:
   stage: security
+  variables:
+    SAST_DISABLE_BABEL: 'true'
 schema:
   stage: schema
   image: ${GITLAB_CI_IMAGE_PYTHON}
