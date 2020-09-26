@@ -15,9 +15,9 @@ LOGGER = logging.getLogger('db')
 def _remove_latest_tle_set(sender, instance, **kwargs):  # pylint: disable=W0613
     """Updates if needed LatestTle entries"""
     if instance.status in ['re-entered', 'future']:
-        remove_latest_tle_set(instance.pk)
+        remove_latest_tle_set(satellite_id=instance.pk)
     else:
-        update_latest_tle_sets([instance.pk])
+        update_latest_tle_sets(satellite_ids=[instance.pk])
 
 
 def _gen_observer(sender, instance, created, **kwargs):  # pylint: disable=W0613

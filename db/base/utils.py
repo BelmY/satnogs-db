@@ -21,49 +21,93 @@ from db.base.models import DemodData, LatestTleSet, Mode, Satellite, Tle, \
 LOGGER = logging.getLogger('db')
 
 
-def remove_latest_tle_set(satellite_pk):
-    """Remove LatestTleSet for specific Satellite"""
-    LatestTleSet.objects.filter(satellite__pk=satellite_pk).delete()
+def remove_latest_tle_set(satellite_id):
+    """Remove LatestTleSet entry for specific Satellite"""
+    LatestTleSet.objects.filter(satellite__pk=satellite_id).delete()
 
 
-def update_latest_tle_sets(satellites=None):
-    """Update LatestTleSet for specific or all Satellites"""
-    if not satellites:
+def update_latest_tle_sets(satellite_ids=None):
+    """Update LatestTleSet entries for all or specific Satellites"""
+    # Select satellite models
+    if satellite_ids:
+        satellites = Satellite.objects.filter(pk__in=satellite_ids)
+    else:
         satellites = Satellite.objects.exclude(status__in=['re-entered', 'future'])
 
-    sub_subquery = Tle.objects.filter(satellite__pk__in=satellites).exclude(
-        tle_source__in=settings.TLE_SOURCES_IGNORE_FROM_LATEST
-    ).filter(
-        satellite=OuterRef('satellite'), tle_source=OuterRef('tle_source')
-    ).order_by('-updated')
-    subquery = Tle.objects.filter(pk=Subquery(sub_subquery.values('pk')[:1])
-                                  ).filter(satellite=OuterRef('satellite')
-                                           ).annotate(epoch=Max(Substr('tle1', 19, 14))
-                                                      ).order_by('-epoch')
-    tle_sets = Tle.objects.filter(pk=Subquery(subquery.values('pk')[:1]))
+    # Create dictionary with Satellite ids as keys and Tle ids as values
+    latest_triplets = LatestTleSet.objects.filter(
+        satellite__in=satellites
+    ).values_list('satellite', 'latest', 'latest_distributable')
+    latest_dictionary = {
+        latest_triplet[0]: (latest_triplet[1], latest_triplet[2])
+        for latest_triplet in latest_triplets
+    }
 
-    sub_subquery = Tle.objects.filter(satellite__pk__in=satellites).exclude(
-        tle_source__in=settings.TLE_SOURCES_IGNORE_FROM_LATEST
-    ).filter(tle_source__in=settings.TLE_SOURCES_REDISTRIBUTABLE).filter(
-        satellite=OuterRef('satellite'), tle_source=OuterRef('tle_source')
-    ).order_by('-updated')
-    subquery = Tle.objects.filter(pk=Subquery(sub_subquery.values('pk')[:1])
-                                  ).filter(satellite=OuterRef('satellite')
-                                           ).annotate(epoch=Max(Substr('tle1', 19, 14))
-                                                      ).order_by('-epoch')
-    distributable_tle_sets = Tle.objects.filter(pk=Subquery(subquery.values('pk')[:1]))
+    # For each satellite update LatestTleSet
+    for satellite in satellites:
 
-    for tle_set in tle_sets:
-        latest_tle_set, _ = LatestTleSet.objects.get_or_create(satellite=tle_set.satellite)
-        latest_tle_set.latest = tle_set
-        latest_tle_set.save(update_fields=['latest'])
-    for distributable_tle_set in distributable_tle_sets:
-        latest_tle_set, _ = LatestTleSet.objects.get_or_create(
-            satellite=distributable_tle_set.satellite
-        )
-        latest_tle_set.latest_distributable = distributable_tle_set
-        latest_tle_set.save(update_fields=['latest_distributable'])
+        # Keep the Tle ids of the LatestTleSet to check Tle entries inserted after them
+        # If there isn't one (new satellite or remove Tle entry) then check all of them
+        tle_id, tle_id_dist = (0, 0)
+        if satellite.id in latest_dictionary:
+            tle_ids = latest_dictionary[satellite.id]
+            tle_id = tle_ids[0] if tle_ids[0] else 0
+            tle_id_dist = tle_ids[1] if tle_ids[1] else 0
 
+        # Query for the latest Tle set for this satellite
+        sub_subquery = Tle.objects.filter(
+            pk__gte=tle_id, satellite=satellite
+        ).exclude(tle_source__in=settings.TLE_SOURCES_IGNORE_FROM_LATEST).filter(
+            satellite=OuterRef('satellite'), tle_source=OuterRef('tle_source')
+        ).order_by('-updated')
+        subquery = Tle.objects.filter(
+            pk__gte=tle_id, satellite=satellite
+        ).exclude(tle_source__in=settings.TLE_SOURCES_IGNORE_FROM_LATEST
+                  ).filter(pk=Subquery(sub_subquery.values('pk')[:1])
+                           ).filter(satellite=OuterRef('satellite')
+                                    ).annotate(epoch=Max(Substr('tle1', 19, 14))
+                                               ).order_by('-epoch')
+        new_latest = Tle.objects.filter(
+            pk__gte=tle_id, satellite=satellite
+        ).exclude(tle_source__in=settings.TLE_SOURCES_IGNORE_FROM_LATEST
+                  ).filter(pk=Subquery(subquery.values('pk')[:1]))
+
+        # Query for the latest Tle set that is distributable for this satellite
+        sub_subquery = Tle.objects.filter(
+            pk__gte=tle_id_dist,
+            satellite=satellite,
+            tle_source__in=settings.TLE_SOURCES_REDISTRIBUTABLE
+        ).exclude(tle_source__in=settings.TLE_SOURCES_IGNORE_FROM_LATEST).filter(
+            satellite=OuterRef('satellite'), tle_source=OuterRef('tle_source')
+        ).order_by('-updated')
+        subquery = Tle.objects.filter(
+            pk__gte=tle_id_dist,
+            satellite=satellite,
+            tle_source__in=settings.TLE_SOURCES_REDISTRIBUTABLE
+        ).exclude(tle_source__in=settings.TLE_SOURCES_IGNORE_FROM_LATEST
+                  ).filter(pk=Subquery(sub_subquery.values('pk')[:1])
+                           ).filter(satellite=OuterRef('satellite')
+                                    ).annotate(epoch=Max(Substr('tle1', 19, 14))
+                                               ).order_by('-epoch')
+        new_latest_dist = Tle.objects.filter(
+            pk__gte=tle_id_dist,
+            satellite=satellite,
+            tle_source__in=settings.TLE_SOURCES_REDISTRIBUTABLE
+        ).exclude(tle_source__in=settings.TLE_SOURCES_IGNORE_FROM_LATEST
+                  ).filter(pk=Subquery(subquery.values('pk')[:1]))
+
+        # Add the latest Tle set if there is a LatestTleSet entry, if not create one
+        if new_latest:
+            LatestTleSet.objects.update_or_create(
+                satellite=satellite, defaults={'latest': new_latest[0]}
+            )
+        # Add the latest distributable Tle set if there is a LatestTleSet entry, if not create one
+        if new_latest_dist:
+            LatestTleSet.objects.update_or_create(
+                satellite=satellite, defaults={'latest_distributable': new_latest_dist[0]}
+            )
+
+    # Remove any LatestTleSet that hasn't any Tle entry (satellite without Tle entries)
     LatestTleSet.objects.filter(latest__isnull=True, latest_distributable__isnull=True).delete()
 
 
