@@ -8,6 +8,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.core.cache import cache
+from django.db import transaction
 from django.db.models import Count, Max, OuterRef, Q, Subquery
 from django.db.models.functions import Substr
 from django.utils.timezone import make_aware
@@ -332,82 +333,74 @@ def write_influx(json_obj):
     client.write_points(json_obj)
 
 
-def decode_data(norad, period=None, handle=None):  # pylint: disable=R0912,R0914
+def decode_demoddata(demoddata, satellite, tlmdecoder):
+    """Decode a DemodData object and push it either in InfluxDB instance or in local DB"""
+    try:
+        decoder_class = getattr(decoder, tlmdecoder.decoder.capitalize())
+    except AttributeError:
+        return
+    try:
+        with open(demoddata.payload_frame.path) as frame_file:
+            # we get data frames in hex but kaitai requires binary
+            hexdata = frame_file.read()
+            bindata = binascii.unhexlify(hexdata)
+
+        try:
+            frame = decoder_class.from_bytes(bindata)
+            json_obj = create_point(
+                decoder.get_fields(frame), satellite, tlmdecoder, demoddata, decoders_version
+            )
+
+            # if we are set to use InfluxDB, send the decoded data
+            # there, otherwise we store it in the local DB.
+            if settings.USE_INFLUX:
+                write_influx(json_obj)
+                demoddata.payload_decoded = 'influxdb'
+            else:
+                demoddata.payload_decoded = json_obj
+
+            demoddata.is_decoded = True
+            demoddata.save()
+        except Exception:  # pylint: disable=W0703
+            demoddata.payload_decoded = ''
+            demoddata.is_decoded = False
+            demoddata.save()
+    except (IOError, binascii.Error) as error:
+        LOGGER.error(error, exc_info=True)
+
+
+def decode_data(norad_id, demoddata_id=None, redecode=False):
     """Decode data for a satellite, with an option to limit the scope.
 
-    :param norad: the NORAD ID of the satellite to decode data for
-    :param period: if period exists, only attempt to decode the last 4 hours,
-    otherwise attempt to decode everything
-    :param handle: if handle exists, we are trying to decode the currently
-    saved frame that got in
+    :param norad_id: the NORAD ID of the satellite to decode data for
+    :param demoddata_id: if demoddata_id exists, try to decode this demoddata object
+    :param redecode: redecode demoddata or only recent
     """
-    sat = Satellite.objects.prefetch_related('telemetries').get(norad_cat_id=norad)
+    satellite = Satellite.objects.prefetch_related('telemetries').get(norad_cat_id=norad_id)
 
-    if not sat.telemetry_decoder_count:
-        return
-
-    if period:
-        time_period = datetime.utcnow() - timedelta(hours=4)
-        time_period = make_aware(time_period)
-        data = DemodData.objects.filter(satellite__norad_cat_id=norad, timestamp__gte=time_period)
-    else:
-        if handle:
-            data = DemodData.objects.filter(id=handle)
+    telemetry_decoders = satellite.telemetries.all()
+    if telemetry_decoders:
+        data = DemodData.objects.select_for_update()
+        if redecode:
+            if demoddata_id:
+                data = data.filter(pk=demoddata_id)
+            else:
+                data = data.filter(satellite__norad_cat_id=norad_id)
         else:
-            data = DemodData.objects.filter(satellite=sat)
+            if demoddata_id:
+                data = data.filter(pk=demoddata_id, is_decoded=False)
+            else:
+                time_period = make_aware(datetime.utcnow() - timedelta(hours=48))
+                data = data.filter(
+                    satellite__norad_cat_id=norad_id, timestamp__gte=time_period, is_decoded=False
+                )
 
-    telemetry_decoders = sat.telemetries.all()
-
-    # iterate over DemodData objects
-    for obj in data:
-        # iterate over Telemetry decoders
-        for tlmdecoder in telemetry_decoders:
-            try:
-                decoder_class = getattr(decoder, tlmdecoder.decoder.capitalize())
-            except AttributeError:
-                continue
-            try:
-                with open(obj.payload_frame.path) as frame_file:
-                    # we get data frames in hex but kaitai requires binary
-                    hexdata = frame_file.read()
-                    bindata = binascii.unhexlify(hexdata)
-
-                # if we are set to use InfluxDB, send the decoded data
-                # there, otherwise we store it in the local DB.
-                if settings.USE_INFLUX:
-                    try:
-                        frame = decoder_class.from_bytes(bindata)
-                        json_obj = create_point(
-                            decoder.get_fields(frame), sat, tlmdecoder, obj, decoders_version
-                        )
-                        write_influx(json_obj)
-                        obj.payload_decoded = 'influxdb'
-                        obj.is_decoded = True
-                        obj.save()
-                        continue
-                    except Exception:  # pylint: disable=W0703
-                        obj.is_decoded = False
-                        obj.save()
-                        continue
-                else:  # store in the local db instead of influx
-                    try:
-                        frame = decoder_class.from_bytes(bindata)
-                    except Exception:  # pylint: disable=W0703
-                        obj.payload_decoded = ''
-                        obj.is_decoded = False
-                        obj.save()
-                        continue
-                    else:
-                        json_obj = create_point(
-                            decoder.get_fields(frame), sat, tlmdecoder, obj, decoders_version
-                        )
-                        obj.payload_decoded = json_obj
-                        obj.is_decoded = True
-                        obj.save()
-                        continue
-            except (IOError, binascii.Error) as error:
-                LOGGER.error(error, exc_info=True)
-                continue
+        with transaction.atomic():
+            # iterate over DemodData objects
+            for obj in data:
+                # iterate over Telemetry decoders
+                for tlmdecoder in telemetry_decoders:
+                    decode_demoddata(demoddata=obj, satellite=satellite, tlmdecoder=tlmdecoder)
 
 
 # Caches stats about satellites and data

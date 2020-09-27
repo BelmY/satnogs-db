@@ -235,9 +235,9 @@ def background_cache_statistics():
 # decode data for a satellite, and a given time frame (if provided). If not
 # provided it is expected that we want to try decoding all frames in the db.
 @shared_task
-def decode_all_data(norad):
+def decode_all_data(norad_id):
     """Task to trigger a full decode of data for a satellite."""
-    decode_data(norad)
+    decode_data(norad_id=norad_id, redecode=True)
 
 
 @shared_task
@@ -247,7 +247,7 @@ def decode_recent_data():
 
     for obj in satellites:
         try:
-            decode_data(obj.norad_cat_id, period=1)
+            decode_data(norad_id=obj.norad_cat_id)
         except Exception:  # pylint: disable=W0703
             # an object could have failed decoding for a number of reasons,
             # keep going
@@ -255,6 +255,6 @@ def decode_recent_data():
 
 
 @shared_task
-def decode_current_frame(norad, handle):
+def decode_current_frame(norad_id, demoddata_id):
     """Task to trigger a decode of a current frame for a satellite."""
-    decode_data(norad, period=None, handle=handle)
+    decode_data(norad_id=norad_id, demoddata_id=demoddata_id)

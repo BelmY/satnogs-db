@@ -6,7 +6,6 @@ from celery import Celery
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'db.settings')
 
-RUN_EVERY_15 = 60 * 15
 RUN_HOURLY = 60 * 60
 RUN_DAILY = 60 * 60 * 24
 RUN_EVERY_TWO_HOURS = 2 * 60 * 60
@@ -60,4 +59,4 @@ def setup_periodic_tasks(sender, **kwargs):
         RUN_HOURLY, remove_old_exported_framesets.s(), name='remove_old_exported_frameset'
     )
 
-    sender.add_periodic_task(RUN_EVERY_15, decode_recent_data.s(), name='decode-recent-data')
+    sender.add_periodic_task(RUN_DAILY, decode_recent_data.s(), name='decode-recent-data')
