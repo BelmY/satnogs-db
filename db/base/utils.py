@@ -355,13 +355,15 @@ def decode_demoddata(demoddata, satellite, tlmdecoder):
             # there, otherwise we store it in the local DB.
             if settings.USE_INFLUX:
                 write_influx(json_obj)
-                DemodData.filter(pk=demoddata.id).update(
+                DemodData.objects.filter(pk=demoddata.id).update(
                     is_decoded=True, payload_decoded='influxdb'
                 )
             else:
-                DemodData.filter(pk=demoddata.id).update(is_decoded=True, payload_decoded=json_obj)
+                DemodData.objects.filter(pk=demoddata.id).update(
+                    is_decoded=True, payload_decoded=json_obj
+                )
         except Exception:  # pylint: disable=W0703
-            DemodData.filter(pk=demoddata.id).update(is_decoded=False, payload_decoded='')
+            DemodData.objects.filter(pk=demoddata.id).update(is_decoded=False, payload_decoded='')
     except (IOError, binascii.Error) as error:
         LOGGER.error(error, exc_info=True)
 
