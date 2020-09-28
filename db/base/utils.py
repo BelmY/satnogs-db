@@ -355,16 +355,13 @@ def decode_demoddata(demoddata, satellite, tlmdecoder):
             # there, otherwise we store it in the local DB.
             if settings.USE_INFLUX:
                 write_influx(json_obj)
-                demoddata.payload_decoded = 'influxdb'
+                DemodData.filter(pk=demoddata.id).update(
+                    is_decoded=True, payload_decoded='influxdb'
+                )
             else:
-                demoddata.payload_decoded = json_obj
-
-            demoddata.is_decoded = True
-            demoddata.save()
+                DemodData.filter(pk=demoddata.id).update(is_decoded=True, payload_decoded=json_obj)
         except Exception:  # pylint: disable=W0703
-            demoddata.payload_decoded = ''
-            demoddata.is_decoded = False
-            demoddata.save()
+            DemodData.filter(pk=demoddata.id).update(is_decoded=False, payload_decoded='')
     except (IOError, binascii.Error) as error:
         LOGGER.error(error, exc_info=True)
 
@@ -377,7 +374,6 @@ def decode_data(norad_id, demoddata_id=None, redecode=False):
     :param redecode: redecode demoddata or only recent
     """
     satellite = Satellite.objects.prefetch_related('telemetries').get(norad_cat_id=norad_id)
-
     telemetry_decoders = satellite.telemetries.all()
     if telemetry_decoders:
         data = DemodData.objects.select_for_update()

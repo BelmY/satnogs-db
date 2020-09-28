@@ -2,7 +2,7 @@
 import logging
 
 import h5py
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save
 
 from db.base.helpers import gridsquare
 from db.base.models import Artifact, DemodData, Satellite
@@ -34,11 +34,6 @@ def _gen_observer(sender, instance, created, **kwargs):  # pylint: disable=W0613
     post_save.connect(_decode, sender=DemodData)
 
 
-def _set_is_decoded(sender, instance, **kwargs):  # pylint: disable=W0613
-    """Returns true if payload_decoded has data"""
-    instance.is_decoded = instance.payload_decoded != ''
-
-
 def _extract_network_obs_id(sender, instance, created, **kwargs):  # pylint: disable=W0613
     post_save.disconnect(_extract_network_obs_id, sender=Artifact)
     try:
@@ -65,8 +60,6 @@ def _decode(sender, instance, created, **kwargs):  # pylint: disable=W0613
 
 
 post_save.connect(_remove_latest_tle_set, sender=Satellite)
-
-pre_save.connect(_set_is_decoded, sender=DemodData)
 
 post_save.connect(_gen_observer, sender=DemodData)
 
