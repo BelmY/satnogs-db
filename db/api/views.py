@@ -12,6 +12,7 @@ from rest_framework.serializers import ValidationError
 from db.api import filters, pagination, serializers
 from db.api.perms import SafeMethodsWithPermission
 from db.api.renderers import BrowserableJSONLDRenderer, JSONLDRenderer
+from db.base.helpers import gridsquare
 from db.base.models import Artifact, DemodData, LatestTleSet, Mode, \
     Satellite, Transmitter
 from db.base.tasks import update_satellite
@@ -131,6 +132,14 @@ class TelemetryView(  # pylint: disable=R0901
         # Create file out of frame string
         frame = ContentFile(request.data.get('frame'), name='sids')
         data['payload_frame'] = frame
+        # Create observer
+        try:
+            qth = gridsquare(data['lat'], data['lng'])
+        except Exception:  # pylint: disable=W0703
+            data['observer'] = 'Unknown'
+        else:
+            observer = '{0}-{1}'.format(data['station'], qth)
+            data['observer'] = observer
 
         serializer = serializers.SidsSerializer(data=data)
         serializer.is_valid(raise_exception=True)

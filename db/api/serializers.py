@@ -179,7 +179,10 @@ class SidsSerializer(serializers.ModelSerializer):
     """SatNOGS DB SiDS API Serializer"""
     class Meta:
         model = DemodData
-        fields = ('satellite', 'payload_frame', 'station', 'lat', 'lng', 'timestamp', 'app_source')
+        fields = (
+            'satellite', 'payload_frame', 'station', 'lat', 'lng', 'timestamp', 'app_source',
+            'observer'
+        )
 
 
 class ArtifactSerializer(serializers.ModelSerializer):
