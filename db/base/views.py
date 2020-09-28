@@ -7,8 +7,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.mixins import LoginRequiredMixin, \
-    PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
@@ -20,11 +19,10 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from db.base.forms import SatelliteModelForm, TransmitterModelForm, \
-    TransmitterUpdateForm
+from db.base.forms import SatelliteModelForm, TransmitterModelForm, TransmitterUpdateForm
 from db.base.helpers import get_apikey
-from db.base.models import DemodData, Satellite, Transmitter, \
-    TransmitterEntry, TransmitterSuggestion
+from db.base.models import DemodData, Satellite, Transmitter, TransmitterEntry, \
+    TransmitterSuggestion
 from db.base.tasks import export_frames, notify_transmitter_suggestion
 from db.base.utils import cache_statistics, millify, read_influx
 

@@ -16,8 +16,7 @@ from influxdb import InfluxDBClient
 from satnogsdecoders import __version__ as decoders_version
 from satnogsdecoders import decoder
 
-from db.base.models import DemodData, LatestTleSet, Mode, Satellite, Tle, \
-    Transmitter
+from db.base.models import DemodData, LatestTleSet, Mode, Satellite, Tle, Transmitter
 
 LOGGER = logging.getLogger('db')
 

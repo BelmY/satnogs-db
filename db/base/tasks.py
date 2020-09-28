@@ -20,8 +20,7 @@ from sgp4.earth_gravity import wgs72
 from sgp4.io import twoline2rv
 
 from db.base.models import DemodData, ExportedFrameset, Satellite, Tle
-from db.base.utils import cache_statistics, decode_data, get_tle_sources, \
-    update_latest_tle_sets
+from db.base.utils import cache_statistics, decode_data, get_tle_sources, update_latest_tle_sets
 
 LOGGER = logging.getLogger('db')
 

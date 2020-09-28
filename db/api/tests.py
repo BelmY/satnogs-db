@@ -3,8 +3,7 @@ import pytest
 from django.test import TestCase
 from rest_framework import status
 
-from db.base.tests import DemodDataFactory, ModeFactory, SatelliteFactory, \
-    TransmitterFactory
+from db.base.tests import DemodDataFactory, ModeFactory, SatelliteFactory, TransmitterFactory
 
 
 @pytest.mark.django_db(transaction=True)

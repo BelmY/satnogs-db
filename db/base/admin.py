@@ -8,9 +8,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from db.base.models import Artifact, DemodData, ExportedFrameset, \
-    LatestTleSet, Mode, Operator, Satellite, Telemetry, Tle, Transmitter, \
-    TransmitterEntry, TransmitterSuggestion
+from db.base.models import Artifact, DemodData, ExportedFrameset, LatestTleSet, Mode, Operator, \
+    Satellite, Telemetry, Tle, Transmitter, TransmitterEntry, TransmitterSuggestion
 from db.base.tasks import check_celery, decode_all_data, update_tle_sets
 from db.base.utils import update_latest_tle_sets
 

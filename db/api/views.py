@@ -2,8 +2,7 @@
 from django.core.files.base import ContentFile
 from django.db.models import F
 from rest_framework import mixins, status, viewsets
-from rest_framework.parsers import FileUploadParser, FormParser, \
-    MultiPartParser
+from rest_framework.parsers import FileUploadParser, FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework.response import Response
@@ -13,8 +12,7 @@ from db.api import filters, pagination, serializers
 from db.api.perms import SafeMethodsWithPermission
 from db.api.renderers import BrowserableJSONLDRenderer, JSONLDRenderer
 from db.base.helpers import gridsquare
-from db.base.models import Artifact, DemodData, LatestTleSet, Mode, \
-    Satellite, Transmitter
+from db.base.models import Artifact, DemodData, LatestTleSet, Mode, Satellite, Transmitter
 from db.base.tasks import update_satellite
 
 

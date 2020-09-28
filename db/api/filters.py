@@ -3,8 +3,7 @@ import django_filters
 from django_filters import rest_framework as filters
 from django_filters.rest_framework import FilterSet
 
-from db.base.models import Artifact, DemodData, LatestTleSet, Mode, \
-    Satellite, Transmitter
+from db.base.models import Artifact, DemodData, LatestTleSet, Mode, Satellite, Transmitter
 
 
 class TransmitterViewFilter(FilterSet):

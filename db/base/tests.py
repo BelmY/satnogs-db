@@ -10,8 +10,8 @@ from django.test import TestCase
 from django.utils.timezone import now
 from factory import fuzzy
 
-from db.base.models import DATA_SOURCES, DemodData, Mode, Satellite, \
-    Telemetry, Transmitter, TransmitterSuggestion
+from db.base.models import DATA_SOURCES, DemodData, Mode, Satellite, Telemetry, Transmitter, \
+    TransmitterSuggestion
 
 DATA_SOURCE_IDS = [c[0] for c in DATA_SOURCES]
 

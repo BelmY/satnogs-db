@@ -4,8 +4,8 @@
 import h5py
 from rest_framework import serializers
 
-from db.base.models import TRANSMITTER_STATUS, Artifact, DemodData, \
-    LatestTleSet, Mode, Satellite, Telemetry, Transmitter
+from db.base.models import TRANSMITTER_STATUS, Artifact, DemodData, LatestTleSet, Mode, \
+    Satellite, Telemetry, Transmitter
 
 
 class ModeSerializer(serializers.ModelSerializer):
