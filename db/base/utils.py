@@ -11,7 +11,7 @@ from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Count, Max, OuterRef, Q, Subquery
 from django.db.models.functions import Substr
-from django.utils.timezone import make_aware
+from django.utils.timezone import make_aware, now
 from influxdb import InfluxDBClient
 from satnogsdecoders import __version__ as decoders_version
 from satnogsdecoders import decoder
@@ -99,12 +99,19 @@ def update_latest_tle_sets(satellite_ids=None):
         # Add the latest Tle set if there is a LatestTleSet entry, if not create one
         if new_latest:
             LatestTleSet.objects.update_or_create(
-                satellite=satellite, defaults={'latest': new_latest[0]}
+                satellite=satellite, defaults={
+                    'latest': new_latest[0],
+                    'last_modified': now()
+                }
             )
         # Add the latest distributable Tle set if there is a LatestTleSet entry, if not create one
         if new_latest_dist:
             LatestTleSet.objects.update_or_create(
-                satellite=satellite, defaults={'latest_distributable': new_latest_dist[0]}
+                satellite=satellite,
+                defaults={
+                    'latest_distributable': new_latest_dist[0],
+                    'last_modified': now()
+                }
             )
 
     # Remove any LatestTleSet that hasn't any Tle entry (satellite without Tle entries)
