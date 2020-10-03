@@ -572,3 +572,111 @@ a.skip-main:focus, a.skip-main:active {
     font-size: .7rem;
     margin-bottom: .2rem;
 }
+
+.transmitters-chart {
+    position: relative;
+    font-size: 14px;
+    --color-text: #4d4e59;
+    --color-axis: #dee2e6;
+    --color-transmitter: #7c82b9;
+    --color-transceiver: #5cb85c;
+    --color-transponder: #fff3cd;
+}
+
+.transmitters-chart .color-transmitter {
+    color: var(--color-transmitter);
+}
+
+.transmitters-chart .color-transceiver {
+    color: var(--color-transceiver);
+}
+
+.transmitters-chart .color-transponder {
+    color: var(--color-transponder);
+}
+
+.transmitters-chart .chart-tooltip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--color-text);
+    color: var(--color-text);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.transmitters-chart .chart-tooltip.color-transmitter {
+    border-color: var(--color-transmitter);
+}
+
+.transmitters-chart .chart-tooltip.color-transceiver {
+    border-color: var(--color-transceiver);
+}
+
+.transmitters-chart .chart-tooltip.color-transponder {
+    border-color: var(--color-transponder);
+}
+
+.transmitters-chart .chart-tooltip.show {
+    opacity: 1;
+}
+
+.transmitters-chart .chart-tooltip td:first-child {
+    padding-right: 0.5rem;
+}
+
+.transmitters-chart .chart-tooltip td:last-child {
+    text-align: right;
+}
+
+.transmitters-chart .chart-legend {
+    display: flex;
+    margin-left: 20px;
+}
+
+.transmitters-chart .legend-item {
+    margin-right: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.transmitters-chart .legend-item:last-child {
+    margin-right: 0;
+}
+
+.transmitters-chart .legend-swatch {
+    width: 14px;
+    height: 14px;
+    background-color: currentColor;
+    margin-right: 0.5rem;
+}
+
+.transmitters-chart .legend-value {
+    color: var(--color-text);
+}
+
+.transmitters-chart .axis {
+    font-family: inherit;
+    color: var(--color-text);
+}
+
+.transmitters-chart .axis__unit {
+    font-size: 14px;
+}
+
+.transmitters-chart .axis path,
+.transmitters-chart .axis line {
+    stroke: var(--color-axis);
+}
+
+.transmitters-chart .bar {
+    fill: currentColor;
+}
+
+.transmitters-chart .bar:hover {
+    stroke: var(--color-text);
+}

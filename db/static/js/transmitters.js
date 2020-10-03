@@ -1,3 +1,5 @@
+/* global renderTransmittersChart */
+
 function ppb_to_freq(freq, drift) {
     var freq_obs = freq + ((freq * drift) / Math.pow(10,9));
     return Math.round(freq_obs);
@@ -68,4 +70,53 @@ $(document).ready(function() {
         order: [ 1, 'asc' ],
         pageLength: 25
     } );
+
+    // Handle deep linking of tabbed panes
+    let url = location.href.replace(/\/$/, '');
+    history.replaceState(null, null, url);
+
+    if (location.hash) {
+        const hash = url.split('#');
+        $('#tabs a[href="#' + hash[1] + '"]').tab('show');
+        url = location.href.replace(/\/#/, '#');
+        history.replaceState(null, null, url);
+        setTimeout(() => {
+            $(window).scrollTop(0);
+        }, 400);
+    }
+
+    $('a[data-toggle="tab"]').on('click', function () {
+        let newUrl;
+        const hash = $(this).attr('href');
+        if (hash == '#list') {
+            newUrl = url.split('#')[0];
+        } else {
+            newUrl = url.split('#')[0] + hash;
+        }
+        history.replaceState(null, null, newUrl);
+    });
+
+    fetch('/api/transmitters/?format=json')
+        .then((response) => response.json())
+        .then((json) => {
+            const transmittersChart = renderTransmittersChart({
+                el: document.querySelector('#transmitters-chart-container'),
+                data: json,
+            });
+
+            transmittersChart.zoom(
+                434.5,
+                438.5
+            );
+
+            document.querySelector('#zoom-all').addEventListener('click', () => {
+                transmittersChart.zoom(0,30000);
+            });
+            document.querySelector('#zoom-vhf').addEventListener('click', () => {
+                transmittersChart.zoom(143,147);
+            });
+            document.querySelector('#zoom-uhf').addEventListener('click', () => {
+                transmittersChart.zoom(434.5,438.5);
+            });
+        });
 } );

@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "admin-lte": "^3.0",
+        "d3": "^6.2.0",
         "flot": "^4.2.1",
         "gpredict.js": "github:kerel-fs/gpredict.js",
         "mapbox-gl": "^1.11.0"
