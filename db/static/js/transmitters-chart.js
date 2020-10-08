@@ -2,21 +2,28 @@
 
 /* eslint-disable no-unused-vars */
 
-function renderTransmittersChart({ el, data }) {
+function renderTransmittersChart({ el, transmitters, satellites_list }) {
     d3.formatDefaultLocale({
         decimal: '.',
         thousands: '',
         grouping: [3],
     });
-    data = processData(data);
+    const data = processData(transmitters, satellites_list);
     const container = d3.select(el).classed('transmitters-chart', true);
     const tooltip = renderTooltip(container);
     renderLegend(container, data.types);
     const { zoom } = renderChart(container, data, tooltip);
 
-    function processData(data) {
-        let sorted = data
+    function processData(transmitters, satellites_list) {
+        let satellites = {};
+
+        satellites_list.forEach(function(item){
+            satellites[item.norad_cat_id] = item;
+        });
+
+        let sorted = transmitters
             .map((d) => {
+                d['satellite'] = satellites[d.norad_cat_id];
                 const width = (d.baud || 9600) / 1e6;
                 const x0 = d.downlink_low / 1e6 - width / 2;
                 const x1 = d.downlink_low / 1e6 + width / 2;
@@ -265,6 +272,10 @@ function renderTransmittersChart({ el, data }) {
             return `
         <table>
           <tbody>
+            <tr>
+              <td>Satellite</td>
+              <td>${d.satellite.name}</td>
+            </tr>
             <tr>
               <td>NORAD ID</td>
               <td>${d.norad_cat_id}</td>

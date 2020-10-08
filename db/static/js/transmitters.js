@@ -96,27 +96,31 @@ $(document).ready(function() {
         history.replaceState(null, null, newUrl);
     });
 
-    fetch('/api/transmitters/?format=json')
-        .then((response) => response.json())
-        .then((json) => {
-            const transmittersChart = renderTransmittersChart({
-                el: document.querySelector('#transmitters-chart-container'),
-                data: json,
-            });
-
-            transmittersChart.zoom(
-                434.5,
-                438.5
-            );
-
-            document.querySelector('#zoom-all').addEventListener('click', () => {
-                transmittersChart.zoom(0,30000);
-            });
-            document.querySelector('#zoom-vhf').addEventListener('click', () => {
-                transmittersChart.zoom(143,147);
-            });
-            document.querySelector('#zoom-uhf').addEventListener('click', () => {
-                transmittersChart.zoom(434.5,438.5);
-            });
+    Promise.all([
+        fetch('/api/transmitters/?format=json')
+            .then((response) => response.json()),
+        fetch('/api/satellites/?format=json')
+            .then((response) => response.json()),
+    ]).then((responses) => {
+        const transmittersChart = renderTransmittersChart({
+            el: document.querySelector('#transmitters-chart-container'),
+            transmitters: responses[0],
+            satellites_list: responses[1],
         });
+
+        transmittersChart.zoom(
+            434.5,
+            438.5
+        );
+
+        document.querySelector('#zoom-all').addEventListener('click', () => {
+            transmittersChart.zoom(0,30000);
+        });
+        document.querySelector('#zoom-vhf').addEventListener('click', () => {
+            transmittersChart.zoom(143,147);
+        });
+        document.querySelector('#zoom-uhf').addEventListener('click', () => {
+            transmittersChart.zoom(434.5,438.5);
+        });
+    });
 } );
