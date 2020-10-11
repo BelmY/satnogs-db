@@ -48,7 +48,7 @@
         </td>
         <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{ sat.name|upper }}</a></td>
         <td><a href="{% url 'satellite' norad=sat.norad_cat_id %}">{{ sat.norad_cat_id }}</a></td>
-        <td class="d-flex justify-content-center">
+        <td class="d-flex justify-content-center" data-order="{{ sat.status }}">
           {% if sat.status == 'alive' %}
           <img height="32" src="{% static 'img/status_alive.png' %}" alt="Operational">
           {% elif sat.status == 're-entered' %}
