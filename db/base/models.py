@@ -498,7 +498,7 @@ class Tle(models.Model):
     tle_source = models.CharField(max_length=300, blank=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
     satellite = models.ForeignKey(
-        Satellite, related_name='tles', on_delete=models.CASCADE, null=True, blank=True
+        Satellite, related_name='tles', on_delete=models.SET_NULL, null=True, blank=True
     )
 
     class Meta:
