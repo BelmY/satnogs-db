@@ -147,8 +147,8 @@ def export_frames(norad, user_id, period=None):
     exported_frameset.satellite = Satellite.objects.get(norad_cat_id=norad)
     exported_frameset.end = datetime.utcnow()
 
-    if period:
-        if period == '1':
+    if period is not None:
+        if period == 1:
             exported_frameset.start = make_aware(exported_frameset.end - timedelta(days=7))
             suffix = 'week'
         else:
