@@ -41,7 +41,7 @@ h5py==2.10.0
 idna==2.10
 importlib-metadata==1.7.0
 influxdb==5.3.0
-kaitaistruct==0.8
+kaitaistruct==0.9
 kombu==4.6.11
 Logbook==1.5.3
 lxml==4.5.2
