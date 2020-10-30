@@ -241,6 +241,7 @@ LOGGING = {
 SENTRY_ENABLED = config('SENTRY_ENABLED', default=False, cast=bool)
 if SENTRY_ENABLED:
     sentry_sdk.init(
+        environment=ENVIRONMENT,
         dsn=config('SENTRY_DSN', default=''),
         integrations=[CeleryIntegration(),
                       DjangoIntegration(),
