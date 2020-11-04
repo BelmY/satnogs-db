@@ -20,6 +20,8 @@ services:
   celery:
     build:
       context: '.'
+      args:
+        SATNOGS_DECODERS_VERSION: '$SATNOGS_DECODERS_VERSION'
     depends_on:
       - 'db'
       - 'redis'
@@ -41,6 +43,8 @@ services:
   web:
     build:
       context: '.'
+      args:
+        SATNOGS_DECODERS_VERSION: '$SATNOGS_DECODERS_VERSION'
     image: 'satnogs-db'
     ports:
       - '8000:8000'

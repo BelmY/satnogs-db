@@ -8,6 +8,7 @@ RUN groupadd -r satnogs \
 	&& install -d -m 755 -o satnogs -g satnogs /var/run/celery
 
 COPY requirements.txt /usr/local/src/satnogs-db/
+ARG SATNOGS_DECODERS_VERSION
 RUN pip install \
 	--no-cache-dir \
 	--no-deps \
