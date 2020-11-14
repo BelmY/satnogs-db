@@ -90,6 +90,10 @@
       <dt class="col-sm-6">Baud</dt>
       <dd class="col-sm-6">{{ transmitter.baud|floatformat:0 }}</dd>
       {% endif %}
+      {% if transmitter.uplink_mode %}
+      <dt class="col-sm-6">Uplink Mode</dt>
+      <dd class="col-sm-6">{{ transmitter.uplink_mode }}</dd>
+      {% endif %}
       {% if transmitter.downlink_high %}
       <dt class="col-sm-6">Downlink High</dt>
       <dd class="col-sm-6" data-toggle="tooltip" data-placement="bottom" title="{{ transmitter.downlink_high }}">
