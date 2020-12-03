@@ -63,7 +63,7 @@ function chart_recent_data(results) {
         for (i = 0; i < point.length; i++) {
             if (i == 0) {
                 var date = new Date(point[i] * 1000);
-                var formattedDate = '' + date.getUTCFullYear() + '/' + date.getUTCMonth() + '/' + date.getUTCDate();
+                var formattedDate = '' + date.getUTCFullYear() + '/' + (date.getUTCMonth()+1) + '/' + date.getUTCDate();
                 labels.push(formattedDate);
             } else {
                 if (point[i] > pointPlaceholder) {
@@ -175,7 +175,7 @@ $(document).ready(function () {
             body: 'This Satellite needs editing. <a href="https://wiki.satnogs.org/Get_In_Touch" target="_blank">Contact us</a> to become an editor.'
         });
     }
-
+    
     var satid = $('#dataChart').data('satid');
     $.ajax({
         url: '/ajax/recent_decoded_cnt/' + satid,
