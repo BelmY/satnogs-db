@@ -66,30 +66,43 @@ class SatelliteStructuredData(StructuredData):
             "status": "status",
             "decoder": "decoder"
         }
+
+        if isinstance(data, dict):
+            self.data = self.structure_satellite_data(data)
+            return
+
         structured_data = []
-        satellite_id_domain = Site.objects.get_current().domain + '/satellite/'
-
         for satellite in data:
-            data_to_append = {
-                "satellite": {
-                    "@id": satellite_id_domain + str(satellite['norad_cat_id']),
-                    "norad_cat_id": satellite['norad_cat_id'],
-                    "name": satellite['name'],
-                    "status": satellite['status'],
-                }
-            }
-
-            if satellite['names']:
-                data_to_append['satellite']['names'] = satellite['names'].replace('\r',
-                                                                                  '').split('\n')
-
-            if satellite['telemetries']:
-                data_to_append['satellite']['decoder'] = []
-                for decoder in satellite['telemetries']:
-                    data_to_append['satellite']['decoder'].append(decoder["decoder"])
-
+            data_to_append = self.structure_satellite_data(satellite)
             structured_data.append(data_to_append)
+
         self.data = structured_data
+
+    @staticmethod
+    def structure_satellite_data(satellite):
+        """Return structured data for one satellite.
+
+        :param satellite: the satellite to be structured
+        """
+        satellite_id_domain = Site.objects.get_current().domain + '/satellite/'
+        data_to_append = {
+            "satellite": {
+                "@id": satellite_id_domain + str(satellite['norad_cat_id']),
+                "norad_cat_id": satellite['norad_cat_id'],
+                "name": satellite['name'],
+                "status": satellite['status'],
+            }
+        }
+
+        if satellite['names']:
+            data_to_append['satellite']['names'] = satellite['names'].replace('\r', '').split('\n')
+
+        if satellite['telemetries']:
+            data_to_append['satellite']['decoder'] = []
+            for decoder in satellite['telemetries']:
+                data_to_append['satellite']['decoder'].append(decoder["decoder"])
+
+        return data_to_append
 
 
 class TransmitterStructuredData(StructuredData):
