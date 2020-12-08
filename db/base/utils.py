@@ -368,7 +368,7 @@ def decode_demoddata(demoddata, satellite, tlmdecoder):
                 DemodData.objects.filter(pk=demoddata.id).update(
                     is_decoded=True, payload_decoded=json_obj
                 )
-        except Exception:  # pylint: disable=W0703
+        except BaseException:  # pylint: disable=W0703
             DemodData.objects.filter(pk=demoddata.id).update(is_decoded=False, payload_decoded='')
     except (IOError, binascii.Error) as error:
         LOGGER.error(error, exc_info=True)
