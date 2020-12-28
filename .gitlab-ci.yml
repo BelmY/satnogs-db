@@ -28,12 +28,8 @@ schema:
     - >-
       ./manage.py generateschema
       --title "SatNOGS DB"
-      --description "SatNOGS DB is a transmitter suggestions and crowd-sourcing app." |
-      ./contrib/postprocess-openapi-schema.py
-      --expand-aliases
-      --api-version '1'
-      --server-url 'https://db.satnogs.org'
-      --enable-apikey-auth -
+      --description "SatNOGS DB is a transmitter suggestions and crowd-sourcing app."
+      --generator_class "db.api.generators.SchemaGenerator"
       > satnogs-db-api-client/api-schema.yml
   artifacts:
     expire_in: 1 week

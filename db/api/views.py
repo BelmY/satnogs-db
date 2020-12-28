@@ -17,7 +17,7 @@ from db.base.tasks import update_satellite
 
 
 class ModeView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
-    """SatNOGS DB Mode API view class"""
+    """View into the transmitter modulation modes in the SatNOGS DB database"""
     renderer_classes = [
         JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer, BrowserableJSONLDRenderer
     ]
@@ -26,7 +26,7 @@ class ModeView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
 
 
 class SatelliteView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
-    """SatNOGS DB Satellite API view class"""
+    """View into the Satellite entities in the SatNOGS DB database"""
     renderer_classes = [
         JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer, BrowserableJSONLDRenderer
     ]
@@ -37,7 +37,10 @@ class SatelliteView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
 
 
 class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
-    """SatNOGS DB Transmitter API view class"""
+    """
+    View into the Transmitter entities in the SatNOGS DB database.
+    Transmitters are inclusive of Transceivers and Transponders
+    """
     renderer_classes = [
         JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer, BrowserableJSONLDRenderer
     ]
@@ -48,7 +51,9 @@ class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
 
 
 class LatestTleSetView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
-    """SatNOGS DB Tle API view class"""
+    """
+    View into the most recent two-line elements (TLE) in the SatNOGS DB database
+    """
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = LatestTleSet.objects.all().select_related('satellite').exclude(
         latest_distributable__isnull=True
@@ -82,7 +87,11 @@ class LatestTleSetView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
 class TelemetryView(  # pylint: disable=R0901
         mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
         viewsets.GenericViewSet):
-    """SatNOGS DB Telemetry API view class"""
+    """
+    View into the Telemetry objects in the SatNOGS DB database. Currently,
+    this table is inclusive of all data collected from satellite downlink
+    observations
+    """
     renderer_classes = [
         JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer, BrowserableJSONLDRenderer
     ]
@@ -94,6 +103,11 @@ class TelemetryView(  # pylint: disable=R0901
     pagination_class = pagination.LinkedHeaderPageNumberPagination
 
     def create(self, request, *args, **kwargs):
+        """
+        Creates an frame of telemetry data from a satellite observation. See
+        https://www.pe0sat.vgnet.nl/download/Hidden/Dombrovski-SIDS-Simple-Downlink-Share-Convention.pdf
+        for a description of the original protocol.
+        """
         data = {}
 
         norad_cat_id = request.data.get('noradID')
@@ -149,7 +163,9 @@ class TelemetryView(  # pylint: disable=R0901
 class ArtifactView(  # pylint: disable=R0901
         mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
         viewsets.GenericViewSet):
-    """SatNOGS DB Artifact API view class"""
+    """
+    Artifacts are objects collected in relation to a satellite observation.
+    """
     queryset = Artifact.objects.all()
     filterset_class = filters.ArtifactViewFilter
     permission_classes = [IsAuthenticated]
@@ -163,7 +179,10 @@ class ArtifactView(  # pylint: disable=R0901
         return serializers.ArtifactSerializer
 
     def create(self, request, *args, **kwargs):
-        """Creates artifact"""
+        """
+        Creates observation artifact
+        * Requires session or key authentication to create an artifact
+        """
         serializer = self.get_serializer(data=request.data)
         try:
             if serializer.is_valid():
