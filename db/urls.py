@@ -5,7 +5,9 @@ from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
 from django.views.static import serve
+from rest_framework.schemas import get_schema_view
 
+from db.api.generators import SchemaGenerator
 from db.api.urls import API_URLPATTERNS
 from db.base.urls import BASE_URLPATTERNS
 
@@ -18,6 +20,18 @@ urlpatterns = [
 
     # API
     path('api/', include(API_URLPATTERNS)),
+
+    # API Schema
+    path(
+        'api-schema',
+        get_schema_view(
+            title='SatNOGS DB',
+            description='SatNOGS DB is a transmitter suggestions and crowd-sourcing app.',
+            version='1.0',
+            generator_class=SchemaGenerator
+        ),
+        name='api-schema'
+    ),
 
     # Admin
     path('admin/', admin.site.urls),
