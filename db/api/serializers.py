@@ -79,19 +79,22 @@ class TransmitterSerializer(serializers.ModelSerializer):
         """Returns downlink mode name"""
         try:
             return obj.downlink_mode.name
-        except Exception:  # pylint: disable=W0703
+        except AttributeError:
             return None
 
     def get_uplink_mode(self, obj):
         """Returns uplink mode name"""
         try:
             return obj.uplink_mode.name
-        except Exception:  # pylint: disable=W0703
+        except AttributeError:
             return None
 
     def get_norad_cat_id(self, obj):
         """Returns Satellite NORAD ID"""
-        return obj.satellite.norad_cat_id
+        try:
+            return obj.satellite.norad_cat_id
+        except AttributeError:
+            return None
 
 
 class LatestTleSetSerializer(serializers.ModelSerializer):
@@ -156,14 +159,14 @@ class TelemetrySerializer(serializers.ModelSerializer):
         """Returns Transmitter UUID"""
         try:
             return obj.transmitter.uuid
-        except Exception:  # pylint: disable=W0703
+        except AttributeError:
             return ''
 
     def get_schema(self, obj):
         """Returns Transmitter telemetry schema"""
         try:
             return obj.payload_telemetry.schema
-        except Exception:  # pylint: disable=W0703
+        except AttributeError:
             return ''
 
     def get_decoded(self, obj):

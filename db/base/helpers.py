@@ -14,10 +14,13 @@ def gridsquare(lat, lng):
 
     :returns: a string of the grid square, ie: EM69uf
     """
-    if not -180 <= lng < 180:
-        return False
-    if not -90 <= lat < 90:
-        return False
+    try:
+        if not -180 <= lng < 180:
+            return 'Unknown'
+        if not -90 <= lat < 90:
+            return 'Unknown'
+    except TypeError:
+        return 'Unknown'
 
     adj_lat = lat + 90.0
     adj_lon = lng + 180.0

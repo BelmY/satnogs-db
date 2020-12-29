@@ -3,6 +3,7 @@ import csv
 import logging
 import tempfile
 from datetime import datetime, timedelta
+from smtplib import SMTPException
 
 from celery import shared_task
 from django.conf import settings
@@ -221,7 +222,7 @@ def notify_transmitter_suggestion(satellite_id, user_id):
     for user in admins:
         try:
             user.email_user(subject, message, from_email=settings.DEFAULT_FROM_EMAIL)
-        except Exception:  # pylint: disable=W0703
+        except SMTPException:
             LOGGER.error('Could not send email to user', exc_info=True)
 
 

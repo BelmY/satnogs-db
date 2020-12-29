@@ -145,13 +145,9 @@ class TelemetryView(  # pylint: disable=R0901
         frame = ContentFile(request.data.get('frame'), name='sids')
         data['payload_frame'] = frame
         # Create observer
-        try:
-            qth = gridsquare(data['lat'], data['lng'])
-        except Exception:  # pylint: disable=W0703
-            data['observer'] = 'Unknown'
-        else:
-            observer = '{0}-{1}'.format(data['station'], qth)
-            data['observer'] = observer
+        qth = gridsquare(data['lat'], data['lng'])
+        observer = '{0}-{1}'.format(data['station'], qth)
+        data['observer'] = observer
 
         serializer = serializers.SidsSerializer(data=data)
         serializer.is_valid(raise_exception=True)
