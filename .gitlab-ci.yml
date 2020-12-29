@@ -308,8 +308,6 @@ dependency_scanning:
   needs:
     - job: api
       artifacts: true
-    - job: static_js_css
-      artifacts: true
   variables:
     DS_DEFAULT_ANALYZERS: 'gemnasium,gemnasium-python,retire.js'
 gemnasium-python-dependency_scanning:
@@ -321,8 +319,6 @@ sast:
   needs:
     - job: api
       artifacts: true
-    - job: static_js_css
-      artifacts: true
   variables:
     SAST_DISABLE_BABEL: 'true'
 secret_detection:
@@ -330,14 +326,10 @@ secret_detection:
   needs:
     - job: api
       artifacts: true
-    - job: static_js_css
-      artifacts: true
 secret_detection_default_branch:
   stage: security
   needs:
     - job: api
-      artifacts: true
-    - job: static_js_css
       artifacts: true
 license_scanning:
   stage: security
