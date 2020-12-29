@@ -231,6 +231,7 @@ pages:
   image: ${GITLAB_CI_IMAGE_ALPINE}
   script:
     - mv docs/_build/html/ public/
+    - mv satnogs-db-api-client/html2/ public/api/
   artifacts:
     paths:
       - public
