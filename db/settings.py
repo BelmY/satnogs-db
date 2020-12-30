@@ -60,7 +60,7 @@ if DEBUG:
 
 if AUTH0:
     THIRD_PARTY_APPS += ('social_django', )
-    LOCAL_APPS += ('auth0login', )
+    # LOCAL_APPS += ('auth0login', )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -185,7 +185,8 @@ WSGI_APPLICATION = 'db.wsgi.application'
 # Auth
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )
 if AUTH0:
-    AUTHENTICATION_BACKENDS += ('auth0login.auth0backend.Auth0', )
+    # AUTHENTICATION_BACKENDS += ('auth0login.auth0backend.Auth0', )
+    AUTHENTICATION_BACKENDS += ('social_core.backends.auth0.Auth0OAuth2', )
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -369,7 +370,7 @@ if AUTH0:
     SOCIAL_AUTH_AUTH0_DOMAIN = config('SOCIAL_AUTH_AUTH0_DOMAIN', default='YOUR_AUTH0_DOMAIN')
     SOCIAL_AUTH_AUTH0_KEY = config('SOCIAL_AUTH_AUTH0_KEY', default='YOUR_CLIENT_ID')
     SOCIAL_AUTH_AUTH0_SECRET = config('SOCIAL_AUTH_AUTH0_SECRET', default='YOUR_CLIENT_SECRET')
-    SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+    # SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
     SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email', 'first_name', 'last_name']
 
     SOCIAL_AUTH_PIPELINE = (
