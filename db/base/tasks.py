@@ -5,6 +5,7 @@ import tempfile
 from datetime import datetime, timedelta
 from smtplib import SMTPException
 
+import zmq
 from celery import shared_task
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -24,6 +25,9 @@ from db.base.models import DemodData, ExportedFrameset, Satellite, Tle
 from db.base.utils import cache_statistics, decode_data, get_tle_sources, update_latest_tle_sets
 
 LOGGER = logging.getLogger('db')
+
+# Initialize shared ZeroMQ context
+CONTEXT = zmq.Context()
 
 
 @shared_task
@@ -258,3 +262,28 @@ def decode_recent_data():
 def decode_current_frame(norad_id, demoddata_id):
     """Task to trigger a decode of a current frame for a satellite."""
     decode_data(norad_id=norad_id, demoddata_id=demoddata_id)
+
+
+@shared_task
+def publish_current_frame(norad_id, timestamp, frame):
+    """Task to publish a current frame for a satellite."""
+    # Initialize ZeroMQ socket
+    publisher = CONTEXT.socket(zmq.XPUB)
+    publisher.setsockopt(zmq.RCVTIMEO, settings.ZEROMQ_SOCKET_RCVTIMEO)
+    publisher.connect(settings.ZEROMQ_SOCKET_URI)
+
+    try:
+        publisher.recv()
+    except zmq.ZMQError as error:
+        if error.errno == zmq.EAGAIN:
+            print('EAGAIN error - No subscription was received')
+        else:
+            raise
+    else:
+        publisher.send_multipart(
+            [bytes(str(norad_id), 'utf-8'),
+             bytes(frame, 'utf-8'),
+             bytes(timestamp, 'utf-8')]
+        )
+    finally:
+        publisher.close()

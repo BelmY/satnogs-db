@@ -441,6 +441,12 @@ DATA_FETCH_DAYS = config('DATA_FETCH_DAYS', default=10, cast=int)
 MAPBOX_GEOCODE_URL = 'https://api.tiles.mapbox.com/v4/geocode/mapbox.places/'
 MAPBOX_TOKEN = config('MAPBOX_TOKEN', default='')
 
+# ZEROMQ
+ZEROMQ_SOCKET_URI = config('ZEROMQ_SOCKET_URI', default='tcp://0.0.0.0:5555')
+ZEROMQ_SOCKET_RCVTIMEO = config(
+    'ZEROMQ_SOCKET_RCVTIMEO', default='100', cast=int
+)  # Time to wait for subscriber message in ms
+
 # TLE Sources
 TLE_SOURCES_REDISTRIBUTABLE = config('TLE_SOURCES_REDISTRIBUTABLE', default='manual', cast=Csv())
 TLE_SOURCES_JSON = config('TLE_SOURCES_JSON', default='')

@@ -17,7 +17,7 @@ from db.api.renderers import BrowserableJSONLDRenderer, JSONLDRenderer
 from db.base.helpers import gridsquare
 from db.base.models import SATELLITE_STATUS, SERVICE_TYPE, TRANSMITTER_STATUS, TRANSMITTER_TYPE, \
     Artifact, DemodData, LatestTleSet, Mode, Satellite, Transmitter
-from db.base.tasks import update_satellite
+from db.base.tasks import publish_current_frame, update_satellite
 
 ISS_EXAMPLE = OpenApiExample('25544 (ISS)', value=25544)
 
@@ -271,8 +271,11 @@ class TelemetryViewSet(  # pylint: disable=R0901
         serializer = serializers.SidsSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(status=status.HTTP_201_CREATED, headers=headers)
+
+        # Run task to publish the current frame via ZeroMQ
+        publish_current_frame.delay(norad_cat_id, timestamp, request.data.get('frame'))
+
+        return Response(status=status.HTTP_201_CREATED)
 
 
 @extend_schema_view(
