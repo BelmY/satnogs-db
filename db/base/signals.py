@@ -4,8 +4,7 @@ import logging
 import h5py
 from django.db.models.signals import post_save
 
-from db.base.models import Artifact, DemodData, Satellite
-from db.base.tasks import decode_current_frame
+from db.base.models import Artifact, Satellite
 from db.base.utils import remove_latest_tle_set, update_latest_tle_sets
 
 LOGGER = logging.getLogger('db')
@@ -31,19 +30,6 @@ def _extract_network_obs_id(sender, instance, created, **kwargs):  # pylint: dis
     post_save.connect(_extract_network_obs_id, sender=Artifact)
 
 
-def _decode(sender, instance, created, **kwargs):  # pylint: disable=W0613
-    """
-    Callback function to immediately decode a saved frame
-    """
-    post_save.disconnect(_decode, sender=DemodData)
-
-    decode_current_frame(instance.satellite.norad_cat_id, instance.id)
-
-    post_save.connect(_decode, sender=DemodData)
-
-
 post_save.connect(_remove_latest_tle_set, sender=Satellite)
-
-post_save.connect(_decode, sender=DemodData)
 
 post_save.connect(_extract_network_obs_id, sender=Artifact)
