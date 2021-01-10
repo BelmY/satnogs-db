@@ -35,6 +35,7 @@ THIRD_PARTY_APPS = (
     'bootstrap_modal_forms',
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_spectacular',
     'django_countries',
     'django_filters',
     'fontawesome_5',
@@ -278,7 +279,127 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication'
     ],
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend', )
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend', ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    # path prefix is used for tagging the discovered operations.
+    # use '/api/v[0-9]' for tagging apis like '/api/v1/albums' with ['albums']
+    'SCHEMA_PATH_PREFIX': r'/api',
+    'DEFAULT_GENERATOR_CLASS': 'drf_spectacular.generators.SchemaGenerator',
+
+    # Configuration for serving the schema with SpectacularAPIView
+    'SERVE_URLCONF': None,
+
+    # complete public schema or a subset based on the requesting user
+    'SERVE_PUBLIC': True,
+
+    # is the
+    'SERVE_INCLUDE_SCHEMA': True,
+    'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny'],
+
+    # available SwaggerUI configuration parameters
+    # https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'persistAuthorization': True,
+        'displayOperationId': True,
+    },
+
+    # available SwaggerUI versions: https://github.com/swagger-api/swagger-ui/releases
+    'SWAGGER_UI_DIST': STATIC_URL + 'lib/swagger-ui-dist',
+    'SWAGGER_UI_FAVICON_HREF': STATIC_URL + 'favicon.ico',
+    'TITLE': 'SatNOGS DB',
+    'DESCRIPTION': 'SatNOGS DB is a crowdsourced database of details about orbital \
+                    satellites and data collected from them.',
+    'TOS': None,
+
+    # Optional: MAY contain "name", "url", "email"
+    'CONTACT': {
+        'name': 'SatNOGS Developer Chat',
+        'url': 'https://riot.im/app/#/room/#satnogs-dev:matrix.org'
+    },
+
+    # Optional: MUST contain "name", MAY contain URL
+    'LICENSE': {
+        'name': 'AGPL 3.0',
+        'url': 'https://www.gnu.org/licenses/agpl-3.0.html'
+    },
+    'VERSION': '1.1',
+
+    # Optional list of servers.
+    # Each entry MUST contain "url", MAY contain "description", "variables"
+    'SERVERS': [
+        {
+            'url': 'https://db-dev.satnogs.org',
+            'description': 'Development server'
+        },
+        {
+            'url': 'https://db.satnogs.org',
+            'description': 'Production server'
+        }
+    ],
+
+    # Postprocessing functions that run at the end of schema generation.
+    # must satisfy interface result = hook(generator, request, public, result)
+    'POSTPROCESSING_HOOKS': [
+        'drf_spectacular.hooks.postprocess_schema_enums'
+    ],
+
+    # Function that returns a mocked request for view processing. For CLI usage
+    # original_request will be None.
+    # interface: request = build_mock_request(method, path, view, original_request, **kwargs)
+    'GET_MOCK_REQUEST': 'drf_spectacular.plumbing.build_mock_request',
+
+    # Tags defined in the global scope
+    'TAGS': [
+        {
+            'name': 'artifacts',
+            'description': 'IN DEVELOPMENT (BETA): Artifacts are file-formatted objects \
+                            collected from a satellite observation.'
+        },
+        {
+            'name': 'modes',
+            'description': 'Radio Frequency modulation modes (RF Modes) currently \
+                            tracked in the SatNOGS DB database',
+            'externalDocs': {
+                'description': 'RF Modes in SatNOGS Wiki',
+                'url': 'https://wiki.satnogs.org/Category:RF_Modes',
+            }
+        },
+        {
+            'name': 'satellites',
+            'description': 'Human-made orbital objects, typically with radio frequency \
+                            transmitters and/or reveivers'
+        },
+        {
+            'name': 'telemetry',
+            'description': 'Telemetry objects in the SatNOGS DB database are frames of \
+                            data collected from downlinked observations.'
+        },
+        {
+            'name': 'tle',
+            'description': 'The most recent two-line elements (TLE) in the SatNOGS DB database',
+            'externalDocs': {
+                'description': 'TLE Wikipedia doc',
+                'url': 'https://en.wikipedia.org/wiki/Two-line_element_set',
+            }
+        },
+        {
+            'name': 'transmitters',
+            'description': 'Radio Frequency (RF) transmitter entities in the SatNOGS DB \
+                            database. Transmitters in this case are inclusive of Transceivers \
+                            and Transponders'
+        },
+    ],
+
+    # Optional: MUST contain 'url', may contain "description"
+    'EXTERNAL_DOCS': {
+        'url': 'https://wiki.satnogs.org',
+        'description': 'SatNOGS Wiki'
+    },
+    'COMPONENT_SPLIT_REQUEST': True
 }
 
 # Security
@@ -397,3 +518,6 @@ if ENVIRONMENT == 'dev':
     for backend in TEMPLATES:
         del backend['OPTIONS']['loaders']
         backend['APP_DIRS'] = True
+
+# for h5 artifact uploads
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880

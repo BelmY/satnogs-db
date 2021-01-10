@@ -26,11 +26,10 @@ schema:
   script:
     - pip install --no-cache-dir --no-deps -r "requirements.txt" --force-reinstall .
     - >-
-      ./manage.py generateschema
-      --title "SatNOGS DB"
-      --description "SatNOGS DB is a transmitter suggestions and crowd-sourcing app."
-      --generator_class "db.api.generators.SchemaGenerator"
-      > satnogs-db-api-client/api-schema.yml
+      ./manage.py spectacular
+      --file satnogs-db-api-client/api-schema.yml
+      --validate
+      --fail-on-warn
   artifacts:
     expire_in: 1 week
     when: always

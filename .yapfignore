@@ -6,3 +6,4 @@ satnogs-db-api-client
 build
 docs
 versioneer.py
+db/settings.py

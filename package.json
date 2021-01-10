@@ -20,7 +20,8 @@
         "d3": "^6.3.0",
         "flot": "^4.2.1",
         "gpredict.js": "github:kerel-fs/gpredict.js",
-        "mapbox-gl": "^2.0.0"
+        "mapbox-gl": "^2.0.0",
+        "swagger-ui-dist": "^3.39.0"
     },
     "assets": [
         "admin-lte/**/*",
@@ -28,6 +29,8 @@
         "flot/dist/**/*",
         "gpredict.js/dist/gpredict.min.js",
         "mapbox-gl/dist/mapbox-gl.css",
-        "mapbox-gl/dist/mapbox-gl.js"
+        "mapbox-gl/dist/mapbox-gl.js",
+        "swagger-ui-dist/swagger-ui.css",
+        "swagger-ui-dist/swagger-ui-bundle.js"
     ]
 }

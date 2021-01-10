@@ -1,6 +1,8 @@
 """SatNOGS DB API django rest framework Views"""
 from django.core.files.base import ContentFile
 from django.db.models import F
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import mixins, status, viewsets
 from rest_framework.parsers import FileUploadParser, FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
@@ -16,8 +18,21 @@ from db.base.models import Artifact, DemodData, LatestTleSet, Mode, Satellite, T
 from db.base.tasks import update_satellite
 
 
-class ModeView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
-    """View into the transmitter modulation modes in the SatNOGS DB database"""
+@extend_schema_view(
+    retrieve=extend_schema(
+        description='Retrieve a single RF Mode from SatNOGS DB based on its ID',
+    ),
+    list=extend_schema(description='Retrieve a complete list of RF Modes from SatNOGS DB', )
+)
+class ModeViewSet(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
+    """
+    Read-only view into the transmitter modulation modes (RF Modes) currently tracked
+    in the SatNOGS DB database
+
+    For more details on individual RF mode types please [see our wiki][moderef].
+
+    [moderef]: https://wiki.satnogs.org/Category:RF_Modes
+    """
     renderer_classes = [
         JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer, BrowserableJSONLDRenderer
     ]
@@ -25,8 +40,47 @@ class ModeView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     serializer_class = serializers.ModeSerializer
 
 
-class SatelliteView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
-    """View into the Satellite entities in the SatNOGS DB database"""
+@extend_schema_view(
+    list=extend_schema(
+        description='Retrieve a full or filtered list of satellites in SatNOGS DB',
+        parameters=[
+            # drf-spectacular does not currently recognize the in_orbit filter as a
+            # bool, forcing it here. See drf-spectacular#234
+            OpenApiParameter(
+                name='in_orbit',
+                description='Filter by satellites currently in orbit (True) or those that have \
+                            decayed (False)',
+                required=False,
+                type=bool
+            ),
+            OpenApiParameter(
+                name='norad_cat_id',
+                description='Select a satellite by its NORAD-assigned identifier'
+            ),
+            OpenApiParameter(
+                name='status',
+                description='Filter satellites by their operational status',
+                required=False,
+                type=bool
+            ),
+        ],
+    ),
+    retrieve=extend_schema(
+        description='Retrieve details on a single satellite in SatNOGS DB',
+        parameters=[
+            OpenApiParameter(
+                'norad_cat_id',
+                OpenApiTypes.INT64,
+                OpenApiParameter.PATH,
+                description='Select a satellite by its NORAD-assigned identifier'
+            ),
+        ],
+    )
+)
+class SatelliteViewSet(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
+    """
+    Read-only view into the Satellite entities in the SatNOGS DB database
+    """
     renderer_classes = [
         JSONRenderer, BrowsableAPIRenderer, JSONLDRenderer, BrowserableJSONLDRenderer
     ]
@@ -36,9 +90,9 @@ class SatelliteView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     lookup_field = 'norad_cat_id'
 
 
-class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
+class TransmitterViewSet(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """
-    View into the Transmitter entities in the SatNOGS DB database.
+    Read-only view into the Transmitter entities in the SatNOGS DB database.
     Transmitters are inclusive of Transceivers and Transponders
     """
     renderer_classes = [
@@ -50,9 +104,10 @@ class TransmitterView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     lookup_field = 'uuid'
 
 
-class LatestTleSetView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
+class LatestTleSetViewSet(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """
-    View into the most recent two-line elements (TLE) in the SatNOGS DB database
+    Read-only view into the most recent two-line elements (TLE) in the SatNOGS DB
+    database
     """
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = LatestTleSet.objects.all().select_related('satellite').exclude(
@@ -84,7 +139,29 @@ class LatestTleSetView(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
         return self.queryset
 
 
-class TelemetryView(  # pylint: disable=R0901
+@extend_schema_view(
+    list=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name='app_source',
+                description='The submission source for the telemetry frames: manual (a manual \
+                             upload/entry), network (SatNOGS Network observations), or sids \
+                             (legacy API submission)',
+            ),
+            OpenApiParameter(
+                name='observer',
+                description='(string) name of the observer (submitter) to retrieve telemetry data \
+                            from'
+            ),
+            OpenApiParameter(
+                name='satellite',
+                description='NORAD ID of a satellite to filter telemetry data for'
+            ),
+            OpenApiParameter(name='transmitter', description='Not currently in use'),
+        ],
+    ),
+)
+class TelemetryViewSet(  # pylint: disable=R0901
         mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
         viewsets.GenericViewSet):
     """
@@ -102,11 +179,12 @@ class TelemetryView(  # pylint: disable=R0901
     parser_classes = (FormParser, FileUploadParser)
     pagination_class = pagination.LinkedHeaderPageNumberPagination
 
+    @extend_schema(
+        responses={'201': None},  # None
+    )
     def create(self, request, *args, **kwargs):
         """
-        Creates an frame of telemetry data from a satellite observation. See
-        https://www.pe0sat.vgnet.nl/download/Hidden/Dombrovski-SIDS-Simple-Downlink-Share-Convention.pdf
-        for a description of the original protocol.
+        Creates an frame of telemetry data from a satellite observation.
         """
         data = {}
 
@@ -156,11 +234,34 @@ class TelemetryView(  # pylint: disable=R0901
         return Response(status=status.HTTP_201_CREATED, headers=headers)
 
 
-class ArtifactView(  # pylint: disable=R0901
+@extend_schema_view(
+    list=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                'network_obs_id',
+                OpenApiTypes.INT64,
+                required=False,
+                description='Given a SatNOGS Network observation ID, this will return any \
+                             artifacts files associated with the observation.'
+            ),
+        ],
+    ),
+    retrieve=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                'id',
+                OpenApiTypes.URI,
+                OpenApiParameter.PATH,
+                description='The ID for the requested artifact entry in DB'
+            ),
+        ],
+    ),
+)
+class ArtifactViewSet(  # pylint: disable=R0901
         mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
         viewsets.GenericViewSet):
     """
-    Artifacts are objects collected in relation to a satellite observation.
+    Artifacts are file-formatted objects collected from a satellite observation.
     """
     queryset = Artifact.objects.all()
     filterset_class = filters.ArtifactViewFilter
@@ -176,8 +277,10 @@ class ArtifactView(  # pylint: disable=R0901
 
     def create(self, request, *args, **kwargs):
         """
-        Creates observation artifact
+        Creates observation artifact from an [HDF5 formatted file][hdf5ref]
         * Requires session or key authentication to create an artifact
+
+        [hdf5ref]: https://en.wikipedia.org/wiki/Hierarchical_Data_Format
         """
         serializer = self.get_serializer(data=request.data)
         try:

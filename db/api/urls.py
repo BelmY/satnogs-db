@@ -5,11 +5,11 @@ from db.api import views
 
 ROUTER = routers.DefaultRouter()
 
-ROUTER.register(r'artifacts', views.ArtifactView)
-ROUTER.register(r'modes', views.ModeView)
-ROUTER.register(r'satellites', views.SatelliteView)
-ROUTER.register(r'transmitters', views.TransmitterView)
-ROUTER.register(r'telemetry', views.TelemetryView)
-ROUTER.register(r'tle', views.LatestTleSetView)
+ROUTER.register(r'artifacts', views.ArtifactViewSet)
+ROUTER.register(r'modes', views.ModeViewSet)
+ROUTER.register(r'satellites', views.SatelliteViewSet)
+ROUTER.register(r'transmitters', views.TransmitterViewSet)
+ROUTER.register(r'telemetry', views.TelemetryViewSet)
+ROUTER.register(r'tle', views.LatestTleSetViewSet)
 
 API_URLPATTERNS = ROUTER.urls

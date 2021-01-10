@@ -5,9 +5,8 @@ from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
 from django.views.static import serve
-from rest_framework.schemas import get_schema_view
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
 
-from db.api.generators import SchemaGenerator
 from db.api.urls import API_URLPATTERNS
 from db.base.urls import BASE_URLPATTERNS
 
@@ -22,16 +21,10 @@ urlpatterns = [
     path('api/', include(API_URLPATTERNS)),
 
     # API Schema
-    path(
-        'api-schema',
-        get_schema_view(
-            title='SatNOGS DB',
-            description='SatNOGS DB is a transmitter suggestions and crowd-sourcing app.',
-            version='1.0',
-            generator_class=SchemaGenerator
-        ),
-        name='api-schema'
-    ),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Swagger UI view of our schema. Note the use of SpectacularSwaggerSplitView
+    # is to avoid CSP issues without having to open up unsafe-inline.
+    path('api/schema/docs/', SpectacularSwaggerSplitView.as_view(url_name='schema'), name='docs'),
 
     # Admin
     path('admin/', admin.site.urls),
