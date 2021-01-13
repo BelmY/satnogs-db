@@ -55,8 +55,8 @@ LOCAL_APPS = (
 if DEBUG:
     DJANGO_APPS += ('debug_toolbar', )
     DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK':
-        lambda request: request.environ.get('SERVER_NAME', None) != 'testserver',
+        'SHOW_TOOLBAR_CALLBACK': lambda request: request.environ.get('SERVER_NAME', None) !=
+        'testserver',
     }
 
 if AUTH0:
@@ -98,8 +98,9 @@ SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # Cache
 CACHES = {
     'default': {
-        'BACKEND':
-        config('CACHE_BACKEND', default='django.core.cache.backends.locmem.LocMemCache'),
+        'BACKEND': config(
+            'CACHE_BACKEND', default='django.core.cache.backends.locmem.LocMemCache'
+        ),
         'LOCATION': config('CACHE_LOCATION', default='unique-location'),
         'OPTIONS': {
             'MAX_ENTRIES': 5000,
@@ -273,8 +274,9 @@ REDIS_CONNECT_RETRY = True
 
 # API
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES':
-    ('rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly', ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication'
@@ -334,8 +336,7 @@ SPECTACULAR_SETTINGS = {
         {
             'url': 'https://db-dev.satnogs.org',
             'description': 'Development server'
-        },
-        {
+        }, {
             'url': 'https://db.satnogs.org',
             'description': 'Production server'
         }
@@ -343,9 +344,7 @@ SPECTACULAR_SETTINGS = {
 
     # Postprocessing functions that run at the end of schema generation.
     # must satisfy interface result = hook(generator, request, public, result)
-    'POSTPROCESSING_HOOKS': [
-        'drf_spectacular.hooks.postprocess_schema_enums'
-    ],
+    'POSTPROCESSING_HOOKS': ['drf_spectacular.hooks.postprocess_schema_enums'],
 
     # Function that returns a mocked request for view processing. For CLI usage
     # original_request will be None.

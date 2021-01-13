@@ -257,14 +257,13 @@ class LatestTleSetSerializer(serializers.ModelSerializer):
                 'app_source': 'network',
                 'schema': None,
                 'decoded': 'influxdb',
-                'frame':
-                '968870A6A0A66086A240404040E103F0ABCD0000004203F500B475E215EA5FA0040C000B00090001\
-                0025008E55EE7B64650100000000AE4D07005D660F007673340000C522370067076507FD0C6000270\
-                0FE0CC50E0D00AD0E0B069007BD0E0E00650D21001400FE0C910054007007690D8700FC0CBA00E407\
-                43001C0F140077077807D7078E00120F240068076D07DA0A74003D0F2500830780077A0AC401490F9\
-                60070077207FDFC9F079507950700C03B0015009AFF6900C8FFE0FFA700EBFF3A00F200F3FF02016D\
-                0A590A0D0AE3099B0C830CB50DA70D9D06CC0043009401B8338B334C20001000000000009F0200000\
-                3000000FF723D00BEFFFFFFFF2E89B0151C00',
+                'frame': '968870A6A0A66086A240404040E103F0ABCD0000004203F500B475E215EA5FA0040C000B'
+                '000900010025008E55EE7B64650100000000AE4D07005D660F007673340000C522370067076507FD0'
+                'C60002700FE0CC50E0D00AD0E0B069007BD0E0E00650D21001400FE0C910054007007690D8700FC0C'
+                'BA00E40743001C0F140077077807D7078E00120F240068076D07DA0A74003D0F2500830780077A0AC'
+                '401490F960070077207FDFC9F079507950700C03B0015009AFF6900C8FFE0FFA700EBFF3A00F200F3'
+                'FF02016D0A590A0D0AE3099B0C830CB50DA70D9D06CC0043009401B8338B334C20001000000000009'
+                'F02000003000000FF723D00BEFFFFFFFF2E89B0151C00',
                 'observer': 'KB9JHU-EM69uf',
                 'timestamp': '2021-01-05T22:28:09Z'
             },
@@ -335,15 +334,13 @@ class SidsSerializer(serializers.ModelSerializer):
         OpenApiExample(
             'View Artifact Example 1',
             summary='Example: retrieving a specific artifact',
-            description='This is an example response when requesting a specific artifact \
-                        previously uploaded to DB',
+            description='This is an example response when requesting a specific artifact '
+            'previously uploaded to DB',
             value={
-                'id':
-                1337,
-                'network_obs_id':
-                3376466,
-                'artifact_file':
-                'http://db-dev.satnogs.org/media/artifacts/bba35b2d-76cc-4a8f-9b8a-4a2ecb09c6df.h5'
+                'id': 1337,
+                'network_obs_id': 3376466,
+                'artifact_file': 'http://db-dev.satnogs.org/media/artifacts/bba35b2d-76cc-4a8f-'
+                '9b8a-4a2ecb09c6df.h5'
             },
             status_codes=['200'],
             response_only=True,  # signal that example only applies to responses
@@ -362,8 +359,8 @@ class ArtifactSerializer(serializers.ModelSerializer):
         OpenApiExample(
             'New Artifact Example 1',
             summary='Example: uploading artifact',
-            description='This is an example response after successfully uploading an artifact \
-                        file. The ID of the artifact is returned',
+            description='This is an example response after successfully uploading an artifact '
+            'file. The ID of the artifact is returned',
             value={
                 'id': 1337,
             },
