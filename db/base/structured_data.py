@@ -42,7 +42,7 @@ class StructuredData:
 class ModeStructuredData(StructuredData):
     """Generic structered data class for Mode model"""
     def __init__(self, data):
-        super(ModeStructuredData, self).__init__(data)
+        super().__init__(data)
         self.context = {"@vocab": "https://schema.space/metasat/", "name": "modulation"}
         structured_data = []
 
@@ -54,7 +54,7 @@ class ModeStructuredData(StructuredData):
 class SatelliteStructuredData(StructuredData):
     """Generic structered data class for Satellite model"""
     def __init__(self, data):
-        super(SatelliteStructuredData, self).__init__(data)
+        super().__init__(data)
         self.context = {
             "@vocab": "https://schema.space/metasat/",
             "schema": "http://schema.org/",
@@ -108,7 +108,7 @@ class SatelliteStructuredData(StructuredData):
 class TransmitterStructuredData(StructuredData):
     """Generic structered data class for Transmitter model"""
     def __init__(self, data):
-        super(TransmitterStructuredData, self).__init__(data)
+        super().__init__(data)
         self.context = {
             "@vocab": "https://schema.space/metasat/",
             "schema": "http://schema.org/",
@@ -200,7 +200,7 @@ class TransmitterStructuredData(StructuredData):
 class DemodDataStructuredData(StructuredData):
     """Generic structered data class for DemodData model"""
     def __init__(self, data):
-        super(DemodDataStructuredData, self).__init__(data)
+        super().__init__(data)
         self.context = {
             "@vocab": "https://schema.space/metasat/",
             "schema": "http://schema.org/",

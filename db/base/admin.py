@@ -42,7 +42,7 @@ class SatelliteAdmin(admin.ModelAdmin):
 
         :returns: Django urls for the Satellite admin view
         """
-        urls = super(SatelliteAdmin, self).get_urls()
+        urls = super().get_urls()
         my_urls = [
             url(r'^check_celery/$', self.check_celery, name='check_celery'),
             url(
@@ -144,7 +144,7 @@ class TransmitterSuggestionAdmin(admin.ModelAdmin):
 
         :returns: list of actions the user can take on TransmitterSuggestion
         """
-        actions = super(TransmitterSuggestionAdmin, self).get_actions(request)
+        actions = super().get_actions(request)
         if not request.user.has_perm('base.delete_transmittersuggestion'):
             if 'delete_selected' in actions:
                 del actions['delete_selected']
@@ -236,7 +236,7 @@ class TleAdmin(admin.ModelAdmin):
 
         :returns: Django urls for the Tle admin view
         """
-        urls = super(TleAdmin, self).get_urls()
+        urls = super().get_urls()
         my_urls = [
             url(r'^update_tle_sets/$', self.update_tle_sets, name='update_tle_sets'),
         ]
