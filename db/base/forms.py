@@ -23,14 +23,11 @@ class TransmitterModelForm(BSModalModelForm):  # pylint: disable=too-many-ancest
     """Model Form class for TransmitterEntry objects"""
     class Meta:
         model = TransmitterEntry
-        # yapf: disable
         fields = [
             'description', 'type', 'status', 'uplink_low', 'uplink_high', 'uplink_drift',
-            'uplink_mode', 'downlink_low', 'downlink_high', 'downlink_drift',
-            'downlink_mode', 'invert', 'baud', 'citation', 'service', 'coordination',
-            'coordination_url'
+            'uplink_mode', 'downlink_low', 'downlink_high', 'downlink_drift', 'downlink_mode',
+            'invert', 'baud', 'citation', 'service', 'coordination', 'coordination_url'
         ]
-        # yapf: enable
         labels = {
             'downlink_low': _('Downlink freq.'),
             'uplink_low': _('Uplink freq.'),
@@ -45,14 +42,11 @@ class TransmitterUpdateForm(BSModalModelForm):  # pylint: disable=too-many-ances
     """Model Form class for TransmitterEntry objects"""
     class Meta:
         model = TransmitterEntry
-        # yapf: disable
         fields = [
             'description', 'type', 'status', 'uplink_low', 'uplink_high', 'uplink_drift',
-            'uplink_mode', 'downlink_low', 'downlink_high', 'downlink_drift',
-            'downlink_mode', 'invert', 'baud', 'citation', 'service', 'coordination',
-            'coordination_url', 'created'
+            'uplink_mode', 'downlink_low', 'downlink_high', 'downlink_drift', 'downlink_mode',
+            'invert', 'baud', 'citation', 'service', 'coordination', 'coordination_url', 'created'
         ]
-        # yapf: enable
         labels = {
             'downlink_low': _('Downlink freq.'),
             'uplink_low': _('Uplink freq.'),

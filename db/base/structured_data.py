@@ -167,8 +167,8 @@ class TransmitterStructuredData(StructuredData):
                         "mode": transmitter['mode']
                     }
                 if transmitter['downlink_drift']:
-                    data_to_append['transmitter']['downlink']['drift'
-                                                              ] = transmitter['downlink_drift']
+                    data_to_append['transmitter']['downlink']['drift'] = transmitter[
+                        'downlink_drift']
 
             if transmitter['uplink_low']:
                 if transmitter['uplink_high']:
