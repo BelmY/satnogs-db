@@ -11,12 +11,12 @@ def existing_uuid(value):
     """ensures the UUID is existing and valid"""
     try:
         Transmitter.objects.get(uuid=value)
-    except Transmitter.DoesNotExist:
+    except Transmitter.DoesNotExist as error:
         raise ValidationError(
             _('%(value)s is not a valid uuid'),
             code='invalid',
             params={'value': value},
-        )
+        ) from error
 
 
 class TransmitterModelForm(BSModalModelForm):  # pylint: disable=too-many-ancestors
