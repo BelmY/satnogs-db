@@ -2,7 +2,8 @@
 from django.core.files.base import ContentFile
 from django.db.models import F
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema, \
+    extend_schema_view
 from rest_framework import mixins, status, viewsets
 from rest_framework.parsers import FileUploadParser, FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
@@ -14,8 +15,11 @@ from db.api import filters, pagination, serializers
 from db.api.perms import SafeMethodsWithPermission
 from db.api.renderers import BrowserableJSONLDRenderer, JSONLDRenderer
 from db.base.helpers import gridsquare
-from db.base.models import Artifact, DemodData, LatestTleSet, Mode, Satellite, Transmitter
+from db.base.models import SATELLITE_STATUS, SERVICE_TYPE, TRANSMITTER_STATUS, TRANSMITTER_TYPE, \
+    Artifact, DemodData, LatestTleSet, Mode, Satellite, Transmitter
 from db.base.tasks import update_satellite
+
+ISS_EXAMPLE = OpenApiExample('25544 (ISS)', value=25544)
 
 
 @extend_schema_view(
@@ -54,14 +58,15 @@ class ModeViewSet(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
                 type=bool
             ),
             OpenApiParameter(
-                name='norad_cat_id',
-                description='Select a satellite by its NORAD-assigned identifier'
+                name='status',
+                description='Filter by satellite status: ' + ' '.join(SATELLITE_STATUS),
+                required=False,
+                type=OpenApiTypes.STR
             ),
             OpenApiParameter(
-                name='status',
-                description='Filter satellites by their operational status',
-                required=False,
-                type=bool
+                name='norad_cat_id',
+                description='Select a satellite by its NORAD-assigned identifier',
+                examples=[ISS_EXAMPLE],
             ),
         ],
     ),
@@ -72,10 +77,11 @@ class ModeViewSet(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
                 'norad_cat_id',
                 OpenApiTypes.INT64,
                 OpenApiParameter.PATH,
-                description='Select a satellite by its NORAD-assigned identifier'
+                description='Select a satellite by its NORAD-assigned identifier',
+                examples=[ISS_EXAMPLE],
             ),
         ],
-    )
+    ),
 )
 class SatelliteViewSet(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """
@@ -90,6 +96,38 @@ class SatelliteViewSet(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     lookup_field = 'norad_cat_id'
 
 
+@extend_schema_view(
+    list=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name='satellite__norad_cat_id',
+                description='NORAD ID of a satellite to filter telemetry data for',
+                examples=[ISS_EXAMPLE],
+            ),
+            OpenApiParameter(
+                name='status',
+                description='Filter by transmitter status: ' + ' '.join(TRANSMITTER_STATUS),
+                required=False,
+                type=OpenApiTypes.STR,
+                examples=[OpenApiExample('active', value='\'active\'')]
+            ),
+            OpenApiParameter(
+                name='service',
+                description='Filter by transmitter service: ' + ' '.join(SERVICE_TYPE),
+                required=False,
+                type=OpenApiTypes.STR,
+                examples=[OpenApiExample('Amateur', value='\'Amateur\'')]
+            ),
+            OpenApiParameter(
+                name='type',
+                description='Filter by transmitter type: ' + ' '.join(TRANSMITTER_TYPE),
+                required=False,
+                type=OpenApiTypes.STR,
+                examples=[OpenApiExample('Transmitter', value='\'Transmitter\'')]
+            ),
+        ],
+    ),
+)
 class TransmitterViewSet(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R0901
     """
     Read-only view into the Transmitter entities in the SatNOGS DB database.
@@ -155,7 +193,8 @@ class LatestTleSetViewSet(viewsets.ReadOnlyModelViewSet):  # pylint: disable=R09
             ),
             OpenApiParameter(
                 name='satellite',
-                description='NORAD ID of a satellite to filter telemetry data for'
+                description='NORAD ID of a satellite to filter telemetry data for',
+                examples=[ISS_EXAMPLE],
             ),
             OpenApiParameter(name='transmitter', description='Not currently in use'),
         ],

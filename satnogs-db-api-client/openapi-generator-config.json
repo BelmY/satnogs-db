@@ -10,6 +10,6 @@
     "perlModuleName": "satnogsdbapiclient",
     "phpInvokerPackage": "satnogsdbapiclient",
     "pythonPackageName": "satnogsdbapiclient",
-    "licenseInfo": "Copyright (C) 2020 Libre Space Foundation <https://libre.space/>",
+    "licenseInfo": "Copyright (C) 2021 Libre Space Foundation <https://libre.space/>",
     "licenseUrl": "https://www.gnu.org/licenses/agpl-3.0.html"
 }

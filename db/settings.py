@@ -283,22 +283,17 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend', ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'FORMAT_SUFFIX_KWARG': 'format',
 }
 
 SPECTACULAR_SETTINGS = {
-    # path prefix is used for tagging the discovered operations.
-    # use '/api/v[0-9]' for tagging apis like '/api/v1/albums' with ['albums']
     'SCHEMA_PATH_PREFIX': r'/api',
     'DEFAULT_GENERATOR_CLASS': 'drf_spectacular.generators.SchemaGenerator',
 
     # Configuration for serving the schema with SpectacularAPIView
     'SERVE_URLCONF': None,
-
-    # complete public schema or a subset based on the requesting user
     'SERVE_PUBLIC': True,
-
-    # is the
-    'SERVE_INCLUDE_SCHEMA': True,
+    'SERVE_INCLUDE_SCHEMA': False,
     'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny'],
 
     # available SwaggerUI configuration parameters
@@ -309,29 +304,22 @@ SPECTACULAR_SETTINGS = {
         'displayOperationId': True,
     },
 
-    # available SwaggerUI versions: https://github.com/swagger-api/swagger-ui/releases
+    # we pull swagger-ui in via npm, as opposed to using their cdn
     'SWAGGER_UI_DIST': STATIC_URL + 'lib/swagger-ui-dist',
     'SWAGGER_UI_FAVICON_HREF': STATIC_URL + 'favicon.ico',
     'TITLE': 'SatNOGS DB',
     'DESCRIPTION': 'SatNOGS DB is a crowdsourced database of details about orbital \
                     satellites and data collected from them.',
     'TOS': None,
-
-    # Optional: MAY contain "name", "url", "email"
     'CONTACT': {
         'name': 'SatNOGS Developer Chat',
         'url': 'https://riot.im/app/#/room/#satnogs-dev:matrix.org'
     },
-
-    # Optional: MUST contain "name", MAY contain URL
     'LICENSE': {
         'name': 'AGPL 3.0',
         'url': 'https://www.gnu.org/licenses/agpl-3.0.html'
     },
     'VERSION': '1.1',
-
-    # Optional list of servers.
-    # Each entry MUST contain "url", MAY contain "description", "variables"
     'SERVERS': [
         {
             'url': 'https://db-dev.satnogs.org',
@@ -341,14 +329,8 @@ SPECTACULAR_SETTINGS = {
             'description': 'Production server'
         }
     ],
-
-    # Postprocessing functions that run at the end of schema generation.
-    # must satisfy interface result = hook(generator, request, public, result)
+    'PREPROCESSING_HOOKS': ['drf_spectacular.hooks.preprocess_exclude_path_format'],
     'POSTPROCESSING_HOOKS': ['drf_spectacular.hooks.postprocess_schema_enums'],
-
-    # Function that returns a mocked request for view processing. For CLI usage
-    # original_request will be None.
-    # interface: request = build_mock_request(method, path, view, original_request, **kwargs)
     'GET_MOCK_REQUEST': 'drf_spectacular.plumbing.build_mock_request',
 
     # Tags defined in the global scope
@@ -392,8 +374,6 @@ SPECTACULAR_SETTINGS = {
                             and Transponders'
         },
     ],
-
-    # Optional: MUST contain 'url', may contain "description"
     'EXTERNAL_DOCS': {
         'url': 'https://wiki.satnogs.org',
         'description': 'SatNOGS Wiki'
