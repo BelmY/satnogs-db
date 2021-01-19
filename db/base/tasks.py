@@ -265,7 +265,7 @@ def decode_current_frame(norad_id, demoddata_id):
 
 
 @shared_task
-def publish_current_frame(norad_id, timestamp, frame):
+def publish_current_frame(norad_id, timestamp, frame, observer):
     """Task to publish a current frame for a satellite."""
     # Initialize ZeroMQ socket
     publisher = CONTEXT.socket(zmq.XPUB)
@@ -281,9 +281,12 @@ def publish_current_frame(norad_id, timestamp, frame):
             raise
     else:
         publisher.send_multipart(
-            [bytes(str(norad_id), 'utf-8'),
-             bytes(frame, 'utf-8'),
-             bytes(timestamp, 'utf-8')]
+            [
+                bytes(str(norad_id), 'utf-8'),
+                bytes(timestamp, 'utf-8'),
+                bytes(frame, 'utf-8'),
+                bytes(observer, 'utf-8')
+            ]
         )
     finally:
         publisher.close()

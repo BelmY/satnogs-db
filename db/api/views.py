@@ -276,7 +276,7 @@ class TelemetryViewSet(  # pylint: disable=R0901
         decode_current_frame.delay(norad_cat_id, serializer.instance.pk)
 
         # Run task to publish the current frame via ZeroMQ
-        publish_current_frame.delay(norad_cat_id, timestamp, request.data.get('frame'))
+        publish_current_frame.delay(norad_cat_id, timestamp, request.data.get('frame'), observer)
 
         return Response(status=status.HTTP_201_CREATED)
 
