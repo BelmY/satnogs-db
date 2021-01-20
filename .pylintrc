@@ -11,4 +11,7 @@ disable=
 [TYPECHECK]
 # zmq.{EAGAIN,RCVTIMEO,XPUB} is dynamically generated and so pylint
 # doesn't see it, causing false positives.
-generated-members=EAGAIN,RCVTIMEO,XPUB
+generated-members=
+    zmq.EAGAIN,
+    zmq.RCVTIMEO,
+    zmq.XPUB
