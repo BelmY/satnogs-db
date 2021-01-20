@@ -584,6 +584,7 @@ class DemodData(models.Model):
     )
     is_decoded = models.BooleanField(default=False, db_index=True)
     timestamp = models.DateTimeField(null=True, db_index=True)
+    version = models.CharField(max_length=45, blank=True)
 
     class Meta:
         ordering = ['-timestamp']
@@ -605,6 +606,8 @@ class DemodData(models.Model):
                     'payload frame path': self.payload_frame.path,
                 }
             )
+            return None
+        except ValueError:  # unlikely to happen in prod, but if an entry is made without a file
             return None
 
 

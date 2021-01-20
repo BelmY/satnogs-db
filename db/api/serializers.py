@@ -283,7 +283,7 @@ class TelemetrySerializer(serializers.ModelSerializer):
         model = DemodData
         fields = (
             'norad_cat_id', 'transmitter', 'app_source', 'schema', 'decoded', 'frame', 'observer',
-            'timestamp'
+            'timestamp', 'version'
         )
 
     @extend_schema_field(OpenApiTypes.INT64)
@@ -318,6 +318,11 @@ class TelemetrySerializer(serializers.ModelSerializer):
         """Returns the payload frame"""
         return obj.display_frame()
 
+    # @extend_schema_field(OpenApiTypes.STR)
+    # def get_version(self, obj):
+    #     """Returns the payload version"""
+    #     return obj.version
+
 
 class SidsSerializer(serializers.ModelSerializer):
     """SatNOGS DB SiDS API Serializer"""
@@ -325,7 +330,7 @@ class SidsSerializer(serializers.ModelSerializer):
         model = DemodData
         fields = (
             'satellite', 'payload_frame', 'station', 'lat', 'lng', 'timestamp', 'app_source',
-            'observer'
+            'observer', 'version'
         )
 
 

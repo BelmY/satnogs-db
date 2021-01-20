@@ -239,6 +239,8 @@ class TelemetryViewSet(  # pylint: disable=R0901
         data['station'] = request.data.get('source')
         timestamp = request.data.get('timestamp')
         data['timestamp'] = timestamp
+        if request.data.get('version'):
+            data['version'] = request.data.get('version')
 
         # Convert coordinates to omit N-S and W-E designators
         lat = request.data.get('latitude')
